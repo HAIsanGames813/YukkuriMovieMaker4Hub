@@ -66,11 +66,13 @@ Hubで使用するフォントを変更できます
 を選択したときにHubを自動で閉じるかの選択ができます
 
 ## 実際の画面
-### 起動
+### 起動　　
 <img width="778" height="588" alt="image" src="https://github.com/user-attachments/assets/a308b27a-6a67-4d90-84c1-8c6c47a4b1c8" />  
-### プラグインポータル
+
+### プラグインポータル　　
 <img width="778" height="585" alt="image" src="https://github.com/user-attachments/assets/5917fe2c-4e7c-4d61-9c4f-5cd50cd69b26" />  
-### 設定
+
+### 設定　　
 <img width="779" height="587" alt="image" src="https://github.com/user-attachments/assets/0cca09cb-8f78-4a11-bb2f-d2b5e2670720" />
 
 ## 利用規約
