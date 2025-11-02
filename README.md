@@ -28,6 +28,9 @@ YMM4を前回のプロジェクト、新規プロジェクト、ymmpから開く
 ### 歯車マーク
 設定画面を開きます
 
+## 実際の画面　
+<img width="778" height="588" alt="image" src="https://github.com/user-attachments/assets/a308b27a-6a67-4d90-84c1-8c6c47a4b1c8" />  
+
 ## プラグインポータル
 ### 検索機能
 プラグイン名や作者で検索できます
@@ -44,6 +47,9 @@ YMM4を前回のプロジェクト、新規プロジェクト、ymmpから開く
 プラグイン名、作者名、公開日、プラグインの説明が書かれています  
 (情報はすべてhttps://manjubox.net/ymm4plugins.yml 及び  
 https://manjubox.net/api/ymm4plugins/github/list から取得しています)
+
+## 実際の画面　　
+<img width="778" height="585" alt="image" src="https://github.com/user-attachments/assets/5917fe2c-4e7c-4d61-9c4f-5cd50cd69b26" />  
 
 ## 設定
 ### YMM4実行ファイルパス
@@ -67,14 +73,7 @@ Hubで使用するフォントを変更できます
 ・フォルダマーク(ymmp選択)
 を選択したときにHubを自動で閉じるかの選択ができます
 
-## 実際の画面
-### 起動　　
-<img width="778" height="588" alt="image" src="https://github.com/user-attachments/assets/a308b27a-6a67-4d90-84c1-8c6c47a4b1c8" />  
-
-### プラグインポータル　　
-<img width="778" height="585" alt="image" src="https://github.com/user-attachments/assets/5917fe2c-4e7c-4d61-9c4f-5cd50cd69b26" />  
-
-### 設定　　
+## 実際の画面　　
 <img width="779" height="587" alt="image" src="https://github.com/user-attachments/assets/0cca09cb-8f78-4a11-bb2f-d2b5e2670720" />
 
 ## 利用規約
