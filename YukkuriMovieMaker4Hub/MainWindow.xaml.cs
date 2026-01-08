@@ -186,7 +186,8 @@ namespace YukkuriMovieMaker4Hub
         {
             get
             {
-                if (SelectedOnlinePlugin == null || string.IsNullOrEmpty(SelectedOnlinePlugin.FullRepoPath)) return "---";
+                if (SelectedOnlinePlugin == null) return "";
+                if (string.IsNullOrEmpty(SelectedOnlinePlugin.FullRepoPath)) return "GitHub情報なし";
                 return _versionCache.TryGetValue(SelectedOnlinePlugin.FullRepoPath, out var v) ? v : "取得中...";
             }
         }
@@ -280,24 +281,27 @@ namespace YukkuriMovieMaker4Hub
                     if (detail?.Releases != null && detail.Releases.Count > 0)
                     {
                         var latest = detail.Releases.OrderByDescending(r => r.PublishedAt).FirstOrDefault();
-                        if (latest != null)
+                        if (latest != null && !string.IsNullOrEmpty(latest.TagName))
                         {
                             _versionCache[repoPath] = latest.TagName;
-                            if (SelectedOnlinePlugin == p) OnPropertyChanged(nameof(SelectedVersion));
+                        }
+                        else
+                        {
+                            _versionCache[repoPath] = "リリースなし";
                         }
                     }
                     else
                     {
-                        _versionCache[repoPath] = "なし";
-                        if (SelectedOnlinePlugin == p) OnPropertyChanged(nameof(SelectedVersion));
+                        _versionCache[repoPath] = "データなし";
                     }
                 }
                 catch (Exception ex)
                 {
-                    _versionCache[repoPath] = "取得失敗";
-                    Debug.WriteLine($"API Error for {repoPath}: {ex.Message}");
-                    if (SelectedOnlinePlugin == p) OnPropertyChanged(nameof(SelectedVersion));
+                    _versionCache[repoPath] = "取得エラー";
+                    Debug.WriteLine($"Error fetching version for {repoPath}: {ex.Message}");
                 }
+
+                if (SelectedOnlinePlugin == p) OnPropertyChanged(nameof(SelectedVersion));
                 await Task.Delay(200);
             }
         }
@@ -314,7 +318,6 @@ namespace YukkuriMovieMaker4Hub
                 {
                     var trimmed = line.Trim();
                     if (string.IsNullOrWhiteSpace(trimmed)) continue;
-
                     if (trimmed.StartsWith("name:")) p.Name = trimmed.Substring(5).Trim().Trim('\'', '\"');
                     else if (trimmed.StartsWith("author:")) p.Author = trimmed.Substring(7).Trim().Trim('\'', '\"');
                     else if (trimmed.StartsWith("description:")) p.Description = trimmed.Substring(12).Trim().Trim('\'', '\"');
