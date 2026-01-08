@@ -244,19 +244,19 @@ namespace YukkuriMovieMaker4Hub
                 OnlinePlugins.Clear();
                 foreach (var p in plugins)
                 {
-                    var match = Regex.Match(p.Url ?? "", @"github\.com/([^/]+)/([^/]+)");
-                    if (!match.Success && p.Links != null)
+                    var githubUrls = new List<string>();
+                    if (!string.IsNullOrEmpty(p.Url)) githubUrls.Add(p.Url);
+                    if (p.Links != null) githubUrls.AddRange(p.Links);
+
+                    foreach (var url in githubUrls)
                     {
-                        foreach (var link in p.Links)
+                        var match = Regex.Match(url, @"github\.com/([^/]+)/([^/]+)");
+                        if (match.Success)
                         {
-                            match = Regex.Match(link, @"github\.com/([^/]+)/([^/]+)");
-                            if (match.Success) break;
+                            p.Owner = match.Groups[1].Value.Trim();
+                            p.RepoName = match.Groups[2].Value.Replace(".git", "").TrimEnd('/').Trim();
+                            break;
                         }
-                    }
-                    if (match.Success)
-                    {
-                        p.Owner = match.Groups[1].Value.Trim();
-                        p.RepoName = match.Groups[2].Value.Replace(".git", "").TrimEnd('/').Trim();
                     }
                     OnlinePlugins.Add(p);
                 }
@@ -292,12 +292,13 @@ namespace YukkuriMovieMaker4Hub
                         if (SelectedOnlinePlugin == p) OnPropertyChanged(nameof(SelectedVersion));
                     }
                 }
-                catch
+                catch (Exception ex)
                 {
-                    _versionCache[repoPath] = "エラー";
+                    _versionCache[repoPath] = "取得失敗";
+                    Debug.WriteLine($"API Error for {repoPath}: {ex.Message}");
                     if (SelectedOnlinePlugin == p) OnPropertyChanged(nameof(SelectedVersion));
                 }
-                await Task.Delay(100);
+                await Task.Delay(200);
             }
         }
 
@@ -312,11 +313,13 @@ namespace YukkuriMovieMaker4Hub
                 foreach (var line in lines)
                 {
                     var trimmed = line.Trim();
+                    if (string.IsNullOrWhiteSpace(trimmed)) continue;
+
                     if (trimmed.StartsWith("name:")) p.Name = trimmed.Substring(5).Trim().Trim('\'', '\"');
                     else if (trimmed.StartsWith("author:")) p.Author = trimmed.Substring(7).Trim().Trim('\'', '\"');
                     else if (trimmed.StartsWith("description:")) p.Description = trimmed.Substring(12).Trim().Trim('\'', '\"');
                     else if (trimmed.StartsWith("url:")) p.Url = trimmed.Substring(4).Trim().Trim('\'', '\"');
-                    else if (trimmed.Length > 2 && trimmed.StartsWith("- http")) p.Links.Add(trimmed.Substring(2).Trim());
+                    else if (trimmed.StartsWith("- http")) p.Links.Add(trimmed.Substring(1).Trim().Trim('\'', '\"'));
                 }
                 if (!string.IsNullOrEmpty(p.Name)) list.Add(p);
             }
