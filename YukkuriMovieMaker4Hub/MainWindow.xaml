@@ -1,0 +1,211 @@
+﻿<Window x:Class="YukkuriMovieMaker4Hub.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="clr-namespace:YukkuriMovieMaker4Hub"
+        Title="YukkuriMovieMaker4 Hub" Height="750" Width="1100" Background="#252525">
+    <Window.Resources>
+        <local:BooleanToStatusConverter x:Key="BooleanToStatusConverter"/>
+        <local:BooleanToColorConverter x:Key="BooleanToColorConverter"/>
+        <local:IsNotNullConverter x:Key="IsNotNullConverter"/>
+        <Style x:Key="IconPathStyle" TargetType="Path">
+            <Setter Property="Fill" Value="White"/>
+            <Setter Property="Stretch" Value="Uniform"/>
+            <Setter Property="Width" Value="20"/>
+            <Setter Property="Height" Value="20"/>
+            <Setter Property="Margin" Value="0,0,10,0"/>
+        </Style>
+    </Window.Resources>
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="250"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <Grid Grid.Column="0" Background="#333333" Margin="5">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <TextBlock Text="インスタンス" Foreground="White" Margin="10" FontWeight="Bold"/>
+            <ListBox Grid.Row="1" ItemsSource="{Binding Instances}" SelectedItem="{Binding SelectedInstance}" Background="#444444" BorderThickness="0" Margin="5">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal" Margin="5">
+                            <Grid Width="32" Height="32" Margin="0,0,10,0">
+                                <Ellipse Fill="#555555"/>
+                                <Image Source="{Binding IconImage}" Stretch="UniformToFill">
+                                    <Image.Clip>
+                                        <EllipseGeometry Center="16,16" RadiusX="16" RadiusY="16"/>
+                                    </Image.Clip>
+                                </Image>
+                            </Grid>
+                            <TextBlock Text="{Binding Name}" VerticalAlignment="Center" Foreground="White" FontSize="13"/>
+                        </StackPanel>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+            <StackPanel Grid.Row="2" Margin="10">
+                <Button Click="AddInstance_Click" Margin="0,3" Height="35" Background="#444444" Foreground="White">
+                    <StackPanel Orientation="Horizontal">
+                        <Path Style="{StaticResource IconPathStyle}" Width="15" Height="15" Data="M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z"/>
+                        <TextBlock Text="追加" VerticalAlignment="Center"/>
+                    </StackPanel>
+                </Button>
+                <Button Click="DeleteInstance_Click" Margin="0,3" Height="35" Background="#663333" Foreground="White">
+                    <StackPanel Orientation="Horizontal">
+                        <Path Style="{StaticResource IconPathStyle}" Width="15" Height="15" Data="M19,4H15.5L14.5,3H9.5L8.5,4H5V6H19V4M6,19A2,2 0 0,0 8,21H16A2,2 0 0,0 18,19V7H6V19Z"/>
+                        <TextBlock Text="削除" VerticalAlignment="Center"/>
+                    </StackPanel>
+                </Button>
+            </StackPanel>
+        </Grid>
+
+        <Grid Grid.Column="1" Margin="5">
+            <TabControl Background="#2D2D2D" BorderThickness="0" SelectionChanged="TabControl_SelectionChanged">
+                <TabItem Header="概要" Foreground="White">
+                    <Grid Margin="30">
+                        <StackPanel>
+                            <StackPanel Orientation="Horizontal" Margin="0,0,0,40">
+                                <Button Width="100" Height="100" Click="ChangeIcon_Click" Background="#444444" BorderThickness="0">
+                                    <Grid>
+                                        <Path Fill="#888888" Width="40" Height="40" Stretch="Uniform" Data="M4,4H7L9,2H15L17,4H20A2,2 0 0,1 22,6V18A2,2 0 0,1 20,20H4A2,2 0 0,1 2,18V6A2,2 0 0,1 4,4M12,7A5,5 0 0,0 7,12A5,5 0 0,0 12,17A5,5 0 0,0 17,12A5,5 0 0,0 12,7M12,9A3,3 0 0,1 15,12A3,3 0 0,1 12,15A3,3 0 0,1 9,12A3,3 0 0,1 12,9Z"/>
+                                        <Image Source="{Binding SelectedInstance.IconImage}" Stretch="UniformToFill"/>
+                                    </Grid>
+                                </Button>
+                                <StackPanel Margin="25,0">
+                                    <TextBox Text="{Binding SelectedInstance.Name, UpdateSourceTrigger=PropertyChanged}" FontSize="32" Background="Transparent" Foreground="White" BorderThickness="0,0,0,2" BorderBrush="#555555" Width="400" HorizontalAlignment="Left"/>
+                                    <TextBlock Text="{Binding SelectedInstance.ExePath}" Foreground="Gray" Margin="0,15" FontSize="11"/>
+                                </StackPanel>
+                            </StackPanel>
+                            <UniformGrid Columns="2" Rows="2">
+                                <Button Click="LaunchInstance_Click" Height="80" Margin="10" Background="#2E7D32" Foreground="White" BorderThickness="0">
+                                    <StackPanel Orientation="Horizontal">
+                                        <Path Style="{StaticResource IconPathStyle}" Width="30" Height="30" Data="M8,5.14V19.14L19,12.14L8,5.14Z"/>
+                                        <TextBlock Text="起動" FontSize="20" FontWeight="Bold" VerticalAlignment="Center"/>
+                                    </StackPanel>
+                                </Button>
+                                <Button Click="OpenFolder_Click" Height="80" Margin="10" Background="#444444" Foreground="White" BorderThickness="0">
+                                    <StackPanel Orientation="Horizontal">
+                                        <Path Style="{StaticResource IconPathStyle}" Width="25" Height="25" Data="M10,4H4C2.89,4 2,4.89 2,6V18A2,2 0 0,0 4,20H20A2,2 0 0,0 22,18V8C22,6.89 21.1,6 20,6H12L10,4Z"/>
+                                        <TextBlock Text="フォルダを開く" FontSize="18" VerticalAlignment="Center"/>
+                                    </StackPanel>
+                                </Button>
+                                <Button Click="LaunchLastProject_Click" Height="80" Margin="10" Background="#444444" Foreground="White" BorderThickness="0">
+                                    <StackPanel Orientation="Horizontal">
+                                        <Path Style="{StaticResource IconPathStyle}" Width="25" Height="25" Data="M13.5,8H12V13L16.28,15.54L17,14.33L13.5,12.25V8M13,3A9,9 0 0,0 4,12H1L4.96,16.03L9,12H6A7,7 0 0,1 13,5A7,7 0 0,1 20,12A7,7 0 0,1 13,19C11.07,19 9.32,18.21 8.06,16.94L6.64,18.36C8.27,20 10.5,21 13,21A9,9 0 0,0 22,12A9,9 0 0,0 13,3Z"/>
+                                        <TextBlock Text="前回プロジェクト" FontSize="18" VerticalAlignment="Center"/>
+                                    </StackPanel>
+                                </Button>
+                                <Button Click="CreateNewProject_Click" Height="80" Margin="10" Background="#444444" Foreground="White" BorderThickness="0">
+                                    <StackPanel Orientation="Horizontal">
+                                        <Path Style="{StaticResource IconPathStyle}" Width="25" Height="25" Data="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M13,13H11V15H9V13H7V11H9V9H11V11H13V13M13,9V3.5L18.5,9H13Z"/>
+                                        <TextBlock Text="新規プロジェクト" FontSize="18" VerticalAlignment="Center"/>
+                                    </StackPanel>
+                                </Button>
+                            </UniformGrid>
+                        </StackPanel>
+                    </Grid>
+                </TabItem>
+
+                <TabItem Header="プラグイン管理" Foreground="White">
+                    <ListView ItemsSource="{Binding LocalPlugins}" Background="#333333" Foreground="White" BorderThickness="0">
+                        <ListView.View>
+                            <GridView>
+                                <GridViewColumn Header="名前" Width="400" DisplayMemberBinding="{Binding DisplayName}"/>
+                                <GridViewColumn Header="状態" Width="100">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding IsEnabled, Converter={StaticResource BooleanToStatusConverter}}" Foreground="{Binding IsEnabled, Converter={StaticResource BooleanToColorConverter}}" FontWeight="Bold"/>
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                                <GridViewColumn Header="操作" Width="100">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <Button Click="TogglePlugin_Click" Padding="10,2" Content="有効/無効"/>
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                            </GridView>
+                        </ListView.View>
+                    </ListView>
+                </TabItem>
+
+                <TabItem Header="プラグインポータル" Foreground="White">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="400"/>
+                        </Grid.ColumnDefinitions>
+                        <ListView Grid.Column="0" ItemsSource="{Binding OnlinePlugins}" SelectedItem="{Binding SelectedOnlinePlugin}" Background="#252525" BorderThickness="0">
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <Border BorderBrush="#333333" BorderThickness="0,0,0,1" Padding="10">
+                                        <StackPanel>
+                                            <TextBlock Text="{Binding Name}" FontSize="15" FontWeight="Bold" Foreground="White"/>
+                                            <TextBlock Text="{Binding Author}" Foreground="#AAAAAA" FontSize="12"/>
+                                        </StackPanel>
+                                    </Border>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+                        <Grid Grid.Column="1" Background="#333333" Margin="5,0,0,0">
+                            <TextBlock Text="プラグインを選択してください" Foreground="Gray" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                <TextBlock.Style>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding SelectedOnlinePlugin}" Value="{x:Null}">
+                                                <Setter Property="Visibility" Value="Visible"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBlock.Style>
+                            </TextBlock>
+                            <ScrollViewer Margin="15">
+                                <ScrollViewer.Style>
+                                    <Style TargetType="ScrollViewer">
+                                        <Setter Property="Visibility" Value="Visible"/>
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding SelectedOnlinePlugin}" Value="{x:Null}">
+                                                <Setter Property="Visibility" Value="Collapsed"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </ScrollViewer.Style>
+                                <StackPanel>
+                                    <TextBlock Text="{Binding SelectedOnlinePlugin.Name}" FontSize="20" FontWeight="Bold" Foreground="White" TextWrapping="Wrap"/>
+                                    <TextBlock Text="{Binding SelectedOnlinePlugin.Author, StringFormat={}{0}}" Foreground="#AAAAAA" Margin="0,5"/>
+                                    <TextBlock Text="{Binding SelectedOnlinePlugin.Description}" Foreground="LightGray" TextWrapping="Wrap" Margin="0,10"/>
+
+                                    <Border BorderBrush="#555555" BorderThickness="0,1,0,0" Margin="0,20,0,20"/>
+
+                                    <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+                                        <TextBlock Text="最新バージョン:" Foreground="White" FontWeight="Bold" Margin="0,0,10,0"/>
+                                        <TextBlock Text="{Binding SelectedVersion}" Foreground="#FFD54F" FontWeight="Bold" FontSize="16"/>
+                                    </StackPanel>
+
+                                    <TextBlock Text="関連リンク" Foreground="White" FontWeight="Bold" Margin="0,15,0,5"/>
+                                    <ItemsControl ItemsSource="{Binding SelectedOnlinePlugin.AllLinks}">
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate>
+                                                <Button Click="OpenUrl_Click" Tag="{Binding Url}" Margin="0,2" Padding="10,8" Background="#444444" Foreground="White" BorderThickness="0" HorizontalContentAlignment="Left">
+                                                    <StackPanel Orientation="Horizontal">
+                                                        <Image Source="{Binding FaviconUrl}" Width="16" Height="16" Margin="0,0,10,0" RenderOptions.BitmapScalingMode="HighQuality"/>
+                                                        <TextBlock Text="{Binding Label}" VerticalAlignment="Center"/>
+                                                    </StackPanel>
+                                                </Button>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
+                                </StackPanel>
+                            </ScrollViewer>
+                        </Grid>
+                    </Grid>
+                </TabItem>
+            </TabControl>
+        </Grid>
+    </Grid>
+</Window>
