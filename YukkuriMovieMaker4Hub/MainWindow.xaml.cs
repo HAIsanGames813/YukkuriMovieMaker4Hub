@@ -15,7 +15,6 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
-using System.Windows.Input;
 using System.Windows.Markup;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
@@ -33,9 +32,13 @@ namespace YukkuriMovieMaker4Hub
 
     public class AppSettings
     {
+        [JsonPropertyName("fontFamily")]
         public string FontFamily { get; set; } = "Segoe UI";
+        [JsonPropertyName("theme")]
         public AppTheme Theme { get; set; } = AppTheme.Windows;
+        [JsonPropertyName("instances")]
         public List<InstanceInfo> Instances { get; set; } = new List<InstanceInfo>();
+        [JsonPropertyName("projectDirectories")]
         public List<string> ProjectDirectories { get; set; } = new List<string>();
     }
 
@@ -43,10 +46,13 @@ namespace YukkuriMovieMaker4Hub
     {
         public event PropertyChangedEventHandler? PropertyChanged;
         protected void OnPropertyChanged(string name) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+        [JsonPropertyName("id")]
         public string Id { get; set; } = Guid.NewGuid().ToString();
         private string? _name;
+        [JsonPropertyName("name")]
         public string Name { get => _name ?? string.Empty; set { _name = value; OnPropertyChanged(nameof(Name)); } }
         private string? _iconPath;
+        [JsonPropertyName("iconPath")]
         public string? IconPath { get => _iconPath; set { _iconPath = value; OnPropertyChanged(nameof(IconPath)); OnPropertyChanged(nameof(IconImage)); } }
         [JsonIgnore]
         public ImageSource? IconImage
@@ -70,8 +76,11 @@ namespace YukkuriMovieMaker4Hub
                 return null;
             }
         }
+        [JsonPropertyName("exePath")]
         public string ExePath { get; set; } = string.Empty;
+        [JsonIgnore]
         public string RootDirectory => string.IsNullOrEmpty(ExePath) ? string.Empty : Path.GetDirectoryName(ExePath) ?? string.Empty;
+        [JsonIgnore]
         public string PluginDirectory => string.IsNullOrEmpty(ExePath) ? string.Empty : Path.Combine(RootDirectory, "user", "plugin");
     }
 
@@ -108,46 +117,50 @@ namespace YukkuriMovieMaker4Hub
         }
     }
 
-    public class OnlinePlugin : INotifyPropertyChanged
+    public class GitHubReleasesPluginSummary
+    {
+        [JsonPropertyName("user")]
+        public string User { get; set; } = string.Empty;
+        [JsonPropertyName("repo")]
+        public string Repo { get; set; } = string.Empty;
+        [JsonPropertyName("browser_download_url")]
+        public string BrowserDownloadUrl { get; set; } = string.Empty;
+        [JsonPropertyName("file_name")]
+        public string FileName { get; set; } = string.Empty;
+        [JsonPropertyName("published_at")]
+        public DateTime PublishedAt { get; set; }
+        [JsonPropertyName("prerelease")]
+        public bool Prerelease { get; set; }
+    }
+
+    public class PluginCatalogItem : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler? PropertyChanged;
         protected void OnPropertyChanged(string name) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+
         public string Name { get; set; } = string.Empty;
         public string Author { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;
-        public string Url { get; set; } = string.Empty;
+        public string? Url { get; set; }
         public List<string> Links { get; set; } = new List<string>();
-        [JsonIgnore]
+
+        private GitHubReleasesPluginSummary? _latestRelease;
+        public GitHubReleasesPluginSummary? LatestRelease { get => _latestRelease; set { _latestRelease = value; OnPropertyChanged(nameof(LatestRelease)); } }
+
         public List<PluginLink> AllLinks
         {
             get
             {
                 var list = new List<PluginLink>();
                 if (!string.IsNullOrEmpty(Url)) try { list.Add(new PluginLink { Url = Url }); } catch { }
-                if (Links != null) foreach (var l in Links) try { list.Add(new PluginLink { Url = l }); } catch { }
+                foreach (var l in Links)
+                {
+                    if (string.IsNullOrWhiteSpace(l)) continue;
+                    try { list.Add(new PluginLink { Url = l }); } catch { }
+                }
                 return list.GroupBy(x => x.Url).Select(g => g.First()).ToList();
             }
         }
-        public string RepoName { get; set; } = string.Empty;
-        public string Owner { get; set; } = string.Empty;
-        [JsonIgnore]
-        public string? FullRepoPath => (string.IsNullOrEmpty(Owner) || string.IsNullOrEmpty(RepoName)) ? null : $"{Owner}/{RepoName}";
-        [JsonIgnore]
-        public string? DetailApiUrl => (string.IsNullOrEmpty(FullRepoPath)) ? null : $"https://manjubox.net/api/ymm4plugins/github/detail/{FullRepoPath}";
-    }
-
-    public class GithubRelease
-    {
-        [JsonPropertyName("tag_name")]
-        public string TagName { get; set; } = string.Empty;
-        [JsonPropertyName("published_at")]
-        public DateTime PublishedAt { get; set; }
-    }
-
-    public class GithubPluginDetail
-    {
-        [JsonPropertyName("releases")]
-        public List<GithubRelease> Releases { get; set; } = new List<GithubRelease>();
     }
 
     public class LocalPluginInfo : INotifyPropertyChanged
@@ -199,7 +212,8 @@ namespace YukkuriMovieMaker4Hub
         }
         public void Save(AppSettings settings)
         {
-            var json = JsonSerializer.Serialize(settings, new JsonSerializerOptions { WriteIndented = true });
+            var options = new JsonSerializerOptions { WriteIndented = true };
+            var json = JsonSerializer.Serialize(settings, options);
             File.WriteAllText(_path, json);
         }
     }
@@ -213,58 +227,33 @@ namespace YukkuriMovieMaker4Hub
         private HttpClient _http = new HttpClient();
         public ObservableCollection<InstanceInfo> Instances { get; set; } = new ObservableCollection<InstanceInfo>();
         public ObservableCollection<LocalPluginInfo> LocalPlugins { get; set; } = new ObservableCollection<LocalPluginInfo>();
-        public ObservableCollection<OnlinePlugin> OnlinePlugins { get; set; } = new ObservableCollection<OnlinePlugin>();
+        public ObservableCollection<PluginCatalogItem> OnlinePlugins { get; set; } = new ObservableCollection<PluginCatalogItem>();
         public ObservableCollection<string> ProjectDirectories { get; set; } = new ObservableCollection<string>();
-
         private List<ProjectFileItem> _allProjects = new List<ProjectFileItem>();
         public ObservableCollection<ProjectFileItem> FilteredProjects { get; set; } = new ObservableCollection<ProjectFileItem>();
-
         private string _projectSearchText = string.Empty;
         public string ProjectSearchText { get => _projectSearchText; set { _projectSearchText = value; ApplyProjectFilter(); OnPropertyChanged(nameof(ProjectSearchText)); } }
-
         private bool _showYmmp = true;
         public bool ShowYmmp { get => _showYmmp; set { _showYmmp = value; ApplyProjectFilter(); OnPropertyChanged(nameof(ShowYmmp)); } }
-
         private bool _showYmmpx = true;
         public bool ShowYmmpx { get => _showYmmpx; set { _showYmmpx = value; ApplyProjectFilter(); OnPropertyChanged(nameof(ShowYmmpx)); } }
-
         private List<FontItem> _allFonts = new List<FontItem>();
         public ObservableCollection<FontItem> FilteredFonts { get; set; } = new ObservableCollection<FontItem>();
-
         private string _fontSearchText = string.Empty;
         public string FontSearchText { get => _fontSearchText; set { _fontSearchText = value; ApplyFontFilter(); OnPropertyChanged(nameof(FontSearchText)); } }
-
         private bool _isJapaneseOnly = false;
         public bool IsJapaneseOnly { get => _isJapaneseOnly; set { _isJapaneseOnly = value; ApplyFontFilter(); OnPropertyChanged(nameof(IsJapaneseOnly)); } }
-
         public Array ThemeModes => Enum.GetValues(typeof(AppTheme));
-
-        private Dictionary<string, string> _versionCache = new Dictionary<string, string>();
-
         private InstanceInfo? _selectedInstance;
         public InstanceInfo? SelectedInstance { get => _selectedInstance; set { _selectedInstance = value; OnPropertyChanged(nameof(SelectedInstance)); RefreshLocalPlugins(); RefreshRecentProjects(); } }
-
-        private OnlinePlugin? _selectedOnlinePlugin;
-        public OnlinePlugin? SelectedOnlinePlugin { get => _selectedOnlinePlugin; set { _selectedOnlinePlugin = value; OnPropertyChanged(nameof(SelectedOnlinePlugin)); OnPropertyChanged(nameof(SelectedVersion)); } }
-
-        public string SelectedVersion
-        {
-            get
-            {
-                if (SelectedOnlinePlugin == null) return "";
-                if (string.IsNullOrEmpty(SelectedOnlinePlugin.FullRepoPath)) return "GitHub情報なし";
-                return _versionCache.TryGetValue(SelectedOnlinePlugin.FullRepoPath, out var v) ? v : "取得中...";
-            }
-        }
-
+        private PluginCatalogItem? _selectedOnlinePlugin;
+        public PluginCatalogItem? SelectedOnlinePlugin { get => _selectedOnlinePlugin; set { _selectedOnlinePlugin = value; OnPropertyChanged(nameof(SelectedOnlinePlugin)); } }
         public FontItem? SelectedFontItem
         {
             get => FilteredFonts.FirstOrDefault(f => f.InternalName == _currentSettings.FontFamily);
             set { if (value != null) { _currentSettings.FontFamily = value.InternalName; ApplyTheme(); SaveAll(); OnPropertyChanged(nameof(SelectedFontItem)); } }
         }
-
         public AppTheme SelectedTheme { get => _currentSettings.Theme; set { _currentSettings.Theme = value; ApplyTheme(); SaveAll(); OnPropertyChanged(nameof(SelectedTheme)); } }
-
         private string _lastSortField = "DisplayName";
         private ListSortDirection _lastSortDir = ListSortDirection.Ascending;
 
@@ -274,18 +263,14 @@ namespace YukkuriMovieMaker4Hub
             _currentSettings = _settingsManager.Load();
             _http.DefaultRequestHeaders.UserAgent.ParseAdd("YukkuriMovieMaker4Hub/1.0");
             this.DataContext = this;
-
             InitializeFonts();
-
             foreach (var i in _currentSettings.Instances)
             {
                 i.PropertyChanged += (s, e) => SaveAll();
                 Instances.Add(i);
             }
-
             foreach (var p in _currentSettings.ProjectDirectories)
                 ProjectDirectories.Add(p);
-
             SystemEvents.UserPreferenceChanged += (s, e) => { if (SelectedTheme == AppTheme.Windows) ApplyTheme(); };
             ApplyTheme();
             RefreshRecentProjects();
@@ -311,7 +296,6 @@ namespace YukkuriMovieMaker4Hub
                 filtered = filtered.Where(f => f.DisplayName.IndexOf(FontSearchText, StringComparison.OrdinalIgnoreCase) >= 0 || f.InternalName.IndexOf(FontSearchText, StringComparison.OrdinalIgnoreCase) >= 0);
             if (IsJapaneseOnly)
                 filtered = filtered.Where(f => f.IsJapanese);
-
             FilteredFonts.Clear();
             foreach (var f in filtered) FilteredFonts.Add(f);
             OnPropertyChanged(nameof(SelectedFontItem));
@@ -322,7 +306,6 @@ namespace YukkuriMovieMaker4Hub
             try
             {
                 this.Resources["AppFont"] = new FontFamily(_currentSettings.FontFamily);
-
                 var mode = SelectedTheme;
                 if (mode == AppTheme.Windows)
                 {
@@ -330,7 +313,6 @@ namespace YukkuriMovieMaker4Hub
                     var value = key?.GetValue("AppsUseLightTheme");
                     mode = (value is int i && i == 1) ? AppTheme.Light : AppTheme.Dark;
                 }
-
                 switch (mode)
                 {
                     case AppTheme.Light:
@@ -403,92 +385,102 @@ namespace YukkuriMovieMaker4Hub
             if (OnlinePlugins.Count > 0) return;
             try
             {
-                var ymlContent = await _http.GetStringAsync("https://manjubox.net/ymm4plugins.yml");
-                var plugins = ParseYmm4PluginsYml(ymlContent);
-                OnlinePlugins.Clear();
-                foreach (var p in plugins)
-                {
-                    var githubUrls = new List<string>();
-                    if (!string.IsNullOrEmpty(p.Url)) githubUrls.Add(p.Url);
-                    if (p.Links != null) githubUrls.AddRange(p.Links);
+                var yml = await _http.GetStringAsync("https://manjubox.net/ymm4plugins.yml");
+                var catalog = ParseYmm4PluginsYaml(yml);
 
-                    foreach (var url in githubUrls)
+                var githubListJson = await _http.GetStringAsync("https://manjubox.net/api/ymm4plugins/github/list");
+                var allReleases = JsonSerializer.Deserialize<GitHubReleasesPluginSummary[]>(githubListJson) ?? Array.Empty<GitHubReleasesPluginSummary>();
+
+                OnlinePlugins.Clear();
+                foreach (var p in catalog)
+                {
+                    var githubUrl = FindGitHubRepositoryUrl(p);
+                    if (githubUrl != null)
                     {
-                        var match = Regex.Match(url, @"github\.com/([^/]+)/([^/]+)");
+                        var match = Regex.Match(githubUrl, @"github\.com/([^/]+)/([^/]+)");
                         if (match.Success)
                         {
-                            p.Owner = match.Groups[1].Value.Trim();
-                            p.RepoName = match.Groups[2].Value.Replace(".git", "").TrimEnd('/').Trim();
-                            break;
+                            var owner = match.Groups[1].Value;
+                            var repo = match.Groups[2].Value.Replace(".git", "").TrimEnd('/');
+
+                            p.LatestRelease = allReleases
+                                .Where(r => !r.Prerelease &&
+                                       r.User.Equals(owner, StringComparison.OrdinalIgnoreCase) &&
+                                       r.Repo.Equals(repo, StringComparison.OrdinalIgnoreCase))
+                                .OrderByDescending(r => r.PublishedAt)
+                                .FirstOrDefault();
                         }
                     }
                     OnlinePlugins.Add(p);
                 }
-                _ = PrefetchVersionsAsync();
             }
             catch (Exception ex) { MessageBox.Show("ポータル読み込み失敗: " + ex.Message); }
         }
 
-        private async Task PrefetchVersionsAsync()
+        private List<PluginCatalogItem> ParseYmm4PluginsYaml(string yaml)
         {
-            var targets = OnlinePlugins.Where(p => !string.IsNullOrEmpty(p.FullRepoPath)).ToList();
-            foreach (var p in targets)
+            var plugins = new List<PluginCatalogItem>();
+            var lines = yaml.Split(new[] { "\r\n", "\r", "\n" }, StringSplitOptions.None);
+            PluginCatalogItem? current = null;
+            bool inLinks = false;
+
+            foreach (var line in lines)
             {
-                string? repoPath = p.FullRepoPath;
-                if (repoPath == null) continue;
-                if (_versionCache.ContainsKey(repoPath)) continue;
-                try
+                var trimmed = line.Trim();
+                if (string.IsNullOrEmpty(trimmed)) continue;
+
+                if (line.StartsWith("- "))
                 {
-                    var response = await _http.GetStringAsync(p.DetailApiUrl);
-                    var detail = JsonSerializer.Deserialize<GithubPluginDetail>(response, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
-                    if (detail?.Releases != null && detail.Releases.Count > 0)
+                    current = new PluginCatalogItem();
+                    plugins.Add(current);
+                    inLinks = false;
+                    var firstKeyValue = trimmed.Substring(2).Split(new[] { ':' }, 2);
+                    if (firstKeyValue.Length == 2) ApplyYamlValue(current, firstKeyValue[0].Trim(), firstKeyValue[1].Trim(), ref inLinks);
+                }
+                else if (current != null)
+                {
+                    if (trimmed.StartsWith("-") && inLinks)
                     {
-                        var latest = detail.Releases.OrderByDescending(r => r.PublishedAt).FirstOrDefault();
-                        if (latest != null && !string.IsNullOrEmpty(latest.TagName))
-                            _versionCache[repoPath] = latest.TagName;
-                        else
-                            _versionCache[repoPath] = "リリースなし";
+                        current.Links.Add(trimmed.Substring(1).Trim().Trim('\'', '\"'));
                     }
                     else
-                        _versionCache[repoPath] = "データなし";
+                    {
+                        var keyValue = trimmed.Split(new[] { ':' }, 2);
+                        if (keyValue.Length == 2) ApplyYamlValue(current, keyValue[0].Trim(), keyValue[1].Trim(), ref inLinks);
+                    }
                 }
-                catch
-                {
-                    _versionCache[repoPath] = "取得エラー";
-                }
+            }
+            return plugins;
+        }
 
-                if (SelectedOnlinePlugin == p) OnPropertyChanged(nameof(SelectedVersion));
-                await Task.Delay(200);
+        private void ApplyYamlValue(PluginCatalogItem item, string key, string value, ref bool inLinks)
+        {
+            value = value.Trim('\'', '\"');
+            switch (key.ToLower())
+            {
+                case "name": item.Name = value; inLinks = false; break;
+                case "author": item.Author = value; inLinks = false; break;
+                case "description": item.Description = value; inLinks = false; break;
+                case "url": item.Url = value; inLinks = false; break;
+                case "links": inLinks = true; break;
+                default: inLinks = false; break;
             }
         }
 
-        private List<OnlinePlugin> ParseYmm4PluginsYml(string content)
+        private static string? FindGitHubRepositoryUrl(PluginCatalogItem? plugin)
         {
-            var list = new List<OnlinePlugin>();
-            var blocks = content.Split(new[] { "\n- " }, StringSplitOptions.RemoveEmptyEntries);
-            foreach (var block in blocks)
-            {
-                var p = new OnlinePlugin();
-                var lines = block.Split('\n');
-                foreach (var line in lines)
-                {
-                    var trimmed = line.Trim();
-                    if (string.IsNullOrWhiteSpace(trimmed)) continue;
-                    if (trimmed.StartsWith("name:")) p.Name = trimmed.Substring(5).Trim().Trim('\'', '\"');
-                    else if (trimmed.StartsWith("author:")) p.Author = trimmed.Substring(7).Trim().Trim('\'', '\"');
-                    else if (trimmed.StartsWith("description:")) p.Description = trimmed.Substring(12).Trim().Trim('\'', '\"');
-                    else if (trimmed.StartsWith("url:")) p.Url = trimmed.Substring(4).Trim().Trim('\'', '\"');
-                    else if (trimmed.StartsWith("- http")) p.Links.Add(trimmed.Substring(1).Trim().Trim('\'', '\"'));
-                }
-                if (!string.IsNullOrEmpty(p.Name)) list.Add(p);
-            }
-            return list;
+            if (plugin == null) return null;
+            if (plugin.Url != null && plugin.Url.Contains("github.com")) return plugin.Url;
+            return plugin.Links.FirstOrDefault(link => link?.Contains("github.com") ?? false);
         }
 
         private void OpenUrl_Click(object sender, RoutedEventArgs e)
         {
             if (sender is Button btn && btn.Tag is string url && !string.IsNullOrEmpty(url))
-                Process.Start(new ProcessStartInfo(url) { UseShellExecute = true });
+            {
+                try { Process.Start(new ProcessStartInfo(url) { UseShellExecute = true }); }
+                catch (Exception ex) { MessageBox.Show("リンクを開けませんでした: " + ex.Message); }
+            }
         }
 
         private void RefreshLocalPlugins()
@@ -539,10 +531,8 @@ namespace YukkuriMovieMaker4Hub
             var filtered = _allProjects.AsEnumerable();
             if (!string.IsNullOrWhiteSpace(ProjectSearchText))
                 filtered = filtered.Where(p => p.Name.IndexOf(ProjectSearchText, StringComparison.OrdinalIgnoreCase) >= 0 || p.FullPath.IndexOf(ProjectSearchText, StringComparison.OrdinalIgnoreCase) >= 0);
-
             if (!ShowYmmp) filtered = filtered.Where(p => p.Extension != ".ymmp");
             if (!ShowYmmpx) filtered = filtered.Where(p => p.Extension != ".ymmpx");
-
             FilteredProjects.Clear();
             foreach (var p in filtered.OrderByDescending(x => x.LastWriteTime)) FilteredProjects.Add(p);
         }
@@ -660,7 +650,6 @@ namespace YukkuriMovieMaker4Hub
                 list = _lastSortDir == ListSortDirection.Ascending ? list.OrderBy(p => p.DisplayName.TrimStart('_')).ToList() : list.OrderByDescending(p => p.DisplayName.TrimStart('_')).ToList();
             else if (_lastSortField == "IsEnabled")
                 list = _lastSortDir == ListSortDirection.Ascending ? list.OrderBy(p => p.IsEnabled).ThenBy(p => p.DisplayName.TrimStart('_')).ToList() : list.OrderByDescending(p => p.IsEnabled).ThenBy(p => p.DisplayName.TrimStart('_')).ToList();
-
             LocalPlugins.Clear();
             foreach (var p in list) LocalPlugins.Add(p);
         }
@@ -676,7 +665,6 @@ namespace YukkuriMovieMaker4Hub
         private void CreateNewProject_Click(object sender, RoutedEventArgs e) => LaunchYmm("CreateNewProject");
         private void OpenFolder_Click(object sender, RoutedEventArgs e) { if (SelectedInstance != null) Process.Start("explorer.exe", SelectedInstance.RootDirectory); }
         private void ChangeIcon_Click(object sender, RoutedEventArgs e) { if (SelectedInstance == null) return; var d = new OpenFileDialog { Filter = "画像|*.png;*.jpg;*.ico" }; if (d.ShowDialog() == true) SelectedInstance.IconPath = d.FileName; }
-
         private void AddProjectDir_Click(object sender, RoutedEventArgs e)
         {
             var d = new OpenFolderDialog();
@@ -690,7 +678,6 @@ namespace YukkuriMovieMaker4Hub
                 }
             }
         }
-
         private void RemoveProjectDir_Click(object sender, RoutedEventArgs e)
         {
             if (sender is Button btn && btn.DataContext is string dir)
@@ -700,19 +687,54 @@ namespace YukkuriMovieMaker4Hub
                 RefreshRecentProjects();
             }
         }
-
         private void OpenProject_Click(object sender, RoutedEventArgs e)
         {
             if (ProjectGrid.SelectedItem is ProjectFileItem project)
                 LaunchYmm($"\"{project.FullPath}\"");
         }
-
         private void ResetProjectFilters_Click(object sender, RoutedEventArgs e)
         {
             ProjectSearchText = string.Empty;
             ShowYmmp = true;
             ShowYmmpx = true;
             RefreshRecentProjects();
+        }
+
+        private async void InstallPlugin_Click(object sender, RoutedEventArgs e)
+        {
+            if (SelectedOnlinePlugin == null || SelectedInstance == null || SelectedOnlinePlugin.LatestRelease == null)
+            {
+                MessageBox.Show("インストール可能な最新リリースが見つかりません。");
+                return;
+            }
+            var release = SelectedOnlinePlugin.LatestRelease;
+            try
+            {
+                string tempDir = Path.Combine(Path.GetTempPath(), "YMM4Hub");
+                if (!Directory.Exists(tempDir)) Directory.CreateDirectory(tempDir);
+                string savePath = Path.Combine(tempDir, release.FileName);
+
+                using var request = new HttpRequestMessage(HttpMethod.Get, release.BrowserDownloadUrl);
+                request.Headers.UserAgent.ParseAdd("YukkuriMovieMaker4Hub/1.0");
+                using var response = await _http.SendAsync(request, HttpCompletionOption.ResponseHeadersRead);
+                response.EnsureSuccessStatusCode();
+
+                using (var contentStream = await response.Content.ReadAsStreamAsync())
+                using (var fileStream = File.Create(savePath))
+                {
+                    await contentStream.CopyToAsync(fileStream);
+                }
+
+                Process.Start(new ProcessStartInfo(savePath) { UseShellExecute = true });
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"ダウンロードまたはインストール中にエラーが発生しました: {ex.Message}");
+            }
+            finally
+            {
+                RefreshLocalPlugins();
+            }
         }
     }
 }
