@@ -16,12 +16,29 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
+using System.Windows.Markup;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using Microsoft.Win32;
 
 namespace YukkuriMovieMaker4Hub
 {
+    public enum AppTheme
+    {
+        Windows,
+        Light,
+        Dark,
+        Black
+    }
+
+    public class AppSettings
+    {
+        public string FontFamily { get; set; } = "Segoe UI";
+        public AppTheme Theme { get; set; } = AppTheme.Windows;
+        public List<InstanceInfo> Instances { get; set; } = new List<InstanceInfo>();
+        public List<string> ProjectDirectories { get; set; } = new List<string>();
+    }
+
     public class InstanceInfo : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler? PropertyChanged;
@@ -56,6 +73,17 @@ namespace YukkuriMovieMaker4Hub
         public string ExePath { get; set; } = string.Empty;
         public string RootDirectory => string.IsNullOrEmpty(ExePath) ? string.Empty : Path.GetDirectoryName(ExePath) ?? string.Empty;
         public string PluginDirectory => string.IsNullOrEmpty(ExePath) ? string.Empty : Path.Combine(RootDirectory, "user", "plugin");
+    }
+
+    public class ProjectFileItem
+    {
+        public string Name { get; set; } = string.Empty;
+        public string FullPath { get; set; } = string.Empty;
+        public DateTime LastWriteTime { get; set; }
+        public long FileSize { get; set; }
+        public string Extension { get; set; } = string.Empty;
+        public string DisplaySize => $"{FileSize / 1024.0 / 1024.0:F2} MB";
+        public string DisplayDate => LastWriteTime.ToString("yyyy/MM/dd HH:mm");
     }
 
     public class PluginLink
@@ -134,6 +162,14 @@ namespace YukkuriMovieMaker4Hub
         public bool IsEnabled => IsDirectory ? !Path.GetFileName(FullPath).StartsWith("_") : !Path.GetFileName(FullPath).EndsWith(".disabled");
     }
 
+    public class FontItem
+    {
+        public string DisplayName { get; set; } = string.Empty;
+        public string InternalName { get; set; } = string.Empty;
+        public bool IsJapanese { get; set; }
+        public FontFamily Family { get; set; }
+    }
+
     public class BooleanToStatusConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture) => (value is bool b && b) ? "有効" : "無効";
@@ -155,15 +191,15 @@ namespace YukkuriMovieMaker4Hub
     public class SettingsManager
     {
         private readonly string _path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "settings.json");
-        public List<InstanceInfo> LoadInstances()
+        public AppSettings Load()
         {
-            if (!File.Exists(_path)) return new List<InstanceInfo>();
-            try { return JsonSerializer.Deserialize<List<InstanceInfo>>(File.ReadAllText(_path)) ?? new List<InstanceInfo>(); }
-            catch { return new List<InstanceInfo>(); }
+            if (!File.Exists(_path)) return new AppSettings();
+            try { return JsonSerializer.Deserialize<AppSettings>(File.ReadAllText(_path)) ?? new AppSettings(); }
+            catch { return new AppSettings(); }
         }
-        public void SaveInstances(List<InstanceInfo> instances)
+        public void Save(AppSettings settings)
         {
-            var json = JsonSerializer.Serialize(instances, new JsonSerializerOptions { WriteIndented = true });
+            var json = JsonSerializer.Serialize(settings, new JsonSerializerOptions { WriteIndented = true });
             File.WriteAllText(_path, json);
         }
     }
@@ -172,16 +208,45 @@ namespace YukkuriMovieMaker4Hub
     {
         public event PropertyChangedEventHandler? PropertyChanged;
         protected void OnPropertyChanged(string name) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
-        private SettingsManager _settings = new SettingsManager();
+        private SettingsManager _settingsManager = new SettingsManager();
+        private AppSettings _currentSettings = new AppSettings();
         private HttpClient _http = new HttpClient();
         public ObservableCollection<InstanceInfo> Instances { get; set; } = new ObservableCollection<InstanceInfo>();
         public ObservableCollection<LocalPluginInfo> LocalPlugins { get; set; } = new ObservableCollection<LocalPluginInfo>();
         public ObservableCollection<OnlinePlugin> OnlinePlugins { get; set; } = new ObservableCollection<OnlinePlugin>();
+        public ObservableCollection<string> ProjectDirectories { get; set; } = new ObservableCollection<string>();
+
+        private List<ProjectFileItem> _allProjects = new List<ProjectFileItem>();
+        public ObservableCollection<ProjectFileItem> FilteredProjects { get; set; } = new ObservableCollection<ProjectFileItem>();
+
+        private string _projectSearchText = string.Empty;
+        public string ProjectSearchText { get => _projectSearchText; set { _projectSearchText = value; ApplyProjectFilter(); OnPropertyChanged(nameof(ProjectSearchText)); } }
+
+        private bool _showYmmp = true;
+        public bool ShowYmmp { get => _showYmmp; set { _showYmmp = value; ApplyProjectFilter(); OnPropertyChanged(nameof(ShowYmmp)); } }
+
+        private bool _showYmmpx = true;
+        public bool ShowYmmpx { get => _showYmmpx; set { _showYmmpx = value; ApplyProjectFilter(); OnPropertyChanged(nameof(ShowYmmpx)); } }
+
+        private List<FontItem> _allFonts = new List<FontItem>();
+        public ObservableCollection<FontItem> FilteredFonts { get; set; } = new ObservableCollection<FontItem>();
+
+        private string _fontSearchText = string.Empty;
+        public string FontSearchText { get => _fontSearchText; set { _fontSearchText = value; ApplyFontFilter(); OnPropertyChanged(nameof(FontSearchText)); } }
+
+        private bool _isJapaneseOnly = false;
+        public bool IsJapaneseOnly { get => _isJapaneseOnly; set { _isJapaneseOnly = value; ApplyFontFilter(); OnPropertyChanged(nameof(IsJapaneseOnly)); } }
+
+        public Array ThemeModes => Enum.GetValues(typeof(AppTheme));
+
         private Dictionary<string, string> _versionCache = new Dictionary<string, string>();
+
         private InstanceInfo? _selectedInstance;
-        public InstanceInfo? SelectedInstance { get => _selectedInstance; set { _selectedInstance = value; OnPropertyChanged(nameof(SelectedInstance)); RefreshLocalPlugins(); } }
+        public InstanceInfo? SelectedInstance { get => _selectedInstance; set { _selectedInstance = value; OnPropertyChanged(nameof(SelectedInstance)); RefreshLocalPlugins(); RefreshRecentProjects(); } }
+
         private OnlinePlugin? _selectedOnlinePlugin;
         public OnlinePlugin? SelectedOnlinePlugin { get => _selectedOnlinePlugin; set { _selectedOnlinePlugin = value; OnPropertyChanged(nameof(SelectedOnlinePlugin)); OnPropertyChanged(nameof(SelectedVersion)); } }
+
         public string SelectedVersion
         {
             get
@@ -192,16 +257,112 @@ namespace YukkuriMovieMaker4Hub
             }
         }
 
+        public FontItem? SelectedFontItem
+        {
+            get => FilteredFonts.FirstOrDefault(f => f.InternalName == _currentSettings.FontFamily);
+            set { if (value != null) { _currentSettings.FontFamily = value.InternalName; ApplyTheme(); SaveAll(); OnPropertyChanged(nameof(SelectedFontItem)); } }
+        }
+
+        public AppTheme SelectedTheme { get => _currentSettings.Theme; set { _currentSettings.Theme = value; ApplyTheme(); SaveAll(); OnPropertyChanged(nameof(SelectedTheme)); } }
+
+        private string _lastSortField = "DisplayName";
+        private ListSortDirection _lastSortDir = ListSortDirection.Ascending;
+
         public MainWindow()
         {
             InitializeComponent();
+            _currentSettings = _settingsManager.Load();
             _http.DefaultRequestHeaders.UserAgent.ParseAdd("YukkuriMovieMaker4Hub/1.0");
             this.DataContext = this;
-            foreach (var i in _settings.LoadInstances())
+
+            InitializeFonts();
+
+            foreach (var i in _currentSettings.Instances)
             {
-                i.PropertyChanged += (s, e) => _settings.SaveInstances(Instances.ToList());
+                i.PropertyChanged += (s, e) => SaveAll();
                 Instances.Add(i);
             }
+
+            foreach (var p in _currentSettings.ProjectDirectories)
+                ProjectDirectories.Add(p);
+
+            SystemEvents.UserPreferenceChanged += (s, e) => { if (SelectedTheme == AppTheme.Windows) ApplyTheme(); };
+            ApplyTheme();
+            RefreshRecentProjects();
+        }
+
+        private void InitializeFonts()
+        {
+            var jpCulture = XmlLanguage.GetLanguage("ja-jp");
+            foreach (var ff in Fonts.SystemFontFamilies)
+            {
+                string name = ff.FamilyNames.TryGetValue(jpCulture, out var jpName) ? jpName : ff.Source;
+                bool isJp = ff.FamilyNames.ContainsKey(jpCulture);
+                _allFonts.Add(new FontItem { DisplayName = name, InternalName = ff.Source, IsJapanese = isJp, Family = ff });
+            }
+            _allFonts = _allFonts.OrderBy(f => f.DisplayName).ToList();
+            ApplyFontFilter();
+        }
+
+        private void ApplyFontFilter()
+        {
+            var filtered = _allFonts.AsEnumerable();
+            if (!string.IsNullOrWhiteSpace(FontSearchText))
+                filtered = filtered.Where(f => f.DisplayName.IndexOf(FontSearchText, StringComparison.OrdinalIgnoreCase) >= 0 || f.InternalName.IndexOf(FontSearchText, StringComparison.OrdinalIgnoreCase) >= 0);
+            if (IsJapaneseOnly)
+                filtered = filtered.Where(f => f.IsJapanese);
+
+            FilteredFonts.Clear();
+            foreach (var f in filtered) FilteredFonts.Add(f);
+            OnPropertyChanged(nameof(SelectedFontItem));
+        }
+
+        private void ApplyTheme()
+        {
+            try
+            {
+                this.Resources["AppFont"] = new FontFamily(_currentSettings.FontFamily);
+
+                var mode = SelectedTheme;
+                if (mode == AppTheme.Windows)
+                {
+                    using var key = Registry.CurrentUser.OpenSubKey(@"Software\Microsoft\Windows\CurrentVersion\Themes\Personalize");
+                    var value = key?.GetValue("AppsUseLightTheme");
+                    mode = (value is int i && i == 1) ? AppTheme.Light : AppTheme.Dark;
+                }
+
+                switch (mode)
+                {
+                    case AppTheme.Light:
+                        SetThemeColors("#FFFFFF", "#F0F0F0", "#E0E0E0", "#000000", "#555555", "#0078D7", "#DDDDDD");
+                        break;
+                    case AppTheme.Dark:
+                        SetThemeColors("#252525", "#333333", "#444444", "#FFFFFF", "#AAAAAA", "#2E7D32", "#555555");
+                        break;
+                    case AppTheme.Black:
+                        SetThemeColors("#000000", "#121212", "#1F1F1F", "#FFFFFF", "#888888", "#333333", "#333333");
+                        break;
+                }
+            }
+            catch { }
+        }
+
+        private void SetThemeColors(string bg, string panel, string item, string text, string subText, string accent, string border)
+        {
+            this.Resources["ThemeBrush"] = new SolidColorBrush((Color)ColorConverter.ConvertFromString(bg));
+            this.Resources["PanelBrush"] = new SolidColorBrush((Color)ColorConverter.ConvertFromString(panel));
+            this.Resources["ItemBrush"] = new SolidColorBrush((Color)ColorConverter.ConvertFromString(item));
+            this.Resources["TextBrush"] = new SolidColorBrush((Color)ColorConverter.ConvertFromString(text));
+            this.Resources["SubTextBrush"] = new SolidColorBrush((Color)ColorConverter.ConvertFromString(subText));
+            this.Resources["AccentBrush"] = new SolidColorBrush((Color)ColorConverter.ConvertFromString(accent));
+            this.Resources["BorderBrush"] = new SolidColorBrush((Color)ColorConverter.ConvertFromString(border));
+        }
+
+        private void SaveAll()
+        {
+            _currentSettings.Instances = Instances.ToList();
+            _currentSettings.ProjectDirectories = ProjectDirectories.ToList();
+            _settingsManager.Save(_currentSettings);
         }
 
         private void AddInstance_Click(object sender, RoutedEventArgs e)
@@ -210,9 +371,9 @@ namespace YukkuriMovieMaker4Hub
             if (dialog.ShowDialog() == true)
             {
                 var newInstance = new InstanceInfo { Name = "新規インスタンス", ExePath = dialog.FileName };
-                newInstance.PropertyChanged += (s, ee) => _settings.SaveInstances(Instances.ToList());
+                newInstance.PropertyChanged += (s, ee) => SaveAll();
                 Instances.Add(newInstance);
-                _settings.SaveInstances(Instances.ToList());
+                SaveAll();
             }
         }
 
@@ -222,16 +383,18 @@ namespace YukkuriMovieMaker4Hub
             if (MessageBox.Show($"{SelectedInstance.Name} をHubから削除しますか？", "確認", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
             {
                 Instances.Remove(SelectedInstance);
-                _settings.SaveInstances(Instances.ToList());
+                SaveAll();
                 SelectedInstance = null;
             }
         }
 
         private async void TabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (e.Source is TabControl tc && tc.SelectedItem is TabItem ti && ti.Header != null && ti.Header.ToString() == "プラグインポータル")
+            if (e.Source is TabControl tc && tc.SelectedItem is TabItem ti && ti.Header != null)
             {
-                await LoadOnlinePlugins();
+                string header = ti.Header.ToString() ?? "";
+                if (header == "プラグインポータル") await LoadOnlinePlugins();
+                if (header == "概要") RefreshRecentProjects();
             }
         }
 
@@ -282,23 +445,16 @@ namespace YukkuriMovieMaker4Hub
                     {
                         var latest = detail.Releases.OrderByDescending(r => r.PublishedAt).FirstOrDefault();
                         if (latest != null && !string.IsNullOrEmpty(latest.TagName))
-                        {
                             _versionCache[repoPath] = latest.TagName;
-                        }
                         else
-                        {
                             _versionCache[repoPath] = "リリースなし";
-                        }
                     }
                     else
-                    {
                         _versionCache[repoPath] = "データなし";
-                    }
                 }
-                catch (Exception ex)
+                catch
                 {
                     _versionCache[repoPath] = "取得エラー";
-                    Debug.WriteLine($"Error fetching version for {repoPath}: {ex.Message}");
                 }
 
                 if (SelectedOnlinePlugin == p) OnPropertyChanged(nameof(SelectedVersion));
@@ -347,6 +503,48 @@ namespace YukkuriMovieMaker4Hub
             }
             foreach (var file in Directory.GetFiles(SelectedInstance.PluginDirectory, "*.dll*"))
                 LocalPlugins.Add(new LocalPluginInfo { FullPath = file, IsDirectory = false });
+            ApplyCurrentSort();
+        }
+
+        private void RefreshRecentProjects()
+        {
+            _allProjects.Clear();
+            foreach (var dir in ProjectDirectories)
+            {
+                if (!Directory.Exists(dir)) continue;
+                try
+                {
+                    var files = Directory.EnumerateFiles(dir, "*", SearchOption.AllDirectories)
+                                        .Where(s => s.EndsWith(".ymmp") || s.EndsWith(".ymmpx"));
+                    foreach (var f in files)
+                    {
+                        var info = new FileInfo(f);
+                        _allProjects.Add(new ProjectFileItem
+                        {
+                            Name = info.Name,
+                            FullPath = info.FullName,
+                            LastWriteTime = info.LastWriteTime,
+                            FileSize = info.Length,
+                            Extension = info.Extension.ToLower()
+                        });
+                    }
+                }
+                catch { }
+            }
+            ApplyProjectFilter();
+        }
+
+        private void ApplyProjectFilter()
+        {
+            var filtered = _allProjects.AsEnumerable();
+            if (!string.IsNullOrWhiteSpace(ProjectSearchText))
+                filtered = filtered.Where(p => p.Name.IndexOf(ProjectSearchText, StringComparison.OrdinalIgnoreCase) >= 0 || p.FullPath.IndexOf(ProjectSearchText, StringComparison.OrdinalIgnoreCase) >= 0);
+
+            if (!ShowYmmp) filtered = filtered.Where(p => p.Extension != ".ymmp");
+            if (!ShowYmmpx) filtered = filtered.Where(p => p.Extension != ".ymmpx");
+
+            FilteredProjects.Clear();
+            foreach (var p in filtered.OrderByDescending(x => x.LastWriteTime)) FilteredProjects.Add(p);
         }
 
         private string GetPluginNameFromYml(string dirPath)
@@ -382,7 +580,13 @@ namespace YukkuriMovieMaker4Hub
 
         private void TogglePlugin_Click(object sender, RoutedEventArgs e)
         {
-            if (!(sender is Button btn && btn.DataContext is LocalPluginInfo plugin) || !EnsureYmmClosed()) return;
+            if (!(sender is Button btn && btn.DataContext is LocalPluginInfo plugin)) return;
+            ToggleOne(plugin);
+        }
+
+        private void ToggleOne(LocalPluginInfo plugin)
+        {
+            if (!EnsureYmmClosed()) return;
             string? parent = Path.GetDirectoryName(plugin.FullPath);
             if (parent == null) return;
             string oldName = Path.GetFileName(plugin.FullPath);
@@ -397,6 +601,70 @@ namespace YukkuriMovieMaker4Hub
             catch (Exception ex) { MessageBox.Show(ex.Message); }
         }
 
+        private void BulkToggle_Click(object sender, RoutedEventArgs e)
+        {
+            var selected = LocalPluginList.SelectedItems.Cast<LocalPluginInfo>().ToList();
+            if (selected.Count == 0) return;
+            if (!EnsureYmmClosed()) return;
+            foreach (var p in selected) ToggleOne(p);
+        }
+
+        private void BulkDelete_Click(object sender, RoutedEventArgs e)
+        {
+            var selected = LocalPluginList.SelectedItems.Cast<LocalPluginInfo>().ToList();
+            if (selected.Count == 0) return;
+            if (MessageBox.Show($"{selected.Count}件のプラグインを完全に削除しますか？\nこの操作は戻せません。", "削除の確認", MessageBoxButton.YesNo, MessageBoxImage.Warning) != MessageBoxResult.Yes) return;
+            if (!EnsureYmmClosed()) return;
+            foreach (var p in selected) DeleteOne(p);
+            RefreshLocalPlugins();
+        }
+
+        private void DeletePlugin_Click(object sender, RoutedEventArgs e)
+        {
+            if (!(sender is Button btn && btn.DataContext is LocalPluginInfo plugin)) return;
+            if (MessageBox.Show($"{plugin.DisplayName} を完全に削除しますか？", "確認", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
+            {
+                if (!EnsureYmmClosed()) return;
+                DeleteOne(plugin);
+                RefreshLocalPlugins();
+            }
+        }
+
+        private void DeleteOne(LocalPluginInfo p)
+        {
+            try { if (p.IsDirectory) Directory.Delete(p.FullPath, true); else File.Delete(p.FullPath); }
+            catch (Exception ex) { MessageBox.Show($"{p.DisplayName}の削除に失敗: {ex.Message}"); }
+        }
+
+        private void GridViewColumnHeader_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is GridViewColumnHeader header && header.Column != null)
+            {
+                string? field = (header.Column.DisplayMemberBinding as Binding)?.Path.Path;
+                if (field == null)
+                {
+                    if (header.Content?.ToString() == "名前") field = "DisplayName";
+                    else if (header.Content?.ToString() == "状態") field = "IsEnabled";
+                }
+                if (field == null) return;
+                if (_lastSortField == field) _lastSortDir = (_lastSortDir == ListSortDirection.Ascending) ? ListSortDirection.Descending : ListSortDirection.Ascending;
+                else { _lastSortField = field; _lastSortDir = ListSortDirection.Ascending; }
+                ApplyCurrentSort();
+            }
+        }
+
+        private void ApplyCurrentSort()
+        {
+            var list = LocalPlugins.ToList();
+            if (_lastSortField == "DisplayName")
+                list = _lastSortDir == ListSortDirection.Ascending ? list.OrderBy(p => p.DisplayName.TrimStart('_')).ToList() : list.OrderByDescending(p => p.DisplayName.TrimStart('_')).ToList();
+            else if (_lastSortField == "IsEnabled")
+                list = _lastSortDir == ListSortDirection.Ascending ? list.OrderBy(p => p.IsEnabled).ThenBy(p => p.DisplayName.TrimStart('_')).ToList() : list.OrderByDescending(p => p.IsEnabled).ThenBy(p => p.DisplayName.TrimStart('_')).ToList();
+
+            LocalPlugins.Clear();
+            foreach (var p in list) LocalPlugins.Add(p);
+        }
+
         private void LaunchYmm(string args = "")
         {
             if (SelectedInstance == null || !File.Exists(SelectedInstance.ExePath)) return;
@@ -408,5 +676,43 @@ namespace YukkuriMovieMaker4Hub
         private void CreateNewProject_Click(object sender, RoutedEventArgs e) => LaunchYmm("CreateNewProject");
         private void OpenFolder_Click(object sender, RoutedEventArgs e) { if (SelectedInstance != null) Process.Start("explorer.exe", SelectedInstance.RootDirectory); }
         private void ChangeIcon_Click(object sender, RoutedEventArgs e) { if (SelectedInstance == null) return; var d = new OpenFileDialog { Filter = "画像|*.png;*.jpg;*.ico" }; if (d.ShowDialog() == true) SelectedInstance.IconPath = d.FileName; }
+
+        private void AddProjectDir_Click(object sender, RoutedEventArgs e)
+        {
+            var d = new OpenFolderDialog();
+            if (d.ShowDialog() == true)
+            {
+                if (!ProjectDirectories.Contains(d.FolderName))
+                {
+                    ProjectDirectories.Add(d.FolderName);
+                    SaveAll();
+                    RefreshRecentProjects();
+                }
+            }
+        }
+
+        private void RemoveProjectDir_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is Button btn && btn.DataContext is string dir)
+            {
+                ProjectDirectories.Remove(dir);
+                SaveAll();
+                RefreshRecentProjects();
+            }
+        }
+
+        private void OpenProject_Click(object sender, RoutedEventArgs e)
+        {
+            if (ProjectGrid.SelectedItem is ProjectFileItem project)
+                LaunchYmm($"\"{project.FullPath}\"");
+        }
+
+        private void ResetProjectFilters_Click(object sender, RoutedEventArgs e)
+        {
+            ProjectSearchText = string.Empty;
+            ShowYmmp = true;
+            ShowYmmpx = true;
+            RefreshRecentProjects();
+        }
     }
 }
