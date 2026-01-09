@@ -387,7 +387,7 @@ namespace YukkuriMovieMaker4Hub
             {
                 var yml = await _http.GetStringAsync("https://manjubox.net/ymm4plugins.yml");
                 var catalog = ParseYmm4PluginsYaml(yml);
-
+                
                 var githubListJson = await _http.GetStringAsync("https://manjubox.net/api/ymm4plugins/github/list");
                 var allReleases = JsonSerializer.Deserialize<GitHubReleasesPluginSummary[]>(githubListJson) ?? Array.Empty<GitHubReleasesPluginSummary>();
 
@@ -402,10 +402,10 @@ namespace YukkuriMovieMaker4Hub
                         {
                             var owner = match.Groups[1].Value;
                             var repo = match.Groups[2].Value.Replace(".git", "").TrimEnd('/');
-
+                            
                             p.LatestRelease = allReleases
-                                .Where(r => !r.Prerelease &&
-                                       r.User.Equals(owner, StringComparison.OrdinalIgnoreCase) &&
+                                .Where(r => !r.Prerelease && 
+                                       r.User.Equals(owner, StringComparison.OrdinalIgnoreCase) && 
                                        r.Repo.Equals(repo, StringComparison.OrdinalIgnoreCase))
                                 .OrderByDescending(r => r.PublishedAt)
                                 .FirstOrDefault();
@@ -713,18 +713,18 @@ namespace YukkuriMovieMaker4Hub
                 string tempDir = Path.Combine(Path.GetTempPath(), "YMM4Hub");
                 if (!Directory.Exists(tempDir)) Directory.CreateDirectory(tempDir);
                 string savePath = Path.Combine(tempDir, release.FileName);
-
+                
                 using var request = new HttpRequestMessage(HttpMethod.Get, release.BrowserDownloadUrl);
                 request.Headers.UserAgent.ParseAdd("YukkuriMovieMaker4Hub/1.0");
                 using var response = await _http.SendAsync(request, HttpCompletionOption.ResponseHeadersRead);
                 response.EnsureSuccessStatusCode();
-
+                
                 using (var contentStream = await response.Content.ReadAsStreamAsync())
                 using (var fileStream = File.Create(savePath))
                 {
                     await contentStream.CopyToAsync(fileStream);
                 }
-
+                
                 Process.Start(new ProcessStartInfo(savePath) { UseShellExecute = true });
             }
             catch (Exception ex)
