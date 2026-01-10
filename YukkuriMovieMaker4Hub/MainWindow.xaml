@@ -105,6 +105,38 @@
                                 <Grid x:Name="DropDown" SnapsToDevicePixels="True" MinWidth="{TemplateBinding ActualWidth}" MaxHeight="{TemplateBinding MaxDropDownHeight}">
                                     <Border x:Name="DropDownBorder" Background="{DynamicResource PanelBrush}" BorderThickness="1" BorderBrush="{DynamicResource BorderBrush}" CornerRadius="4"/>
                                     <ScrollViewer Margin="1" SnapsToDevicePixels="True">
+                                        <ScrollViewer.Resources>
+                                            <Style TargetType="{x:Type ScrollBar}">
+                                                <Setter Property="Stylus.IsPressAndHoldEnabled" Value="false"/>
+                                                <Setter Property="Stylus.IsFlicksEnabled" Value="false"/>
+                                                <Setter Property="Width" Value="8"/>
+                                                <Setter Property="Margin" Value="2,0"/>
+                                                <Setter Property="Template">
+                                                    <Setter.Value>
+                                                        <ControlTemplate TargetType="{x:Type ScrollBar}">
+                                                            <Grid x:Name="Bg" SnapsToDevicePixels="true">
+                                                                <Track x:Name="PART_Track" IsDirectionReversed="true" IsEnabled="{TemplateBinding IsEnabled}">
+                                                                    <Track.Thumb>
+                                                                        <Thumb x:Name="Thumb">
+                                                                            <Thumb.Template>
+                                                                                <ControlTemplate TargetType="{x:Type Thumb}">
+                                                                                    <Border Background="{DynamicResource ItemBrush}" CornerRadius="4" />
+                                                                                </ControlTemplate>
+                                                                            </Thumb.Template>
+                                                                        </Thumb>
+                                                                    </Track.Thumb>
+                                                                </Track>
+                                                            </Grid>
+                                                            <ControlTemplate.Triggers>
+                                                                <Trigger Property="IsMouseOver" Value="true">
+                                                                    <Setter TargetName="Thumb" Property="Background" Value="{DynamicResource AccentBrush}" />
+                                                                </Trigger>
+                                                            </ControlTemplate.Triggers>
+                                                        </ControlTemplate>
+                                                    </Setter.Value>
+                                                </Setter>
+                                            </Style>
+                                        </ScrollViewer.Resources>
                                         <StackPanel IsItemsHost="True" KeyboardNavigation.DirectionalNavigation="Contained"/>
                                     </ScrollViewer>
                                 </Grid>
@@ -319,22 +351,55 @@
 
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="250"/>
+            <ColumnDefinition Width="320"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
-        <Grid Grid.Column="0" Background="{DynamicResource PanelBrush}" Margin="5">
+        <Grid Grid.Column="0" Background="{DynamicResource PanelBrush}">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
-            <TextBlock Text="インスタンス" Margin="10" FontWeight="Bold"/>
+
+            <Grid.Resources>
+                <Style x:Key="QuickActionButtonStyle" TargetType="Button">
+                    <Setter Property="Background" Value="Transparent"/>
+                    <Setter Property="BorderThickness" Value="0"/>
+                    <Setter Property="Width" Value="28"/>
+                    <Setter Property="Height" Value="28"/>
+                    <Setter Property="Margin" Value="2,0"/>
+                    <Setter Property="Cursor" Value="Hand"/>
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="Button">
+                                <Border x:Name="btnBorder" Background="{TemplateBinding Background}" CornerRadius="4">
+                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </Border>
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter TargetName="btnBorder" Property="Background" Value="#40FFFFFF"/>
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </Grid.Resources>
+
+            <TextBlock Text="インスタンス" Margin="10" FontWeight="Bold" Foreground="{DynamicResource TextBrush}"/>
+
             <ListBox x:Name="InstanceListBox" Grid.Row="1" ItemsSource="{Binding Instances}" SelectedItem="{Binding SelectedInstance}" Background="Transparent" BorderThickness="0" Margin="5">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
-                        <StackPanel Orientation="Horizontal" Margin="5">
-                            <Grid Width="32" Height="32" Margin="0,0,10,0">
+                        <Grid Margin="2">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <Grid Grid.Column="0" Width="32" Height="32" Margin="0,0,10,0">
                                 <Ellipse Fill="{DynamicResource BorderBrush}"/>
                                 <Image Source="{Binding IconImage}" Stretch="UniformToFill">
                                     <Image.Clip>
@@ -354,32 +419,23 @@
                                     </Path.Style>
                                 </Path>
                             </Grid>
-                            <TextBlock Text="{Binding Name}" VerticalAlignment="Center" FontSize="13" Foreground="{DynamicResource TextBrush}"/>
-                        </StackPanel>
+
+
+                            <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+                                <Button Style="{StaticResource QuickActionButtonStyle}" Click="LaunchInstance_Click" ToolTip="起動">
+                                    <Path Fill="{DynamicResource TextBrush}" Width="14" Height="14" Stretch="Uniform" Data="M8,5.14V19.14L19,12.14L8,5.14Z"/>
+                                </Button>
+                                <Button Style="{StaticResource QuickActionButtonStyle}" Click="LaunchLastProject_Click" ToolTip="前回のプロジェクト">
+                                    <Path Fill="{DynamicResource TextBrush}" Width="14" Height="14" Stretch="Uniform" Data="M13.5,8H12V13L16.28,15.54L17,14.33L13.5,12.25V8M13,3A9,9 0 0,0 4,12H1L4.96,16.03L9,12H6A7,7 0 0,1 13,5A7,7 0 0,1 20,12A7,7 0 0,1 13,19C11.07,19 9.32,18.21 8.06,16.94L6.64,18.36C8.27,20 10.5,21 13,21A9,9 0 0,0 22,12A9,9 0 0,0 13,3Z"/>
+                                </Button>
+                                <Button Style="{StaticResource QuickActionButtonStyle}" Click="CreateNewProject_Click" ToolTip="新規作成">
+                                    <Path Fill="{DynamicResource TextBrush}" Width="14" Height="14" Stretch="Uniform" Data="M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z"/>
+                                </Button>
+                            </StackPanel>
+                            <TextBlock Grid.Column="2" Text="{Binding Name}" VerticalAlignment="Center" FontSize="13" Foreground="{DynamicResource TextBrush}" TextTrimming="CharacterEllipsis"/>
+                        </Grid>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
-                <ListBox.ItemContainerStyle>
-                    <Style TargetType="ListBoxItem">
-                        <Setter Property="Background" Value="Transparent"/>
-                        <Setter Property="Template">
-                            <Setter.Value>
-                                <ControlTemplate TargetType="ListBoxItem">
-                                    <Border x:Name="Bd" Background="{TemplateBinding Background}" CornerRadius="4" Padding="5">
-                                        <ContentPresenter/>
-                                    </Border>
-                                    <ControlTemplate.Triggers>
-                                        <Trigger Property="IsSelected" Value="True">
-                                            <Setter TargetName="Bd" Property="Background" Value="{DynamicResource AccentBrush}"/>
-                                        </Trigger>
-                                        <Trigger Property="IsMouseOver" Value="True">
-                                            <Setter TargetName="Bd" Property="Background" Value="{DynamicResource ItemBrush}"/>
-                                        </Trigger>
-                                    </ControlTemplate.Triggers>
-                                </ControlTemplate>
-                            </Setter.Value>
-                        </Setter>
-                    </Style>
-                </ListBox.ItemContainerStyle>
             </ListBox>
             <StackPanel Grid.Row="2" Margin="10">
                 <Button Click="AddInstance_Click" Margin="0,3" Height="35">
@@ -441,7 +497,7 @@
                             <Button Click="LaunchLastProject_Click" Height="60" Margin="5">
                                 <StackPanel Orientation="Horizontal">
                                     <Path Fill="{DynamicResource TextBrush}" Width="20" Height="20" Stretch="Uniform" Margin="0,0,10,0" Data="M13.5,8H12V13L16.28,15.54L17,14.33L13.5,12.25V8M13,3A9,9 0 0,0 4,12H1L4.96,16.03L9,12H6A7,7 0 0,1 13,5A7,7 0 0,1 20,12A7,7 0 0,1 13,19C11.07,19 9.32,18.21 8.06,16.94L6.64,18.36C8.27,20 10.5,21 13,21A9,9 0 0,0 22,12A9,9 0 0,0 13,3Z"/>
-                                    <TextBlock Text="前回開く" VerticalAlignment="Center"/>
+                                    <TextBlock Text="前回のプロジェクトを開く" VerticalAlignment="Center"/>
                                 </StackPanel>
                             </Button>
                             <Button Click="CreateNewProject_Click" Height="60" Margin="5">
@@ -466,6 +522,7 @@
                             <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center" Margin="20,0,0,0">
                                 <CheckBox Content=".ymmp" IsChecked="{Binding ShowYmmp}" Style="{StaticResource ModernCheckBox}" Margin="0,0,15,0"/>
                                 <CheckBox Content=".ymmpx" IsChecked="{Binding ShowYmmpx}" Style="{StaticResource ModernCheckBox}" Margin="0,0,20,0"/>
+                                <CheckBox Content=".ymmx" IsChecked="{Binding ShowYmmx}" Style="{StaticResource ModernCheckBox}" Margin="0,0,20,0"/>
                                 <Button Content="フィルタ解除" Click="ResetProjectFilters_Click" Padding="15,8" Background="Transparent" Foreground="{DynamicResource SubTextBrush}">
                                     <Button.Style>
                                         <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
@@ -481,6 +538,38 @@
                         </Grid>
 
                         <DataGrid x:Name="ProjectGrid" Grid.Row="3" ItemsSource="{Binding FilteredProjects}" Margin="5" MouseDoubleClick="OpenProject_Click">
+                            <DataGrid.Resources>
+                                <Style TargetType="{x:Type ScrollBar}">
+                                    <Setter Property="Stylus.IsPressAndHoldEnabled" Value="false"/>
+                                    <Setter Property="Stylus.IsFlicksEnabled" Value="false"/>
+                                    <Setter Property="Width" Value="8"/>
+                                    <Setter Property="Margin" Value="2,0"/>
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="{x:Type ScrollBar}">
+                                                <Grid x:Name="Bg" SnapsToDevicePixels="true">
+                                                    <Track x:Name="PART_Track" IsDirectionReversed="true" IsEnabled="{TemplateBinding IsEnabled}">
+                                                        <Track.Thumb>
+                                                            <Thumb x:Name="Thumb">
+                                                                <Thumb.Template>
+                                                                    <ControlTemplate TargetType="{x:Type Thumb}">
+                                                                        <Border Background="{DynamicResource ItemBrush}" CornerRadius="4" />
+                                                                    </ControlTemplate>
+                                                                </Thumb.Template>
+                                                            </Thumb>
+                                                        </Track.Thumb>
+                                                    </Track>
+                                                </Grid>
+                                                <ControlTemplate.Triggers>
+                                                    <Trigger Property="IsMouseOver" Value="true">
+                                                        <Setter TargetName="Thumb" Property="Background" Value="{DynamicResource AccentBrush}" />
+                                                    </Trigger>
+                                                </ControlTemplate.Triggers>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+                            </DataGrid.Resources>
                             <DataGrid.Columns>
                                 <DataGridTextColumn Header="ファイル名" Binding="{Binding Name}" Width="*"/>
                                 <DataGridTextColumn Header="最終更新日時" Binding="{Binding LastWriteTime, StringFormat='yyyy/MM/dd HH:mm'}" Width="150"/>
@@ -492,6 +581,38 @@
                 </TabItem>
 
                 <TabItem Header="プラグイン管理">
+                    <TabItem.Resources>
+                        <Style TargetType="{x:Type ScrollBar}">
+                            <Setter Property="Stylus.IsPressAndHoldEnabled" Value="false"/>
+                            <Setter Property="Stylus.IsFlicksEnabled" Value="false"/>
+                            <Setter Property="Width" Value="8"/>
+                            <Setter Property="Margin" Value="2,0"/>
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="{x:Type ScrollBar}">
+                                        <Grid x:Name="Bg" SnapsToDevicePixels="true">
+                                            <Track x:Name="PART_Track" IsDirectionReversed="true" IsEnabled="{TemplateBinding IsEnabled}">
+                                                <Track.Thumb>
+                                                    <Thumb x:Name="Thumb">
+                                                        <Thumb.Template>
+                                                            <ControlTemplate TargetType="{x:Type Thumb}">
+                                                                <Border Background="{DynamicResource ItemBrush}" CornerRadius="4" />
+                                                            </ControlTemplate>
+                                                        </Thumb.Template>
+                                                    </Thumb>
+                                                </Track.Thumb>
+                                            </Track>
+                                        </Grid>
+                                        <ControlTemplate.Triggers>
+                                            <Trigger Property="IsMouseOver" Value="true">
+                                                <Setter TargetName="Thumb" Property="Background" Value="{DynamicResource AccentBrush}" />
+                                            </Trigger>
+                                        </ControlTemplate.Triggers>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </TabItem.Resources>
                     <Grid IsEnabled="{Binding SelectedInstance, Converter={StaticResource IsNotNullConverter}}">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto"/>
@@ -546,7 +667,7 @@
                                                 <TextBlock x:Name="StatusText" Text="{Binding IsEnabled, Converter={StaticResource BooleanToStatusConverter}}" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                                                 <DataTemplate.Triggers>
                                                     <DataTrigger Binding="{Binding IsEnabled}" Value="True">
-                                                        <Setter TargetName="StatusText" Property="Foreground" Value="{DynamicResource AccentBrush}"/>
+                                                        <Setter TargetName="StatusText" Property="Foreground" Value="{DynamicResource TextBrush}"/>
                                                     </DataTrigger>
                                                     <DataTrigger Binding="{Binding IsEnabled}" Value="False">
                                                         <Setter TargetName="StatusText" Property="Foreground" Value="{DynamicResource SubTextBrush}"/>
@@ -572,6 +693,38 @@
                 </TabItem>
 
                 <TabItem Header="プラグインポータル">
+                    <TabItem.Resources>
+                        <Style TargetType="{x:Type ScrollBar}">
+                            <Setter Property="Stylus.IsPressAndHoldEnabled" Value="false"/>
+                            <Setter Property="Stylus.IsFlicksEnabled" Value="false"/>
+                            <Setter Property="Width" Value="8"/>
+                            <Setter Property="Margin" Value="2,0"/>
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="{x:Type ScrollBar}">
+                                        <Grid x:Name="Bg" SnapsToDevicePixels="true">
+                                            <Track x:Name="PART_Track" IsDirectionReversed="true" IsEnabled="{TemplateBinding IsEnabled}">
+                                                <Track.Thumb>
+                                                    <Thumb x:Name="Thumb">
+                                                        <Thumb.Template>
+                                                            <ControlTemplate TargetType="{x:Type Thumb}">
+                                                                <Border Background="{DynamicResource ItemBrush}" CornerRadius="4" />
+                                                            </ControlTemplate>
+                                                        </Thumb.Template>
+                                                    </Thumb>
+                                                </Track.Thumb>
+                                            </Track>
+                                        </Grid>
+                                        <ControlTemplate.Triggers>
+                                            <Trigger Property="IsMouseOver" Value="true">
+                                                <Setter TargetName="Thumb" Property="Background" Value="{DynamicResource AccentBrush}" />
+                                            </Trigger>
+                                        </ControlTemplate.Triggers>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </TabItem.Resources>
                     <Grid>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto"/>
@@ -580,7 +733,55 @@
 
                         <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="10,5">
                             <TextBlock Text="プラグイン検索:" VerticalAlignment="Center" Margin="0,0,5,0" Foreground="{DynamicResource TextBrush}"/>
-                            <TextBox Width="300" Text="{Binding OnlinePluginSearchText, UpdateSourceTrigger=PropertyChanged}" VerticalContentAlignment="Center"/>
+                            <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+                                <TextBox Text="{Binding OnlinePluginSearchText, UpdateSourceTrigger=PropertyChanged}" Width="300" Tag="プラグインを検索..." />
+
+                                <Grid Margin="5,0,0,0">
+                                    <ToggleButton x:Name="FilterButton" Content="" FontFamily="Segoe MDL2 Assets" Width="40">
+                                        <ToggleButton.Style>
+                                            <Style TargetType="ToggleButton">
+                                                <Setter Property="Background" Value="{DynamicResource ItemBrush}"/>
+                                                <Setter Property="Foreground" Value="{DynamicResource TextBrush}"/>
+                                                <Setter Property="Template">
+                                                    <Setter.Value>
+                                                        <ControlTemplate TargetType="ToggleButton">
+                                                            <Border Background="{TemplateBinding Background}" CornerRadius="2">
+                                                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                            </Border>
+                                                        </ControlTemplate>
+                                                    </Setter.Value>
+                                                </Setter>
+                                                <Style.Triggers>
+                                                    <Trigger Property="IsMouseOver" Value="True">
+                                                        <Setter Property="Background" Value="#555555"/>
+                                                    </Trigger>
+                                                    <Trigger Property="IsChecked" Value="True">
+                                                        <Setter Property="Background" Value="#666666"/>
+                                                    </Trigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </ToggleButton.Style>
+                                    </ToggleButton>
+                                    <Popup IsOpen="{Binding IsChecked, ElementName=FilterButton}" StaysOpen="False" PlacementTarget="{Binding ElementName=FilterButton}" Placement="Bottom">
+                                        <Border Background="{DynamicResource PanelBrush}" BorderBrush="{DynamicResource ItemBrush}" BorderThickness="1" Padding="10" Width="200">
+                                            <StackPanel>
+                                                <TextBlock Text="タイプフィルター" FontWeight="Bold" Margin="0,0,0,10" Foreground="{DynamicResource TextBrush}"/>
+                                                <ItemsControl ItemsSource="{Binding PluginTypeFilters}">
+                                                    <ItemsControl.ItemTemplate>
+                                                        <DataTemplate>
+                                                            <CheckBox Content="{Binding Name}" IsChecked="{Binding IsSelected}" Foreground="{DynamicResource TextBrush}" Margin="0,2"/>
+                                                        </DataTemplate>
+                                                    </ItemsControl.ItemTemplate>
+                                                </ItemsControl>
+                                                <Separator Margin="0,10" Background="{DynamicResource TextBrush}"/>
+                                                <Button Content="すべてチェック" Click="AllCheck_Click" Margin="0,2"/>
+                                                <Button Content="すべて外す" Click="NoneCheck_Click" Margin="0,2"/>
+                                            </StackPanel>
+                                        </Border>
+                                    </Popup>
+                                    
+                                </Grid>
+                            </StackPanel>
                         </StackPanel>
 
                         <Grid Grid.Row="1">
@@ -631,7 +832,6 @@
                                         <TextBlock Text="{Binding SelectedOnlinePlugin.Author}" Foreground="{DynamicResource SubTextBrush}" Margin="0,5"/>
                                         <TextBlock Text="{Binding SelectedOnlinePlugin.Description}" TextWrapping="Wrap" Margin="0,10" Foreground="{DynamicResource TextBrush}"/>
                                         <Border BorderBrush="{DynamicResource BorderBrush}" BorderThickness="0,1,0,0" Margin="0,20"/>
-
                                         <Grid Margin="0,10">
                                             <Grid.ColumnDefinitions>
                                                 <ColumnDefinition Width="*"/>
@@ -639,7 +839,7 @@
                                             </Grid.ColumnDefinitions>
                                             <StackPanel>
                                                 <TextBlock Text="最新バージョン:" FontWeight="Bold" Foreground="{DynamicResource TextBrush}"/>
-                                                <TextBlock Text="{Binding SelectedOnlinePlugin.SelectedVersion.TagName}" Foreground="#FFD54F" FontWeight="Bold" FontSize="16"/>
+                                                <TextBlock Text="{Binding SelectedOnlinePlugin.LatestVersionName}" Foreground="Orange" FontWeight="Bold" FontSize="16"/>
                                             </StackPanel>
                                             <Button Grid.Column="1" Click="InstallPlugin_Click" Background="{DynamicResource AccentBrush}" Padding="20,10" IsEnabled="{Binding SelectedOnlinePlugin.SelectedVersion, Converter={StaticResource IsNotNullConverter}}">
                                                 <StackPanel Orientation="Horizontal">
@@ -655,17 +855,51 @@
                                                 <RowDefinition Height="Auto"/>
                                             </Grid.RowDefinitions>
                                             <TextBlock Text="バージョン選択" Foreground="{DynamicResource TextBrush}" Margin="0,0,0,5"/>
-                                            <ComboBox ItemsSource="{Binding SelectedOnlinePlugin.Releases}" SelectedItem="{Binding SelectedOnlinePlugin.SelectedVersion}" Margin="0,0,0,15">
-                                                <ComboBox.ItemTemplate>
+                                            <ListBox ItemsSource="{Binding SelectedOnlinePlugin.Releases}" 
+         SelectedItem="{Binding SelectedOnlinePlugin.SelectedVersion}" 
+         Height="150" Margin="0,0,0,15"
+         Background="{DynamicResource ItemBrush}"
+         BorderBrush="{DynamicResource BorderBrush}"
+         BorderThickness="1">
+                                                <ListBox.Resources>
+                                                    <Style TargetType="{x:Type ScrollBar}">
+                                                        <Setter Property="Width" Value="8"/>
+                                                        <Setter Property="Template">
+                                                            <Setter.Value>
+                                                                <ControlTemplate TargetType="{x:Type ScrollBar}">
+                                                                    <Grid x:Name="Bg" SnapsToDevicePixels="true">
+                                                                        <Track x:Name="PART_Track" IsDirectionReversed="true">
+                                                                            <Track.Thumb>
+                                                                                <Thumb x:Name="Thumb">
+                                                                                    <Thumb.Template>
+                                                                                        <ControlTemplate TargetType="{x:Type Thumb}">
+                                                                                            <Border Background="{DynamicResource PanelBrush}" CornerRadius="4" />
+                                                                                        </ControlTemplate>
+                                                                                    </Thumb.Template>
+                                                                                </Thumb>
+                                                                            </Track.Thumb>
+                                                                        </Track>
+                                                                    </Grid>
+                                                                </ControlTemplate>
+                                                            </Setter.Value>
+                                                        </Setter>
+                                                    </Style>
+                                                </ListBox.Resources>
+                                                <ListBox.ItemTemplate>
                                                     <DataTemplate>
-                                                        <StackPanel Orientation="Horizontal">
-                                                            <TextBlock Text="{Binding TagName}"/>
-                                                            <TextBlock Text=" (Pre-release)" Foreground="Orange" Visibility="{Binding Prerelease, Converter={StaticResource BoolToVis}}" Margin="5,0,0,0"/>
-                                                            <TextBlock Text="{Binding PublishedAt, StringFormat=' - {0:yyyy/MM/dd}'}" Foreground="{DynamicResource SubTextBrush}" Margin="5,0,0,0"/>
-                                                        </StackPanel>
+                                                        <Grid Margin="2">
+                                                            <Grid.ColumnDefinitions>
+                                                                <ColumnDefinition Width="Auto"/>
+                                                                <ColumnDefinition Width="*"/>
+                                                                <ColumnDefinition Width="Auto"/>
+                                                            </Grid.ColumnDefinitions>
+                                                            <TextBlock Grid.Column="0" Text="{Binding TagName}" Foreground="{DynamicResource TextBrush}" FontWeight="Bold"/>
+                                                            <TextBlock Grid.Column="1" Text=" (プレリリース)" Foreground="Orange" Visibility="{Binding Prerelease, Converter={StaticResource BoolToVis}}" Margin="5,0,0,0"/>
+                                                            <TextBlock Grid.Column="2" Text="{Binding PublishedAt, StringFormat=' - {0:yyyy/MM/dd}'}" Foreground="{DynamicResource SubTextBrush}" Margin="5,0,0,0"/>
+                                                        </Grid>
                                                     </DataTemplate>
-                                                </ComboBox.ItemTemplate>
-                                            </ComboBox>
+                                                </ListBox.ItemTemplate>
+                                            </ListBox>
                                         </Grid>
 
                                         <TextBlock Text="※ .ymme ファイル等をダウンロードして実行します。" Margin="0,10,0,0" Foreground="{DynamicResource SubTextBrush}" FontSize="11" TextWrapping="Wrap"/>
@@ -688,7 +922,7 @@
                         </Grid>
                     </Grid>
                 </TabItem>
-                
+
                 <TabItem Header="Hub設定">
                     <Grid Margin="30">
                         <StackPanel MaxWidth="600" HorizontalAlignment="Left">
@@ -727,8 +961,38 @@
                                     </DataTemplate>
                                 </ItemsControl.ItemTemplate>
                             </ItemsControl>
+                            <TextBlock Text="GitHub API 設定" FontSize="18" FontWeight="Bold" Margin="0,30,0,10" Foreground="{DynamicResource TextBrush}"/>
+                            <TextBlock Text="プラグイン取得の制限を回避するための設定です。頻繁に取得制限が発生する場合に設定してください。" Foreground="{DynamicResource SubTextBrush}" TextWrapping="Wrap" Margin="0,0,0,10"/>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="トークン:" VerticalAlignment="Center" Margin="0,0,10,0" Foreground="{DynamicResource TextBrush}"/>
+                                <PasswordBox x:Name="GitHubTokenBox" 
+                 Grid.Column="1" 
+                 PasswordChanged="GitHubTokenBox_PasswordChanged" 
+                 Padding="5"
+                 Background="{DynamicResource ItemBrush}"
+                 Foreground="{DynamicResource TextBrush}"
+                 BorderBrush="{DynamicResource SubTextBrush}"
+                 BorderThickness="1"/>
+                                <Button Content="トークンを発行する" 
+            Grid.Column="2" 
+            Click="IssueToken_Click"
+            Margin="10,0,0,0"
+            Padding="10,5"
+            Background="{DynamicResource AccentBrush}"
+            Foreground="White"
+            BorderThickness="0"/>
+                            </Grid>
+
+
                         </StackPanel>
+                        
                     </Grid>
+                    
                 </TabItem>
             </TabControl>
         </Grid>
