@@ -498,6 +498,8 @@
                             <RowDefinition Height="*"/>
                         </Grid.RowDefinitions>
                         <StackPanel Orientation="Horizontal" Margin="10,5">
+                            <TextBlock Text="検索:" VerticalAlignment="Center" Margin="0,0,5,0" Foreground="{DynamicResource TextBrush}"/>
+                            <TextBox Width="200" Text="{Binding LocalPluginSearchText, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,20,0" VerticalContentAlignment="Center"/>
                             <Button Click="BulkToggle_Click" Content="選択項目を有効/無効" Padding="15,5" Margin="0,0,10,0"/>
                             <Button Click="BulkDelete_Click" Content="選択項目を削除" Padding="15,5"/>
                         </StackPanel>
@@ -541,7 +543,15 @@
                                         <GridViewColumnHeader Content="状態" Click="GridViewColumnHeader_Click"/>
                                         <GridViewColumn.CellTemplate>
                                             <DataTemplate>
-                                                <TextBlock Text="{Binding IsEnabled, Converter={StaticResource BooleanToStatusConverter}}" Foreground="{Binding IsEnabled, Converter={StaticResource BooleanToColorConverter}}" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                <TextBlock x:Name="StatusText" Text="{Binding IsEnabled, Converter={StaticResource BooleanToStatusConverter}}" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                <DataTemplate.Triggers>
+                                                    <DataTrigger Binding="{Binding IsEnabled}" Value="True">
+                                                        <Setter TargetName="StatusText" Property="Foreground" Value="{DynamicResource AccentBrush}"/>
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding IsEnabled}" Value="False">
+                                                        <Setter TargetName="StatusText" Property="Foreground" Value="{DynamicResource SubTextBrush}"/>
+                                                    </DataTrigger>
+                                                </DataTemplate.Triggers>
                                             </DataTemplate>
                                         </GridViewColumn.CellTemplate>
                                     </GridViewColumn>
@@ -563,113 +573,133 @@
 
                 <TabItem Header="プラグインポータル">
                     <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="400"/>
-                        </Grid.ColumnDefinitions>
-                        <ListView Grid.Column="0" ItemsSource="{Binding OnlinePlugins}" SelectedItem="{Binding SelectedOnlinePlugin}" Background="Transparent" BorderThickness="0">
-                            <ListView.ItemTemplate>
-                                <DataTemplate>
-                                    <Border BorderBrush="{DynamicResource BorderBrush}" BorderThickness="0,0,0,1" Padding="15">
-                                        <StackPanel>
-                                            <TextBlock Text="{Binding Name}" FontSize="16" FontWeight="Bold" Foreground="{DynamicResource TextBrush}"/>
-                                            <TextBlock Text="{Binding Author}" Foreground="{DynamicResource SubTextBrush}" FontSize="12" Margin="0,5,0,0"/>
-                                        </StackPanel>
-                                    </Border>
-                                </DataTemplate>
-                            </ListView.ItemTemplate>
-                            <ListView.ItemContainerStyle>
-                                <Style TargetType="ListBoxItem">
-                                    <Setter Property="Background" Value="Transparent"/>
-                                    <Setter Property="Template">
-                                        <Setter.Value>
-                                            <ControlTemplate TargetType="ListBoxItem">
-                                                <Border x:Name="Bd" Background="{TemplateBinding Background}">
-                                                    <ContentPresenter/>
-                                                </Border>
-                                                <ControlTemplate.Triggers>
-                                                    <Trigger Property="IsSelected" Value="True">
-                                                        <Setter TargetName="Bd" Property="Background" Value="{DynamicResource AccentBrush}"/>
-                                                    </Trigger>
-                                                    <Trigger Property="IsMouseOver" Value="True">
-                                                        <Setter TargetName="Bd" Property="Background" Value="{DynamicResource ItemBrush}"/>
-                                                    </Trigger>
-                                                </ControlTemplate.Triggers>
-                                            </ControlTemplate>
-                                        </Setter.Value>
-                                    </Setter>
-                                </Style>
-                            </ListView.ItemContainerStyle>
-                        </ListView>
-                        <Grid Grid.Column="1" Background="{DynamicResource PanelBrush}" Margin="5,0,0,0">
-                            <ScrollViewer Margin="15" Visibility="{Binding SelectedOnlinePlugin, Converter={StaticResource IsNotNullConverter}, ConverterParameter=Visible}">
-                                <StackPanel>
-                                    <TextBlock Text="{Binding SelectedOnlinePlugin.Name}" FontSize="20" FontWeight="Bold" TextWrapping="Wrap" Foreground="{DynamicResource TextBrush}"/>
-                                    <TextBlock Text="{Binding SelectedOnlinePlugin.Author}" Foreground="{DynamicResource SubTextBrush}" Margin="0,5"/>
-                                    <TextBlock Text="{Binding SelectedOnlinePlugin.Description}" TextWrapping="Wrap" Margin="0,10" Foreground="{DynamicResource TextBrush}"/>
-                                    <Border BorderBrush="{DynamicResource BorderBrush}" BorderThickness="0,1,0,0" Margin="0,20"/>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
 
-                                    <Grid Margin="0,10">
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="*"/>
-                                            <ColumnDefinition Width="Auto"/>
-                                        </Grid.ColumnDefinitions>
-                                        <StackPanel>
-                                            <TextBlock Text="最新バージョン:" FontWeight="Bold" Foreground="{DynamicResource TextBrush}"/>
-                                            <TextBlock Text="{Binding SelectedVersion}" Foreground="#FFD54F" FontWeight="Bold" FontSize="16"/>
-                                        </StackPanel>
-                                        <Button Grid.Column="1" Click="InstallPlugin_Click" Background="{DynamicResource AccentBrush}" Padding="20,10" Visibility="{Binding SelectedOnlinePlugin.LatestAssetUrl, Converter={StaticResource IsNotNullConverter}, ConverterParameter=Visible}">
-                                            <StackPanel Orientation="Horizontal">
-                                                <Path Fill="White" Width="16" Height="16" Stretch="Uniform" Margin="0,0,10,0" Data="M5,20H19V18H5M19,9H15V3H9V9H5L12,16L19,9Z"/>
-                                                <TextBlock Text="インストール" FontWeight="Bold" VerticalAlignment="Center" Foreground="White"/>
+                        <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="10,5">
+                            <TextBlock Text="プラグイン検索:" VerticalAlignment="Center" Margin="0,0,5,0" Foreground="{DynamicResource TextBrush}"/>
+                            <TextBox Width="300" Text="{Binding OnlinePluginSearchText, UpdateSourceTrigger=PropertyChanged}" VerticalContentAlignment="Center"/>
+                        </StackPanel>
+
+                        <Grid Grid.Row="1">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="400"/>
+                            </Grid.ColumnDefinitions>
+
+                            <ListView Grid.Column="0" ItemsSource="{Binding OnlinePlugins}" SelectedItem="{Binding SelectedOnlinePlugin}" Background="Transparent" BorderThickness="0">
+                                <ListView.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border BorderBrush="{DynamicResource BorderBrush}" BorderThickness="0,0,0,1" Padding="15">
+                                            <StackPanel>
+                                                <TextBlock Text="{Binding Name}" FontSize="16" FontWeight="Bold" Foreground="{DynamicResource TextBrush}"/>
+                                                <TextBlock Text="{Binding Author}" Foreground="{DynamicResource SubTextBrush}" FontSize="12" Margin="0,5,0,0"/>
                                             </StackPanel>
-                                        </Button>
-                                    </Grid>
-                                    <Grid Margin="0,0,0,20">
-                                        <Grid.RowDefinitions>
-                                            <RowDefinition Height="Auto"/>
-                                            <RowDefinition Height="Auto"/>
-                                        </Grid.RowDefinitions>
-                                        <TextBlock Text="バージョン選択" Foreground="{DynamicResource TextBrush}" Margin="0,0,0,5"/>
-                                        <ComboBox ItemsSource="{Binding SelectedOnlinePlugin.Releases}" SelectedItem="{Binding SelectedOnlinePlugin.SelectedVersion}" Margin="0,0,0,15">
-                                            <ComboBox.ItemTemplate>
-                                                <DataTemplate>
-                                                    <StackPanel Orientation="Horizontal">
-                                                        <TextBlock Text="{Binding TagName}"/>
-                                                        <TextBlock Text=" (Pre-release)" Foreground="Orange" Visibility="{Binding Prerelease, Converter={StaticResource BoolToVis}}" Margin="5,0,0,0"/>
-                                                        <TextBlock Text="{Binding PublishedAt, StringFormat=' - {0:yyyy/MM/dd}'}" Foreground="{DynamicResource SubTextBrush}" Margin="5,0,0,0"/>
-                                                    </StackPanel>
-                                                </DataTemplate>
-                                            </ComboBox.ItemTemplate>
-                                        </ComboBox>
-                                    </Grid>
-                                    <Button Content="選択したバージョンをインストール" Click="InstallPlugin_Click" Padding="10" Background="{DynamicResource AccentBrush}" Foreground="White" FontWeight="Bold" IsEnabled="{Binding SelectedOnlinePlugin.SelectedVersion, Converter={StaticResource IsNotNullConverter}}"/>
-                                    <TextBlock Text="※ .ymme ファイル等をダウンロードして実行します。" Margin="0,10,0,0" Foreground="{DynamicResource SubTextBrush}" FontSize="11" TextWrapping="Wrap"/>
+                                        </Border>
+                                    </DataTemplate>
+                                </ListView.ItemTemplate>
+                                <ListView.ItemContainerStyle>
+                                    <Style TargetType="ListBoxItem">
+                                        <Setter Property="Background" Value="Transparent"/>
+                                        <Setter Property="Template">
+                                            <Setter.Value>
+                                                <ControlTemplate TargetType="ListBoxItem">
+                                                    <Border x:Name="Bd" Background="{TemplateBinding Background}">
+                                                        <ContentPresenter/>
+                                                    </Border>
+                                                    <ControlTemplate.Triggers>
+                                                        <Trigger Property="IsSelected" Value="True">
+                                                            <Setter TargetName="Bd" Property="Background" Value="{DynamicResource AccentBrush}"/>
+                                                        </Trigger>
+                                                        <Trigger Property="IsMouseOver" Value="True">
+                                                            <Setter TargetName="Bd" Property="Background" Value="{DynamicResource ItemBrush}"/>
+                                                        </Trigger>
+                                                    </ControlTemplate.Triggers>
+                                                </ControlTemplate>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </Style>
+                                </ListView.ItemContainerStyle>
+                            </ListView>
 
-                                    <ItemsControl ItemsSource="{Binding SelectedOnlinePlugin.AllLinks}" Margin="0,20,0,0">
-                                        <ItemsControl.ItemTemplate>
-                                            <DataTemplate>
-                                                <Button Click="OpenUrl_Click" Tag="{Binding Url}" Margin="0,2" HorizontalContentAlignment="Left">
-                                                    <StackPanel Orientation="Horizontal">
-                                                        <Image Source="{Binding FaviconUrl}" Width="16" Height="16" Margin="0,0,10,0"/>
-                                                        <TextBlock Text="{Binding Label}"/>
-                                                    </StackPanel>
-                                                </Button>
-                                            </DataTemplate>
-                                        </ItemsControl.ItemTemplate>
-                                    </ItemsControl>
-                                </StackPanel>
-                            </ScrollViewer>
+                            <Grid Grid.Column="1" Background="{DynamicResource PanelBrush}" Margin="5,0,0,0">
+                                <ScrollViewer Margin="15" Visibility="{Binding SelectedOnlinePlugin, Converter={StaticResource IsNotNullConverter}, ConverterParameter=Visible}">
+                                    <StackPanel>
+                                        <TextBlock Text="{Binding SelectedOnlinePlugin.Name}" FontSize="20" FontWeight="Bold" TextWrapping="Wrap" Foreground="{DynamicResource TextBrush}"/>
+                                        <TextBlock Text="{Binding SelectedOnlinePlugin.Author}" Foreground="{DynamicResource SubTextBrush}" Margin="0,5"/>
+                                        <TextBlock Text="{Binding SelectedOnlinePlugin.Description}" TextWrapping="Wrap" Margin="0,10" Foreground="{DynamicResource TextBrush}"/>
+                                        <Border BorderBrush="{DynamicResource BorderBrush}" BorderThickness="0,1,0,0" Margin="0,20"/>
+
+                                        <Grid Margin="0,10">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="Auto"/>
+                                            </Grid.ColumnDefinitions>
+                                            <StackPanel>
+                                                <TextBlock Text="最新バージョン:" FontWeight="Bold" Foreground="{DynamicResource TextBrush}"/>
+                                                <TextBlock Text="{Binding SelectedOnlinePlugin.SelectedVersion.TagName}" Foreground="#FFD54F" FontWeight="Bold" FontSize="16"/>
+                                            </StackPanel>
+                                            <Button Grid.Column="1" Click="InstallPlugin_Click" Background="{DynamicResource AccentBrush}" Padding="20,10" IsEnabled="{Binding SelectedOnlinePlugin.SelectedVersion, Converter={StaticResource IsNotNullConverter}}">
+                                                <StackPanel Orientation="Horizontal">
+                                                    <Path Fill="White" Width="16" Height="16" Stretch="Uniform" Margin="0,0,10,0" Data="M5,20H19V18H5M19,9H15V3H9V9H5L12,16L19,9Z"/>
+                                                    <TextBlock Text="インストール" FontWeight="Bold" VerticalAlignment="Center" Foreground="White"/>
+                                                </StackPanel>
+                                            </Button>
+                                        </Grid>
+
+                                        <Grid Margin="0,0,0,20">
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="Auto"/>
+                                                <RowDefinition Height="Auto"/>
+                                            </Grid.RowDefinitions>
+                                            <TextBlock Text="バージョン選択" Foreground="{DynamicResource TextBrush}" Margin="0,0,0,5"/>
+                                            <ComboBox ItemsSource="{Binding SelectedOnlinePlugin.Releases}" SelectedItem="{Binding SelectedOnlinePlugin.SelectedVersion}" Margin="0,0,0,15">
+                                                <ComboBox.ItemTemplate>
+                                                    <DataTemplate>
+                                                        <StackPanel Orientation="Horizontal">
+                                                            <TextBlock Text="{Binding TagName}"/>
+                                                            <TextBlock Text=" (Pre-release)" Foreground="Orange" Visibility="{Binding Prerelease, Converter={StaticResource BoolToVis}}" Margin="5,0,0,0"/>
+                                                            <TextBlock Text="{Binding PublishedAt, StringFormat=' - {0:yyyy/MM/dd}'}" Foreground="{DynamicResource SubTextBrush}" Margin="5,0,0,0"/>
+                                                        </StackPanel>
+                                                    </DataTemplate>
+                                                </ComboBox.ItemTemplate>
+                                            </ComboBox>
+                                        </Grid>
+
+                                        <TextBlock Text="※ .ymme ファイル等をダウンロードして実行します。" Margin="0,10,0,0" Foreground="{DynamicResource SubTextBrush}" FontSize="11" TextWrapping="Wrap"/>
+
+                                        <ItemsControl ItemsSource="{Binding SelectedOnlinePlugin.AllLinks}" Margin="0,20,0,0">
+                                            <ItemsControl.ItemTemplate>
+                                                <DataTemplate>
+                                                    <Button Click="OpenUrl_Click" Tag="{Binding Url}" Margin="0,2" HorizontalContentAlignment="Left">
+                                                        <StackPanel Orientation="Horizontal">
+                                                            <Image Source="{Binding FaviconUrl}" Width="16" Height="16" Margin="0,0,10,0"/>
+                                                            <TextBlock Text="{Binding Label}"/>
+                                                        </StackPanel>
+                                                    </Button>
+                                                </DataTemplate>
+                                            </ItemsControl.ItemTemplate>
+                                        </ItemsControl>
+                                    </StackPanel>
+                                </ScrollViewer>
+                            </Grid>
                         </Grid>
                     </Grid>
                 </TabItem>
-
+                
                 <TabItem Header="Hub設定">
                     <Grid Margin="30">
                         <StackPanel MaxWidth="600" HorizontalAlignment="Left">
                             <TextBlock Text="Hubのカスタマイズ" FontSize="24" FontWeight="Bold" Margin="0,0,0,20" Foreground="{DynamicResource TextBrush}"/>
+
+                            <TextBlock Text="動作設定" Margin="0,10,0,5" Foreground="{DynamicResource SubTextBrush}"/>
+                            <CheckBox IsChecked="{Binding CloseOnLaunch}" Content="YMM4起動時にHubを終了する" Margin="0,0,0,10" Style="{StaticResource ModernCheckBox}"/>
+
                             <TextBlock Text="テーマ設定" Margin="0,10,0,5" Foreground="{DynamicResource SubTextBrush}"/>
                             <ComboBox ItemsSource="{Binding ThemeModes}" SelectedItem="{Binding SelectedTheme}" Height="35"/>
+
                             <TextBlock Text="UIフォント" Margin="0,20,0,5" Foreground="{DynamicResource SubTextBrush}"/>
                             <TextBox Text="{Binding FontSearchText, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,10" Tag="フォントを検索..."/>
                             <CheckBox IsChecked="{Binding IsJapaneseOnly}" Content="日本語フォントのみ" Margin="0,0,0,10" Style="{StaticResource ModernCheckBox}"/>
@@ -680,7 +710,8 @@
                                     </DataTemplate>
                                 </ComboBox.ItemTemplate>
                             </ComboBox>
-                            <TextBlock Text="編集データフォルダの監視" FontSize="18" FontWeight="Bold" Margin="30,30,0,10" Foreground="{DynamicResource TextBrush}"/>
+
+                            <TextBlock Text="編集データフォルダの監視" FontSize="18" FontWeight="Bold" Margin="0,30,0,10" Foreground="{DynamicResource TextBrush}"/>
                             <Button Content="フォルダを追加" Click="AddProjectDir_Click" HorizontalAlignment="Left" Padding="15,5"/>
                             <ItemsControl ItemsSource="{Binding ProjectDirectories}" Margin="0,10,0,0">
                                 <ItemsControl.ItemTemplate>

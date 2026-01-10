@@ -40,6 +40,8 @@ namespace YukkuriMovieMaker4Hub
         public List<InstanceInfo> Instances { get; set; } = new List<InstanceInfo>();
         [JsonPropertyName("projectDirectories")]
         public List<string> ProjectDirectories { get; set; } = new List<string>();
+        [JsonPropertyName("closeOnLaunch")]
+        public bool CloseOnLaunch { get; set; } = false;
     }
 
     public class InstanceInfo : INotifyPropertyChanged
@@ -248,6 +250,11 @@ namespace YukkuriMovieMaker4Hub
             set { if (value != null) { _currentSettings.FontFamily = value.InternalName; ApplyTheme(); SaveAll(); OnPropertyChanged(nameof(SelectedFontItem)); } }
         }
         public AppTheme SelectedTheme { get => _currentSettings.Theme; set { _currentSettings.Theme = value; ApplyTheme(); SaveAll(); OnPropertyChanged(nameof(SelectedTheme)); } }
+        public bool CloseOnLaunch
+        {
+            get => _currentSettings.CloseOnLaunch;
+            set { _currentSettings.CloseOnLaunch = value; SaveAll(); OnPropertyChanged(nameof(CloseOnLaunch)); }
+        }
         private string _lastSortField = "DisplayName";
         private ListSortDirection _lastSortDir = ListSortDirection.Ascending;
 
@@ -563,7 +570,7 @@ namespace YukkuriMovieMaker4Hub
 
         private void TogglePlugin_Click(object sender, RoutedEventArgs e)
         {
-            if (!(sender is CheckBox cb && cb.DataContext is LocalPluginInfo plugin)) return;
+            if (!(sender is Button btn && btn.DataContext is LocalPluginInfo plugin)) return;
             ToggleOne(plugin);
         }
 
@@ -623,7 +630,7 @@ namespace YukkuriMovieMaker4Hub
             {
                 string? headerText = header.Content?.ToString();
                 string? field = null;
-                if (headerText == "名前") field = "DisplayName";
+                if (headerText == "プラグイン名") field = "DisplayName";
                 else if (headerText == "状態") field = "IsEnabled";
                 if (field == null) return;
                 if (_lastSortField == field) _lastSortDir = (_lastSortDir == ListSortDirection.Ascending) ? ListSortDirection.Descending : ListSortDirection.Ascending;
@@ -647,6 +654,11 @@ namespace YukkuriMovieMaker4Hub
         {
             if (SelectedInstance == null || !File.Exists(SelectedInstance.ExePath)) return;
             Process.Start(new ProcessStartInfo(SelectedInstance.ExePath, args) { WorkingDirectory = SelectedInstance.RootDirectory, UseShellExecute = true });
+
+            if (CloseOnLaunch)
+            {
+                Application.Current.Shutdown();
+            }
         }
 
         private void LaunchInstance_Click(object sender, RoutedEventArgs e) => LaunchYmm();
@@ -657,12 +669,37 @@ namespace YukkuriMovieMaker4Hub
         private void AddProjectDir_Click(object sender, RoutedEventArgs e)
         {
             var d = new OpenFolderDialog();
-            if (d.ShowDialog() == true) { if (!ProjectDirectories.Contains(d.FolderName)) { ProjectDirectories.Add(d.FolderName); SaveAll(); RefreshRecentProjects(); } }
+            if (d.ShowDialog() == true)
+            {
+                if (!ProjectDirectories.Contains(d.FolderName))
+                {
+                    ProjectDirectories.Add(d.FolderName);
+                    SaveAll();
+                    RefreshRecentProjects();
+                }
+            }
         }
-        private void RemoveProjectDir_Click(object sender, RoutedEventArgs e) { if (sender is Button btn && btn.DataContext is string dir) { ProjectDirectories.Remove(dir); SaveAll(); RefreshRecentProjects(); } }
-        private void OpenProject_Click(object sender, RoutedEventArgs e) { if (sender is Button btn && btn.Tag is string path) LaunchYmm($"\"{path}\""); }
-        private void ResetProjectFilters_Click(object sender, RoutedEventArgs e) { ProjectSearchText = string.Empty; ShowYmmp = true; ShowYmmpx = true; }
-
+        private void RemoveProjectDir_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is Button btn && btn.DataContext is string dir)
+            {
+                ProjectDirectories.Remove(dir);
+                SaveAll();
+                RefreshRecentProjects();
+            }
+        }
+        private void OpenProject_Click(object sender, RoutedEventArgs e)
+        {
+            if (ProjectGrid.SelectedItem is ProjectFileItem project)
+                LaunchYmm($"\"{project.FullPath}\"");
+        }
+        private void ResetProjectFilters_Click(object sender, RoutedEventArgs e)
+        {
+            ProjectSearchText = string.Empty;
+            ShowYmmp = true;
+            ShowYmmpx = true;
+            RefreshRecentProjects();
+        }
         private async void InstallPlugin_Click(object sender, RoutedEventArgs e)
         {
             if (SelectedOnlinePlugin?.SelectedVersion == null || SelectedInstance == null)
