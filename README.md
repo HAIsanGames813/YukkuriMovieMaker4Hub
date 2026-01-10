@@ -2,14 +2,14 @@
 ゆっくりムービーメーカー4のハブソフトです
 
 ## 導入方法
-ダウンロードしたファイルを解凍し、フォルダ内のexeファイルを起動してください
 ### [最新バージョンはこちらから](https://github.com/HAIsanGames813/YukkuriMovieMaker4Hub/releases/latest)
+1.`YukkuriMovieMaker4Hub.zip`をクリックしてダウンロード  
+2.ダウンロード後zipファイルを解凍する  
+3.解凍してできたフォルダをPC上の自由な場所に移動  
+4.フォルダ内の`YukkuriMovieMaker4Hub.exe`を起動  
 
 ## 概要
 YMM4を前回のプロジェクト、新規プロジェクト、ymmpから開くことができる外部ソフトです
-
-## 使用方法
-解凍したファイルの中の`YMMHub.exe`を起動します
 
 # 機能説明
 ## インスタンス
