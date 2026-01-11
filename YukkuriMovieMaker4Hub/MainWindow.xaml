@@ -418,8 +418,20 @@
                                         </Style>
                                     </Path.Style>
                                 </Path>
-                            </Grid>
 
+                                <Ellipse Width="10" Height="10" Fill="#4CAF50" Stroke="{DynamicResource ThemeBrush}" StrokeThickness="2" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0,-2,-2,0">
+                                    <Ellipse.Style>
+                                        <Style TargetType="Ellipse">
+                                            <Setter Property="Visibility" Value="Collapsed"/>
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding HasUpdate}" Value="True">
+                                                    <Setter Property="Visibility" Value="Visible"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Ellipse.Style>
+                                </Ellipse>
+                            </Grid>
 
                             <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
                                 <Button Style="{StaticResource QuickActionButtonStyle}" Click="InstanceLaunch_Click" ToolTip="起動">
@@ -476,7 +488,29 @@
                                 </Grid>
                             </Button>
                             <StackPanel Margin="20,0">
-                                <TextBox Text="{Binding SelectedInstance.Name, UpdateSourceTrigger=PropertyChanged}" FontSize="24" Background="Transparent" BorderThickness="0,0,0,1" Width="300" HorizontalAlignment="Left" Tag="インスタンス名"/>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBox Text="{Binding SelectedInstance.Name, UpdateSourceTrigger=PropertyChanged}" FontSize="24" Background="Transparent" BorderThickness="0,0,0,1" Width="300" HorizontalAlignment="Left" Tag="インスタンス名"/>
+
+                                    <Button Content="アップデートあり" Click="ShowUpdateInfo_Click" Foreground="#4CAF50" FontWeight="Bold" VerticalAlignment="Bottom" Margin="10,0,0,5" Cursor="Hand" Background="Transparent" BorderThickness="0">
+                                        <Button.Style>
+                                            <Style TargetType="Button">
+                                                <Setter Property="Template">
+                                                    <Setter.Value>
+                                                        <ControlTemplate TargetType="Button">
+                                                            <TextBlock Text="{TemplateBinding Content}" TextDecorations="Underline"/>
+                                                        </ControlTemplate>
+                                                    </Setter.Value>
+                                                </Setter>
+                                                <Setter Property="Visibility" Value="Collapsed"/>
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding SelectedInstance.HasUpdate}" Value="True">
+                                                        <Setter Property="Visibility" Value="Visible"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Button.Style>
+                                    </Button>
+                                </StackPanel>
                                 <TextBlock Text="{Binding SelectedInstance.ExePath}" Foreground="{DynamicResource SubTextBrush}" Margin="0,10" FontSize="10"/>
                             </StackPanel>
                         </StackPanel>
@@ -623,7 +657,11 @@
                             <TextBox Width="200" Text="{Binding LocalPluginSearchText, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,20,0" VerticalContentAlignment="Center"/>
                             <Button Click="BulkToggle_Click" Content="選択項目を有効/無効" Padding="15,5" Margin="0,0,10,0"/>
                             <Button Click="BulkDelete_Click" Content="選択項目を削除" Padding="15,5"/>
+                            <Button Click="OpenPluginFolder_Click" Padding="10,5" Margin="10,0,0,0" ToolTip="プラグインフォルダを開く">
+                                <Path Fill="{DynamicResource TextBrush}" Width="20" Height="20" Stretch="Uniform" Margin="0,0,0,0" Data="M10,4H4C2.89,4 2,4.89 2,6V18A2,2 0 0,0 4,20H20A2,2 0 0,0 22,18V8C22,6.89 21.1,6 20,6H12L10,4Z"/>
+                            </Button>
                         </StackPanel>
+
                         <ListView x:Name="LocalPluginList" Grid.Row="1" ItemsSource="{Binding LocalPlugins}" Background="Transparent" BorderThickness="0">
                             <ListView.ItemContainerStyle>
                                 <Style TargetType="ListViewItem">

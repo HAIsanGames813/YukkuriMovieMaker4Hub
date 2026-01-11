@@ -49,7 +49,12 @@ namespace YukkuriMovieMaker4Hub
         [JsonPropertyName("lastSelectedInstanceId")]
         public string? LastSelectedInstanceId { get; set; }
     }
-
+    public class YmmUpdateItem
+    {
+        public string Title { get; set; } = string.Empty;
+        public string Description { get; set; } = string.Empty;
+        public Version? Version { get; set; }
+    }
     public class InstanceInfo : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler? PropertyChanged;
@@ -92,6 +97,36 @@ namespace YukkuriMovieMaker4Hub
         public string PluginDirectory => string.IsNullOrEmpty(ExePath) ? string.Empty : Path.Combine(RootDirectory, "user", "plugin");
         [JsonIgnore]
         public string InstallerPath => string.IsNullOrEmpty(ExePath) ? string.Empty : Path.Combine(RootDirectory, "Resources", "bin", "Installer", "YukkuriMovieMaker.Plugin.Installer.exe");
+        private bool _hasUpdate;
+        [JsonIgnore]
+        public bool HasUpdate { get => _hasUpdate; set { _hasUpdate = value; OnPropertyChanged(nameof(HasUpdate)); } }
+
+        public string GetLocalVersion()
+        {
+            try
+            {
+                string settingsPath = Path.Combine(RootDirectory, "user", "setting");
+                if (!Directory.Exists(settingsPath)) return "0.0.0.0";
+                var versionDirectories = new DirectoryInfo(settingsPath).GetDirectories();
+                var latestDir = versionDirectories
+                    .Select(d => new
+                    {
+                        Directory = d,
+                        LastWriteTime = d.EnumerateFiles("*", SearchOption.AllDirectories)
+                                         .Select(f => f.LastWriteTime)
+                                         .DefaultIfEmpty(d.LastWriteTime)
+                                         .Max()
+                    })
+                    .OrderByDescending(x => x.LastWriteTime)
+                    .FirstOrDefault();
+
+                return latestDir?.Directory.Name ?? "0.0.0.0";
+            }
+            catch
+            {
+                return "0.0.0.0";
+            }
+        }
     }
 
     public class ProjectFileItem
@@ -244,6 +279,7 @@ namespace YukkuriMovieMaker4Hub
     }
     public partial class MainWindow : Window, INotifyPropertyChanged
     {
+        private string _latestOnlineVersion = string.Empty;
         public event PropertyChangedEventHandler? PropertyChanged;
         protected void OnPropertyChanged(string name) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         private SettingsManager _settingsManager = new SettingsManager();
@@ -344,6 +380,77 @@ namespace YukkuriMovieMaker4Hub
         }
         private string _lastSortField = "DisplayName";
         private ListSortDirection _lastSortDir = ListSortDirection.Ascending;
+        private List<YmmUpdateItem> _ymmUpdates = new List<YmmUpdateItem>();
+
+        private async Task CheckYmmUpdates()
+        {
+            try
+            {
+                var xml = await _http.GetStringAsync("https://manjubox.net/rss.xml");
+                var doc = new System.Xml.XmlDocument();
+                doc.LoadXml(xml);
+                var nodes = doc.SelectNodes("//item");
+                _ymmUpdates.Clear();
+
+                if (nodes != null)
+                {
+                    foreach (System.Xml.XmlNode node in nodes)
+                    {
+                        string title = node.SelectSingleNode("title")?.InnerText ?? "";
+                        string desc = node.SelectSingleNode("description")?.InnerText ?? "";
+                        var match = Regex.Match(title, @"v(\d+\.\d+\.\d+\.\d+)");
+
+                        if (match.Success && Version.TryParse(match.Groups[1].Value, out var v))
+                        {
+                            _ymmUpdates.Add(new YmmUpdateItem { Title = title, Description = desc, Version = v });
+                        }
+                    }
+                }
+
+                if (_ymmUpdates.Count == 0) return;
+                var latest = _ymmUpdates[0].Version;
+
+                foreach (var instance in Instances)
+                {
+                    if (Version.TryParse(instance.GetLocalVersion(), out var localV))
+                    {
+                        instance.HasUpdate = latest > localV;
+                    }
+                }
+            }
+            catch { }
+        }
+
+        private void ShowUpdateInfo_Click(object sender, RoutedEventArgs e)
+        {
+            if (SelectedInstance == null) return;
+
+            Version.TryParse(SelectedInstance.GetLocalVersion(), out var localV);
+            var filteredUpdates = _ymmUpdates
+                .Where(u => u.Version > localV)
+                .Take(5)
+                .ToList();
+
+            if (filteredUpdates.Count == 0) return;
+
+            var sb = new StringBuilder();
+            sb.AppendLine($"現在のバージョン: v{SelectedInstance.GetLocalVersion()}");
+            sb.AppendLine("------------------------------------");
+
+            foreach (var update in filteredUpdates)
+            {
+                sb.AppendLine($"■ {update.Title}");
+
+                string cleanDesc = Regex.Replace(update.Description, "<.*?>", string.Empty);
+                cleanDesc = cleanDesc.Replace(" ", "\n");
+
+                sb.AppendLine(cleanDesc);
+                sb.AppendLine();
+            }
+
+            MessageBox.Show(sb.ToString(), "アップデート内容", MessageBoxButton.OK, MessageBoxImage.Information);
+        }
+
 
         public MainWindow()
         {
@@ -365,11 +472,9 @@ namespace YukkuriMovieMaker4Hub
             GitHubTokenBox.Password = _currentSettings.GitHubToken;
 
             ApplyTheme();
-
-            // 以下の1行を追加
             RestoreLastSelection();
-
             RefreshRecentProjects();
+            _ = CheckYmmUpdates();
         }
         private void GitHubTokenBox_PasswordChanged(object sender, RoutedEventArgs e)
         {
@@ -408,7 +513,13 @@ namespace YukkuriMovieMaker4Hub
             foreach (var f in filtered) FilteredFonts.Add(f);
             OnPropertyChanged(nameof(SelectedFontItem));
         }
-
+        private void OpenPluginFolder_Click(object sender, RoutedEventArgs e)
+        {
+            if (SelectedInstance != null && Directory.Exists(SelectedInstance.PluginDirectory))
+            {
+                Process.Start("explorer.exe", SelectedInstance.PluginDirectory);
+            }
+        }
         private void ApplyTheme()
         {
             try
@@ -484,7 +595,11 @@ namespace YukkuriMovieMaker4Hub
             {
                 string header = ti.Header.ToString() ?? "";
                 if (header == "プラグインポータル") await LoadOnlinePlugins();
-                if (header == "概要") RefreshRecentProjects();
+                if (header == "概要")
+                {
+                    RefreshRecentProjects();
+                    _ = CheckYmmUpdates();
+                }
             }
         }
         private void IssueToken_Click(object sender, RoutedEventArgs e)
