@@ -422,13 +422,13 @@
 
 
                             <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
-                                <Button Style="{StaticResource QuickActionButtonStyle}" Click="LaunchInstance_Click" ToolTip="起動">
+                                <Button Style="{StaticResource QuickActionButtonStyle}" Click="InstanceLaunch_Click" ToolTip="起動">
                                     <Path Fill="{DynamicResource TextBrush}" Width="14" Height="14" Stretch="Uniform" Data="M8,5.14V19.14L19,12.14L8,5.14Z"/>
                                 </Button>
-                                <Button Style="{StaticResource QuickActionButtonStyle}" Click="LaunchLastProject_Click" ToolTip="前回のプロジェクト">
+                                <Button Style="{StaticResource QuickActionButtonStyle}" Click="InstanceLaunchLastProject_Click" ToolTip="前回のプロジェクト">
                                     <Path Fill="{DynamicResource TextBrush}" Width="14" Height="14" Stretch="Uniform" Data="M13.5,8H12V13L16.28,15.54L17,14.33L13.5,12.25V8M13,3A9,9 0 0,0 4,12H1L4.96,16.03L9,12H6A7,7 0 0,1 13,5A7,7 0 0,1 20,12A7,7 0 0,1 13,19C11.07,19 9.32,18.21 8.06,16.94L6.64,18.36C8.27,20 10.5,21 13,21A9,9 0 0,0 22,12A9,9 0 0,0 13,3Z"/>
                                 </Button>
-                                <Button Style="{StaticResource QuickActionButtonStyle}" Click="CreateNewProject_Click" ToolTip="新規作成">
+                                <Button Style="{StaticResource QuickActionButtonStyle}" Click="InstanceCreateNewProject_Click" ToolTip="新規作成">
                                     <Path Fill="{DynamicResource TextBrush}" Width="14" Height="14" Stretch="Uniform" Data="M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z"/>
                                 </Button>
                             </StackPanel>

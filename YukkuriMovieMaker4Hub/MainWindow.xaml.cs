@@ -816,10 +816,11 @@ namespace YukkuriMovieMaker4Hub
             foreach (var p in list) LocalPlugins.Add(p);
         }
 
-        private void LaunchYmm(string args = "")
+        private void LaunchYmm(InstanceInfo? instance, string args = "")
         {
-            if (SelectedInstance == null || !File.Exists(SelectedInstance.ExePath)) return;
-            Process.Start(new ProcessStartInfo(SelectedInstance.ExePath, args) { WorkingDirectory = SelectedInstance.RootDirectory, UseShellExecute = true });
+            var target = instance ?? SelectedInstance;
+            if (target == null || !File.Exists(target.ExePath)) return;
+            Process.Start(new ProcessStartInfo(target.ExePath, args) { WorkingDirectory = target.RootDirectory, UseShellExecute = true });
 
             if (CloseOnLaunch)
             {
@@ -827,9 +828,38 @@ namespace YukkuriMovieMaker4Hub
             }
         }
 
-        private void LaunchInstance_Click(object sender, RoutedEventArgs e) => LaunchYmm();
-        private void LaunchLastProject_Click(object sender, RoutedEventArgs e) => LaunchYmm("OpenLatestProject");
-        private void CreateNewProject_Click(object sender, RoutedEventArgs e) => LaunchYmm("CreateNewProject");
+        private void InstanceLaunch_Click(object sender, RoutedEventArgs e)
+        {
+            var instance = (sender as FrameworkElement)?.DataContext as InstanceInfo;
+            LaunchYmm(instance);
+        }
+
+        private void InstanceLaunchLastProject_Click(object sender, RoutedEventArgs e)
+        {
+            var instance = (sender as FrameworkElement)?.DataContext as InstanceInfo;
+            LaunchYmm(instance, "OpenLatestProject");
+        }
+
+        private void InstanceCreateNewProject_Click(object sender, RoutedEventArgs e)
+        {
+            var instance = (sender as FrameworkElement)?.DataContext as InstanceInfo;
+            LaunchYmm(instance, "CreateNewProject");
+        }
+
+        private void LaunchInstance_Click(object sender, RoutedEventArgs e)
+        {
+            LaunchYmm(SelectedInstance);
+        }
+
+        private void LaunchLastProject_Click(object sender, RoutedEventArgs e)
+        {
+            LaunchYmm(SelectedInstance, "OpenLatestProject");
+        }
+
+        private void CreateNewProject_Click(object sender, RoutedEventArgs e)
+        {
+            LaunchYmm(SelectedInstance, "CreateNewProject");
+        }
         private void OpenFolder_Click(object sender, RoutedEventArgs e) { if (SelectedInstance != null) Process.Start("explorer.exe", SelectedInstance.RootDirectory); }
         private void ChangeIcon_Click(object sender, RoutedEventArgs e) { if (SelectedInstance == null) return; var d = new OpenFileDialog { Filter = "画像|*.png;*.jpg;*.ico" }; if (d.ShowDialog() == true) SelectedInstance.IconPath = d.FileName; }
         private void AddProjectDir_Click(object sender, RoutedEventArgs e)
@@ -857,7 +887,7 @@ namespace YukkuriMovieMaker4Hub
         private void OpenProject_Click(object sender, RoutedEventArgs e)
         {
             if (ProjectGrid.SelectedItem is ProjectFileItem project)
-                LaunchYmm($"\"{project.FullPath}\"");
+                LaunchYmm(SelectedInstance, $"\"{project.FullPath}\"");
         }
         private void ResetProjectFilters_Click(object sender, RoutedEventArgs e)
         {
