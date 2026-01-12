@@ -3,10 +3,9 @@
 
 ## 導入方法
 ### [最新バージョンはこちらから](https://github.com/HAIsanGames813/YukkuriMovieMaker4Hub/releases/latest)
-1.`YukkuriMovieMaker4Hub.zip`をクリックしてダウンロード  
-2.ダウンロード後zipファイルを解凍する  
-3.解凍してできたフォルダをPC上の自由な場所に移動  
-4.フォルダ内の`YukkuriMovieMaker4Hub.exe`を起動  
+1.`YMM4Hub.msi`をクリックしてダウンロード  
+2.ダウンロード後msiファイルを開きインストール  
+**注意**:プログラムフォルダに置くと管理者として実行する必要があるためプログラムフォルダ以外(Userなど)に配置するようにしてください
 
 ## 概要
 YMM4を前回のプロジェクト、新規プロジェクト、ymmpから開くことができる外部ソフトです
