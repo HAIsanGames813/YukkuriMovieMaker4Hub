@@ -70,6 +70,7 @@
 <data name="ExitHubOnYmm4Start" xml:space="preserve"><value>YMM4 启动时退出 Hub</value></data>
 <data name="Ymm4InfoSite" xml:space="preserve"><value>YMM4 信息站</value></data>
 <data name="Action" xml:space="preserve"><value>操作</value></data>
+<data name="AccessDenied" xml:space="preserve"><value>访问被拒绝</value></data>
 <data name="UpdateAvailable" xml:space="preserve"><value>有更新</value></data>
 <data name="ConfirmUpdate" xml:space="preserve"><value>是否更新？</value></data>
 <data name="UpdateDetails" xml:space="preserve"><value>更新内容</value></data>
@@ -154,6 +155,7 @@
 <data name="DistributionSite" xml:space="preserve"><value>发布网站</value></data>
 <data name="EndDistribution" xml:space="preserve"><value>停止发布</value></data>
 <data name="Transcription" xml:space="preserve"><value>转录</value></data>
+<data name="AdminPrivilegeRequired" xml:space="preserve"><value>需要管理员权限。请以管理员身份运行程序，或将其移动到可写文件夹。</value></data>
 <data name="MonitorEditFolder" xml:space="preserve"><value>监控编辑数据文件夹</value></data>
 <data name="Disable" xml:space="preserve"><value>禁用</value></data>
 <data name="Pattern" xml:space="preserve"><value>图案</value></data>

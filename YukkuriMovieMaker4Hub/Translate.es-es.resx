@@ -70,6 +70,7 @@
 <data name="ExitHubOnYmm4Start" xml:space="preserve"><value>Cerrar Hub al iniciar YMM4</value></data>
 <data name="Ymm4InfoSite" xml:space="preserve"><value>Sitio de información de YMM4</value></data>
 <data name="Action" xml:space="preserve"><value>Acción</value></data>
+<data name="AccessDenied" xml:space="preserve"><value>Acceso denegado</value></data>
 <data name="UpdateAvailable" xml:space="preserve"><value>Actualización disponible</value></data>
 <data name="ConfirmUpdate" xml:space="preserve"><value>¿Desea actualizar?</value></data>
 <data name="UpdateDetails" xml:space="preserve"><value>Detalles de la actualización</value></data>
@@ -154,6 +155,7 @@
 <data name="DistributionSite" xml:space="preserve"><value>Sitio de distribución</value></data>
 <data name="EndDistribution" xml:space="preserve"><value>Fin de la distribución</value></data>
 <data name="Transcription" xml:space="preserve"><value>Transcripción</value></data>
+<data name="AdminPrivilegeRequired" xml:space="preserve"><value>Se requieren privilegios de administrador. Ejecute el programa como administrador o muévalo a una carpeta con permisos de escritura.</value></data>
 <data name="MonitorEditFolder" xml:space="preserve"><value>Monitorear carpeta de datos de edición</value></data>
 <data name="Disable" xml:space="preserve"><value>Desactivar</value></data>
 <data name="Pattern" xml:space="preserve"><value>Patrón</value></data>

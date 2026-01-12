@@ -70,6 +70,7 @@
 <data name="ExitHubOnYmm4Start" xml:space="preserve"><value>YMM4起動時にHubを終了する</value></data>
 <data name="Ymm4InfoSite" xml:space="preserve"><value>YMM4情報サイト</value></data>
 <data name="Action" xml:space="preserve"><value>アクション</value></data>
+<data name="AccessDenied" xml:space="preserve"><value>アクセスが拒否されました</value></data>
 <data name="UpdateAvailable" xml:space="preserve"><value>アップデートあり</value></data>
 <data name="ConfirmUpdate" xml:space="preserve"><value>アップデートしますか？</value></data>
 <data name="UpdateDetails" xml:space="preserve"><value>アップデート内容</value></data>
@@ -154,6 +155,7 @@
 <data name="DistributionSite" xml:space="preserve"><value>配布サイト</value></data>
 <data name="EndDistribution" xml:space="preserve"><value>配布終了</value></data>
 <data name="Transcription" xml:space="preserve"><value>文字起こし</value></data>
+<data name="AdminPrivilegeRequired" xml:space="preserve"><value>管理者権限が必要です。プログラムを管理者として実行するか、書き込み可能なフォルダに移動させてください。</value></data>
 <data name="MonitorEditFolder" xml:space="preserve"><value>編集データフォルダの監視</value></data>
 <data name="Disable" xml:space="preserve"><value>無効</value></data>
 <data name="Pattern" xml:space="preserve"><value>模様</value></data>

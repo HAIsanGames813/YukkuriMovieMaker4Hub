@@ -791,20 +791,53 @@ namespace YukkuriMovieMaker4Hub
 
         private void SaveAll()
         {
-            _currentSettings.Instances = Instances.ToList();
-            _currentSettings.ProjectDirectories = ProjectDirectories.ToList();
-            _settingsManager.Save(_currentSettings);
+            try
+            {
+                _currentSettings.Instances = Instances.ToList();
+                _currentSettings.ProjectDirectories = ProjectDirectories.ToList();
+                _currentSettings.GitHubToken = GitHubTokenBox.Password;
+                _settingsManager.Save(_currentSettings);
+            }
+            catch (UnauthorizedAccessException)
+            {
+                MessageBox.Show(
+                    Translate.AccessDenied ?? Translate.AdminPrivilegeRequired,
+                    "Error",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Save Error: {ex.Message}");
+            }
         }
 
         private void AddInstance_Click(object sender, RoutedEventArgs e)
         {
-            var dialog = new OpenFileDialog { Filter = "YukkuriMovieMaker.exe|YukkuriMovieMaker.exe" };
+            var dialog = new OpenFileDialog
+            {
+                Filter = "YukkuriMovieMaker.exe|YukkuriMovieMaker.exe",
+                Title = "Select YMM4 Executable"
+            };
+
             if (dialog.ShowDialog() == true)
             {
-                var newInstance = new InstanceInfo { Name = Translate.NewInstance, ExePath = dialog.FileName };
-                newInstance.PropertyChanged += (s, ee) => SaveAll();
-                Instances.Add(newInstance);
-                SaveAll();
+                try
+                {
+                    var newInstance = new InstanceInfo
+                    {
+                        Name = Path.GetFileName(Path.GetDirectoryName(dialog.FileName)) ?? "New Instance",
+                        ExePath = dialog.FileName
+                    };
+                    newInstance.PropertyChanged += (s, ev) => SaveAll();
+                    Instances.Add(newInstance);
+                    SelectedInstance = newInstance;
+                    SaveAll();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Failed to add instance: {ex.Message}");
+                }
             }
         }
 
