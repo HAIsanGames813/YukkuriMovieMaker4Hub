@@ -617,22 +617,21 @@ namespace YukkuriMovieMaker4Hub
                         var assets = doc.RootElement.GetProperty("assets");
                         if (assets.GetArrayLength() > 0)
                         {
-                            var downloadUrl = assets[0].GetProperty("browser_download_url").GetString();
-                            if (!string.IsNullOrEmpty(downloadUrl))
+                            var asset = assets[0];
+                            var downloadUrl = asset.GetProperty("browser_download_url").GetString();
+                            var fileName = asset.GetProperty("name").GetString();
+
+                            if (!string.IsNullOrEmpty(downloadUrl) && !string.IsNullOrEmpty(fileName))
                             {
                                 var result = MessageBox.Show(
-                                    $"{Translate.UpdateAvailable}\nLocal: {HubVersion}\nLatest: {latestTag}\n\n{Translate.OpenFolder}?",
+                                    $"{Translate.UpdateAvailable}\nLocal: {HubVersion}\nLatest: {latestTag}\n\n{Translate.UpdateDetails}?",
                                     "Update Check",
                                     MessageBoxButton.YesNo,
                                     MessageBoxImage.Information);
 
                                 if (result == MessageBoxResult.Yes)
                                 {
-                                    Process.Start(new ProcessStartInfo
-                                    {
-                                        FileName = downloadUrl,
-                                        UseShellExecute = true
-                                    });
+                                    await DownloadAndExecuteUpdateAsync(downloadUrl, fileName);
                                 }
                             }
                         }
@@ -641,6 +640,45 @@ namespace YukkuriMovieMaker4Hub
             }
             catch
             {
+            }
+        }
+        private async Task DownloadAndExecuteUpdateAsync(string url, string fileName)
+        {
+            try
+            {
+                string tempDir = Path.Combine(Path.GetTempPath(), "YMM4HubUpdate");
+                if (!Directory.Exists(tempDir)) Directory.CreateDirectory(tempDir);
+                string savePath = Path.Combine(tempDir, fileName);
+
+                using var request = new HttpRequestMessage(HttpMethod.Get, url);
+                request.Headers.UserAgent.ParseAdd("YukkuriMovieMaker4Hub");
+                using var response = await _http.SendAsync(request, HttpCompletionOption.ResponseHeadersRead);
+                response.EnsureSuccessStatusCode();
+
+                using (var contentStream = await response.Content.ReadAsStreamAsync())
+                using (var fileStream = File.Create(savePath))
+                {
+                    await contentStream.CopyToAsync(fileStream);
+                }
+
+                var psi = new ProcessStartInfo
+                {
+                    FileName = savePath,
+                    UseShellExecute = true
+                };
+                var process = Process.Start(psi);
+                if (process != null)
+                {
+                    await process.WaitForExitAsync();
+                    if (File.Exists(savePath))
+                    {
+                        File.Delete(savePath);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"{Translate.DownloadError} {ex.Message}");
             }
         }
         private void GitHubTokenBox_PasswordChanged(object sender, RoutedEventArgs e)
