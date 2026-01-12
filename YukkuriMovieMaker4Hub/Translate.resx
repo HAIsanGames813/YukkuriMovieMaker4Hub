@@ -1,0 +1,163 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+<data name="CurrentCulture" xml:space="preserve"><value>ja-jp</value></data>
+<data name="PreRelease" xml:space="preserve"><value>(プレリリース)</value></data>
+<data name="DownloadAndRun" xml:space="preserve"><value>※.ymmeファイルをダウンロードして実行します。</value></data>
+<data name="GitHubApiSettings" xml:space="preserve"><value>GitHub API 設定</value></data>
+<data name="GitHubApiLimit" xml:space="preserve"><value>GitHub APIの取得制限に達しました。アカウントをお持ちでない場合は、しばらく時間を置いてから再度お試しください。</value></data>
+<data name="CustomizeHub" xml:space="preserve"><value>Hubのカスタマイズ</value></data>
+<data name="HubSettings" xml:space="preserve"><value>Hub設定</value></data>
+<data name="UiFont" xml:space="preserve"><value>UIフォント</value></data>
+<data name="WindowsStandard" xml:space="preserve"><value>Windows標準</value></data>
+<data name="ExitHubOnYmm4Start" xml:space="preserve"><value>YMM4起動時にHubを終了する</value></data>
+<data name="Ymm4InfoSite" xml:space="preserve"><value>YMM4情報サイト</value></data>
+<data name="Action" xml:space="preserve"><value>アクション</value></data>
+<data name="UpdateAvailable" xml:space="preserve"><value>アップデートあり</value></data>
+<data name="UpdateDetails" xml:space="preserve"><value>アップデート内容</value></data>
+<data name="Instance" xml:space="preserve"><value>インスタンス</value></data>
+<data name="SelectInstance" xml:space="preserve"><value>インスタンスを選択してください</value></data>
+<data name="InstanceName" xml:space="preserve"><value>インスタンス名</value></data>
+<data name="Install" xml:space="preserve"><value>インストール</value></data>
+<data name="SelectInstallVersion" xml:space="preserve"><value>インストールするバージョンと対象のインスタンスを選択してください。</value></data>
+<data name="CannotBeUndone" xml:space="preserve"><value>この操作は戻せません。</value></data>
+<data name="Size" xml:space="preserve"><value>サイズ</value></data>
+<data name="All" xml:space="preserve"><value>すべて</value></data>
+<data name="CheckAll" xml:space="preserve"><value>すべてチェック</value></data>
+<data name="UncheckAll" xml:space="preserve"><value>すべて外す</value></data>
+<data name="Others" xml:space="preserve"><value>その他</value></data>
+<data name="Dark" xml:space="preserve"><value>ダーク</value></data>
+<data name="TypeFilter" xml:space="preserve"><value>タイプフィルター</value></data>
+<data name="DownloadError" xml:space="preserve"><value>ダウンロード中にエラーが発生しました:</value></data>
+<data name="Tools" xml:space="preserve"><value>ツール</value></data>
+<data name="ThemeSettings" xml:space="preserve"><value>テーマ設定</value></data>
+<data name="TextCompletion" xml:space="preserve"><value>テキスト補完</value></data>
+<data name="Token" xml:space="preserve"><value>トークン</value></data>
+<data name="IssueToken" xml:space="preserve"><value>トークンを発行する</value></data>
+<data name="Niconico" xml:space="preserve"><value>ニコニコ動画</value></data>
+<data name="DeleteFailed" xml:space="preserve"><value>の削除に失敗</value></data>
+<data name="SelectVersion" xml:space="preserve"><value>バージョン選択</value></data>
+<data name="Path" xml:space="preserve"><value>パス</value></data>
+<data name="FileName" xml:space="preserve"><value>ファイル名</value></data>
+<data name="ClearFilter" xml:space="preserve"><value>フィルタ解除</value></data>
+<data name="Folder" xml:space="preserve"><value>フォルダ</value></data>
+<data name="FolderPath" xml:space="preserve"><value>フォルダパス</value></data>
+<data name="AddFolder" xml:space="preserve"><value>フォルダを追加</value></data>
+<data name="OpenFolder" xml:space="preserve"><value>フォルダを開く</value></data>
+<data name="SearchFont" xml:space="preserve"><value>フォントを検索...</value></data>
+<data name="OpenPluginFolder" xml:space="preserve"><value>プラグインフォルダを開く</value></data>
+<data name="PluginPortal" xml:space="preserve"><value>プラグインポータル</value></data>
+<data name="SearchPlugins" xml:space="preserve"><value>プラグインを検索</value></data>
+<data name="PluginManagement" xml:space="preserve"><value>プラグイン管理</value></data>
+<data name="PluginSearch" xml:space="preserve"><value>プラグイン検索</value></data>
+<data name="AvoidLimitSettings" xml:space="preserve"><value>プラグイン取得の制限を回避するための設定です。頻繁に取得制限が発生する場合に設定してください。</value></data>
+<data name="ExitYmm4ForPlugin" xml:space="preserve"><value>プラグイン操作のためにYMM4を終了しますか？</value></data>
+<data name="PluginName" xml:space="preserve"><value>プラグイン名</value></data>
+<data name="Black" xml:space="preserve"><value>ブラック</value></data>
+<data name="SearchProject" xml:space="preserve"><value>プロジェクト･プロジェクト名で検索...</value></data>
+<data name="PortalLoadFailed" xml:space="preserve"><value>ポータル読み込み失敗</value></data>
+<data name="Light" xml:space="preserve"><value>ライト</value></data>
+<data name="OpenLinkFailed" xml:space="preserve"><value>リンクを開けませんでした</value></data>
+<data name="RemoveFromHub" xml:space="preserve"><value>をHubから削除しますか？</value></data>
+<data name="DeletePermanently" xml:space="preserve"><value>を完全に削除しますか？</value></data>
+<data name="VideoEffects" xml:space="preserve"><value>映像エフェクト</value></data>
+<data name="AudioEffects" xml:space="preserve"><value>音声エフェクト</value></data>
+<data name="SpeechSynthesis" xml:space="preserve"><value>音声合成</value></data>
+<data name="LoadAudio" xml:space="preserve"><value>音声読み込み</value></data>
+<data name="Image" xml:space="preserve"><value>画像</value></data>
+<data name="LoadImage" xml:space="preserve"><value>画像読み込み</value></data>
+<data name="Overview" xml:space="preserve"><value>概要</value></data>
+<data name="Extension" xml:space="preserve"><value>拡張子</value></data>
+<data name="Confirm" xml:space="preserve"><value>確認</value></data>
+<data name="Launch" xml:space="preserve"><value>起動</value></data>
+<data name="DeleteCountPermanently" xml:space="preserve"><value>件のプラグインを完全に削除しますか？</value></data>
+<data name="SearchLabel" xml:space="preserve"><value>検索:</value></data>
+<data name="CurrentVersion" xml:space="preserve"><value>現在のバージョン</value></data>
+<data name="LanguageSettings" xml:space="preserve"><value>言語設定</value></data>
+<data name="LastUpdate" xml:space="preserve"><value>最終更新日時</value></data>
+<data name="LatestVersion" xml:space="preserve"><value>最新バージョン</value></data>
+<data name="Delete" xml:space="preserve"><value>削除</value></data>
+<data name="ConfirmDeletion" xml:space="preserve"><value>削除の確認</value></data>
+<data name="InstallerNotFound" xml:space="preserve"><value>指定されたインスタンスにインストーラーが見つかりません。</value></data>
+<data name="Acquiring" xml:space="preserve"><value>取得中</value></data>
+<data name="SceneTransition" xml:space="preserve"><value>場面切り替え</value></data>
+<data name="NoInfo" xml:space="preserve"><value>情報なし</value></data>
+<data name="Status" xml:space="preserve"><value>状態</value></data>
+<data name="NewInstance" xml:space="preserve"><value>新規インスタンス</value></data>
+<data name="CreateNew" xml:space="preserve"><value>新規作成</value></data>
+<data name="Shapes" xml:space="preserve"><value>図形</value></data>
+<data name="Toggle" xml:space="preserve"><value>切替</value></data>
+<data name="DeleteSelected" xml:space="preserve"><value>選択項目を削除</value></data>
+<data name="EnableDisableSelected" xml:space="preserve"><value>選択項目を有効/無効</value></data>
+<data name="OpenLastProject" xml:space="preserve"><value>前回のプロジェクトを開く</value></data>
+<data name="Add" xml:space="preserve"><value>追加</value></data>
+<data name="VideoOutput" xml:space="preserve"><value>動画出力</value></data>
+<data name="LoadVideo" xml:space="preserve"><value>動画読み込み</value></data>
+<data name="OperationSettings" xml:space="preserve"><value>動作設定</value></data>
+<data name="DistributionSite" xml:space="preserve"><value>配布サイト</value></data>
+<data name="EndDistribution" xml:space="preserve"><value>配布終了</value></data>
+<data name="Transcription" xml:space="preserve"><value>文字起こし</value></data>
+<data name="MonitorEditFolder" xml:space="preserve"><value>編集データフォルダの監視</value></data>
+<data name="Disable" xml:space="preserve"><value>無効</value></data>
+<data name="Pattern" xml:space="preserve"><value>模様</value></data>
+<data name="Enable" xml:space="preserve"><value>有効</value></data>
+<data name="Character" xml:space="preserve"><value>立ち絵</value></data>
+<data name="RestartRequired" xml:space="preserve"><value>(要再起動)</value></data>
+</root>

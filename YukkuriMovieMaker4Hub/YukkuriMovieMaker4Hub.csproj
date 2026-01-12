@@ -12,4 +12,17 @@
   <ItemGroup>
     <Content Include="Ymm4_hub_logo.ico" />
   </ItemGroup>
+	
+	<ItemGroup>
+		<AdditionalFiles Include="**/*.csv" />
+	</ItemGroup>
+	
+	<ItemGroup>
+	  <ProjectReference Include="..\YukkuriMovieMaker.Generator\YukkuriMovieMaker.Generator\YukkuriMovieMaker.Generator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
+	</ItemGroup>
+	<ItemGroup>
+		<Reference Include="YukkuriMovieMaker.Plugin">
+			<HintPath>C:\Users\ADMIN\YukkuriMovieMaker4\YukkuriMovieMaker.Plugin.dll</HintPath>
+		</Reference>
+	</ItemGroup>
 </Project>

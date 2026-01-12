@@ -1,0 +1,163 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+<data name="CurrentCulture" xml:space="preserve"><value>id-id</value></data>
+<data name="PreRelease" xml:space="preserve"><value>(Prarilis)</value></data>
+<data name="DownloadAndRun" xml:space="preserve"><value>※File .ymme akan diunduh dan dijalankan.</value></data>
+<data name="GitHubApiSettings" xml:space="preserve"><value>Pengaturan API GitHub</value></data>
+<data name="GitHubApiLimit" xml:space="preserve"><value>Batas pengambilan API GitHub telah tercapai. Jika Anda tidak memiliki akun, silakan coba lagi nanti.</value></data>
+<data name="CustomizeHub" xml:space="preserve"><value>Kustomisasi Hub</value></data>
+<data name="HubSettings" xml:space="preserve"><value>Pengaturan Hub</value></data>
+<data name="UiFont" xml:space="preserve"><value>Font UI</value></data>
+<data name="WindowsStandard" xml:space="preserve"><value>Standar Windows</value></data>
+<data name="ExitHubOnYmm4Start" xml:space="preserve"><value>Keluar dari Hub saat YMM4 dimulai</value></data>
+<data name="Ymm4InfoSite" xml:space="preserve"><value>Situs Informasi YMM4</value></data>
+<data name="Action" xml:space="preserve"><value>Aksi</value></data>
+<data name="UpdateAvailable" xml:space="preserve"><value>Pembaruan tersedia</value></data>
+<data name="UpdateDetails" xml:space="preserve"><value>Detail Pembaruan</value></data>
+<data name="Instance" xml:space="preserve"><value>Instans</value></data>
+<data name="SelectInstance" xml:space="preserve"><value>Silakan pilih instans.</value></data>
+<data name="InstanceName" xml:space="preserve"><value>Nama Instans</value></data>
+<data name="Install" xml:space="preserve"><value>Instal</value></data>
+<data name="SelectInstallVersion" xml:space="preserve"><value>Silakan pilih versi yang akan diinstal dan instans target.</value></data>
+<data name="CannotBeUndone" xml:space="preserve"><value>Tindakan ini tidak dapat dibatalkan.</value></data>
+<data name="Size" xml:space="preserve"><value>Ukuran</value></data>
+<data name="All" xml:space="preserve"><value>Semua</value></data>
+<data name="CheckAll" xml:space="preserve"><value>Centang Semua</value></data>
+<data name="UncheckAll" xml:space="preserve"><value>Hapus Semua Centang</value></data>
+<data name="Others" xml:space="preserve"><value>Lainnya</value></data>
+<data name="Dark" xml:space="preserve"><value>Gelap</value></data>
+<data name="TypeFilter" xml:space="preserve"><value>Filter Tipe</value></data>
+<data name="DownloadError" xml:space="preserve"><value>Terjadi kesalahan saat mengunduh:</value></data>
+<data name="Tools" xml:space="preserve"><value>Alat</value></data>
+<data name="ThemeSettings" xml:space="preserve"><value>Pengaturan Tema</value></data>
+<data name="TextCompletion" xml:space="preserve"><value>Penyelesaian Teks</value></data>
+<data name="Token" xml:space="preserve"><value>Token</value></data>
+<data name="IssueToken" xml:space="preserve"><value>Terbitkan Token</value></data>
+<data name="Niconico" xml:space="preserve"><value>Niconico</value></data>
+<data name="DeleteFailed" xml:space="preserve"><value>Gagal menghapus</value></data>
+<data name="SelectVersion" xml:space="preserve"><value>Pilih Versi</value></data>
+<data name="Path" xml:space="preserve"><value>Jalur</value></data>
+<data name="FileName" xml:space="preserve"><value>Nama File</value></data>
+<data name="ClearFilter" xml:space="preserve"><value>Hapus Filter</value></data>
+<data name="Folder" xml:space="preserve"><value>Folder</value></data>
+<data name="FolderPath" xml:space="preserve"><value>Jalur Folder</value></data>
+<data name="AddFolder" xml:space="preserve"><value>Tambah Folder</value></data>
+<data name="OpenFolder" xml:space="preserve"><value>Buka Folder</value></data>
+<data name="SearchFont" xml:space="preserve"><value>Cari font...</value></data>
+<data name="OpenPluginFolder" xml:space="preserve"><value>Buka Folder Plugin</value></data>
+<data name="PluginPortal" xml:space="preserve"><value>Portal Plugin</value></data>
+<data name="SearchPlugins" xml:space="preserve"><value>Cari Plugin</value></data>
+<data name="PluginManagement" xml:space="preserve"><value>Manajemen Plugin</value></data>
+<data name="PluginSearch" xml:space="preserve"><value>Pencarian Plugin</value></data>
+<data name="AvoidLimitSettings" xml:space="preserve"><value>Pengaturan ini untuk menghindari batasan pengambilan plugin. Atur ini jika batasan sering terjadi.</value></data>
+<data name="ExitYmm4ForPlugin" xml:space="preserve"><value>Apakah Anda ingin keluar dari YMM4 untuk operasi plugin?</value></data>
+<data name="PluginName" xml:space="preserve"><value>Nama Plugin</value></data>
+<data name="Black" xml:space="preserve"><value>Hitam</value></data>
+<data name="SearchProject" xml:space="preserve"><value>Cari berdasarkan proyek/nama proyek...</value></data>
+<data name="PortalLoadFailed" xml:space="preserve"><value>Gagal memuat portal</value></data>
+<data name="Light" xml:space="preserve"><value>Terang</value></data>
+<data name="OpenLinkFailed" xml:space="preserve"><value>Gagal membuka tautan</value></data>
+<data name="RemoveFromHub" xml:space="preserve"><value>Apakah Anda ingin menghapus ini dari Hub?</value></data>
+<data name="DeletePermanently" xml:space="preserve"><value>Apakah Anda ingin menghapus ini secara permanen?</value></data>
+<data name="VideoEffects" xml:space="preserve"><value>Efek Video</value></data>
+<data name="AudioEffects" xml:space="preserve"><value>Efek Audio</value></data>
+<data name="SpeechSynthesis" xml:space="preserve"><value>Sintesis Suara</value></data>
+<data name="LoadAudio" xml:space="preserve"><value>Muat Audio</value></data>
+<data name="Image" xml:space="preserve"><value>Gambar</value></data>
+<data name="LoadImage" xml:space="preserve"><value>Muat Gambar</value></data>
+<data name="Overview" xml:space="preserve"><value>Ringkasan</value></data>
+<data name="Extension" xml:space="preserve"><value>Ekstensi</value></data>
+<data name="Confirm" xml:space="preserve"><value>Konfirmasi</value></data>
+<data name="Launch" xml:space="preserve"><value>Luncurkan</value></data>
+<data name="DeleteCountPermanently" xml:space="preserve"><value>Apakah Anda ingin menghapus plugin ini secara permanen?</value></data>
+<data name="SearchLabel" xml:space="preserve"><value>Cari:</value></data>
+<data name="CurrentVersion" xml:space="preserve"><value>Versi Saat Ini</value></data>
+<data name="LanguageSettings" xml:space="preserve"><value>Pengaturan Bahasa</value></data>
+<data name="LastUpdate" xml:space="preserve"><value>Pembaruan Terakhir</value></data>
+<data name="LatestVersion" xml:space="preserve"><value>Versi Terbaru</value></data>
+<data name="Delete" xml:space="preserve"><value>Hapus</value></data>
+<data name="ConfirmDeletion" xml:space="preserve"><value>Konfirmasi Penghapusan</value></data>
+<data name="InstallerNotFound" xml:space="preserve"><value>Pemasang tidak ditemukan di instans yang ditentukan.</value></data>
+<data name="Acquiring" xml:space="preserve"><value>Mengambil</value></data>
+<data name="SceneTransition" xml:space="preserve"><value>Transisi Adegan</value></data>
+<data name="NoInfo" xml:space="preserve"><value>Tidak Ada Informasi</value></data>
+<data name="Status" xml:space="preserve"><value>Status</value></data>
+<data name="NewInstance" xml:space="preserve"><value>Instans Baru</value></data>
+<data name="CreateNew" xml:space="preserve"><value>Buat Baru</value></data>
+<data name="Shapes" xml:space="preserve"><value>Bentuk</value></data>
+<data name="Toggle" xml:space="preserve"><value>Alihkan</value></data>
+<data name="DeleteSelected" xml:space="preserve"><value>Hapus yang Dipilih</value></data>
+<data name="EnableDisableSelected" xml:space="preserve"><value>Aktifkan/Nonaktifkan yang Dipilih</value></data>
+<data name="OpenLastProject" xml:space="preserve"><value>Buka Proyek Terakhir</value></data>
+<data name="Add" xml:space="preserve"><value>Tambah</value></data>
+<data name="VideoOutput" xml:space="preserve"><value>Output Video</value></data>
+<data name="LoadVideo" xml:space="preserve"><value>Muat Video</value></data>
+<data name="OperationSettings" xml:space="preserve"><value>Pengaturan Operasi</value></data>
+<data name="DistributionSite" xml:space="preserve"><value>Situs Distribusi</value></data>
+<data name="EndDistribution" xml:space="preserve"><value>Distribusi Berakhir</value></data>
+<data name="Transcription" xml:space="preserve"><value>Transkripsi</value></data>
+<data name="MonitorEditFolder" xml:space="preserve"><value>Pantau folder data edit</value></data>
+<data name="Disable" xml:space="preserve"><value>Nonaktifkan</value></data>
+<data name="Pattern" xml:space="preserve"><value>Pola</value></data>
+<data name="Enable" xml:space="preserve"><value>Aktifkan</value></data>
+<data name="Character" xml:space="preserve"><value>Gambar Karakter</value></data>
+<data name="RestartRequired" xml:space="preserve"><value>(Perlu Mulai Ulang)</value></data>
+</root>

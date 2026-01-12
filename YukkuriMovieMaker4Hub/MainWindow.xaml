@@ -4,7 +4,7 @@
         xmlns:local="clr-namespace:YukkuriMovieMaker4Hub"
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         x:Name="RootWindow"
-        Title="YukkuriMovieMaker4 Hub" Height="800" Width="1200" 
+        Title="YukkuriMovieMaker4Hub" Height="800" Width="1200" 
         Background="{DynamicResource ThemeBrush}"
         FontFamily="{DynamicResource AppFont}">
     <Window.Resources>
@@ -328,7 +328,7 @@
                     <ControlTemplate TargetType="TextBox">
                         <Grid>
                             <Border x:Name="border" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="4"/>
-                            <ScrollViewer x:Name="PART_ContentHost" Focusable="false" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden" Margin="10,0"/>
+                            <ScrollViewer x:Name="PART_ContentHost" Focusable="false" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden" Margin="-13,0"/>
                             <TextBlock x:Name="placeholder" IsHitTestVisible="False" Text="{TemplateBinding Tag}" VerticalAlignment="Center" Margin="12,0" Foreground="{DynamicResource SubTextBrush}" Visibility="Collapsed"/>
                         </Grid>
                         <ControlTemplate.Triggers>
@@ -387,7 +387,7 @@
                 </Style>
             </Grid.Resources>
 
-            <TextBlock Text="インスタンス" Margin="10" FontWeight="Bold" Foreground="{DynamicResource TextBrush}"/>
+            <TextBlock Text="{x:Static local:Translate.Instance}" Margin="10" FontWeight="Bold" Foreground="{DynamicResource TextBrush}"/>
 
             <ListBox x:Name="InstanceListBox" Grid.Row="1" ItemsSource="{Binding Instances}" SelectedItem="{Binding SelectedInstance}" Background="Transparent" BorderThickness="0" Margin="5">
                 <ListBox.ItemTemplate>
@@ -419,7 +419,7 @@
                                     </Path.Style>
                                 </Path>
 
-                                <Ellipse Width="10" Height="10" Fill="#4CAF50" Stroke="{DynamicResource ThemeBrush}" StrokeThickness="2" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0,-2,-2,0">
+                                <Ellipse Width="10" Height="10" Fill="#2E7D32" Stroke="{DynamicResource ThemeBrush}" StrokeThickness="2" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0,-2,-2,0">
                                     <Ellipse.Style>
                                         <Style TargetType="Ellipse">
                                             <Setter Property="Visibility" Value="Collapsed"/>
@@ -434,13 +434,13 @@
                             </Grid>
 
                             <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
-                                <Button Style="{StaticResource QuickActionButtonStyle}" Click="InstanceLaunch_Click" ToolTip="起動">
+                                <Button Style="{StaticResource QuickActionButtonStyle}" Click="InstanceLaunch_Click" ToolTip="{x:Static local:Translate.Launch}">
                                     <Path Fill="{DynamicResource TextBrush}" Width="14" Height="14" Stretch="Uniform" Data="M8,5.14V19.14L19,12.14L8,5.14Z"/>
                                 </Button>
-                                <Button Style="{StaticResource QuickActionButtonStyle}" Click="InstanceLaunchLastProject_Click" ToolTip="前回のプロジェクト">
+                                <Button Style="{StaticResource QuickActionButtonStyle}" Click="InstanceLaunchLastProject_Click" ToolTip="{x:Static local:Translate.OpenLastProject}">
                                     <Path Fill="{DynamicResource TextBrush}" Width="14" Height="14" Stretch="Uniform" Data="M13.5,8H12V13L16.28,15.54L17,14.33L13.5,12.25V8M13,3A9,9 0 0,0 4,12H1L4.96,16.03L9,12H6A7,7 0 0,1 13,5A7,7 0 0,1 20,12A7,7 0 0,1 13,19C11.07,19 9.32,18.21 8.06,16.94L6.64,18.36C8.27,20 10.5,21 13,21A9,9 0 0,0 22,12A9,9 0 0,0 13,3Z"/>
                                 </Button>
-                                <Button Style="{StaticResource QuickActionButtonStyle}" Click="InstanceCreateNewProject_Click" ToolTip="新規作成">
+                                <Button Style="{StaticResource QuickActionButtonStyle}" Click="InstanceCreateNewProject_Click" ToolTip="{x:Static local:Translate.CreateNew}">
                                     <Path Fill="{DynamicResource TextBrush}" Width="14" Height="14" Stretch="Uniform" Data="M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z"/>
                                 </Button>
                             </StackPanel>
@@ -453,13 +453,13 @@
                 <Button Click="AddInstance_Click" Margin="0,3" Height="35">
                     <StackPanel Orientation="Horizontal">
                         <Path Style="{StaticResource IconPathStyle}" Width="15" Height="15" Data="M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z"/>
-                        <TextBlock Text="追加" VerticalAlignment="Center"/>
+                        <TextBlock Text="{x:Static local:Translate.Add}" VerticalAlignment="Center"/>
                     </StackPanel>
                 </Button>
                 <Button Click="DeleteInstance_Click" Margin="0,3" Height="35">
                     <StackPanel Orientation="Horizontal">
                         <Path Style="{StaticResource IconPathStyle}" Width="15" Height="15" Data="M19,4H15.5L14.5,3H9.5L8.5,4H5V6H19V4M6,19A2,2 0 0,0 8,21H16A2,2 0 0,0 18,19V7H6V19Z"/>
-                        <TextBlock Text="削除" VerticalAlignment="Center"/>
+                        <TextBlock Text="{x:Static local:Translate.Delete}" VerticalAlignment="Center"/>
                     </StackPanel>
                 </Button>
             </StackPanel>
@@ -467,7 +467,7 @@
 
         <Grid Grid.Column="1" Margin="5">
             <TabControl Background="Transparent" BorderThickness="0" SelectionChanged="TabControl_SelectionChanged">
-                <TabItem Header="概要">
+                <TabItem Header="{x:Static local:Translate.Overview}">
                     <Grid Margin="20">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto"/>
@@ -477,7 +477,8 @@
                         </Grid.RowDefinitions>
 
                         <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,20">
-                            <Button Width="80" Height="80" Click="ChangeIcon_Click" Padding="0">
+                            <Button Width="80" Height="80" Click="ChangeIcon_Click" Padding="0"
+            IsEnabled="{Binding SelectedInstance.IsRealInstance}">
                                 <Grid>
                                     <Border Background="{DynamicResource ItemBrush}" CornerRadius="4"/>
                                     <Image Source="{Binding SelectedInstance.IconImage}" Stretch="UniformToFill">
@@ -489,55 +490,56 @@
                             </Button>
                             <StackPanel Margin="20,0">
                                 <StackPanel Orientation="Horizontal">
-                                    <TextBox Text="{Binding SelectedInstance.Name, UpdateSourceTrigger=PropertyChanged}" FontSize="24" Background="Transparent" BorderThickness="0,0,0,1" Width="300" HorizontalAlignment="Left" Tag="インスタンス名"/>
-
-                                    <Button Content="アップデートあり" Click="ShowUpdateInfo_Click" Foreground="#4CAF50" FontWeight="Bold" VerticalAlignment="Bottom" Margin="10,0,0,5" Cursor="Hand" Background="Transparent" BorderThickness="0">
-                                        <Button.Style>
-                                            <Style TargetType="Button">
-                                                <Setter Property="Template">
-                                                    <Setter.Value>
-                                                        <ControlTemplate TargetType="Button">
-                                                            <TextBlock Text="{TemplateBinding Content}" TextDecorations="Underline"/>
-                                                        </ControlTemplate>
-                                                    </Setter.Value>
-                                                </Setter>
-                                                <Setter Property="Visibility" Value="Collapsed"/>
-                                                <Style.Triggers>
-                                                    <DataTrigger Binding="{Binding SelectedInstance.HasUpdate}" Value="True">
-                                                        <Setter Property="Visibility" Value="Visible"/>
-                                                    </DataTrigger>
-                                                </Style.Triggers>
-                                            </Style>
-                                        </Button.Style>
-                                    </Button>
+                                    <TextBox Text="{Binding SelectedInstance.Name, UpdateSourceTrigger=PropertyChanged}" 
+                     IsEnabled="{Binding SelectedInstance.IsRealInstance}"
+                     FontSize="24" Background="Transparent" BorderThickness="0,0,0,1" Width="Auto" HorizontalAlignment="Left" Tag="{x:Static local:Translate.InstanceName}"/>
                                 </StackPanel>
                                 <TextBlock Text="{Binding SelectedInstance.ExePath}" Foreground="{DynamicResource SubTextBrush}" Margin="0,10" FontSize="10"/>
+                                <Button Content="{x:Static local:Translate.UpdateAvailable}" Click="ShowUpdateInfo_Click" Foreground="#2E7D32" FontWeight="Bold" VerticalAlignment="Bottom" Margin="0,0,0,5" Cursor="Hand" Background="Transparent" BorderThickness="0">
+                                    <Button.Style>
+                                        <Style TargetType="Button">
+                                            <Setter Property="Template">
+                                                <Setter.Value>
+                                                    <ControlTemplate TargetType="Button">
+                                                        <TextBlock Text="{TemplateBinding Content}" TextDecorations="Underline"/>
+                                                    </ControlTemplate>
+                                                </Setter.Value>
+                                            </Setter>
+                                            <Setter Property="Visibility" Value="Collapsed"/>
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding SelectedInstance.HasUpdate}" Value="True">
+                                                    <Setter Property="Visibility" Value="Visible"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Button.Style>
+                                </Button>
                             </StackPanel>
                         </StackPanel>
 
                         <UniformGrid Grid.Row="1" Columns="4" Margin="0,0,0,20">
-                            <Button Click="LaunchInstance_Click" Height="60" Margin="5" Background="{DynamicResource AccentBrush}">
+                            <Button Click="LaunchInstance_Click" IsEnabled="{Binding SelectedInstance.IsRealInstance}" Height="60" Margin="5" Background="{DynamicResource AccentBrush}">
                                 <StackPanel Orientation="Horizontal">
-                                    <Path Fill="White" Width="20" Height="20" Stretch="Uniform" Margin="0,0,10,0" Data="M8,5.14V19.14L19,12.14L8,5.14Z"/>
-                                    <TextBlock Text="起動" FontSize="16" FontWeight="Bold" Foreground="White" VerticalAlignment="Center"/>
+                                    <Path Fill="{DynamicResource TextBrush}" Width="20" Height="20" Stretch="Uniform" Margin="0,0,10,0" Data="M8,5.14V19.14L19,12.14L8,5.14Z"/>
+                                    <TextBlock Text="{x:Static local:Translate.Launch}" FontSize="16" FontWeight="Bold" Foreground="{DynamicResource TextBrush}" VerticalAlignment="Center"/>
                                 </StackPanel>
                             </Button>
-                            <Button Click="OpenFolder_Click" Height="60" Margin="5">
+                            <Button Click="OpenFolder_Click" IsEnabled="{Binding SelectedInstance.IsRealInstance}" Height="60" Margin="5">
                                 <StackPanel Orientation="Horizontal">
                                     <Path Fill="{DynamicResource TextBrush}" Width="20" Height="20" Stretch="Uniform" Margin="0,0,10,0" Data="M10,4H4C2.89,4 2,4.89 2,6V18A2,2 0 0,0 4,20H20A2,2 0 0,0 22,18V8C22,6.89 21.1,6 20,6H12L10,4Z"/>
-                                    <TextBlock Text="フォルダ" VerticalAlignment="Center"/>
+                                    <TextBlock Text="{x:Static local:Translate.Folder}" VerticalAlignment="Center"/>
                                 </StackPanel>
                             </Button>
-                            <Button Click="LaunchLastProject_Click" Height="60" Margin="5">
+                            <Button Click="LaunchLastProject_Click" IsEnabled="{Binding SelectedInstance.IsRealInstance}" Height="60" Margin="5">
                                 <StackPanel Orientation="Horizontal">
                                     <Path Fill="{DynamicResource TextBrush}" Width="20" Height="20" Stretch="Uniform" Margin="0,0,10,0" Data="M13.5,8H12V13L16.28,15.54L17,14.33L13.5,12.25V8M13,3A9,9 0 0,0 4,12H1L4.96,16.03L9,12H6A7,7 0 0,1 13,5A7,7 0 0,1 20,12A7,7 0 0,1 13,19C11.07,19 9.32,18.21 8.06,16.94L6.64,18.36C8.27,20 10.5,21 13,21A9,9 0 0,0 22,12A9,9 0 0,0 13,3Z"/>
-                                    <TextBlock Text="前回のプロジェクトを開く" VerticalAlignment="Center"/>
+                                    <TextBlock Text="{x:Static local:Translate.OpenLastProject}" VerticalAlignment="Center"/>
                                 </StackPanel>
                             </Button>
-                            <Button Click="CreateNewProject_Click" Height="60" Margin="5">
+                            <Button Click="CreateNewProject_Click" IsEnabled="{Binding SelectedInstance.IsRealInstance}" Height="60" Margin="5">
                                 <StackPanel Orientation="Horizontal">
                                     <Path Fill="{DynamicResource TextBrush}" Width="20" Height="20" Stretch="Uniform" Margin="0,0,10,0" Data="M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z"/>
-                                    <TextBlock Text="新規作成" VerticalAlignment="Center"/>
+                                    <TextBlock Text="{x:Static local:Translate.CreateNew}" VerticalAlignment="Center"/>
                                 </StackPanel>
                             </Button>
                         </UniformGrid>
@@ -549,7 +551,7 @@
                             </Grid.ColumnDefinitions>
 
                             <Grid Grid.Column="0">
-                                <TextBox Text="{Binding ProjectSearchText, UpdateSourceTrigger=PropertyChanged}" Height="45" Tag="プロジェクト・ファイル名で検索..."/>
+                                <TextBox Text="{Binding ProjectSearchText, UpdateSourceTrigger=PropertyChanged}" Height="45" Tag="{x:Static local:Translate.SearchProject}"/>
                                 <Path IsHitTestVisible="False" Fill="{DynamicResource SubTextBrush}" Width="18" Height="18" Stretch="Uniform" HorizontalAlignment="Right" Margin="0,0,15,0" Data="M9.5,3A6.5,6.5 0 0,1 16,9.5C16,11.11 15.41,12.59 14.44,13.73L19.71,19L18.29,20.41L13.01,15.14C11.87,16.11 10.39,16.7 8.5,16.7A6.5,6.5 0 0,1 3,9.5A6.5,6.5 0 0,1 9.5,3M9.5,5A4.5,4.5 0 0,0 5,9.5A4.5,4.5 0 0,0 9.5,14A4.5,4.5 0 0,0 14,9.5A4.5,4.5 0 0,0 9.5,5Z"/>
                             </Grid>
 
@@ -557,7 +559,7 @@
                                 <CheckBox Content=".ymmp" IsChecked="{Binding ShowYmmp}" Style="{StaticResource ModernCheckBox}" Margin="0,0,15,0"/>
                                 <CheckBox Content=".ymmpx" IsChecked="{Binding ShowYmmpx}" Style="{StaticResource ModernCheckBox}" Margin="0,0,20,0"/>
                                 <CheckBox Content=".ymmx" IsChecked="{Binding ShowYmmx}" Style="{StaticResource ModernCheckBox}" Margin="0,0,20,0"/>
-                                <Button Content="フィルタ解除" Click="ResetProjectFilters_Click" Padding="15,8" Background="Transparent" Foreground="{DynamicResource SubTextBrush}">
+                                <Button Content="{x:Static local:Translate.ClearFilter}" Click="ResetProjectFilters_Click" Padding="15,8" Background="Transparent" Foreground="{DynamicResource SubTextBrush}">
                                     <Button.Style>
                                         <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
                                             <Style.Triggers>
@@ -605,16 +607,16 @@
                                 </Style>
                             </DataGrid.Resources>
                             <DataGrid.Columns>
-                                <DataGridTextColumn Header="ファイル名" Binding="{Binding Name}" Width="*"/>
-                                <DataGridTextColumn Header="最終更新日時" Binding="{Binding LastWriteTime, StringFormat='yyyy/MM/dd HH:mm'}" Width="150"/>
-                                <DataGridTextColumn Header="サイズ" Binding="{Binding DisplaySize}" ClipboardContentBinding="{Binding FileSize}" Width="120" SortMemberPath="FileSize"/>
-                                <DataGridTextColumn Header="拡張子" Binding="{Binding Extension}" Width="100"/>
+                                <DataGridTextColumn Header="{x:Static local:Translate.FileName}" Binding="{Binding Name}" Width="*"/>
+                                <DataGridTextColumn Header="{x:Static local:Translate.LastUpdate}" Binding="{Binding LastWriteTime, StringFormat='yyyy/MM/dd HH:mm'}" Width="150"/>
+                                <DataGridTextColumn Header="{x:Static local:Translate.Size}" Binding="{Binding DisplaySize}" ClipboardContentBinding="{Binding FileSize}" Width="120" SortMemberPath="FileSize"/>
+                                <DataGridTextColumn Header="{x:Static local:Translate.Extension}" Binding="{Binding Extension}" Width="100"/>
                             </DataGrid.Columns>
                         </DataGrid>
                     </Grid>
                 </TabItem>
 
-                <TabItem Header="プラグイン管理">
+                <TabItem Header="{x:Static local:Translate.PluginManagement}">
                     <TabItem.Resources>
                         <Style TargetType="{x:Type ScrollBar}">
                             <Setter Property="Stylus.IsPressAndHoldEnabled" Value="false"/>
@@ -653,11 +655,11 @@
                             <RowDefinition Height="*"/>
                         </Grid.RowDefinitions>
                         <StackPanel Orientation="Horizontal" Margin="10,5">
-                            <TextBlock Text="検索:" VerticalAlignment="Center" Margin="0,0,5,0" Foreground="{DynamicResource TextBrush}"/>
+                            <TextBlock Text="{x:Static local:Translate.SearchLabel}" VerticalAlignment="Center" Margin="0,0,5,0" Foreground="{DynamicResource TextBrush}"/>
                             <TextBox Width="200" Text="{Binding LocalPluginSearchText, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,20,0" VerticalContentAlignment="Center"/>
-                            <Button Click="BulkToggle_Click" Content="選択項目を有効/無効" Padding="15,5" Margin="0,0,10,0"/>
-                            <Button Click="BulkDelete_Click" Content="選択項目を削除" Padding="15,5"/>
-                            <Button Click="OpenPluginFolder_Click" Padding="10,5" Margin="10,0,0,0" ToolTip="プラグインフォルダを開く">
+                            <Button Click="BulkToggle_Click" Content="{x:Static local:Translate.EnableDisableSelected}" Padding="15,5" Margin="0,0,10,0"/>
+                            <Button Click="BulkDelete_Click" Content="{x:Static local:Translate.DeleteSelected}" Padding="15,5"/>
+                            <Button Click="OpenPluginFolder_Click" Padding="10,5" Margin="10,0,0,0" ToolTip="{x:Static local:Translate.OpenPluginFolder}">
                                 <Path Fill="{DynamicResource TextBrush}" Width="20" Height="20" Stretch="Uniform" Margin="0,0,0,0" Data="M10,4H4C2.89,4 2,4.89 2,6V18A2,2 0 0,0 4,20H20A2,2 0 0,0 22,18V8C22,6.89 21.1,6 20,6H12L10,4Z"/>
                             </Button>
                         </StackPanel>
@@ -691,7 +693,7 @@
                             <ListView.View>
                                 <GridView>
                                     <GridViewColumn Width="400">
-                                        <GridViewColumnHeader Content="プラグイン名" Click="GridViewColumnHeader_Click"/>
+                                        <GridViewColumnHeader Content="{x:Static local:Translate.PluginName}" Click="GridViewColumnHeader_Click"/>
                                         <GridViewColumn.CellTemplate>
                                             <DataTemplate>
                                                 <TextBlock Text="{Binding DisplayName}" Padding="5" Foreground="{DynamicResource TextBrush}" VerticalAlignment="Center"/>
@@ -699,7 +701,7 @@
                                         </GridViewColumn.CellTemplate>
                                     </GridViewColumn>
                                     <GridViewColumn Width="100">
-                                        <GridViewColumnHeader Content="状態" Click="GridViewColumnHeader_Click"/>
+                                        <GridViewColumnHeader Content="{x:Static local:Translate.Status}" Click="GridViewColumnHeader_Click"/>
                                         <GridViewColumn.CellTemplate>
                                             <DataTemplate>
                                                 <TextBlock x:Name="StatusText" Text="{Binding IsEnabled, Converter={StaticResource BooleanToStatusConverter}}" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center"/>
@@ -714,12 +716,20 @@
                                             </DataTemplate>
                                         </GridViewColumn.CellTemplate>
                                     </GridViewColumn>
-                                    <GridViewColumn Header="アクション" Width="200">
+                                    <GridViewColumn Header="{x:Static local:Translate.Action}" Width="200">
                                         <GridViewColumn.CellTemplate>
                                             <DataTemplate>
                                                 <StackPanel Orientation="Horizontal">
-                                                    <Button Click="TogglePlugin_Click" Content="切替" Margin="2" Width="60"/>
-                                                    <Button Click="DeletePlugin_Click" Content="削除" Margin="10,2,2,2" Width="60"/>
+                                                    <Button Click="TogglePlugin_Click" 
+        Content="{x:Static local:Translate.Toggle}" 
+        IsEnabled="{Binding IsSelectionValid}"
+        Margin="2" 
+        Width="60"/>
+                                                    <Button Click="DeletePlugin_Click" 
+        Content="{x:Static local:Translate.Delete}" 
+        IsEnabled="{Binding IsSelectionValid}"
+        Margin="10,2,2,2" 
+        Width="60"/>
                                                 </StackPanel>
                                             </DataTemplate>
                                         </GridViewColumn.CellTemplate>
@@ -730,7 +740,7 @@
                     </Grid>
                 </TabItem>
 
-                <TabItem Header="プラグインポータル">
+                <TabItem Header="{x:Static local:Translate.PluginPortal}">
                     <TabItem.Resources>
                         <Style TargetType="{x:Type ScrollBar}">
                             <Setter Property="Stylus.IsPressAndHoldEnabled" Value="false"/>
@@ -770,9 +780,9 @@
                         </Grid.RowDefinitions>
 
                         <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="10,5">
-                            <TextBlock Text="プラグイン検索:" VerticalAlignment="Center" Margin="0,0,5,0" Foreground="{DynamicResource TextBrush}"/>
+                            <TextBlock Text="{x:Static local:Translate.SearchPlugins}" VerticalAlignment="Center" Margin="0,0,5,0" Foreground="{DynamicResource TextBrush}"/>
                             <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
-                                <TextBox Text="{Binding OnlinePluginSearchText, UpdateSourceTrigger=PropertyChanged}" Width="300" Tag="プラグインを検索..." />
+                                <TextBox Text="{Binding OnlinePluginSearchText, UpdateSourceTrigger=PropertyChanged}" Width="300" Tag="{x:Static local:Translate.SearchPlugins}" />
 
                                 <Grid Margin="5,0,0,0">
                                     <ToggleButton x:Name="FilterButton" Content="" FontFamily="Segoe MDL2 Assets" Width="40">
@@ -803,21 +813,21 @@
                                     <Popup IsOpen="{Binding IsChecked, ElementName=FilterButton}" StaysOpen="False" PlacementTarget="{Binding ElementName=FilterButton}" Placement="Bottom">
                                         <Border Background="{DynamicResource PanelBrush}" BorderBrush="{DynamicResource ItemBrush}" BorderThickness="1" Padding="10" Width="200">
                                             <StackPanel>
-                                                <TextBlock Text="タイプフィルター" FontWeight="Bold" Margin="0,0,0,10" Foreground="{DynamicResource TextBrush}"/>
+                                                <TextBlock Text="{x:Static local:Translate.TypeFilter}" FontWeight="Bold" Margin="0,0,0,10" Foreground="{DynamicResource TextBrush}"/>
                                                 <ItemsControl ItemsSource="{Binding PluginTypeFilters}">
                                                     <ItemsControl.ItemTemplate>
                                                         <DataTemplate>
-                                                            <CheckBox Content="{Binding Name}" IsChecked="{Binding IsSelected}" Foreground="{DynamicResource TextBrush}" Margin="0,2"/>
+                                                            <CheckBox Content="{Binding DisplayName}" IsChecked="{Binding IsSelected}" Foreground="{DynamicResource TextBrush}" Margin="0,2"/>
                                                         </DataTemplate>
                                                     </ItemsControl.ItemTemplate>
                                                 </ItemsControl>
                                                 <Separator Margin="0,10" Background="{DynamicResource TextBrush}"/>
-                                                <Button Content="すべてチェック" Click="AllCheck_Click" Margin="0,2"/>
-                                                <Button Content="すべて外す" Click="NoneCheck_Click" Margin="0,2"/>
+                                                <Button Content="{x:Static local:Translate.CheckAll}" Click="AllCheck_Click" Margin="0,2"/>
+                                                <Button Content="{x:Static local:Translate.UncheckAll}" Click="NoneCheck_Click" Margin="0,2"/>
                                             </StackPanel>
                                         </Border>
                                     </Popup>
-                                    
+
                                 </Grid>
                             </StackPanel>
                         </StackPanel>
@@ -876,13 +886,13 @@
                                                 <ColumnDefinition Width="Auto"/>
                                             </Grid.ColumnDefinitions>
                                             <StackPanel>
-                                                <TextBlock Text="最新バージョン:" FontWeight="Bold" Foreground="{DynamicResource TextBrush}"/>
+                                                <TextBlock Text="{x:Static local:Translate.LatestVersion}" FontWeight="Bold" Foreground="{DynamicResource TextBrush}"/>
                                                 <TextBlock Text="{Binding SelectedOnlinePlugin.LatestVersionName}" Foreground="Orange" FontWeight="Bold" FontSize="16"/>
                                             </StackPanel>
                                             <Button Grid.Column="1" Click="InstallPlugin_Click" Background="{DynamicResource AccentBrush}" Padding="20,10" IsEnabled="{Binding SelectedOnlinePlugin.SelectedVersion, Converter={StaticResource IsNotNullConverter}}">
                                                 <StackPanel Orientation="Horizontal">
-                                                    <Path Fill="White" Width="16" Height="16" Stretch="Uniform" Margin="0,0,10,0" Data="M5,20H19V18H5M19,9H15V3H9V9H5L12,16L19,9Z"/>
-                                                    <TextBlock Text="インストール" FontWeight="Bold" VerticalAlignment="Center" Foreground="White"/>
+                                                    <Path Fill="{DynamicResource TextBrush}" Width="16" Height="16" Stretch="Uniform" Margin="0,0,10,0" Data="M5,20H19V18H5M19,9H15V3H9V9H5L12,16L19,9Z"/>
+                                                    <TextBlock Text="{x:Static local:Translate.Install}" FontWeight="Bold" VerticalAlignment="Center" Foreground="{DynamicResource TextBrush}"/>
                                                 </StackPanel>
                                             </Button>
                                         </Grid>
@@ -892,7 +902,7 @@
                                                 <RowDefinition Height="Auto"/>
                                                 <RowDefinition Height="Auto"/>
                                             </Grid.RowDefinitions>
-                                            <TextBlock Text="バージョン選択" Foreground="{DynamicResource TextBrush}" Margin="0,0,0,5"/>
+                                            <TextBlock Text="{x:Static local:Translate.SelectInstallVersion}" Foreground="{DynamicResource TextBrush}" Margin="0,0,0,5"/>
                                             <ListBox ItemsSource="{Binding SelectedOnlinePlugin.Releases}" 
          SelectedItem="{Binding SelectedOnlinePlugin.SelectedVersion}" 
          Height="150" Margin="0,0,0,15"
@@ -932,7 +942,7 @@
                                                                 <ColumnDefinition Width="Auto"/>
                                                             </Grid.ColumnDefinitions>
                                                             <TextBlock Grid.Column="0" Text="{Binding TagName}" Foreground="{DynamicResource TextBrush}" FontWeight="Bold"/>
-                                                            <TextBlock Grid.Column="1" Text=" (プレリリース)" Foreground="Orange" Visibility="{Binding Prerelease, Converter={StaticResource BoolToVis}}" Margin="5,0,0,0"/>
+                                                            <TextBlock Grid.Column="1" Text="{x:Static local:Translate.PreRelease}" Foreground="Orange" Visibility="{Binding Prerelease, Converter={StaticResource BoolToVis}}" Margin="5,0,0,0"/>
                                                             <TextBlock Grid.Column="2" Text="{Binding PublishedAt, StringFormat=' - {0:yyyy/MM/dd}'}" Foreground="{DynamicResource SubTextBrush}" Margin="5,0,0,0"/>
                                                         </Grid>
                                                     </DataTemplate>
@@ -940,7 +950,7 @@
                                             </ListBox>
                                         </Grid>
 
-                                        <TextBlock Text="※ .ymme ファイル等をダウンロードして実行します。" Margin="0,10,0,0" Foreground="{DynamicResource SubTextBrush}" FontSize="11" TextWrapping="Wrap"/>
+                                        <TextBlock Text="{x:Static local:Translate.DownloadAndRun}" Margin="0,10,0,0" Foreground="{DynamicResource SubTextBrush}" FontSize="11" TextWrapping="Wrap"/>
 
                                         <ItemsControl ItemsSource="{Binding SelectedOnlinePlugin.AllLinks}" Margin="0,20,0,0">
                                             <ItemsControl.ItemTemplate>
@@ -961,20 +971,30 @@
                     </Grid>
                 </TabItem>
 
-                <TabItem Header="Hub設定">
+                <TabItem Header="{x:Static local:Translate.HubSettings}">
                     <Grid Margin="30">
                         <StackPanel MaxWidth="600" HorizontalAlignment="Left">
-                            <TextBlock Text="Hubのカスタマイズ" FontSize="24" FontWeight="Bold" Margin="0,0,0,20" Foreground="{DynamicResource TextBrush}"/>
+                            <TextBlock Text="{x:Static local:Translate.CustomizeHub}" FontSize="24" FontWeight="Bold" Margin="0,0,0,20" Foreground="{DynamicResource TextBrush}"/>
 
-                            <TextBlock Text="動作設定" Margin="0,10,0,5" Foreground="{DynamicResource SubTextBrush}"/>
-                            <CheckBox IsChecked="{Binding CloseOnLaunch}" Content="YMM4起動時にHubを終了する" Margin="0,0,0,10" Style="{StaticResource ModernCheckBox}"/>
+                            <TextBlock Text="{x:Static local:Translate.OperationSettings}" Margin="0,10,0,5" Foreground="{DynamicResource SubTextBrush}"/>
+                            <CheckBox IsChecked="{Binding CloseOnLaunch}" Content="{x:Static local:Translate.ExitHubOnYmm4Start}" Margin="0,0,0,10" Style="{StaticResource ModernCheckBox}"/>
 
-                            <TextBlock Text="テーマ設定" Margin="0,10,0,5" Foreground="{DynamicResource SubTextBrush}"/>
-                            <ComboBox ItemsSource="{Binding ThemeModes}" SelectedItem="{Binding SelectedTheme}" Height="35"/>
+                            <TextBlock Text="{x:Static local:Translate.ThemeSettings}" Margin="0,10,0,5" Foreground="{DynamicResource SubTextBrush}"/>
+                            <ComboBox SelectedValue="{Binding SelectedTheme}" SelectedValuePath="Tag" Height="35">
+                                <ComboBoxItem Content="{x:Static local:Translate.WindowsStandard}" Tag="{x:Static local:AppTheme.Windows}"/>
+                                <ComboBoxItem Content="{x:Static local:Translate.Light}" Tag="{x:Static local:AppTheme.Light}"/>
+                                <ComboBoxItem Content="{x:Static local:Translate.Dark}" Tag="{x:Static local:AppTheme.Dark}"/>
+                                <ComboBoxItem Content="{x:Static local:Translate.Black}" Tag="{x:Static local:AppTheme.Black}"/>
+                            </ComboBox>
 
-                            <TextBlock Text="UIフォント" Margin="0,20,0,5" Foreground="{DynamicResource SubTextBrush}"/>
-                            <TextBox Text="{Binding FontSearchText, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,10" Tag="フォントを検索..."/>
-                            <CheckBox IsChecked="{Binding IsJapaneseOnly}" Content="日本語フォントのみ" Margin="0,0,0,10" Style="{StaticResource ModernCheckBox}"/>
+                            <TextBlock Text="{x:Static local:Translate.LanguageSettings}" Margin="0,10,0,5" Foreground="{DynamicResource SubTextBrush}"/>
+                            <ComboBox ItemsSource="{Binding Languages}" 
+          SelectedItem="{Binding SelectedLanguage}" 
+          DisplayMemberPath="Name"
+          Height="35"/>
+                            <TextBlock Text="{x:Static local:Translate.RestartRequired}" Margin="0,10,0,5" Foreground="{DynamicResource SubTextBrush}"/>
+                            <TextBlock Text="{x:Static local:Translate.UiFont}" Margin="0,20,0,5" Foreground="{DynamicResource SubTextBrush}"/>
+                            <TextBox Text="{Binding FontSearchText, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,10" Tag="{x:Static local:Translate.SearchFont}"/>
                             <ComboBox ItemsSource="{Binding FilteredFonts}" SelectedItem="{Binding SelectedFontItem}" Height="35">
                                 <ComboBox.ItemTemplate>
                                     <DataTemplate>
@@ -983,8 +1003,8 @@
                                 </ComboBox.ItemTemplate>
                             </ComboBox>
 
-                            <TextBlock Text="編集データフォルダの監視" FontSize="18" FontWeight="Bold" Margin="0,30,0,10" Foreground="{DynamicResource TextBrush}"/>
-                            <Button Content="フォルダを追加" Click="AddProjectDir_Click" HorizontalAlignment="Left" Padding="15,5"/>
+                            <TextBlock Text="{x:Static local:Translate.MonitorEditFolder}" FontSize="18" FontWeight="Bold" Margin="0,30,0,10" Foreground="{DynamicResource TextBrush}"/>
+                            <Button Content="{x:Static local:Translate.AddFolder}" Click="AddProjectDir_Click" HorizontalAlignment="Left" Padding="15,5"/>
                             <ItemsControl ItemsSource="{Binding ProjectDirectories}" Margin="0,10,0,0">
                                 <ItemsControl.ItemTemplate>
                                     <DataTemplate>
@@ -993,21 +1013,21 @@
                                                 <ColumnDefinition Width="*"/>
                                                 <ColumnDefinition Width="Auto"/>
                                             </Grid.ColumnDefinitions>
-                                            <TextBox Text="{Binding .}" IsReadOnly="True" VerticalContentAlignment="Center" Tag="フォルダパス"/>
-                                            <Button Grid.Column="1" Click="RemoveProjectDir_Click" Content="削除" Margin="5,0,0,0"/>
+                                            <TextBox Text="{Binding .}" IsReadOnly="True" VerticalContentAlignment="Center" Tag="{x:Static local:Translate.FolderPath}"/>
+                                            <Button Grid.Column="1" Click="RemoveProjectDir_Click" Content="{x:Static local:Translate.Delete}" Margin="5,0,0,0"/>
                                         </Grid>
                                     </DataTemplate>
                                 </ItemsControl.ItemTemplate>
                             </ItemsControl>
-                            <TextBlock Text="GitHub API 設定" FontSize="18" FontWeight="Bold" Margin="0,30,0,10" Foreground="{DynamicResource TextBrush}"/>
-                            <TextBlock Text="プラグイン取得の制限を回避するための設定です。頻繁に取得制限が発生する場合に設定してください。" Foreground="{DynamicResource SubTextBrush}" TextWrapping="Wrap" Margin="0,0,0,10"/>
+                            <TextBlock Text="{x:Static local:Translate.GitHubApiSettings}" FontSize="18" FontWeight="Bold" Margin="0,30,0,10" Foreground="{DynamicResource TextBrush}"/>
+                            <TextBlock Text="{x:Static local:Translate.GitHubApiLimit}" Foreground="{DynamicResource SubTextBrush}" TextWrapping="Wrap" Margin="0,0,0,10"/>
                             <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="Auto"/>
                                     <ColumnDefinition Width="*"/>
                                     <ColumnDefinition Width="Auto"/>
                                 </Grid.ColumnDefinitions>
-                                <TextBlock Text="トークン:" VerticalAlignment="Center" Margin="0,0,10,0" Foreground="{DynamicResource TextBrush}"/>
+                                <TextBlock Text="{x:Static local:Translate.Token}" VerticalAlignment="Center" Margin="0,0,10,0" Foreground="{DynamicResource TextBrush}"/>
                                 <PasswordBox x:Name="GitHubTokenBox" 
                  Grid.Column="1" 
                  PasswordChanged="GitHubTokenBox_PasswordChanged" 
@@ -1016,13 +1036,13 @@
                  Foreground="{DynamicResource TextBrush}"
                  BorderBrush="{DynamicResource SubTextBrush}"
                  BorderThickness="1"/>
-                                <Button Content="トークンを発行する" 
+                                <Button Content="{x:Static local:Translate.IssueToken}" 
             Grid.Column="2" 
             Click="IssueToken_Click"
             Margin="10,0,0,0"
             Padding="10,5"
             Background="{DynamicResource AccentBrush}"
-            Foreground="White"
+            Foreground="{DynamicResource TextBrush}"
             BorderThickness="0"/>
                             </Grid>
 

@@ -1,0 +1,163 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+<data name="CurrentCulture" xml:space="preserve"><value>ar-sa</value></data>
+<data name="PreRelease" xml:space="preserve"><value>(ما قبل الإصدار)</value></data>
+<data name="DownloadAndRun" xml:space="preserve"><value>سيتم تنزيل ملف .ymme وتشغيله.※</value></data>
+<data name="GitHubApiSettings" xml:space="preserve"><value>إعدادات GitHub API</value></data>
+<data name="GitHubApiLimit" xml:space="preserve"><value>تم الوصول إلى حد واجهة برمجة تطبيقات GitHub. إذا لم يكن لديك حساب، يرجى المحاولة مرة أخرى لاحقًا。</value></data>
+<data name="CustomizeHub" xml:space="preserve"><value>تخصيص Hub</value></data>
+<data name="HubSettings" xml:space="preserve"><value>إعدادات Hub</value></data>
+<data name="UiFont" xml:space="preserve"><value>خط واجهة المستخدم</value></data>
+<data name="WindowsStandard" xml:space="preserve"><value>قياسي ويندوز</value></data>
+<data name="ExitHubOnYmm4Start" xml:space="preserve"><value>إغلاق Hub عند بدء تشغيل YMM4</value></data>
+<data name="Ymm4InfoSite" xml:space="preserve"><value>موقع معلومات YMM4</value></data>
+<data name="Action" xml:space="preserve"><value>إجراء</value></data>
+<data name="UpdateAvailable" xml:space="preserve"><value>تحديث متاح</value></data>
+<data name="UpdateDetails" xml:space="preserve"><value>تفاصيل التحديث</value></data>
+<data name="Instance" xml:space="preserve"><value>مثيل</value></data>
+<data name="SelectInstance" xml:space="preserve"><value>يرجى تحديد مثيل.</value></data>
+<data name="InstanceName" xml:space="preserve"><value>اسم المثيل</value></data>
+<data name="Install" xml:space="preserve"><value>تثبيت</value></data>
+<data name="SelectInstallVersion" xml:space="preserve"><value>يرجى تحديد الإصدار المراد تثبيته والمثيل المستهدف。</value></data>
+<data name="CannotBeUndone" xml:space="preserve"><value>لا يمكن التراجع عن هذا الإجراء。</value></data>
+<data name="Size" xml:space="preserve"><value>الحجم</value></data>
+<data name="All" xml:space="preserve"><value>الكل</value></data>
+<data name="CheckAll" xml:space="preserve"><value>تحديد الكل</value></data>
+<data name="UncheckAll" xml:space="preserve"><value>إلغاء تحديد الكل</value></data>
+<data name="Others" xml:space="preserve"><value>آخرون</value></data>
+<data name="Dark" xml:space="preserve"><value>داكن</value></data>
+<data name="TypeFilter" xml:space="preserve"><value>فلتر النوع</value></data>
+<data name="DownloadError" xml:space="preserve"><value>حدث خطأ أثناء التنزيل:</value></data>
+<data name="Tools" xml:space="preserve"><value>أدوات</value></data>
+<data name="ThemeSettings" xml:space="preserve"><value>إعدادات المظهر</value></data>
+<data name="TextCompletion" xml:space="preserve"><value>إكمال النص</value></data>
+<data name="Token" xml:space="preserve"><value>رمز</value></data>
+<data name="IssueToken" xml:space="preserve"><value>إصدار رمز</value></data>
+<data name="Niconico" xml:space="preserve"><value>نيكو نيكو دوغا</value></data>
+<data name="DeleteFailed" xml:space="preserve"><value>فشل في الحذف</value></data>
+<data name="SelectVersion" xml:space="preserve"><value>تحديد الإصدار</value></data>
+<data name="Path" xml:space="preserve"><value>مسار</value></data>
+<data name="FileName" xml:space="preserve"><value>اسم الملف</value></data>
+<data name="ClearFilter" xml:space="preserve"><value>مسح الفلتر</value></data>
+<data name="Folder" xml:space="preserve"><value>مجلد</value></data>
+<data name="FolderPath" xml:space="preserve"><value>مسار المجلد</value></data>
+<data name="AddFolder" xml:space="preserve"><value>إضافة مجلد</value></data>
+<data name="OpenFolder" xml:space="preserve"><value>فتح المجلد</value></data>
+<data name="SearchFont" xml:space="preserve"><value>البحث عن الخطوط...</value></data>
+<data name="OpenPluginFolder" xml:space="preserve"><value>فتح مجلد الملحقات</value></data>
+<data name="PluginPortal" xml:space="preserve"><value>بوابة الملحقات</value></data>
+<data name="SearchPlugins" xml:space="preserve"><value>البحث عن الملحقات</value></data>
+<data name="PluginManagement" xml:space="preserve"><value>إدارة الملحقات</value></data>
+<data name="PluginSearch" xml:space="preserve"><value>بحث الملحقات</value></data>
+<data name="AvoidLimitSettings" xml:space="preserve"><value>هذا الإعداد لتجنب قيود جلب الملحقات. قم بضبطه إذا كانت القيود تحدث بشكل متكرر。</value></data>
+<data name="ExitYmm4ForPlugin" xml:space="preserve"><value>هل تريد إغلاق YMM4 لعمليات الملحقات؟</value></data>
+<data name="PluginName" xml:space="preserve"><value>اسم الملحق</value></data>
+<data name="Black" xml:space="preserve"><value>أسود</value></data>
+<data name="SearchProject" xml:space="preserve"><value>البحث حسب المشروع/اسم المشروع...</value></data>
+<data name="PortalLoadFailed" xml:space="preserve"><value>فشل تحميل البوابة</value></data>
+<data name="Light" xml:space="preserve"><value>فاتح</value></data>
+<data name="OpenLinkFailed" xml:space="preserve"><value>فشل في فتح الرابط</value></data>
+<data name="RemoveFromHub" xml:space="preserve"><value>هل تريد إزالته من Hub؟</value></data>
+<data name="DeletePermanently" xml:space="preserve"><value>هل تريد حذفه نهائيًا؟</value></data>
+<data name="VideoEffects" xml:space="preserve"><value>تأثيرات الفيديو</value></data>
+<data name="AudioEffects" xml:space="preserve"><value>تأثيرات صوتية</value></data>
+<data name="SpeechSynthesis" xml:space="preserve"><value>تركيب الكلام</value></data>
+<data name="LoadAudio" xml:space="preserve"><value>تحميل الصوت</value></data>
+<data name="Image" xml:space="preserve"><value>صورة</value></data>
+<data name="LoadImage" xml:space="preserve"><value>تحميل الصورة</value></data>
+<data name="Overview" xml:space="preserve"><value>نظرة عامة</value></data>
+<data name="Extension" xml:space="preserve"><value>امتداد</value></data>
+<data name="Confirm" xml:space="preserve"><value>تأكيد</value></data>
+<data name="Launch" xml:space="preserve"><value>تشغيل</value></data>
+<data name="DeleteCountPermanently" xml:space="preserve"><value>هل تريد حذف هذه الملحقات نهائيًا؟</value></data>
+<data name="SearchLabel" xml:space="preserve"><value>بحث:</value></data>
+<data name="CurrentVersion" xml:space="preserve"><value>الإصدار الحالي</value></data>
+<data name="LanguageSettings" xml:space="preserve"><value>إعدادات اللغة</value></data>
+<data name="LastUpdate" xml:space="preserve"><value>آخر تحديث</value></data>
+<data name="LatestVersion" xml:space="preserve"><value>أحدث إصدار</value></data>
+<data name="Delete" xml:space="preserve"><value>حذف</value></data>
+<data name="ConfirmDeletion" xml:space="preserve"><value>تأكيد الحذف</value></data>
+<data name="InstallerNotFound" xml:space="preserve"><value>لم يتم العثور على برنامج التثبيت في المثيل المحدد。</value></data>
+<data name="Acquiring" xml:space="preserve"><value>جاري الجلب</value></data>
+<data name="SceneTransition" xml:space="preserve"><value>انتقال المشهد</value></data>
+<data name="NoInfo" xml:space="preserve"><value>لا توجد معلومات</value></data>
+<data name="Status" xml:space="preserve"><value>الحالة</value></data>
+<data name="NewInstance" xml:space="preserve"><value>مثيل جديد</value></data>
+<data name="CreateNew" xml:space="preserve"><value>إنشاء جديد</value></data>
+<data name="Shapes" xml:space="preserve"><value>أشكال</value></data>
+<data name="Toggle" xml:space="preserve"><value>تبديل</value></data>
+<data name="DeleteSelected" xml:space="preserve"><value>حذف المحدد</value></data>
+<data name="EnableDisableSelected" xml:space="preserve"><value>تفعيل/تعطيل المحدد</value></data>
+<data name="OpenLastProject" xml:space="preserve"><value>فتح المشروع الأخير</value></data>
+<data name="Add" xml:space="preserve"><value>إضافة</value></data>
+<data name="VideoOutput" xml:space="preserve"><value>إخراج الفيديو</value></data>
+<data name="LoadVideo" xml:space="preserve"><value>تحميل الفيديو</value></data>
+<data name="OperationSettings" xml:space="preserve"><value>إعدادات التشغيل</value></data>
+<data name="DistributionSite" xml:space="preserve"><value>موقع التوزيع</value></data>
+<data name="EndDistribution" xml:space="preserve"><value>نهاية التوزيع</value></data>
+<data name="Transcription" xml:space="preserve"><value>نسخ النص</value></data>
+<data name="MonitorEditFolder" xml:space="preserve"><value>مراقبة مجلد بيانات التحرير</value></data>
+<data name="Disable" xml:space="preserve"><value>تعطيل</value></data>
+<data name="Pattern" xml:space="preserve"><value>نمط</value></data>
+<data name="Enable" xml:space="preserve"><value>تفعيل</value></data>
+<data name="Character" xml:space="preserve"><value>صورة شخصية واقفة</value></data>
+<data name="RestartRequired" xml:space="preserve"><value>(يتطلب إعادة التشغيل)</value></data>
+</root>

@@ -1,0 +1,163 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+<data name="CurrentCulture" xml:space="preserve"><value>zh-tw</value></data>
+<data name="PreRelease" xml:space="preserve"><value>(預發行)</value></data>
+<data name="DownloadAndRun" xml:space="preserve"><value>※下載並執行 .ymme 檔案。</value></data>
+<data name="GitHubApiSettings" xml:space="preserve"><value>GitHub API 設定</value></data>
+<data name="GitHubApiLimit" xml:space="preserve"><value>已達到 GitHub API 取得限制。如果您沒有帳號，請稍後再試。</value></data>
+<data name="CustomizeHub" xml:space="preserve"><value>自定義 Hub</value></data>
+<data name="HubSettings" xml:space="preserve"><value>Hub 設定</value></data>
+<data name="UiFont" xml:space="preserve"><value>UI 字體</value></data>
+<data name="WindowsStandard" xml:space="preserve"><value>Windows 標準</value></data>
+<data name="ExitHubOnYmm4Start" xml:space="preserve"><value>YMM4 啟動時退出 Hub</value></data>
+<data name="Ymm4InfoSite" xml:space="preserve"><value>YMM4 資訊站</value></data>
+<data name="Action" xml:space="preserve"><value>操作</value></data>
+<data name="UpdateAvailable" xml:space="preserve"><value>有更新</value></data>
+<data name="UpdateDetails" xml:space="preserve"><value>更新內容</value></data>
+<data name="Instance" xml:space="preserve"><value>執行個體</value></data>
+<data name="SelectInstance" xml:space="preserve"><value>請選擇執行個體。</value></data>
+<data name="InstanceName" xml:space="preserve"><value>執行個體名稱</value></data>
+<data name="Install" xml:space="preserve"><value>安裝</value></data>
+<data name="SelectInstallVersion" xml:space="preserve"><value>請選擇要安裝的版本和目標執行個體。</value></data>
+<data name="CannotBeUndone" xml:space="preserve"><value>此操作無法復原。</value></data>
+<data name="Size" xml:space="preserve"><value>大小</value></data>
+<data name="All" xml:space="preserve"><value>全部</value></data>
+<data name="CheckAll" xml:space="preserve"><value>全選</value></data>
+<data name="UncheckAll" xml:space="preserve"><value>取消全選</value></data>
+<data name="Others" xml:space="preserve"><value>其他</value></data>
+<data name="Dark" xml:space="preserve"><value>深色</value></data>
+<data name="TypeFilter" xml:space="preserve"><value>類型篩選</value></data>
+<data name="DownloadError" xml:space="preserve"><value>下載過程中發生錯誤：</value></data>
+<data name="Tools" xml:space="preserve"><value>工具</value></data>
+<data name="ThemeSettings" xml:space="preserve"><value>主題設定</value></data>
+<data name="TextCompletion" xml:space="preserve"><value>文字補全</value></data>
+<data name="Token" xml:space="preserve"><value>令牌</value></data>
+<data name="IssueToken" xml:space="preserve"><value>發行令牌</value></data>
+<data name="Niconico" xml:space="preserve"><value>niconico 動畫</value></data>
+<data name="DeleteFailed" xml:space="preserve"><value>刪除失敗</value></data>
+<data name="SelectVersion" xml:space="preserve"><value>選擇版本</value></data>
+<data name="Path" xml:space="preserve"><value>路徑</value></data>
+<data name="FileName" xml:space="preserve"><value>檔案名稱</value></data>
+<data name="ClearFilter" xml:space="preserve"><value>清除篩選</value></data>
+<data name="Folder" xml:space="preserve"><value>資料夾</value></data>
+<data name="FolderPath" xml:space="preserve"><value>資料夾路徑</value></data>
+<data name="AddFolder" xml:space="preserve"><value>新增資料夾</value></data>
+<data name="OpenFolder" xml:space="preserve"><value>開啟資料夾</value></data>
+<data name="SearchFont" xml:space="preserve"><value>搜尋字體...</value></data>
+<data name="OpenPluginFolder" xml:space="preserve"><value>開啟外掛資料夾</value></data>
+<data name="PluginPortal" xml:space="preserve"><value>外掛門戶</value></data>
+<data name="SearchPlugins" xml:space="preserve"><value>搜尋外掛</value></data>
+<data name="PluginManagement" xml:space="preserve"><value>外掛管理</value></data>
+<data name="PluginSearch" xml:space="preserve"><value>外掛搜尋</value></data>
+<data name="AvoidLimitSettings" xml:space="preserve"><value>這是為了避免外掛取得限制的設定。如果頻繁發生取得限制，請進行設定。</value></data>
+<data name="ExitYmm4ForPlugin" xml:space="preserve"><value>是否為了外掛操作而退出 YMM4？</value></data>
+<data name="PluginName" xml:space="preserve"><value>外掛名稱</value></data>
+<data name="Black" xml:space="preserve"><value>黑色</value></data>
+<data name="SearchProject" xml:space="preserve"><value>按專案/專案名稱搜尋...</value></data>
+<data name="PortalLoadFailed" xml:space="preserve"><value>門戶載入失敗</value></data>
+<data name="Light" xml:space="preserve"><value>淺色</value></data>
+<data name="OpenLinkFailed" xml:space="preserve"><value>無法開啟連結</value></data>
+<data name="RemoveFromHub" xml:space="preserve"><value>是否將其從 Hub 中刪除？</value></data>
+<data name="DeletePermanently" xml:space="preserve"><value>是否將其永久刪除？</value></data>
+<data name="VideoEffects" xml:space="preserve"><value>影片效果</value></data>
+<data name="AudioEffects" xml:space="preserve"><value>音訊效果</value></data>
+<data name="SpeechSynthesis" xml:space="preserve"><value>語音合成</value></data>
+<data name="LoadAudio" xml:space="preserve"><value>載入音訊</value></data>
+<data name="Image" xml:space="preserve"><value>圖片</value></data>
+<data name="LoadImage" xml:space="preserve"><value>載入圖片</value></data>
+<data name="Overview" xml:space="preserve"><value>概要</value></data>
+<data name="Extension" xml:space="preserve"><value>副檔名</value></data>
+<data name="Confirm" xml:space="preserve"><value>確認</value></data>
+<data name="Launch" xml:space="preserve"><value>啟動</value></data>
+<data name="DeleteCountPermanently" xml:space="preserve"><value>是否永久刪除這些外掛？</value></data>
+<data name="SearchLabel" xml:space="preserve"><value>搜尋:</value></data>
+<data name="CurrentVersion" xml:space="preserve"><value>目前版本</value></data>
+<data name="LanguageSettings" xml:space="preserve"><value>語言設定</value></data>
+<data name="LastUpdate" xml:space="preserve"><value>最後更新時間</value></data>
+<data name="LatestVersion" xml:space="preserve"><value>最新版本</value></data>
+<data name="Delete" xml:space="preserve"><value>刪除</value></data>
+<data name="ConfirmDeletion" xml:space="preserve"><value>確認刪除</value></data>
+<data name="InstallerNotFound" xml:space="preserve"><value>指定的執行個體中找不到安裝程式。</value></data>
+<data name="Acquiring" xml:space="preserve"><value>取得中</value></data>
+<data name="SceneTransition" xml:space="preserve"><value>場景切換</value></data>
+<data name="NoInfo" xml:space="preserve"><value>無資訊</value></data>
+<data name="Status" xml:space="preserve"><value>狀態</value></data>
+<data name="NewInstance" xml:space="preserve"><value>新執行個體</value></data>
+<data name="CreateNew" xml:space="preserve"><value>新建</value></data>
+<data name="Shapes" xml:space="preserve"><value>形狀</value></data>
+<data name="Toggle" xml:space="preserve"><value>切換</value></data>
+<data name="DeleteSelected" xml:space="preserve"><value>刪除所選內容</value></data>
+<data name="EnableDisableSelected" xml:space="preserve"><value>啟用/禁用所選內容</value></data>
+<data name="OpenLastProject" xml:space="preserve"><value>開啟上次的專案</value></data>
+<data name="Add" xml:space="preserve"><value>新增</value></data>
+<data name="VideoOutput" xml:space="preserve"><value>影片輸出</value></data>
+<data name="LoadVideo" xml:space="preserve"><value>載入影片</value></data>
+<data name="OperationSettings" xml:space="preserve"><value>操作設定</value></data>
+<data name="DistributionSite" xml:space="preserve"><value>發布網站</value></data>
+<data name="EndDistribution" xml:space="preserve"><value>停止發布</value></data>
+<data name="Transcription" xml:space="preserve"><value>轉錄</value></data>
+<data name="MonitorEditFolder" xml:space="preserve"><value>監控編輯數據資料夾</value></data>
+<data name="Disable" xml:space="preserve"><value>禁用</value></data>
+<data name="Pattern" xml:space="preserve"><value>圖案</value></data>
+<data name="Enable" xml:space="preserve"><value>啟用</value></data>
+<data name="Character" xml:space="preserve"><value>立繪</value></data>
+<data name="RestartRequired" xml:space="preserve"><value>(需重啟)</value></data>
+</root>

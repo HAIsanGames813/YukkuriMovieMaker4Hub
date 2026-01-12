@@ -1,0 +1,163 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+<data name="CurrentCulture" xml:space="preserve"><value>en-us</value></data>
+<data name="PreRelease" xml:space="preserve"><value>(Pre-release)</value></data>
+<data name="DownloadAndRun" xml:space="preserve"><value>*.ymme file will be downloaded and executed.</value></data>
+<data name="GitHubApiSettings" xml:space="preserve"><value>GitHub API Settings</value></data>
+<data name="GitHubApiLimit" xml:space="preserve"><value>GitHub API rate limit reached. If you do not have an account, please try again later.</value></data>
+<data name="CustomizeHub" xml:space="preserve"><value>Customize Hub</value></data>
+<data name="HubSettings" xml:space="preserve"><value>Hub Settings</value></data>
+<data name="UiFont" xml:space="preserve"><value>UI Font</value></data>
+<data name="WindowsStandard" xml:space="preserve"><value>Windows Standard</value></data>
+<data name="ExitHubOnYmm4Start" xml:space="preserve"><value>Exit Hub when YMM4 starts</value></data>
+<data name="Ymm4InfoSite" xml:space="preserve"><value>YMM4 Information Site</value></data>
+<data name="Action" xml:space="preserve"><value>Action</value></data>
+<data name="UpdateAvailable" xml:space="preserve"><value>Update available</value></data>
+<data name="UpdateDetails" xml:space="preserve"><value>Update Details</value></data>
+<data name="Instance" xml:space="preserve"><value>Instance</value></data>
+<data name="SelectInstance" xml:space="preserve"><value>Please select an instance.</value></data>
+<data name="InstanceName" xml:space="preserve"><value>Instance Name</value></data>
+<data name="Install" xml:space="preserve"><value>Install</value></data>
+<data name="SelectInstallVersion" xml:space="preserve"><value>Please select the version to install and the target instance.</value></data>
+<data name="CannotBeUndone" xml:space="preserve"><value>This action cannot be undone.</value></data>
+<data name="Size" xml:space="preserve"><value>Size</value></data>
+<data name="All" xml:space="preserve"><value>All</value></data>
+<data name="CheckAll" xml:space="preserve"><value>Check All</value></data>
+<data name="UncheckAll" xml:space="preserve"><value>Uncheck All</value></data>
+<data name="Others" xml:space="preserve"><value>Others</value></data>
+<data name="Dark" xml:space="preserve"><value>Dark</value></data>
+<data name="TypeFilter" xml:space="preserve"><value>Type Filter</value></data>
+<data name="DownloadError" xml:space="preserve"><value>An error occurred during download:</value></data>
+<data name="Tools" xml:space="preserve"><value>Tools</value></data>
+<data name="ThemeSettings" xml:space="preserve"><value>Theme Settings</value></data>
+<data name="TextCompletion" xml:space="preserve"><value>Text Completion</value></data>
+<data name="Token" xml:space="preserve"><value>Token</value></data>
+<data name="IssueToken" xml:space="preserve"><value>Issue Token</value></data>
+<data name="Niconico" xml:space="preserve"><value>Niconico</value></data>
+<data name="DeleteFailed" xml:space="preserve"><value>Failed to delete</value></data>
+<data name="SelectVersion" xml:space="preserve"><value>Select Version</value></data>
+<data name="Path" xml:space="preserve"><value>Path</value></data>
+<data name="FileName" xml:space="preserve"><value>File Name</value></data>
+<data name="ClearFilter" xml:space="preserve"><value>Clear Filter</value></data>
+<data name="Folder" xml:space="preserve"><value>Folder</value></data>
+<data name="FolderPath" xml:space="preserve"><value>Folder Path</value></data>
+<data name="AddFolder" xml:space="preserve"><value>Add Folder</value></data>
+<data name="OpenFolder" xml:space="preserve"><value>Open Folder</value></data>
+<data name="SearchFont" xml:space="preserve"><value>Search fonts...</value></data>
+<data name="OpenPluginFolder" xml:space="preserve"><value>Open Plugin Folder</value></data>
+<data name="PluginPortal" xml:space="preserve"><value>Plugin Portal</value></data>
+<data name="SearchPlugins" xml:space="preserve"><value>Search Plugins</value></data>
+<data name="PluginManagement" xml:space="preserve"><value>Plugin Management</value></data>
+<data name="PluginSearch" xml:space="preserve"><value>Plugin Search</value></data>
+<data name="AvoidLimitSettings" xml:space="preserve"><value>This setting is to avoid plugin retrieval limits. Set this if limits occur frequently.</value></data>
+<data name="ExitYmm4ForPlugin" xml:space="preserve"><value>Do you want to exit YMM4 for plugin operations?</value></data>
+<data name="PluginName" xml:space="preserve"><value>Plugin Name</value></data>
+<data name="Black" xml:space="preserve"><value>Black</value></data>
+<data name="SearchProject" xml:space="preserve"><value>Search by project/project name...</value></data>
+<data name="PortalLoadFailed" xml:space="preserve"><value>Failed to load portal</value></data>
+<data name="Light" xml:space="preserve"><value>Light</value></data>
+<data name="OpenLinkFailed" xml:space="preserve"><value>Failed to open link</value></data>
+<data name="RemoveFromHub" xml:space="preserve"><value>Do you want to remove this from the Hub?</value></data>
+<data name="DeletePermanently" xml:space="preserve"><value>Do you want to delete this permanently?</value></data>
+<data name="VideoEffects" xml:space="preserve"><value>Video Effects</value></data>
+<data name="AudioEffects" xml:space="preserve"><value>Audio Effects</value></data>
+<data name="SpeechSynthesis" xml:space="preserve"><value>Speech Synthesis</value></data>
+<data name="LoadAudio" xml:space="preserve"><value>Load Audio</value></data>
+<data name="Image" xml:space="preserve"><value>Image</value></data>
+<data name="LoadImage" xml:space="preserve"><value>Load Image</value></data>
+<data name="Overview" xml:space="preserve"><value>Overview</value></data>
+<data name="Extension" xml:space="preserve"><value>Extension</value></data>
+<data name="Confirm" xml:space="preserve"><value>Confirm</value></data>
+<data name="Launch" xml:space="preserve"><value>Launch</value></data>
+<data name="DeleteCountPermanently" xml:space="preserve"><value>Do you want to permanently delete these plugins?</value></data>
+<data name="SearchLabel" xml:space="preserve"><value>Search:</value></data>
+<data name="CurrentVersion" xml:space="preserve"><value>Current Version</value></data>
+<data name="LanguageSettings" xml:space="preserve"><value>Language Settings</value></data>
+<data name="LastUpdate" xml:space="preserve"><value>Last Update</value></data>
+<data name="LatestVersion" xml:space="preserve"><value>Latest Version</value></data>
+<data name="Delete" xml:space="preserve"><value>Delete</value></data>
+<data name="ConfirmDeletion" xml:space="preserve"><value>Confirm Deletion</value></data>
+<data name="InstallerNotFound" xml:space="preserve"><value>Installer not found in the specified instance.</value></data>
+<data name="Acquiring" xml:space="preserve"><value>Acquiring</value></data>
+<data name="SceneTransition" xml:space="preserve"><value>Scene Transition</value></data>
+<data name="NoInfo" xml:space="preserve"><value>No Information</value></data>
+<data name="Status" xml:space="preserve"><value>Status</value></data>
+<data name="NewInstance" xml:space="preserve"><value>New Instance</value></data>
+<data name="CreateNew" xml:space="preserve"><value>Create New</value></data>
+<data name="Shapes" xml:space="preserve"><value>Shapes</value></data>
+<data name="Toggle" xml:space="preserve"><value>Toggle</value></data>
+<data name="DeleteSelected" xml:space="preserve"><value>Delete Selected</value></data>
+<data name="EnableDisableSelected" xml:space="preserve"><value>Enable/Disable Selected</value></data>
+<data name="OpenLastProject" xml:space="preserve"><value>Open Last Project</value></data>
+<data name="Add" xml:space="preserve"><value>Add</value></data>
+<data name="VideoOutput" xml:space="preserve"><value>Video Output</value></data>
+<data name="LoadVideo" xml:space="preserve"><value>Load Video</value></data>
+<data name="OperationSettings" xml:space="preserve"><value>Operation Settings</value></data>
+<data name="DistributionSite" xml:space="preserve"><value>Distribution Site</value></data>
+<data name="EndDistribution" xml:space="preserve"><value>End of Distribution</value></data>
+<data name="Transcription" xml:space="preserve"><value>Transcription</value></data>
+<data name="MonitorEditFolder" xml:space="preserve"><value>Monitor edit data folder</value></data>
+<data name="Disable" xml:space="preserve"><value>Disable</value></data>
+<data name="Pattern" xml:space="preserve"><value>Pattern</value></data>
+<data name="Enable" xml:space="preserve"><value>Enable</value></data>
+<data name="Character" xml:space="preserve"><value>Standing Picture</value></data>
+<data name="RestartRequired" xml:space="preserve"><value>(Restart Required)</value></data>
+</root>
