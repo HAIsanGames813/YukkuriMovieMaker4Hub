@@ -597,7 +597,7 @@ namespace YukkuriMovieMaker4Hub
             _ = CheckYmmUpdates();
             _ = CheckForHubUpdateAsync();
         }
-        private static readonly string HubVersion = "1.0.0";
+        private static readonly string HubVersion = "3.1.0";
         private async Task CheckForHubUpdateAsync()
         {
             try
@@ -624,7 +624,7 @@ namespace YukkuriMovieMaker4Hub
                             if (!string.IsNullOrEmpty(downloadUrl) && !string.IsNullOrEmpty(fileName))
                             {
                                 var result = MessageBox.Show(
-                                    $"{Translate.UpdateAvailable}\nLocal: {HubVersion}\nLatest: {latestTag}\n\n{Translate.UpdateDetails}?",
+                                    $"{Translate.UpdateAvailable}\nLocal: {HubVersion}\nLatest: {latestTag}\n\n{Translate.ConfirmUpdate}",
                                     "Update Check",
                                     MessageBoxButton.YesNo,
                                     MessageBoxImage.Information);

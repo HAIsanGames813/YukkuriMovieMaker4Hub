@@ -71,6 +71,7 @@
 <data name="Ymm4InfoSite" xml:space="preserve"><value>YMM4情報サイト</value></data>
 <data name="Action" xml:space="preserve"><value>アクション</value></data>
 <data name="UpdateAvailable" xml:space="preserve"><value>アップデートあり</value></data>
+<data name="ConfirmUpdate" xml:space="preserve"><value>アップデートしますか？</value></data>
 <data name="UpdateDetails" xml:space="preserve"><value>アップデート内容</value></data>
 <data name="Instance" xml:space="preserve"><value>インスタンス</value></data>
 <data name="SelectInstance" xml:space="preserve"><value>インスタンスを選択してください</value></data>
@@ -100,7 +101,6 @@
 <data name="Folder" xml:space="preserve"><value>フォルダ</value></data>
 <data name="FolderPath" xml:space="preserve"><value>フォルダパス</value></data>
 <data name="AddFolder" xml:space="preserve"><value>フォルダを追加</value></data>
-<data name="OpenFolder" xml:space="preserve"><value>フォルダを開く</value></data>
 <data name="SearchFont" xml:space="preserve"><value>フォントを検索...</value></data>
 <data name="OpenPluginFolder" xml:space="preserve"><value>プラグインフォルダを開く</value></data>
 <data name="PluginPortal" xml:space="preserve"><value>プラグインポータル</value></data>

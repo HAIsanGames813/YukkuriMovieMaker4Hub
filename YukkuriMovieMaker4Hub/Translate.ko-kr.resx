@@ -71,6 +71,7 @@
 <data name="Ymm4InfoSite" xml:space="preserve"><value>YMM4 정보 사이트</value></data>
 <data name="Action" xml:space="preserve"><value>액션</value></data>
 <data name="UpdateAvailable" xml:space="preserve"><value>업데이트 있음</value></data>
+<data name="ConfirmUpdate" xml:space="preserve"><value>업데이트하시겠습니까?</value></data>
 <data name="UpdateDetails" xml:space="preserve"><value>업데이트 내용</value></data>
 <data name="Instance" xml:space="preserve"><value>인스턴스</value></data>
 <data name="SelectInstance" xml:space="preserve"><value>인스턴스를 선택해 주세요.</value></data>
@@ -100,7 +101,6 @@
 <data name="Folder" xml:space="preserve"><value>폴더</value></data>
 <data name="FolderPath" xml:space="preserve"><value>폴더 경로</value></data>
 <data name="AddFolder" xml:space="preserve"><value>폴더 추가</value></data>
-<data name="OpenFolder" xml:space="preserve"><value>폴더 열기</value></data>
 <data name="SearchFont" xml:space="preserve"><value>글꼴 검색...</value></data>
 <data name="OpenPluginFolder" xml:space="preserve"><value>플러그인 폴더 열기</value></data>
 <data name="PluginPortal" xml:space="preserve"><value>플러그인 포털</value></data>

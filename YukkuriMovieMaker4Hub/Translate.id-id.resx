@@ -71,6 +71,7 @@
 <data name="Ymm4InfoSite" xml:space="preserve"><value>Situs Informasi YMM4</value></data>
 <data name="Action" xml:space="preserve"><value>Aksi</value></data>
 <data name="UpdateAvailable" xml:space="preserve"><value>Pembaruan tersedia</value></data>
+<data name="ConfirmUpdate" xml:space="preserve"><value>Apakah Anda ingin memperbarui?</value></data>
 <data name="UpdateDetails" xml:space="preserve"><value>Detail Pembaruan</value></data>
 <data name="Instance" xml:space="preserve"><value>Instans</value></data>
 <data name="SelectInstance" xml:space="preserve"><value>Silakan pilih instans.</value></data>
@@ -100,7 +101,6 @@
 <data name="Folder" xml:space="preserve"><value>Folder</value></data>
 <data name="FolderPath" xml:space="preserve"><value>Jalur Folder</value></data>
 <data name="AddFolder" xml:space="preserve"><value>Tambah Folder</value></data>
-<data name="OpenFolder" xml:space="preserve"><value>Buka Folder</value></data>
 <data name="SearchFont" xml:space="preserve"><value>Cari font...</value></data>
 <data name="OpenPluginFolder" xml:space="preserve"><value>Buka Folder Plugin</value></data>
 <data name="PluginPortal" xml:space="preserve"><value>Portal Plugin</value></data>

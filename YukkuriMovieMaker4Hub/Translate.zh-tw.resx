@@ -71,6 +71,7 @@
 <data name="Ymm4InfoSite" xml:space="preserve"><value>YMM4 資訊站</value></data>
 <data name="Action" xml:space="preserve"><value>操作</value></data>
 <data name="UpdateAvailable" xml:space="preserve"><value>有更新</value></data>
+<data name="ConfirmUpdate" xml:space="preserve"><value>是否更新？</value></data>
 <data name="UpdateDetails" xml:space="preserve"><value>更新內容</value></data>
 <data name="Instance" xml:space="preserve"><value>執行個體</value></data>
 <data name="SelectInstance" xml:space="preserve"><value>請選擇執行個體。</value></data>
@@ -100,7 +101,6 @@
 <data name="Folder" xml:space="preserve"><value>資料夾</value></data>
 <data name="FolderPath" xml:space="preserve"><value>資料夾路徑</value></data>
 <data name="AddFolder" xml:space="preserve"><value>新增資料夾</value></data>
-<data name="OpenFolder" xml:space="preserve"><value>開啟資料夾</value></data>
 <data name="SearchFont" xml:space="preserve"><value>搜尋字體...</value></data>
 <data name="OpenPluginFolder" xml:space="preserve"><value>開啟外掛資料夾</value></data>
 <data name="PluginPortal" xml:space="preserve"><value>外掛門戶</value></data>
