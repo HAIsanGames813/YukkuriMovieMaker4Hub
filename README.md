@@ -11,19 +11,8 @@
 YMM4を前回のプロジェクト、新規プロジェクト、ymmpから開くことができる外部ソフトです
 
 # 機能説明
-## 概要
 ### 実際の画面　
 <img width="390" height="260" alt="image" src="https://github.com/user-attachments/assets/3217599c-6daf-4277-90c2-9c176552e801" /><img width="390" height="260" alt="image" src="https://github.com/user-attachments/assets/2df0f3bb-4c27-424b-b01c-2eece417ab53" /><img width="390" height="260" alt="image" src="https://github.com/user-attachments/assets/22958c0f-e4ec-4629-a88f-4a762f1f4eea" /><img width="390" height="260" alt="image" src="https://github.com/user-attachments/assets/a18f2d73-5a79-47c3-b957-674de6911fc9" />
-
-## プラグイン管理
-### 実際の画面
-
-## プラグインポータル
-### 実際の画面　　
-
-
-## Hub設定
-### 実際の画面　
 
 ## 更新履歴
 ### 1.0.0
