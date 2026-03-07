@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+// using System.Drawing; // 削除: System.Windows.Media と競合するため完全修飾名を使用
+using System.Windows.Interop;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
+using System.IO.Compression;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
@@ -15,6 +18,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
+using System.Windows.Input;
 using System.Windows.Markup;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
@@ -31,6 +35,59 @@ namespace YukkuriMovieMaker4Hub
         public string Code { get; set; } = string.Empty;
     }
 
+    public enum PluginLocalStatus
+    {
+        NotInstalled,
+        UpToDate,
+        HasUpdate
+    }
+
+    public class HubInfo
+    {
+        public string PortalName { get; set; } = string.Empty;
+        public string Author { get; set; } = string.Empty;
+        public string Version { get; set; } = string.Empty;
+        public string Owner { get; set; } = string.Empty;
+        public string Repo { get; set; } = string.Empty;
+    }
+
+    // プラグインディレクトリ直下のinfo.jsonに保存する統合プラグイン情報
+    public class PluginsInfo
+    {
+        [JsonPropertyName("plugins")]
+        public List<PluginMetadata> Plugins { get; set; } = new List<PluginMetadata>();
+    }
+
+    public class PluginMetadata
+    {
+        [JsonPropertyName("name")]
+        public string Name { get; set; } = string.Empty;
+
+        [JsonPropertyName("portalName")]
+        public string PortalName { get; set; } = string.Empty;
+
+        [JsonPropertyName("author")]
+        public string Author { get; set; } = string.Empty;
+
+        [JsonPropertyName("version")]
+        public string Version { get; set; } = string.Empty;
+
+        [JsonPropertyName("owner")]
+        public string Owner { get; set; } = string.Empty;
+
+        [JsonPropertyName("repo")]
+        public string Repo { get; set; } = string.Empty;
+
+        [JsonPropertyName("type")]
+        public string Type { get; set; } = string.Empty;
+
+        [JsonPropertyName("publishedAt")]
+        public DateTime? PublishedAt { get; set; }
+
+        [JsonPropertyName("downloadedAt")]
+        public DateTime? DownloadedAt { get; set; }
+    }
+
     public class AppSettings
     {
         [JsonPropertyName("fontFamily")]
@@ -43,12 +100,12 @@ namespace YukkuriMovieMaker4Hub
         public List<string> ProjectDirectories { get; set; } = new List<string>();
         [JsonPropertyName("closeOnLaunch")]
         public bool CloseOnLaunch { get; set; } = false;
-        [JsonPropertyName("githubToken")]
-        public string GitHubToken { get; set; } = string.Empty;
         [JsonPropertyName("lastSelectedInstanceId")]
         public string? LastSelectedInstanceId { get; set; }
         [JsonPropertyName("languageCode")]
         public string LanguageCode { get; set; } = "ja-JP";
+        [JsonPropertyName("itemSize")]
+        public double ItemSize { get; set; } = 300;
     }
     public class YmmUpdateItem
     {
@@ -77,6 +134,7 @@ namespace YukkuriMovieMaker4Hub
         {
             get
             {
+                // カスタムアイコンファイルが指定されている場合はそちらを使用
                 if (!string.IsNullOrEmpty(IconPath) && File.Exists(IconPath))
                 {
                     try
@@ -89,7 +147,25 @@ namespace YukkuriMovieMaker4Hub
                         bitmap.Freeze();
                         return bitmap;
                     }
-                    catch { return null; }
+                    catch { }
+                }
+                // IconPathが未設定またはファイルが存在しない場合はexeからアイコンを抽出
+                if (!string.IsNullOrEmpty(ExePath) && File.Exists(ExePath))
+                {
+                    try
+                    {
+                        var icon = System.Drawing.Icon.ExtractAssociatedIcon(ExePath);
+                        if (icon != null)
+                        {
+                            var bs = System.Windows.Interop.Imaging.CreateBitmapSourceFromHIcon(
+                                icon.Handle,
+                                System.Windows.Int32Rect.Empty,
+                                BitmapSizeOptions.FromEmptyOptions());
+                            bs.Freeze();
+                            return bs;
+                        }
+                    }
+                    catch { }
                 }
                 return null;
             }
@@ -112,6 +188,13 @@ namespace YukkuriMovieMaker4Hub
         [JsonIgnore]
         public bool HasUpdate { get => _hasUpdate; set { _hasUpdate = value; OnPropertyChanged(nameof(HasUpdate)); } }
 
+        private bool _isSelected;
+        [JsonIgnore]
+        public bool IsSelected
+        {
+            get => _isSelected;
+            set { _isSelected = value; OnPropertyChanged(nameof(IsSelected)); }
+        }
         public string GetLocalVersion()
         {
             try
@@ -193,23 +276,75 @@ namespace YukkuriMovieMaker4Hub
         public bool IsEnabled { get; set; } = true;
         public string? Url { get; set; }
         public List<string> Links { get; set; } = new List<string>();
+        public string Owner { get; set; } = string.Empty;
+        public string Repo { get; set; } = string.Empty;
+        private PluginLocalStatus _localStatus = PluginLocalStatus.NotInstalled;
+        public PluginLocalStatus LocalStatus { get => _localStatus; set { _localStatus = value; OnPropertyChanged(nameof(LocalStatus)); OnPropertyChanged(nameof(IsInstalled)); } }
+        private string _localVersion = "";
+        public string LocalVersion { get => _localVersion; set { _localVersion = value; OnPropertyChanged(nameof(LocalVersion)); } }
         private ObservableCollection<GitHubReleaseDetail> _releases = new ObservableCollection<GitHubReleaseDetail>();
         public ObservableCollection<GitHubReleaseDetail> Releases { get => _releases; set { _releases = value; OnPropertyChanged(nameof(Releases)); } }
         private GitHubReleaseDetail? _selectedVersion;
         public GitHubReleaseDetail? SelectedVersion { get => _selectedVersion; set { _selectedVersion = value; OnPropertyChanged(nameof(SelectedVersion)); } }
+        private bool _isSelected;
+        public bool IsSelected { get => _isSelected; set { _isSelected = value; OnPropertyChanged(nameof(IsSelected)); } }
+        private bool _hasUpdate;
+        public bool HasUpdate { get => _hasUpdate; set { _hasUpdate = value; OnPropertyChanged(nameof(HasUpdate)); } }
+        private bool _isNew;
+        public bool IsNew { get => _isNew; set { _isNew = value; OnPropertyChanged(nameof(IsNew)); } }
+        private bool _isUnlinked;
+        public bool IsUnlinked { get => _isUnlinked; set { _isUnlinked = value; OnPropertyChanged(nameof(IsUnlinked)); } }
+        private bool _isLocalEnabled = true;
+        public bool IsLocalEnabled { get => _isLocalEnabled; set { _isLocalEnabled = value; OnPropertyChanged(nameof(IsLocalEnabled)); } }
+        public bool IsDirectDownloadSupported => !string.IsNullOrEmpty(Url) && Url.Contains("github.com");
+        public bool IsInstalled => LocalStatus != PluginLocalStatus.NotInstalled;
 
+        // リリースが取得済みで0件（GitHub URLはあるがリリースが存在しない）
+        private bool _hasNoRelease;
+        public bool HasNoRelease
+        {
+            get => _hasNoRelease;
+            set { _hasNoRelease = value; OnPropertyChanged(nameof(HasNoRelease)); OnPropertyChanged(nameof(IsAssetDownloadable)); OnPropertyChanged(nameof(LatestVersionName)); }
+        }
+
+        // リリースデータ取得完了フラグ（取得前は判定しない）
+        private bool _releaseLoaded;
+        public bool ReleaseLoaded
+        {
+            get => _releaseLoaded;
+            set { _releaseLoaded = value; OnPropertyChanged(nameof(ReleaseLoaded)); OnPropertyChanged(nameof(IsAssetDownloadable)); }
+        }
+
+        // 最新リリースのアセットが .ymme / .zip / .dll のいずれかであること
+        public bool IsAssetDownloadable
+        {
+            get
+            {
+                if (!IsDirectDownloadSupported) return false;
+                if (!ReleaseLoaded) return true; // 取得前は仮にtrueとして表示を崩さない
+                if (HasNoRelease) return false;
+                if (Releases == null || Releases.Count == 0) return false;
+                var fn = Releases[0].FileName.ToLower();
+                return fn.EndsWith(".ymme") || fn.EndsWith(".zip") || fn.EndsWith(".dll");
+            }
+        }
+        // プラグイン自体の初公開日（最も古いリリースの日付）
+        public DateTime FirstPublishedAt => Releases != null && Releases.Count > 0 ? Releases.Min(r => r.PublishedAt) : DateTime.MinValue;
+        // 最新リリース日
+        public DateTime LatestPublishedAt => Releases != null && Releases.Count > 0 ? Releases.Max(r => r.PublishedAt) : DateTime.MinValue;
         public string LatestVersionName
         {
             get
             {
                 if (!IsEnabled) return Translate.EndDistribution;
-                bool hasGitHub = (Url != null && Url.Contains("github.com")) || (Links != null && Links.Any(l => l != null && l.Contains("github.com")));
-                if (!hasGitHub) return Translate.NoInfo;
+                if (!IsDirectDownloadSupported) return Translate.NoInfo;
+                if (!ReleaseLoaded) return Translate.Acquiring;
+                if (HasNoRelease) return Translate.EndDistribution;
                 if (Releases == null || Releases.Count == 0) return Translate.Acquiring;
+                if (!IsAssetDownloadable) return Translate.NoInfo; // 対応形式なし
                 return Releases[0].TagName;
             }
         }
-
         public List<PluginLink> AllLinks
         {
             get
@@ -229,35 +364,55 @@ namespace YukkuriMovieMaker4Hub
     public class LocalPluginInfo : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler? PropertyChanged;
-        protected void OnPropertyChanged(string name) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
-        private string _fullPath = string.Empty;
-        public string FullPath { get => _fullPath; set { _fullPath = value; OnPropertyChanged(nameof(FullPath)); OnPropertyChanged(nameof(DisplayName)); OnPropertyChanged(nameof(IsEnabled)); OnPropertyChanged(nameof(IsSelectionValid)); } }
+        public void OnPropertyChanged(string name) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+        public string FullPath { get; set; } = string.Empty;
+        public string DisplayName { get; set; } = string.Empty;
         public bool IsDirectory { get; set; }
-        private string? _displayName;
-        public string DisplayName
-        {
-            get
-            {
-                if (FullPath == "DUMMY_NONE_SELECTED")
-                {
-                    return $"--- {Translate.SelectInstance} ---";
-                }
-                return !string.IsNullOrEmpty(_displayName) ? _displayName : (IsDirectory ? Path.GetFileName(FullPath) : Path.GetFileNameWithoutExtension(FullPath).Replace(".disabled", ""));
-            }
-            set { _displayName = value; OnPropertyChanged(nameof(DisplayName)); }
-        }
-
         public bool IsEnabled
         {
             get
             {
-                if (FullPath == "DUMMY_NONE_SELECTED") return false;
-                if (string.IsNullOrEmpty(FullPath)) return false;
-                return IsDirectory ? !Path.GetFileName(FullPath).StartsWith("_") : !Path.GetFileName(FullPath).EndsWith(".disabled");
+                if (IsDirectory && Directory.Exists(FullPath))
+                {
+                    // ディレクトリの場合：中に.dll.disabledファイルがあれば無効
+                    var disabledDlls = Directory.GetFiles(FullPath, "*.dll.disabled", SearchOption.AllDirectories);
+                    if (disabledDlls.Length > 0) return false;
+
+                    // .dllファイルがあれば有効
+                    var enabledDlls = Directory.GetFiles(FullPath, "*.dll", SearchOption.AllDirectories);
+                    return enabledDlls.Length > 0;
+                }
+                else if (!IsDirectory)
+                {
+                    // ファイルの場合：.disabledで終わっていれば無効
+                    return !FullPath.EndsWith(".disabled");
+                }
+                return true;
             }
         }
+        public bool IsSelectionValid => FullPath != "DUMMY_NONE_SELECTED";
+        public string Author { get; set; } = "-";
+        public string Version { get; set; } = "-";
+        public string Owner { get; set; } = string.Empty;
+        public string Repo { get; set; } = string.Empty;
+        private bool _hasUpdate;
+        public bool IsBackup { get; set; } = false;
+        public bool HasUpdate { get => _hasUpdate; set { _hasUpdate = value; OnPropertyChanged(nameof(HasUpdate)); } }
 
-        public bool IsSelectionValid => FullPath != "DUMMY_NONE_SELECTED" && !string.IsNullOrEmpty(FullPath);
+        private string _type = string.Empty;
+        public string Type { get => _type; set { _type = value; OnPropertyChanged(nameof(Type)); OnPropertyChanged(nameof(DisplayType)); } }
+
+        /// <summary>Type を多言語表示名に変換したプロパティ（タイプフィルターと同じ翻訳を使用）</summary>
+        public string DisplayType => PluginTypeHelper.GetDisplayName(Type);
+
+        public DateTime? PublishedAt { get; set; }
+        public DateTime? DownloadedAt { get; set; }
+
+        public string DisplayPublishedAt => PublishedAt.HasValue ? PublishedAt.Value.ToString("yyyy/MM/dd") : "-";
+        public string DisplayDownloadedAt => DownloadedAt.HasValue ? DownloadedAt.Value.ToString("yyyy/MM/dd HH:mm") : "-";
+
+        // 日本語名順ソート用：先頭の _ や . を除去した読み名
+        public string DisplayNameSortKey => DisplayName.TrimStart('_', '.', ' ');
     }
     public class FontItem
     {
@@ -301,11 +456,36 @@ namespace YukkuriMovieMaker4Hub
         }
     }
 
+    /// <summary>プラグインタイプの内部名→多言語表示名変換（LocalPluginInfo と PluginTypeFilterItem の両方から使用）</summary>
+    public static class PluginTypeHelper
+    {
+        public static string GetDisplayName(string internalName) => internalName switch
+        {
+            "映像エフェクト" => Translate.VideoEffects,
+            "音声エフェクト" => Translate.AudioEffects,
+            "音声合成" => Translate.SpeechSynthesis,
+            "動画出力" => Translate.VideoOutput,
+            "動画読み込み" => Translate.LoadVideo,
+            "音声読み込み" => Translate.LoadAudio,
+            "画像読み込み" => Translate.LoadImage,
+            "場面切り替え" => Translate.SceneTransition,
+            "図形" => Translate.Shapes,
+            "立ち絵" => Translate.Character,
+            "ツール" => Translate.Tools,
+            "テキスト補完" => Translate.TextCompletion,
+            "模様" => Translate.Pattern,
+            "文字起こし" => Translate.Transcription,
+            "その他" => Translate.Others,
+            "配布終了" => Translate.EndDistribution,
+            _ => internalName   // 未知のタイプはそのまま表示
+        };
+    }
+
     public class PluginTypeFilterItem : INotifyPropertyChanged
     {
         public string InternalName { get; set; } = string.Empty;
 
-        public string DisplayName => GetDisplayName(InternalName);
+        public string DisplayName => PluginTypeHelper.GetDisplayName(InternalName);
 
         private bool _isSelected;
         public bool IsSelected
@@ -321,33 +501,21 @@ namespace YukkuriMovieMaker4Hub
             }
         }
 
-        private string GetDisplayName(string internalName)
-        {
-            return internalName switch
-            {
-                "映像エフェクト" => Translate.VideoEffects,
-                "音声エフェクト" => Translate.AudioEffects,
-                "音声合成" => Translate.SpeechSynthesis,
-                "動画出力" => Translate.VideoOutput,
-                "動画読み込み" => Translate.LoadVideo,
-                "音声読み込み" => Translate.LoadAudio,
-                "画像読み込み" => Translate.LoadImage,
-                "場面切り替え" => Translate.SceneTransition,
-                "図形" => Translate.Shapes,
-                "立ち絵" => Translate.Character,
-                "ツール" => Translate.Tools,
-                "テキスト補完" => Translate.TextCompletion,
-                "模様" => Translate.Pattern,
-                "文字起こし" => Translate.Transcription,
-                "その他" => Translate.Others,
-                "配布終了" => Translate.EndDistribution,
-                _ => internalName
-            };
-        }
-
         public event PropertyChangedEventHandler? PropertyChanged;
         protected void OnPropertyChanged(string name) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
     }
+
+    public class InstalledVersionConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (value is string s && !string.IsNullOrEmpty(s) && s != "-")
+                return string.Format(Translate.InstalledVersion, s);
+            return string.Empty;
+        }
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) => throw new NotImplementedException();
+    }
+
     public partial class MainWindow : Window, INotifyPropertyChanged
     {
         private string _latestOnlineVersion = string.Empty;
@@ -356,6 +524,8 @@ namespace YukkuriMovieMaker4Hub
         private SettingsManager _settingsManager = new SettingsManager();
         private AppSettings _currentSettings = new AppSettings();
         private HttpClient _http = new HttpClient();
+        // APIへの同時リクエスト数を制限するセマフォ（サーバー負荷・レート制限対策）
+        private readonly SemaphoreSlim _apiSemaphore = new SemaphoreSlim(4, 4);
         public ObservableCollection<InstanceInfo> Instances { get; set; } = new ObservableCollection<InstanceInfo>();
         public ObservableCollection<LocalPluginInfo> LocalPlugins { get; set; } = new ObservableCollection<LocalPluginInfo>();
         public ObservableCollection<PluginCatalogItem> OnlinePlugins { get; set; } = new ObservableCollection<PluginCatalogItem>();
@@ -363,6 +533,44 @@ namespace YukkuriMovieMaker4Hub
         private List<ProjectFileItem> _allProjects = new List<ProjectFileItem>();
         public ObservableCollection<ProjectFileItem> FilteredProjects { get; set; } = new ObservableCollection<ProjectFileItem>();
         private string _projectSearchText = string.Empty;
+
+        private bool _hasAnyUpdate;
+        public bool HasAnyUpdate
+        {
+            get => _hasAnyUpdate;
+            set { _hasAnyUpdate = value; OnPropertyChanged(nameof(HasAnyUpdate)); }
+        }
+
+        private bool _hasAnyNew;
+        public bool HasAnyNew
+        {
+            get => _hasAnyNew;
+            set { _hasAnyNew = value; OnPropertyChanged(nameof(HasAnyNew)); }
+        }
+
+        private bool _isViewTile = true;
+        public bool IsViewTile
+        {
+            get => _isViewTile;
+            set { _isViewTile = value; OnPropertyChanged(nameof(IsViewTile)); }
+        }
+
+        // ソート順保存用
+        private string _lastPluginSortField = "DisplayName";
+        private ListSortDirection _lastPluginSortDirection = ListSortDirection.Ascending;
+
+        public bool ShowBackup
+        {
+            get => _showBackup;
+            set
+            {
+                _showBackup = value;
+                RefreshRecentProjects(); // ← ApplyProjectFilterではなくRefreshRecentProjectsを呼ぶ
+                OnPropertyChanged(nameof(ShowBackup));
+            }
+        }
+        // バックアップフィルタ用
+        private bool _showBackup = false;
         public string ProjectSearchText { get => _projectSearchText; set { _projectSearchText = value; ApplyProjectFilter(); OnPropertyChanged(nameof(ProjectSearchText)); } }
         private bool _showYmmp = true;
         public bool ShowYmmp { get => _showYmmp; set { _showYmmp = value; ApplyProjectFilter(); OnPropertyChanged(nameof(ShowYmmp)); } }
@@ -392,6 +600,7 @@ namespace YukkuriMovieMaker4Hub
             get => _selectedPluginType;
             set { _selectedPluginType = value; ApplyOnlinePluginFilter(); OnPropertyChanged(nameof(SelectedPluginType)); }
         }
+
 
         private ObservableCollection<FontItem> _filteredFonts = new ObservableCollection<FontItem>();
         public ObservableCollection<FontItem> FilteredFonts
@@ -449,7 +658,7 @@ namespace YukkuriMovieMaker4Hub
         private string _fontSearchText = string.Empty;
         public string FontSearchText { get => _fontSearchText; set { _fontSearchText = value; ApplyFontFilter(); OnPropertyChanged(nameof(FontSearchText)); } }
         public Array ThemeModes => Enum.GetValues(typeof(AppTheme));
-        private readonly InstanceInfo _dummyInstance = new InstanceInfo { Name =Translate.SelectInstance, ExePath = string.Empty };
+        private readonly InstanceInfo _dummyInstance = new InstanceInfo { Name = Translate.SelectInstance, ExePath = string.Empty };
 
         private InstanceInfo? _selectedInstance;
         public InstanceInfo SelectedInstance
@@ -461,7 +670,7 @@ namespace YukkuriMovieMaker4Hub
                 OnPropertyChanged(nameof(SelectedInstance));
                 _currentSettings.LastSelectedInstanceId = value?.Id;
                 _settingsManager.Save(_currentSettings);
-                RefreshLocalPlugins();
+                RefreshLocalPlugins(); // ソート順はRefreshLocalPlugins→ApplyLocalPluginFilter内で復元される
             }
         }
         private PluginCatalogItem? _selectedOnlinePlugin;
@@ -470,6 +679,20 @@ namespace YukkuriMovieMaker4Hub
         {
             get => FilteredFonts.FirstOrDefault(f => f.InternalName == _currentSettings.FontFamily);
             set { if (value != null) { _currentSettings.FontFamily = value.InternalName; ApplyTheme(); SaveAll(); OnPropertyChanged(nameof(SelectedFontItem)); } }
+        }
+        // 既存の ItemSize を以下のように書き換えてください
+        public double ItemSize
+        {
+            get => _currentSettings.ItemSize;
+            set
+            {
+                if (_currentSettings.ItemSize != value)
+                {
+                    _currentSettings.ItemSize = value;
+                    OnPropertyChanged(nameof(ItemSize));
+                    SaveAll(); // ここでファイルに保存されます
+                }
+            }
         }
         public bool CloseOnLaunch
         {
@@ -552,8 +775,6 @@ namespace YukkuriMovieMaker4Hub
 
         public MainWindow()
         {
-            InitializeComponent();
-            DataContext = this;
             _currentSettings = _settingsManager.Load();
 
             string langCode = _currentSettings.LanguageCode ?? "ja-JP";
@@ -571,13 +792,7 @@ namespace YukkuriMovieMaker4Hub
 
             this.FlowDirection = (langCode == "ar-SA") ? FlowDirection.RightToLeft : FlowDirection.LeftToRight;
 
-            _http.DefaultRequestHeaders.Add("User-Agent", "YukkuriMovieMaker4Hub");
-            RefreshLocalPlugins();
-            LoadOnlinePlugins();
-            InitializeComponent();
-            _currentSettings = _settingsManager.Load();
             _http.DefaultRequestHeaders.UserAgent.ParseAdd("YukkuriMovieMaker4Hub");
-            this.DataContext = this;
             InitializePluginFilters();
             InitializeFonts();
             foreach (var i in _currentSettings.Instances)
@@ -589,15 +804,14 @@ namespace YukkuriMovieMaker4Hub
                 ProjectDirectories.Add(p);
             SystemEvents.UserPreferenceChanged += (s, e) => { if (SelectedTheme == AppTheme.Windows) ApplyTheme(); };
 
-            GitHubTokenBox.Password = _currentSettings.GitHubToken;
-
             ApplyTheme();
             RestoreLastSelection();
             RefreshRecentProjects();
             _ = CheckYmmUpdates();
             _ = CheckForHubUpdateAsync();
+            _ = LoadOnlinePlugins();
         }
-        private static readonly string HubVersion = "3.1.0";
+        private static readonly string HubVersion = "4.0.0";
         private async Task CheckForHubUpdateAsync()
         {
             try
@@ -681,14 +895,6 @@ namespace YukkuriMovieMaker4Hub
                 MessageBox.Show($"{Translate.DownloadError} {ex.Message}");
             }
         }
-        private void GitHubTokenBox_PasswordChanged(object sender, RoutedEventArgs e)
-        {
-            if (sender is PasswordBox pb)
-            {
-                _currentSettings.GitHubToken = pb.Password;
-                SaveAll();
-            }
-        }
 
         private void RestoreLastSelection()
         {
@@ -727,13 +933,6 @@ namespace YukkuriMovieMaker4Hub
             foreach (var f in filtered) FilteredFonts.Add(f);
             OnPropertyChanged(nameof(SelectedFontItem));
         }
-        private void OpenPluginFolder_Click(object sender, RoutedEventArgs e)
-        {
-            if (SelectedInstance != null && Directory.Exists(SelectedInstance.PluginDirectory))
-            {
-                Process.Start("explorer.exe", SelectedInstance.PluginDirectory);
-            }
-        }
         public AppTheme SelectedTheme
         {
             get => _currentSettings.Theme;
@@ -753,7 +952,6 @@ namespace YukkuriMovieMaker4Hub
         {
             try
             {
-                this.Resources["AppFont"] = new FontFamily(_currentSettings.FontFamily);
                 var mode = SelectedTheme;
                 if (mode == AppTheme.Windows)
                 {
@@ -765,13 +963,13 @@ namespace YukkuriMovieMaker4Hub
                 switch (mode)
                 {
                     case AppTheme.Light:
-                        SetThemeColors("#FFFFFF", "#F0F0F0", "#E0E0E0", "#000000", "#555555", "#4acff0", "#DDDDDD");
+                        SetThemeColors("#FFFFFF", "#F0F0F0", "#E0E0E0", "#000000", "#555555", "#2255BB", "#DDDDDD");
                         break;
                     case AppTheme.Dark:
-                        SetThemeColors("#252525", "#333333", "#444444", "#FFFFFF", "#AAAAAA", "#2E7D32", "#555555");
+                        SetThemeColors("#252525", "#333333", "#444444", "#FFFFFF", "#AAAAAA", "#4CAF50", "#555555");
                         break;
                     case AppTheme.Black:
-                        SetThemeColors("#000000", "#121212", "#1F1F1F", "#FFFFFF", "#888888", "#2E7D32", "#333333");
+                        SetThemeColors("#000000", "#121212", "#1F1F1F", "#FFFFFF", "#888888", "#4CAF50", "#333333");
                         break;
                 }
             }
@@ -780,13 +978,34 @@ namespace YukkuriMovieMaker4Hub
 
         private void SetThemeColors(string bg, string panel, string item, string text, string subText, string accent, string border)
         {
-            this.Resources["ThemeBrush"] = new SolidColorBrush((Color)ColorConverter.ConvertFromString(bg));
-            this.Resources["PanelBrush"] = new SolidColorBrush((Color)ColorConverter.ConvertFromString(panel));
-            this.Resources["ItemBrush"] = new SolidColorBrush((Color)ColorConverter.ConvertFromString(item));
-            this.Resources["TextBrush"] = new SolidColorBrush((Color)ColorConverter.ConvertFromString(text));
-            this.Resources["SubTextBrush"] = new SolidColorBrush((Color)ColorConverter.ConvertFromString(subText));
-            this.Resources["AccentBrush"] = new SolidColorBrush((Color)ColorConverter.ConvertFromString(accent));
-            this.Resources["BorderBrush"] = new SolidColorBrush((Color)ColorConverter.ConvertFromString(border));
+            var font = new FontFamily(_currentSettings.FontFamily);
+
+            var brushes = new Dictionary<string, SolidColorBrush>
+            {
+                ["ThemeBrush"] = new SolidColorBrush((Color)ColorConverter.ConvertFromString(bg)),
+                ["PanelBrush"] = new SolidColorBrush((Color)ColorConverter.ConvertFromString(panel)),
+                ["ItemBrush"] = new SolidColorBrush((Color)ColorConverter.ConvertFromString(item)),
+                ["TextBrush"] = new SolidColorBrush((Color)ColorConverter.ConvertFromString(text)),
+                ["SubTextBrush"] = new SolidColorBrush((Color)ColorConverter.ConvertFromString(subText)),
+                ["AccentBrush"] = new SolidColorBrush((Color)ColorConverter.ConvertFromString(accent)),
+                ["BorderBrush"] = new SolidColorBrush((Color)ColorConverter.ConvertFromString(border)),
+            };
+
+            // ① Application.Current.Resources に書き込む（起動直後やウィンドウ未表示時のフォールバック）
+            Application.Current.Resources["AppFont"] = font;
+            foreach (var kv in brushes)
+                Application.Current.Resources[kv.Key] = kv.Value;
+
+            // ② 既に開いている全ウィンドウの Window.Resources を直接更新する
+            //    （Window.Resources は Application.Resources より優先されるため、ここも更新が必要）
+            foreach (Window win in Application.Current.Windows)
+            {
+                if (win.Resources.Contains("AppFont"))
+                    win.Resources["AppFont"] = font;
+                foreach (var kv in brushes)
+                    if (win.Resources.Contains(kv.Key))
+                        win.Resources[kv.Key] = kv.Value;
+            }
         }
 
         private void SaveAll()
@@ -795,13 +1014,12 @@ namespace YukkuriMovieMaker4Hub
             {
                 _currentSettings.Instances = Instances.ToList();
                 _currentSettings.ProjectDirectories = ProjectDirectories.ToList();
-                _currentSettings.GitHubToken = GitHubTokenBox.Password;
                 _settingsManager.Save(_currentSettings);
             }
             catch (UnauthorizedAccessException)
             {
                 MessageBox.Show(
-                    Translate.AccessDenied ?? Translate.AdminPrivilegeRequired,
+                    Translate.AccessDenied + " " + Translate.AdminPrivilegeRequired,
                     "Error",
                     MessageBoxButton.OK,
                     MessageBoxImage.Error);
@@ -812,22 +1030,27 @@ namespace YukkuriMovieMaker4Hub
             }
         }
 
-        private void AddInstance_Click(object sender, RoutedEventArgs e)
+        private async void AddInstance_Click(object sender, RoutedEventArgs e)
         {
-            var dialog = new OpenFileDialog
-            {
-                Filter = "YukkuriMovieMaker.exe|YukkuriMovieMaker.exe",
-                Title = "Select YMM4 Executable"
-            };
+            // ① 追加方法を選択（新規DL / 既存追加）
+            var choiceDialog = new AddInstanceChoiceDialog { Owner = this };
+            if (choiceDialog.ShowDialog() != true || choiceDialog.Mode == AddInstanceMode.Cancelled)
+                return;
 
-            if (dialog.ShowDialog() == true)
+            if (choiceDialog.Mode == AddInstanceMode.NewDownload)
             {
+                // ② 新規ダウンロード
+                var setupDialog = new InstanceSetupDialog(isNewDownload: true) { Owner = this };
+                if (setupDialog.ShowDialog() != true || string.IsNullOrEmpty(setupDialog.ResultExePath))
+                    return;
+
                 try
                 {
                     var newInstance = new InstanceInfo
                     {
-                        Name = Path.GetFileName(Path.GetDirectoryName(dialog.FileName)) ?? "New Instance",
-                        ExePath = dialog.FileName
+                        Name = setupDialog.InstanceName ?? "YukkuriMovieMaker4",
+                        ExePath = setupDialog.ResultExePath,
+                        IconPath = setupDialog.IconPath  // nullの場合IconImageがexeから自動取得
                     };
                     newInstance.PropertyChanged += (s, ev) => SaveAll();
                     Instances.Add(newInstance);
@@ -836,7 +1059,42 @@ namespace YukkuriMovieMaker4Hub
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show($"Failed to add instance: {ex.Message}");
+                    MessageBox.Show($"インスタンスの追加に失敗しました: {ex.Message}");
+                }
+            }
+            else
+            {
+                // ③ 既存を追加：exe選択 → 名前・アイコン設定
+                var fileDialog = new OpenFileDialog
+                {
+                    Filter = "YukkuriMovieMaker.exe|YukkuriMovieMaker.exe",
+                    Title = Translate.SelectExeTitle
+                };
+                if (fileDialog.ShowDialog() != true) return;
+
+                string exePath = fileDialog.FileName;
+                string defaultName = Path.GetFileName(Path.GetDirectoryName(exePath)) ?? "YukkuriMovieMaker4";
+
+                // exeパスを渡すことでアイコンを自動プレビュー
+                var setupDialog = new InstanceSetupDialog(exePath, defaultName) { Owner = this };
+                if (setupDialog.ShowDialog() != true) return;
+
+                try
+                {
+                    var newInstance = new InstanceInfo
+                    {
+                        Name = setupDialog.InstanceName ?? defaultName,
+                        ExePath = exePath,
+                        IconPath = setupDialog.IconPath  // nullの場合IconImageがexeから自動取得
+                    };
+                    newInstance.PropertyChanged += (s, ev) => SaveAll();
+                    Instances.Add(newInstance);
+                    SelectedInstance = newInstance;
+                    SaveAll();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"インスタンスの追加に失敗しました: {ex.Message}");
                 }
             }
         }
@@ -865,100 +1123,196 @@ namespace YukkuriMovieMaker4Hub
                 }
             }
         }
-        private void IssueToken_Click(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                Process.Start(new ProcessStartInfo
-                {
-                    FileName = "https://github.com/settings/tokens/new",
-                    UseShellExecute = true
-                });
-            }
-            catch { }
-        }
-
         private async Task LoadOnlinePlugins()
         {
             if (OnlinePlugins.Count > 0) return;
             try
             {
+                // 1. YAMLから一覧を取得
                 var yml = await _http.GetStringAsync("https://manjubox.net/ymm4plugins.yml");
                 var catalog = ParseYmm4PluginsYaml(yml);
                 _allOnlinePlugins = catalog;
+
+                // UIにまず一覧を表示（ユーザーを待たせない）
+                OnlinePlugins.Clear();
+                foreach (var p in _allOnlinePlugins) OnlinePlugins.Add(p);
                 ApplyOnlinePluginFilter();
+
+                // 2. 詳細情報（Releases）をセマフォで並列数を制限しながらバックグラウンド取得
+                // 同時リクエスト数を _apiSemaphore で絞ることでレート制限・サーバー負荷を回避
+                var detailTasks = _allOnlinePlugins.Select(async plugin =>
+                {
+                    await _apiSemaphore.WaitAsync();
+                    try
+                    {
+                        await LoadReleaseDetails(plugin);
+                        plugin.OnPropertyChanged(nameof(plugin.LatestVersionName));
+                    }
+                    finally
+                    {
+                        _apiSemaphore.Release();
+                    }
+                });
+
+                // 全ての詳細取得を開始（完了を待たずにUI操作可能）
+                _ = Task.WhenAll(detailTasks);
+
             }
-            catch (Exception ex) { MessageBox.Show(Translate.PortalLoadFailed + ex.Message); }
+            catch (Exception ex)
+            {
+                MessageBox.Show(Translate.PortalLoadFailed + ex.Message);
+            }
         }
 
-        private Dictionary<string, (DateTime Time, List<GitHubReleaseDetail> Releases)> _releaseCache = new();
-
-
+        // 既存の LoadReleaseDetails をそのまま使用、あるいは以下の微修正版を使用
         private async Task LoadReleaseDetails(PluginCatalogItem plugin)
         {
             var githubUrl = FindGitHubRepositoryUrl(plugin);
-            if (githubUrl == null) return;
-            var match = Regex.Match(githubUrl, @"github\.com/([^/]+)/([^/]+)");
-            if (!match.Success) return;
-            string owner = match.Groups[1].Value;
-            string repo = match.Groups[2].Value.Replace(".git", "").TrimEnd('/');
-            string cacheKey = $"{owner}/{repo}";
-
-            if (_releaseCache.TryGetValue(cacheKey, out var cache) && (DateTime.Now - cache.Time).TotalMinutes < 60)
+            if (githubUrl == null)
             {
-                plugin.Releases = new ObservableCollection<GitHubReleaseDetail>(cache.Releases);
-                if (plugin.Releases.Count > 0) plugin.SelectedVersion = plugin.Releases[0];
+                // GitHub URL なし → サイトで確認扱い（取得完了とみなす）
+                Dispatcher.Invoke(() => { plugin.ReleaseLoaded = true; });
                 return;
             }
 
-            try
+            var match = Regex.Match(githubUrl, @"github\.com/([^/]+)/([^/]+)");
+            if (!match.Success)
             {
-                var request = new HttpRequestMessage(HttpMethod.Get, $"https://api.github.com/repos/{owner}/{repo}/releases");
-                if (!string.IsNullOrEmpty(_currentSettings.GitHubToken))
-                {
-                    request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", _currentSettings.GitHubToken);
-                }
+                Dispatcher.Invoke(() => { plugin.ReleaseLoaded = true; });
+                return;
+            }
 
-                var response = await _http.SendAsync(request);
-                if (response.StatusCode == System.Net.HttpStatusCode.Forbidden)
+            string owner = match.Groups[1].Value;
+            string repo = match.Groups[2].Value.Replace(".git", "").TrimEnd('/');
+
+            // 429 レート制限が来た場合に備えてリトライ（最大3回、指数バックオフ）
+            const int maxRetries = 3;
+            for (int attempt = 0; attempt < maxRetries; attempt++)
+            {
+                try
                 {
-                    MessageBox.Show(Translate.GitHubApiLimit);
+                    var request = new HttpRequestMessage(HttpMethod.Get,
+                        $"https://manjubox.net/api/ymm4plugins/github/detail/{owner}/{repo}");
+                    var response = await _http.SendAsync(request);
+
+                    // 403 Forbidden → GitHub側のブロック、リトライ不要
+                    if (response.StatusCode == System.Net.HttpStatusCode.Forbidden)
+                    {
+                        Dispatcher.Invoke(() => { plugin.ReleaseLoaded = true; });
+                        return;
+                    }
+
+                    // 429 Too Many Requests → Retry-After を待ってリトライ
+                    if (response.StatusCode == System.Net.HttpStatusCode.TooManyRequests)
+                    {
+                        int waitSec = 10 * (attempt + 1); // 10s, 20s, 30s
+                        if (response.Headers.TryGetValues("Retry-After", out var retryVals)
+                            && int.TryParse(retryVals.FirstOrDefault(), out int ra))
+                            waitSec = ra + 1;
+                        await Task.Delay(waitSec * 1000);
+                        continue; // リトライ
+                    }
+
+                    // その他の非成功ステータス
+                    if (!response.IsSuccessStatusCode)
+                    {
+                        Dispatcher.Invoke(() => { plugin.ReleaseLoaded = true; });
+                        return;
+                    }
+
+                    var responseBody = await response.Content.ReadAsStringAsync();
+
+                    // レスポンスが JSON 配列でない場合（HTMLエラーページ等）は無視
+                    var trimmed = responseBody.TrimStart();
+                    if (!trimmed.StartsWith("[") && !trimmed.StartsWith("{"))
+                    {
+                        Dispatcher.Invoke(() => { plugin.ReleaseLoaded = true; });
+                        return;
+                    }
+
+                    using var doc = JsonDocument.Parse(responseBody);
+                    var releaseList = new List<GitHubReleaseDetail>();
+
+                    foreach (var rel in doc.RootElement.EnumerateArray())
+                    {
+                        var tagName = rel.GetProperty("tag_name").GetString() ?? "";
+                        var publishedAt = rel.GetProperty("published_at").GetDateTime();
+                        var isPrerelease = rel.GetProperty("prerelease").GetBoolean();
+                        var assets = rel.GetProperty("assets");
+
+                        if (assets.GetArrayLength() > 0)
+                        {
+                            var firstAsset = assets[0];
+                            releaseList.Add(new GitHubReleaseDetail
+                            {
+                                TagName = tagName,
+                                PublishedAt = publishedAt,
+                                Prerelease = isPrerelease,
+                                BrowserDownloadUrl = firstAsset.GetProperty("browser_download_url").GetString() ?? "",
+                                FileName = firstAsset.GetProperty("name").GetString() ?? ""
+                            });
+                        }
+                    }
+
+                    // UIスレッドでデータをセット
+                    Dispatcher.Invoke(() => {
+                        plugin.Releases = new ObservableCollection<GitHubReleaseDetail>(releaseList);
+                        if (plugin.Releases.Count > 0)
+                        {
+                            plugin.SelectedVersion = plugin.Releases[0];
+                            plugin.HasNoRelease = false;
+                        }
+                        else
+                        {
+                            plugin.HasNoRelease = true;
+                        }
+                        plugin.ReleaseLoaded = true;
+                        plugin.OnPropertyChanged(nameof(plugin.LatestVersionName));
+                        plugin.OnPropertyChanged(nameof(plugin.IsAssetDownloadable));
+                        plugin.OnPropertyChanged(nameof(plugin.FirstPublishedAt));
+                        plugin.OnPropertyChanged(nameof(plugin.LatestPublishedAt));
+                    });
+                    return; // 成功したのでループ終了
+                }
+                catch (System.Text.Json.JsonException)
+                {
+                    // JSONパース失敗（HTMLエラーページ等）→ リトライしても無駄なので終了
+                    Dispatcher.Invoke(() => { plugin.ReleaseLoaded = true; });
+                    return;
+                }
+                catch (HttpRequestException) when (attempt < maxRetries - 1)
+                {
+                    // 接続エラー → 少し待ってリトライ
+                    await Task.Delay(3000 * (attempt + 1));
+                }
+                catch
+                {
+                    // その他のエラー → 取得失敗扱いで終了
+                    Dispatcher.Invoke(() => { plugin.ReleaseLoaded = true; });
+                    return;
+                }
+            }
+
+            // リトライ上限到達
+            Dispatcher.Invoke(() => { plugin.ReleaseLoaded = true; });
+        }
+        private async void IndividualDownload_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is Button btn && btn.DataContext is GitHubReleaseDetail release)
+            {
+                if (SelectedInstance == null)
+                {
+                    MessageBox.Show(Translate.SelectInstance);
                     return;
                 }
 
-                response.EnsureSuccessStatusCode();
-                var responseBody = await response.Content.ReadAsStringAsync();
-
-                using var doc = JsonDocument.Parse(responseBody);
-                var releaseList = new List<GitHubReleaseDetail>();
-                response.EnsureSuccessStatusCode();
-                foreach (var rel in doc.RootElement.EnumerateArray())
+                if (SelectedOnlinePlugin != null)
                 {
-                    var tagName = rel.GetProperty("tag_name").GetString() ?? "";
-                    var publishedAt = rel.GetProperty("published_at").GetDateTime();
-                    var isPrerelease = rel.GetProperty("prerelease").GetBoolean();
-                    var assets = rel.GetProperty("assets");
-                    if (assets.GetArrayLength() > 0)
-                    {
-                        var firstAsset = assets[0];
-                        releaseList.Add(new GitHubReleaseDetail
-                        {
-                            TagName = tagName,
-                            PublishedAt = publishedAt,
-                            Prerelease = isPrerelease,
-                            BrowserDownloadUrl = firstAsset.GetProperty("browser_download_url").GetString() ?? "",
-                            FileName = firstAsset.GetProperty("name").GetString() ?? ""
-                        });
-                    }
+                    SelectedOnlinePlugin.SelectedVersion = release;
+                    await ExecuteDownload(SelectedOnlinePlugin, SelectedInstance);
                 }
-                _releaseCache[cacheKey] = (DateTime.Now, releaseList);
-
-                plugin.Releases = new ObservableCollection<GitHubReleaseDetail>(releaseList);
-                if (plugin.Releases.Count > 0) plugin.SelectedVersion = plugin.Releases[0];
             }
-            catch { }
         }
-
         private List<PluginCatalogItem> ParseYmm4PluginsYaml(string yaml)
         {
             var plugins = new List<PluginCatalogItem>();
@@ -1013,6 +1367,400 @@ namespace YukkuriMovieMaker4Hub
             }
         }
 
+        private void SelectAllPlugins_Click(object sender, RoutedEventArgs e)
+        {
+            if (OnlinePlugins == null) return;
+            foreach (var p in OnlinePlugins) p.IsSelected = true;
+        }
+
+        private void UnselectAllPlugins_Click(object sender, RoutedEventArgs e)
+        {
+            if (OnlinePlugins == null) return;
+            foreach (var p in OnlinePlugins) p.IsSelected = false;
+        }
+        private async void VersionDownload_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is Button btn && btn.DataContext is GitHubReleaseDetail release)
+            {
+                if (SelectedInstance == null || SelectedOnlinePlugin == null) return;
+                SelectedOnlinePlugin.SelectedVersion = release;
+                await ExecuteDownload(SelectedOnlinePlugin, SelectedInstance);
+            }
+        }
+        private void ListView_PreviewMouseWheel(object sender, System.Windows.Input.MouseWheelEventArgs e)
+        {
+            if (System.Windows.Input.Keyboard.Modifiers == System.Windows.Input.ModifierKeys.Control)
+            {
+                if (e.Delta > 0)
+                    ItemSizeSlider.Value += ItemSizeSlider.TickFrequency * 2;
+                else
+                    ItemSizeSlider.Value -= ItemSizeSlider.TickFrequency * 2;
+
+                e.Handled = true;
+            }
+        }
+
+        private async void DirectDownload_Click(object sender, RoutedEventArgs e)
+        {
+            var plugin = (sender as Button)?.DataContext as PluginCatalogItem ?? SelectedOnlinePlugin;
+            if (plugin == null || SelectedInstance == null) return;
+
+            if (!plugin.IsEnabled || plugin.Releases == null || plugin.Releases.Count == 0)
+            {
+                MessageBox.Show(Translate.SkipNoRelease, Translate.SkipTitle, MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            await ExecuteDownload(plugin, SelectedInstance, null, false);
+
+            RefreshLocalPlugins();
+        }
+        private async void BulkDownload_Click(object sender, RoutedEventArgs e)
+        {
+            var targets = OnlinePlugins.Where(p => p.IsSelected).ToList();
+            if (targets.Count == 0) return;
+
+            var dialog = new BulkDownloadWindow(targets, _currentSettings.Instances);
+            dialog.Owner = this;
+
+            if (dialog.ShowDialog() == true)
+            {
+                var selectedPlugins = dialog.SelectedPlugins;
+                var selectedInstances = dialog.SelectedInstances;
+
+                if (selectedPlugins.Count == 0 || selectedInstances.Count == 0) return;
+
+                var progressWin = new DownloadProgressWindow();
+                progressWin.Owner = this;
+                progressWin.Show();
+
+                int totalTasks = selectedPlugins.Count * selectedInstances.Count;
+                int currentTask = 0;
+
+                foreach (var plugin in selectedPlugins)
+                {
+                    if (plugin.Releases == null || plugin.Releases.Count == 0)
+                    {
+                        await LoadReleaseDetails(plugin);
+                    }
+
+                    var release = SelectedOnlinePlugin?.SelectedVersion;
+                    if (release == null) return;
+
+                    foreach (var instance in selectedInstances)
+                    {
+                        currentTask++;
+                        string statusMsg = $"[{currentTask}/{totalTasks}] {plugin.Name}";
+                        progressWin.UpdateStatus(statusMsg, ((double)(currentTask - 1) / totalTasks) * 100, $"{currentTask} / {totalTasks}");
+
+                        try
+                        {
+                            await ExecuteDownload(plugin, instance, progressWin, true);
+                        }
+                        catch (Exception ex)
+                        {
+                            progressWin.AddReadme(plugin.Name, $"Error: {instance.Name}\n{ex.Message}");
+                        }
+
+                        progressWin.UpdateStatus(statusMsg, ((double)currentTask / totalTasks) * 100, $"{currentTask} / {totalTasks}");
+                    }
+                }
+
+                foreach (var p in OnlinePlugins) p.IsSelected = false;
+                RefreshLocalPlugins();
+                progressWin.ShowFinalClose();
+            }
+        }
+
+        private async Task ExecuteDownload(PluginCatalogItem plugin, InstanceInfo instance, DownloadProgressWindow? progressWin = null, bool isBulk = false)
+        {
+            var release = plugin.SelectedVersion;
+            if (release == null || instance == null)
+            {
+                if (progressWin != null && !isBulk)
+                {
+                    progressWin.UpdateStatus(Translate.ErrorNoDownloadVersion, 100, "");
+                    progressWin.ShowFinalClose();
+                }
+                return;
+            }
+
+            // ファイル拡張子チェック：.ymme, .zip, .dllのみダウンロード
+            string fileName = release.FileName.ToLower();
+            if (!fileName.EndsWith(".ymme") && !fileName.EndsWith(".zip") && !fileName.EndsWith(".dll"))
+            {
+                if (progressWin != null && !isBulk)
+                {
+                    progressWin.UpdateStatus(string.Format(Translate.SkipUnsupportedFormat, release.FileName), 100, "");
+                    progressWin.ShowFinalClose();
+                }
+                return;
+            }
+
+            if (progressWin == null)
+            {
+                progressWin = new DownloadProgressWindow();
+                progressWin.Owner = this;
+                progressWin.Show();
+            }
+
+            int maxRetries = 3;
+
+            for (int i = 0; i < maxRetries; i++)
+            {
+                try
+                {
+                    string uniqueId = Guid.NewGuid().ToString("N");
+                    string tempBase = Path.Combine(Path.GetTempPath(), "YMM4Hub_" + uniqueId);
+                    string downloadFile = Path.Combine(tempBase, release.FileName);
+                    string extractPath = Path.Combine(tempBase, "extract");
+
+                    Directory.CreateDirectory(tempBase);
+                    Directory.CreateDirectory(extractPath);
+
+                    using (var request = new HttpRequestMessage(HttpMethod.Get, release.BrowserDownloadUrl))
+                    {
+                        request.Headers.UserAgent.ParseAdd("YukkuriMovieMaker4Hub");
+                        using (var response = await _http.SendAsync(request, HttpCompletionOption.ResponseHeadersRead))
+                        {
+                            response.EnsureSuccessStatusCode();
+                            using (var fs = File.Create(downloadFile)) await response.Content.CopyToAsync(fs);
+                        }
+                    }
+
+                    string pluginBaseDir = Path.Combine(instance.RootDirectory, "user", "plugin");
+                    DateTime? releasePublishedAt = release.PublishedAt == default ? (DateTime?)null : release.PublishedAt;
+
+                    await Task.Run(async () =>
+                    {
+                        if (!Directory.Exists(pluginBaseDir)) Directory.CreateDirectory(pluginBaseDir);
+
+                        // .dllファイル → プラグイン名のフォルダを作成してその中に配置
+                        if (release.FileName.ToLower().EndsWith(".dll"))
+                        {
+                            string pluginDirName = Path.GetFileNameWithoutExtension(release.FileName);
+                            // portal名があればそちらをフォルダ名に使う
+                            if (!string.IsNullOrEmpty(plugin.Name))
+                                pluginDirName = plugin.Name;
+
+                            string targetDir = Path.Combine(pluginBaseDir, pluginDirName);
+                            if (!Directory.Exists(targetDir)) Directory.CreateDirectory(targetDir);
+
+                            string targetPath = Path.Combine(targetDir, release.FileName);
+                            File.Copy(downloadFile, targetPath, true);
+
+                            UpdateCentralPluginsInfo(pluginBaseDir, pluginDirName, plugin, release.TagName, releasePublishedAt);
+                            Dispatcher.Invoke(() => progressWin.AddReadme(plugin.Name, $"【{instance.Name}】\n\n{string.Format(Translate.DllInstalledMsg, pluginDirName)}"));
+                            return;
+                        }
+
+                        // .zip / .ymme → 解凍してプラグインフォルダに配置
+                        ZipFile.ExtractToDirectory(downloadFile, extractPath);
+
+                        var dllFile = Directory.GetFiles(extractPath, "*.dll", SearchOption.AllDirectories).FirstOrDefault();
+
+                        if (dllFile != null)
+                        {
+                            string pluginSourceDir = Path.GetDirectoryName(dllFile)!;
+                            string pluginDirName = Path.GetFileName(pluginSourceDir);
+
+                            if (string.Equals(pluginDirName, "extract", StringComparison.OrdinalIgnoreCase))
+                            {
+                                pluginDirName = Path.GetFileNameWithoutExtension(release.FileName).Replace(".ymme", "");
+                            }
+
+                            string targetDir = Path.Combine(pluginBaseDir, pluginDirName);
+
+                            if (Directory.Exists(targetDir))
+                            {
+                                for (int d = 0; d < 5; d++)
+                                {
+                                    try { Directory.Delete(targetDir, true); break; }
+                                    catch { await Task.Delay(500); }
+                                }
+                            }
+
+                            Directory.CreateDirectory(targetDir);
+
+                            foreach (var dirPath in Directory.GetDirectories(pluginSourceDir, "*", SearchOption.AllDirectories))
+                                Directory.CreateDirectory(dirPath.Replace(pluginSourceDir, targetDir));
+                            foreach (var filePath in Directory.GetFiles(pluginSourceDir, "*", SearchOption.AllDirectories))
+                                File.Copy(filePath, filePath.Replace(pluginSourceDir, targetDir), true);
+
+                            UpdateCentralPluginsInfo(pluginBaseDir, pluginDirName, plugin, release.TagName, releasePublishedAt);
+
+                            var readmeFile = Directory.GetFiles(targetDir, "*", SearchOption.AllDirectories)
+                                .FirstOrDefault(f => {
+                                    string n = Path.GetFileNameWithoutExtension(f).ToLower();
+                                    return n.Contains("readme") || n.Contains("説明書") || n.Contains("はじめに");
+                                });
+                            string readmeContent = readmeFile != null ? File.ReadAllText(readmeFile) : Translate.NoReadme;
+                            Dispatcher.Invoke(() => progressWin.AddReadme(plugin.Name, $"【{instance.Name}】\n\n{readmeContent}"));
+                        }
+                        else
+                        {
+                            throw new Exception(Translate.NoDllFound);
+                        }
+                    });
+
+                    if (Directory.Exists(tempBase)) Directory.Delete(tempBase, true);
+                    break;
+                }
+                catch (Exception)
+                {
+                    if (i == maxRetries - 1) throw;
+                    await Task.Delay(1000 * (i + 1));
+                }
+            }
+
+            if (!isBulk)
+            {
+                RefreshLocalPlugins();
+                progressWin.ShowFinalClose();
+            }
+        }
+        private void SelectAll_Click(object sender, RoutedEventArgs e)
+        {
+            foreach (var plugin in OnlinePlugins)
+            {
+                plugin.IsSelected = false;
+            }
+        }
+
+        private void PluginListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            // ハイライト選択の変化は何もしない
+            // IsSelected（予約チェック）は「予約に追加」ボタン押下時のみ更新する
+        }
+
+        // リストの複数選択（ハイライト）されているものを一括で予約(チェック)に入れる
+        private void BulkAddReservation_Click(object sender, RoutedEventArgs e)
+        {
+            if (PluginListView == null) return;
+            var selectedItems = PluginListView.SelectedItems.Cast<PluginCatalogItem>().ToList();
+            foreach (var plugin in selectedItems)
+            {
+                plugin.IsSelected = true;
+            }
+        }
+
+        private void SyncPortalStatus()
+        {
+            if (_allOnlinePlugins == null || _allLocalPlugins == null) return;
+
+            // フィルター済みの OnlinePlugins ではなく _allOnlinePlugins 全体を走査する。
+            // こうすることで「フィルターで隠れているプラグイン」の LocalStatus も正しく更新され、
+            // インスタンス変更後に ApplyOnlinePluginFilter が呼ばれても正確なフィルター結果になる。
+            foreach (var online in _allOnlinePlugins)
+            {
+                online.IsUnlinked = false;
+
+                var local = _allLocalPlugins.FirstOrDefault(l =>
+                    (!string.IsNullOrEmpty(l.Owner) && !string.IsNullOrEmpty(online.Owner) &&
+                     string.Equals(l.Owner, online.Owner, StringComparison.OrdinalIgnoreCase) &&
+                     string.Equals(l.Repo, online.Repo, StringComparison.OrdinalIgnoreCase)) ||
+                    string.Equals(l.DisplayName, online.Name, StringComparison.OrdinalIgnoreCase));
+
+                if (local != null)
+                {
+                    online.IsNew = false;
+                    online.LocalVersion = local.Version ?? "-";
+                    online.IsLocalEnabled = local.IsEnabled;
+
+                    if (!string.IsNullOrEmpty(local.Version) && local.Version != "-" && online.Releases != null && online.Releases.Count > 0)
+                    {
+                        var latest = online.Releases[0].TagName.TrimStart('v');
+                        var current = local.Version.TrimStart('v');
+
+                        if (latest != current)
+                        {
+                            online.HasUpdate = true;
+                            online.LocalStatus = PluginLocalStatus.HasUpdate;
+                        }
+                        else
+                        {
+                            online.HasUpdate = false;
+                            online.LocalStatus = PluginLocalStatus.UpToDate;
+                        }
+                    }
+                    else
+                    {
+                        online.HasUpdate = false;
+                        online.LocalStatus = PluginLocalStatus.UpToDate;
+                    }
+                }
+                else
+                {
+                    online.IsNew = true;
+                    online.HasUpdate = false;
+                    online.LocalVersion = "";
+                    online.LocalStatus = PluginLocalStatus.NotInstalled;
+                    online.IsLocalEnabled = true;
+                }
+            }
+
+            HasAnyUpdate = _allOnlinePlugins.Any(p => p.HasUpdate);
+            HasAnyNew = _allOnlinePlugins.Any(p => p.IsNew);
+            // 全プラグインの LocalStatus 更新後にフィルターを再適用
+            ApplyOnlinePluginFilter();
+        }
+
+        private async void UpdatePlugin_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is Button btn && btn.DataContext is PluginCatalogItem onlinePlugin)
+            {
+                // バージョン情報がなければ取得
+                if (onlinePlugin.Releases.Count == 0) await LoadReleaseDetails(onlinePlugin);
+
+                // 最新版をセットして実行
+                onlinePlugin.SelectedVersion = onlinePlugin.Releases.FirstOrDefault();
+                if (onlinePlugin.SelectedVersion != null && SelectedInstance != null)
+                {
+                    await ExecuteDownload(onlinePlugin, SelectedInstance);
+                }
+            }
+        }
+
+        private async void UpdateLocalPlugin_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is Button btn && btn.DataContext is LocalPluginInfo localPlugin)
+            {
+                // オンラインプラグインを探す
+                var onlinePlugin = OnlinePlugins.FirstOrDefault(o =>
+                    (!string.IsNullOrEmpty(localPlugin.Owner) && !string.IsNullOrEmpty(o.Owner) &&
+                     string.Equals(localPlugin.Owner, o.Owner, StringComparison.OrdinalIgnoreCase) &&
+                     string.Equals(localPlugin.Repo, o.Repo, StringComparison.OrdinalIgnoreCase)) ||
+                    string.Equals(localPlugin.DisplayName, o.Name, StringComparison.OrdinalIgnoreCase));
+
+                if (onlinePlugin != null && onlinePlugin.HasUpdate)
+                {
+                    // バージョン情報がなければ取得
+                    if (onlinePlugin.Releases.Count == 0) await LoadReleaseDetails(onlinePlugin);
+
+                    // 最新版をセットして実行
+                    onlinePlugin.SelectedVersion = onlinePlugin.Releases.FirstOrDefault();
+                    if (onlinePlugin.SelectedVersion != null && SelectedInstance != null)
+                    {
+                        await ExecuteDownload(onlinePlugin, SelectedInstance);
+                    }
+                }
+            }
+        }
+
+
+        private void BulkToggleFromPortal_Click(object sender, RoutedEventArgs e)
+        {
+            var selectedOnline = OnlinePlugins.Where(p => p.IsSelected).ToList();
+            if (selectedOnline.Count == 0 || !EnsureYmmClosed()) return;
+
+            foreach (var online in selectedOnline)
+            {
+                var local = _allLocalPlugins.FirstOrDefault(l => l.Owner == online.Owner && l.Repo == online.Repo);
+                if (local != null) ToggleOne(local);
+            }
+        }
+
+
         private static string? FindGitHubRepositoryUrl(PluginCatalogItem? plugin)
         {
             if (plugin == null) return null;
@@ -1031,32 +1779,238 @@ namespace YukkuriMovieMaker4Hub
 
         private void RefreshLocalPlugins()
         {
-            if (SelectedInstance == _dummyInstance || string.IsNullOrEmpty(SelectedInstance.ExePath) || !Directory.Exists(SelectedInstance.PluginDirectory))
+            // pluginフォルダが未作成・存在しない場合はエラーなしで0件扱い
+            if (SelectedInstance == null
+                || string.IsNullOrEmpty(SelectedInstance.PluginDirectory)
+                || !Directory.Exists(SelectedInstance.PluginDirectory))
             {
-                var dummyList = new List<LocalPluginInfo> { new LocalPluginInfo { FullPath = "DUMMY_NONE_SELECTED" } };
-                _allLocalPlugins = dummyList;
-                LocalPlugins.Clear();
-                foreach (var item in dummyList) LocalPlugins.Add(item);
+                _allLocalPlugins = new List<LocalPluginInfo>();
                 ApplyLocalPluginFilter();
+                SyncPortalStatus();
                 return;
             }
 
-            var items = new List<LocalPluginInfo>();
+            var newLocalPlugins = new List<LocalPluginInfo>();
 
-            foreach (var dir in Directory.GetDirectories(SelectedInstance.PluginDirectory))
+            try
             {
-                var info = new LocalPluginInfo { FullPath = dir, IsDirectory = true };
-                info.DisplayName = GetPluginNameFromYml(dir);
-                items.Add(info);
+                // 統合info.jsonのパス
+                string centralInfoPath = Path.Combine(SelectedInstance.PluginDirectory, "info.json");
+
+                // 既存の統合info.jsonを読み込む（存在する場合）
+                PluginsInfo? pluginsInfo = null;
+                if (File.Exists(centralInfoPath))
+                {
+                    try
+                    {
+                        var json = File.ReadAllText(centralInfoPath);
+                        pluginsInfo = JsonSerializer.Deserialize<PluginsInfo>(json, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+                    }
+                    catch { }
+                }
+
+                if (pluginsInfo == null)
+                {
+                    pluginsInfo = new PluginsInfo();
+                }
+
+                var dirs = Directory.GetDirectories(SelectedInstance.PluginDirectory);
+                var files = Directory.GetFiles(SelectedInstance.PluginDirectory, "*.dll");
+                bool infoUpdated = false;
+
+                foreach (var path in dirs.Concat(files))
+                {
+                    var info = new LocalPluginInfo();
+                    info.FullPath = path;
+                    info.IsDirectory = Directory.Exists(path);
+
+                    // プラグイン名を取得（ディレクトリ/ファイル名から）
+                    string pluginFileName = Path.GetFileName(path);
+                    string pluginName = Path.GetFileNameWithoutExtension(path);
+
+                    // _プレフィックスや.disabled拡張子を除去して本来の名前を取得
+                    string actualName = pluginFileName;
+                    if (info.IsDirectory && pluginFileName.StartsWith("_"))
+                    {
+                        actualName = pluginFileName.Substring(1);
+                    }
+                    else if (!info.IsDirectory && pluginFileName.EndsWith(".disabled"))
+                    {
+                        actualName = pluginFileName.Substring(0, pluginFileName.Length - 9);
+                        pluginName = Path.GetFileNameWithoutExtension(actualName);
+                    }
+
+                    info.DisplayName = pluginName;
+
+                    // 個別のinfo.jsonとhub_info.jsonから情報を読み取る（削除はしない）
+                    string oldInfoPath = string.Empty;
+                    string oldHubInfoPath = string.Empty;
+
+                    if (info.IsDirectory)
+                    {
+                        oldInfoPath = Path.Combine(path, "info.json");
+                        oldHubInfoPath = Path.Combine(path, "hub_info.json");
+                    }
+                    else
+                    {
+                        var dirName = Path.GetDirectoryName(path);
+                        if (dirName != null)
+                        {
+                            string baseName = Path.GetFileNameWithoutExtension(path);
+                            oldInfoPath = Path.Combine(dirName, baseName + ".info.json");
+                            oldHubInfoPath = Path.Combine(dirName, baseName + ".hub_info.json");
+                        }
+                    }
+
+                    // 個別のinfo.jsonから情報を読み取る（削除しない）
+                    HubInfo? oldHubInfo = null;
+                    if (File.Exists(oldInfoPath))
+                    {
+                        try
+                        {
+                            var json = File.ReadAllText(oldInfoPath);
+                            oldHubInfo = JsonSerializer.Deserialize<HubInfo>(json, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+                        }
+                        catch { }
+                    }
+
+                    // hub_info.jsonからも読み取る（削除しない）
+                    if (oldHubInfo == null && File.Exists(oldHubInfoPath))
+                    {
+                        try
+                        {
+                            var json = File.ReadAllText(oldHubInfoPath);
+                            oldHubInfo = JsonSerializer.Deserialize<HubInfo>(json, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+                        }
+                        catch { }
+                    }
+
+                    // 統合info.jsonから情報を取得（優先）
+                    var metadata = pluginsInfo.Plugins.FirstOrDefault(p => p.Name == actualName);
+                    if (metadata != null)
+                    {
+                        info.Owner = metadata.Owner;
+                        info.Repo = metadata.Repo;
+                        info.Version = metadata.Version;
+                        info.Author = metadata.Author;
+                        info.Type = metadata.Type;
+                        info.PublishedAt = metadata.PublishedAt;
+                        info.DownloadedAt = metadata.DownloadedAt;
+                        if (!string.IsNullOrEmpty(metadata.PortalName))
+                        {
+                            info.DisplayName = metadata.PortalName;
+                        }
+                    }
+                    else if (oldHubInfo != null)
+                    {
+                        // 統合info.jsonになければ個別JSONから取得
+                        info.Owner = oldHubInfo.Owner;
+                        info.Repo = oldHubInfo.Repo;
+                        info.Version = oldHubInfo.Version;
+                        info.Author = oldHubInfo.Author;
+                        if (!string.IsNullOrEmpty(oldHubInfo.PortalName))
+                        {
+                            info.DisplayName = oldHubInfo.PortalName;
+                        }
+                    }
+
+                    newLocalPlugins.Add(info);
+                }
+
+                // 統合info.jsonを保存（更新があった場合）
+                if (infoUpdated)
+                {
+                    SaveCentralPluginsInfo(SelectedInstance.PluginDirectory, pluginsInfo);
+                }
             }
-            foreach (var file in Directory.GetFiles(SelectedInstance.PluginDirectory, "*.dll*"))
+            catch (Exception ex)
             {
-                items.Add(new LocalPluginInfo { FullPath = file, IsDirectory = false });
+                MessageBox.Show(Translate.LoadError + ex.Message);
             }
 
-            _allLocalPlugins = items;
-            ApplyLocalPluginFilter();
-            ApplyCurrentSort();
+            _allLocalPlugins = newLocalPlugins;
+            ApplyLocalPluginFilter(); // LocalPluginsを更新
+            SyncPortalStatus();
+        }
+
+        // 統合info.jsonを更新・保存するヘルパーメソッド
+        private void UpdateCentralPluginsInfo(string pluginDirectory, string pluginName, PluginCatalogItem plugin, string version, DateTime? publishedAt = null)
+        {
+            if (string.IsNullOrEmpty(pluginDirectory) || !Directory.Exists(pluginDirectory)) return;
+
+            try
+            {
+                string centralInfoPath = Path.Combine(pluginDirectory, "info.json");
+                PluginsInfo pluginsInfo;
+
+                // 既存のinfo.jsonを読み込む
+                if (File.Exists(centralInfoPath))
+                {
+                    var json = File.ReadAllText(centralInfoPath);
+                    pluginsInfo = JsonSerializer.Deserialize<PluginsInfo>(json, new JsonSerializerOptions { PropertyNameCaseInsensitive = true }) ?? new PluginsInfo();
+                }
+                else
+                {
+                    pluginsInfo = new PluginsInfo();
+                }
+
+                var now = DateTime.Now;
+
+                // 既存のエントリを探す
+                var existingMeta = pluginsInfo.Plugins.FirstOrDefault(p => p.Name == pluginName);
+                if (existingMeta != null)
+                {
+                    existingMeta.PortalName = plugin.Name;
+                    existingMeta.Author = plugin.Author;
+                    existingMeta.Version = version;
+                    existingMeta.Owner = plugin.Owner;
+                    existingMeta.Repo = plugin.Repo;
+                    existingMeta.Type = plugin.Type;
+                    existingMeta.DownloadedAt = now;
+                    if (publishedAt.HasValue) existingMeta.PublishedAt = publishedAt;
+                }
+                else
+                {
+                    pluginsInfo.Plugins.Add(new PluginMetadata
+                    {
+                        Name = pluginName,
+                        PortalName = plugin.Name,
+                        Author = plugin.Author,
+                        Version = version,
+                        Owner = plugin.Owner,
+                        Repo = plugin.Repo,
+                        Type = plugin.Type,
+                        PublishedAt = publishedAt,
+                        DownloadedAt = now
+                    });
+                }
+
+                SaveCentralPluginsInfo(pluginDirectory, pluginsInfo);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(string.Format(Translate.CentralInfoUpdateFailed, ex.Message));
+            }
+        }
+
+        // 統合info.jsonを保存する共通メソッド
+        private void SaveCentralPluginsInfo(string pluginDirectory, PluginsInfo pluginsInfo)
+        {
+            try
+            {
+                string centralInfoPath = Path.Combine(pluginDirectory, "info.json");
+                var options = new JsonSerializerOptions
+                {
+                    WriteIndented = true,
+                    Encoder = System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping
+                };
+                var jsonString = JsonSerializer.Serialize(pluginsInfo, options);
+                File.WriteAllText(centralInfoPath, jsonString);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(string.Format(Translate.CentralInfoSaveFailed, ex.Message));
+            }
         }
 
         private void RefreshRecentProjects()
@@ -1076,6 +2030,31 @@ namespace YukkuriMovieMaker4Hub
                 }
                 catch { }
             }
+
+            // バックアップフォルダ（各インスタンスの user/backup）
+            if (_showBackup)
+            {
+                foreach (var instance in Instances)
+                {
+                    if (string.IsNullOrEmpty(instance.ExePath)) continue;
+                    var backupDir = Path.Combine(instance.RootDirectory, "user", "backup");
+                    if (!Directory.Exists(backupDir)) continue;
+                    try
+                    {
+                        var files = Directory.EnumerateFiles(backupDir, "*", SearchOption.AllDirectories)
+                            .Where(s => s.EndsWith(".ymmp") || s.EndsWith(".ymmpx") || s.EndsWith(".ymmx"));
+                        foreach (var f in files)
+                        {
+                            var info = new FileInfo(f);
+                            // 重複チェック
+                            if (!_allProjects.Any(p => p.FullPath == info.FullName))
+                                _allProjects.Add(new ProjectFileItem { Name = info.Name, FullPath = info.FullName, LastWriteTime = info.LastWriteTime, FileSize = info.Length, Extension = info.Extension.ToLower() });
+                        }
+                    }
+                    catch { }
+                }
+            }
+
             ApplyProjectFilter();
         }
 
@@ -1084,31 +2063,11 @@ namespace YukkuriMovieMaker4Hub
             var filtered = _allProjects.AsEnumerable();
             if (!string.IsNullOrWhiteSpace(ProjectSearchText)) filtered = filtered.Where(p => p.Name.IndexOf(ProjectSearchText, StringComparison.OrdinalIgnoreCase) >= 0);
             if (!ShowYmmp) filtered = filtered.Where(p => p.Extension != ".ymmp");
-            if (!ShowYmmpx)filtered = filtered.Where(p => p.Extension != ".ymmpx");
+            if (!ShowYmmpx) filtered = filtered.Where(p => p.Extension != ".ymmpx");
             if (!ShowYmmx) filtered = filtered.Where(p => p.Extension != ".ymmx");
             FilteredProjects.Clear();
             foreach (var p in filtered.OrderByDescending(x => x.LastWriteTime)) FilteredProjects.Add(p);
         }
-
-        private string GetPluginNameFromYml(string dirPath)
-        {
-            try
-            {
-                var ymlFiles = Directory.GetFiles(dirPath, "*.yml", SearchOption.TopDirectoryOnly);
-                foreach (var yml in ymlFiles)
-                {
-                    var lines = File.ReadAllLines(yml, Encoding.UTF8);
-                    foreach (var line in lines)
-                    {
-                        var trimmed = line.Trim();
-                        if (trimmed.StartsWith("name:")) return trimmed.Substring(5).Trim().Trim('\'', '\"');
-                    }
-                }
-            }
-            catch { }
-            return Path.GetFileName(dirPath);
-        }
-
         private bool EnsureYmmClosed()
         {
             var processes = Process.GetProcessesByName("YukkuriMovieMaker");
@@ -1120,39 +2079,482 @@ namespace YukkuriMovieMaker4Hub
             }
             return false;
         }
-
-        private void TogglePlugin_Click(object sender, RoutedEventArgs e)
+        private void TogglePluginFromPortal_Click(object sender, RoutedEventArgs e)
         {
-            if (!(sender is Button btn && btn.DataContext is LocalPluginInfo plugin)) return;
-            ToggleOne(plugin);
+            if (sender is Button btn && btn.DataContext is PluginCatalogItem onlinePlugin)
+            {
+                var local = FindLocalPlugin(onlinePlugin);
+                if (local != null) ToggleOne(local);
+            }
+        }
+
+        private void DeletePluginFromPortal_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is Button btn && btn.DataContext is PluginCatalogItem onlinePlugin)
+            {
+                var local = FindLocalPlugin(onlinePlugin);
+                if (local != null) DeleteOne(local);
+            }
         }
 
         private void ToggleOne(LocalPluginInfo plugin)
         {
+            if (SelectedInstance == null) return;
             if (!EnsureYmmClosed()) return;
-            string? parent = Path.GetDirectoryName(plugin.FullPath);
-            if (parent == null) return;
-            string oldName = Path.GetFileName(plugin.FullPath);
-            string newName = plugin.IsDirectory ? (plugin.IsEnabled ? "_" + oldName : oldName.TrimStart('_')) : (plugin.IsEnabled ? oldName + ".disabled" : oldName.Replace(".disabled", ""));
+
+            string currentPath = plugin.FullPath;
+
+            // ディレクトリまたはファイルが存在するか確認
+            bool isDirectory = Directory.Exists(currentPath);
+            bool isFile = File.Exists(currentPath);
+
+            if (!isDirectory && !isFile)
+            {
+                MessageBox.Show($"{Translate.TargetNotFound}\n{currentPath}");
+                return;
+            }
+
             try
             {
-                string newPath = Path.Combine(parent, newName);
-                if (plugin.IsDirectory) Directory.Move(plugin.FullPath, newPath); else File.Move(plugin.FullPath, newPath);
+                if (isDirectory)
+                {
+                    // ディレクトリの場合：中の全DLLファイルに.disabledを付け外し
+                    var dllFiles = Directory.GetFiles(currentPath, "*.dll", SearchOption.AllDirectories);
+
+                    if (plugin.IsEnabled)
+                    {
+                        // 有効 -> 無効：全DLLに.disabledを追加
+                        foreach (var dllPath in dllFiles)
+                        {
+                            if (!dllPath.EndsWith(".disabled"))
+                            {
+                                File.Move(dllPath, dllPath + ".disabled");
+                            }
+                        }
+                    }
+                    else
+                    {
+                        // 無効 -> 有効：全.dll.disabledから.disabledを削除
+                        var disabledFiles = Directory.GetFiles(currentPath, "*.dll.disabled", SearchOption.AllDirectories);
+                        foreach (var disabledPath in disabledFiles)
+                        {
+                            if (disabledPath.EndsWith(".dll.disabled"))
+                            {
+                                string newPath = disabledPath.Substring(0, disabledPath.Length - 9); // ".disabled"を削除
+                                File.Move(disabledPath, newPath);
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    // ファイルの場合：DLLファイルに.disabledを付け外し
+                    if (plugin.IsEnabled)
+                    {
+                        // 有効 -> 無効
+                        if (!currentPath.EndsWith(".disabled"))
+                        {
+                            File.Move(currentPath, currentPath + ".disabled");
+                        }
+                    }
+                    else
+                    {
+                        // 無効 -> 有効
+                        if (currentPath.EndsWith(".disabled"))
+                        {
+                            string newPath = currentPath.Substring(0, currentPath.Length - 9);
+                            File.Move(currentPath, newPath);
+                        }
+                    }
+                }
+
+                RefreshLocalPlugins();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"{Translate.RenameError}\n{ex.Message}");
+            }
+        }
+
+        private void DeleteOne(LocalPluginInfo plugin)
+        {
+            if (!EnsureYmmClosed()) return;
+            var result = MessageBox.Show($"{Translate.ConfirmDeletePlugin}\n{plugin.DisplayName}", Translate.Confirm, MessageBoxButton.YesNo, MessageBoxImage.Warning);
+            if (result != MessageBoxResult.Yes) return;
+
+            try
+            {
+                // プラグイン名を取得（_プレフィックスや.disabled拡張子を除去）
+                string pluginFileName = Path.GetFileName(plugin.FullPath);
+                string actualName = pluginFileName;
+                if (plugin.IsDirectory && pluginFileName.StartsWith("_"))
+                {
+                    actualName = pluginFileName.Substring(1);
+                }
+                else if (!plugin.IsDirectory && pluginFileName.EndsWith(".disabled"))
+                {
+                    actualName = pluginFileName.Substring(0, pluginFileName.Length - 9);
+                }
+
+                // プラグインの削除
+                if (Directory.Exists(plugin.FullPath)) Directory.Delete(plugin.FullPath, true);
+                else if (File.Exists(plugin.FullPath)) File.Delete(plugin.FullPath);
+
+                // 統合info.jsonからエントリを削除
+                if (SelectedInstance != null && !string.IsNullOrEmpty(SelectedInstance.PluginDirectory))
+                {
+                    RemoveFromCentralPluginsInfo(SelectedInstance.PluginDirectory, actualName);
+                }
+
                 RefreshLocalPlugins();
             }
             catch (Exception ex) { MessageBox.Show(ex.Message); }
         }
 
+        // 統合info.jsonからプラグインエントリを削除するヘルパーメソッド
+        private void RemoveFromCentralPluginsInfo(string pluginDirectory, string pluginName)
+        {
+            try
+            {
+                string centralInfoPath = Path.Combine(pluginDirectory, "info.json");
+                if (!File.Exists(centralInfoPath)) return;
+
+                var json = File.ReadAllText(centralInfoPath);
+                var pluginsInfo = JsonSerializer.Deserialize<PluginsInfo>(json, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+
+                if (pluginsInfo != null)
+                {
+                    pluginsInfo.Plugins.RemoveAll(p => p.Name == pluginName);
+                    SaveCentralPluginsInfo(pluginDirectory, pluginsInfo);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(string.Format(Translate.CentralInfoDeleteFailed, ex.Message));
+            }
+        }
+
         private void BulkToggle_Click(object sender, RoutedEventArgs e)
         {
-            var selected = LocalPluginList.SelectedItems.Cast<LocalPluginInfo>().ToList();
+            var selected = LocalPlugins.Where(p => p.IsSelectionValid).ToList();
             if (selected.Count == 0 || !EnsureYmmClosed()) return;
             foreach (var p in selected) ToggleOne(p);
         }
 
+        private void TogglePlugin_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is Button btn && btn.DataContext is LocalPluginInfo plugin)
+            {
+                if (!EnsureYmmClosed()) return;
+                ToggleOne(plugin);
+            }
+        }
+
+        private void DeletePlugin_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is Button btn && btn.DataContext is LocalPluginInfo plugin)
+            {
+                if (MessageBox.Show($"{plugin.DisplayName}{Translate.DeletePermanently}\n{Translate.CannotBeUndone}", Translate.ConfirmDeletion, MessageBoxButton.YesNo, MessageBoxImage.Warning) != MessageBoxResult.Yes) return;
+                if (!EnsureYmmClosed()) return;
+                DeleteOne(plugin);
+                RefreshLocalPlugins();
+            }
+        }
+
+        private void EnablePlugin_Click(object sender, RoutedEventArgs e)
+        {
+            if (!EnsureYmmClosed()) return;
+
+            // 複数選択されている場合はすべて処理
+            if (PluginListView != null && PluginListView.SelectedItems.Count > 1)
+            {
+                var selectedPlugins = PluginListView.SelectedItems.Cast<PluginCatalogItem>().ToList();
+                foreach (var plugin in selectedPlugins)
+                {
+                    var local = FindLocalPlugin(plugin);
+                    if (local != null && !local.IsEnabled) ToggleOne(local);
+                }
+            }
+            else if (SelectedOnlinePlugin != null)
+            {
+                var local = FindLocalPlugin(SelectedOnlinePlugin);
+                if (local != null && !local.IsEnabled) ToggleOne(local);
+            }
+        }
+
+        private void DisablePlugin_Click(object sender, RoutedEventArgs e)
+        {
+            if (!EnsureYmmClosed()) return;
+
+            // 複数選択されている場合はすべて処理
+            if (PluginListView != null && PluginListView.SelectedItems.Count > 1)
+            {
+                var selectedPlugins = PluginListView.SelectedItems.Cast<PluginCatalogItem>().ToList();
+                foreach (var plugin in selectedPlugins)
+                {
+                    var local = FindLocalPlugin(plugin);
+                    if (local != null && local.IsEnabled) ToggleOne(local);
+                }
+            }
+            else if (SelectedOnlinePlugin != null)
+            {
+                var local = FindLocalPlugin(SelectedOnlinePlugin);
+                if (local != null && local.IsEnabled) ToggleOne(local);
+            }
+        }
+
+        private void TogglePluginEnabled_Click(object sender, RoutedEventArgs e)
+        {
+            if (SelectedOnlinePlugin == null) return;
+            var local = FindLocalPlugin(SelectedOnlinePlugin);
+            if (local != null) ToggleOne(local);
+        }
+
+        private void UninstallPlugin_Click(object sender, RoutedEventArgs e)
+        {
+            if (!EnsureYmmClosed()) return;
+
+            // 複数選択されている場合はすべて処理
+            if (PluginListView != null && PluginListView.SelectedItems.Count > 1)
+            {
+                var selectedPlugins = PluginListView.SelectedItems.Cast<PluginCatalogItem>().ToList();
+                var result = MessageBox.Show(
+                    string.Format(Translate.UninstallMultipleConfirm, selectedPlugins.Count),
+                    Translate.Confirm,
+                    MessageBoxButton.YesNo,
+                    MessageBoxImage.Warning);
+
+                if (result == MessageBoxResult.Yes)
+                {
+                    foreach (var plugin in selectedPlugins)
+                    {
+                        var local = FindLocalPlugin(plugin);
+                        if (local != null) DeleteOne(local);
+                    }
+                }
+            }
+            else if (SelectedOnlinePlugin != null)
+            {
+                var local = FindLocalPlugin(SelectedOnlinePlugin);
+                if (local != null) DeleteOne(local);
+            }
+        }
+
+        private void RegenerateInfoJson_Click(object sender, RoutedEventArgs e)
+        {
+            if (SelectedInstance == null || string.IsNullOrEmpty(SelectedInstance.PluginDirectory))
+            {
+                MessageBox.Show(Translate.InstanceNotSelected);
+                return;
+            }
+
+            var result = MessageBox.Show(
+                Translate.RegenerateConfirm,
+                Translate.Confirm,
+                MessageBoxButton.YesNo,
+                MessageBoxImage.Question);
+
+            if (result != MessageBoxResult.Yes) return;
+
+            try
+            {
+                var pluginsInfo = new PluginsInfo();
+
+                // 個別のinfo.json/hub_info.jsonから情報を収集
+                var dirs = Directory.GetDirectories(SelectedInstance.PluginDirectory);
+                var files = Directory.GetFiles(SelectedInstance.PluginDirectory, "*.dll");
+
+                foreach (var path in dirs.Concat(files))
+                {
+                    string pluginFileName = Path.GetFileName(path);
+                    string actualName = pluginFileName;
+
+                    // .disabledを除去
+                    if (!Directory.Exists(path) && pluginFileName.EndsWith(".disabled"))
+                    {
+                        actualName = pluginFileName.Substring(0, pluginFileName.Length - 9);
+                    }
+
+                    // info.jsonまたはhub_info.jsonを探す
+                    string oldInfoPath = string.Empty;
+                    string oldHubInfoPath = string.Empty;
+
+                    if (Directory.Exists(path))
+                    {
+                        oldInfoPath = Path.Combine(path, "info.json");
+                        oldHubInfoPath = Path.Combine(path, "hub_info.json");
+                    }
+                    else
+                    {
+                        var dirName = Path.GetDirectoryName(path);
+                        if (dirName != null)
+                        {
+                            string baseName = Path.GetFileNameWithoutExtension(path);
+                            oldInfoPath = Path.Combine(dirName, baseName + ".info.json");
+                            oldHubInfoPath = Path.Combine(dirName, baseName + ".hub_info.json");
+                        }
+                    }
+
+                    HubInfo? hubInfo = null;
+                    if (File.Exists(oldInfoPath))
+                    {
+                        try
+                        {
+                            var json = File.ReadAllText(oldInfoPath);
+                            hubInfo = JsonSerializer.Deserialize<HubInfo>(json, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+                        }
+                        catch { }
+                    }
+
+                    if (hubInfo == null && File.Exists(oldHubInfoPath))
+                    {
+                        try
+                        {
+                            var json = File.ReadAllText(oldHubInfoPath);
+                            hubInfo = JsonSerializer.Deserialize<HubInfo>(json, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+                        }
+                        catch { }
+                    }
+
+                    if (hubInfo != null)
+                    {
+                        pluginsInfo.Plugins.Add(new PluginMetadata
+                        {
+                            Name = actualName,
+                            PortalName = hubInfo.PortalName,
+                            Author = hubInfo.Author,
+                            Version = hubInfo.Version,
+                            Owner = hubInfo.Owner,
+                            Repo = hubInfo.Repo
+                        });
+                    }
+                }
+
+                // 統合info.jsonを保存
+                SaveCentralPluginsInfo(SelectedInstance.PluginDirectory, pluginsInfo);
+
+                MessageBox.Show(string.Format(Translate.RegenerateSuccess, pluginsInfo.Plugins.Count));
+
+                RefreshLocalPlugins();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(string.Format(Translate.RegenerateFailed, ex.Message));
+            }
+        }
+
+        private async void ReloadPluginPortal_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                // プラグインポータルを再読み込み
+                await LoadOnlinePlugins();
+                RefreshLocalPlugins();
+                MessageBox.Show(Translate.ReloadPortalSuccess);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(string.Format(Translate.ReloadPortalFailed, ex.Message));
+            }
+        }
+
+        private void OpenPluginDirectoryRoot_Click(object sender, RoutedEventArgs e)
+        {
+            if (SelectedInstance == null || string.IsNullOrEmpty(SelectedInstance.PluginDirectory)) return;
+
+            try
+            {
+                if (Directory.Exists(SelectedInstance.PluginDirectory))
+                {
+                    System.Diagnostics.Process.Start("explorer.exe", SelectedInstance.PluginDirectory);
+                }
+                else
+                {
+                    MessageBox.Show(Translate.PluginFolderNotFound);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(string.Format(Translate.FolderOpenError, ex.Message));
+            }
+        }
+
+        private void OpenPluginFolder_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is Button btn && btn.DataContext is PluginCatalogItem plugin)
+            {
+                var local = FindLocalPlugin(plugin);
+                if (local != null && Directory.Exists(local.FullPath))
+                {
+                    try
+                    {
+                        System.Diagnostics.Process.Start("explorer.exe", local.FullPath);
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(string.Format(Translate.FolderOpenError, ex.Message));
+                    }
+                }
+                else
+                {
+                    MessageBox.Show(Translate.PluginFolderNotFound);
+                }
+            }
+        }
+
+        private void SortOrder_Changed(object sender, RoutedEventArgs e)
+        {
+            ApplySorting();
+        }
+
+        private void ApplySorting()
+        {
+            if (OnlinePlugins == null) return;
+            var view = CollectionViewSource.GetDefaultView(OnlinePlugins);
+            if (view == null) return;
+
+            view.SortDescriptions.Clear();
+
+            var direction = SortDescendingDir?.IsChecked == true
+                ? ListSortDirection.Descending
+                : ListSortDirection.Ascending;
+
+            if (SortByName?.IsChecked == true)
+            {
+                view.SortDescriptions.Add(new SortDescription("Name", direction));
+            }
+            else if (SortByAuthor?.IsChecked == true)
+            {
+                view.SortDescriptions.Add(new SortDescription("Author", direction));
+            }
+            else if (SortByType?.IsChecked == true)
+            {
+                view.SortDescriptions.Add(new SortDescription("Type", direction));
+            }
+            else if (SortByStatus?.IsChecked == true)
+            {
+                view.SortDescriptions.Add(new SortDescription("LocalStatus", direction));
+            }
+            else if (SortByPublishDate?.IsChecked == true)
+            {
+                // 初公開日時順：最も古いリリース日（昇順=古い順、降順=新しい順）
+                view.SortDescriptions.Add(new SortDescription("FirstPublishedAt", direction));
+            }
+            else if (SortByLatestDate?.IsChecked == true)
+            {
+                // 最終更新日時順
+                view.SortDescriptions.Add(new SortDescription("LatestPublishedAt", direction));
+            }
+        }
+        private LocalPluginInfo? FindLocalPlugin(PluginCatalogItem online)
+        {
+            return _allLocalPlugins?.FirstOrDefault(l =>
+                (!string.IsNullOrEmpty(l.Owner) && l.Owner == online.Owner && l.Repo == online.Repo) ||
+                (l.DisplayName == online.Name));
+        }
         private void BulkDelete_Click(object sender, RoutedEventArgs e)
         {
-            var selected = LocalPluginList.SelectedItems.Cast<LocalPluginInfo>().ToList();
+            var selected = LocalPlugins.Where(p => p.IsSelectionValid).ToList();
             if (selected.Count == 0) return;
             if (MessageBox.Show($"{selected.Count}{Translate.DeleteCountPermanently}\n{Translate.CannotBeUndone}", Translate.ConfirmDeletion, MessageBoxButton.YesNo, MessageBoxImage.Warning) != MessageBoxResult.Yes) return;
             if (!EnsureYmmClosed()) return;
@@ -1160,37 +2562,61 @@ namespace YukkuriMovieMaker4Hub
             RefreshLocalPlugins();
         }
 
-        private void DeletePlugin_Click(object sender, RoutedEventArgs e)
+        // OpenLocalPluginFolder_Clickメソッド
+        private void OpenLocalPluginFolder_Click(object sender, RoutedEventArgs e)
         {
-            if (!(sender is Button btn && btn.DataContext is LocalPluginInfo plugin)) return;
-            if (MessageBox.Show($"{plugin.DisplayName} {Translate.DeletePermanently}", Translate.Confirm, MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
+            if (sender is Button btn && btn.DataContext is LocalPluginInfo plugin)
             {
-                if (!EnsureYmmClosed()) return;
-                DeleteOne(plugin);
-                RefreshLocalPlugins();
+                if (Directory.Exists(plugin.FullPath))
+                {
+                    try
+                    {
+                        System.Diagnostics.Process.Start("explorer.exe", plugin.FullPath);
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(string.Format(Translate.FolderOpenError, ex.Message));
+                    }
+                }
+                else
+                {
+                    MessageBox.Show(Translate.FolderNotFound);
+                }
             }
-        }
-
-        private void DeleteOne(LocalPluginInfo p)
-        {
-            try { if (p.IsDirectory) Directory.Delete(p.FullPath, true); else File.Delete(p.FullPath); }
-            catch (Exception ex) { MessageBox.Show($"{p.DisplayName}{Translate.DeleteFailed} {ex.Message}"); }
         }
 
         private void GridViewColumnHeader_Click(object sender, RoutedEventArgs e)
         {
             if (sender is GridViewColumnHeader header && header.Column != null)
             {
-                string? headerText = header.Content?.ToString();
-                string? field = null;
-                if (headerText == Translate.PluginName) field = "DisplayName";
-                else if (headerText == Translate.Status) field = "IsEnabled";
-                if (field == null) return;
-                if (_lastSortField == field) _lastSortDir = (_lastSortDir == ListSortDirection.Ascending) ? ListSortDirection.Descending : ListSortDirection.Ascending;
-                else { _lastSortField = field; _lastSortDir = ListSortDirection.Ascending; }
-                ApplyCurrentSort();
+                string? field = header.Tag as string ?? header.Content?.ToString();
+                if (string.IsNullOrEmpty(field)) return;
+
+                // プラグイン管理リストのソート
+                var view = CollectionViewSource.GetDefaultView(LocalPlugins);
+                if (view != null)
+                {
+                    // 同じフィールドなら方向を反転
+                    if (field == _lastPluginSortField)
+                    {
+                        _lastPluginSortDirection = _lastPluginSortDirection == ListSortDirection.Ascending
+                            ? ListSortDirection.Descending
+                            : ListSortDirection.Ascending;
+                    }
+                    else
+                    {
+                        _lastPluginSortField = field;
+                        _lastPluginSortDirection = ListSortDirection.Ascending;
+                    }
+
+                    view.SortDescriptions.Clear();
+                    // プラグイン名は日本語順（DisplayNameSortKey）でソート
+                    string sortField = field == "DisplayName" ? "DisplayNameSortKey" : field;
+                    view.SortDescriptions.Add(new SortDescription(sortField, _lastPluginSortDirection));
+                }
             }
         }
+
 
         private void ApplyCurrentSort()
         {
@@ -1212,6 +2638,27 @@ namespace YukkuriMovieMaker4Hub
             if (CloseOnLaunch)
             {
                 Application.Current.Shutdown();
+            }
+        }
+
+        private void ApplyLocalPluginFilter()
+        {
+            var filtered = _allLocalPlugins.Where(p =>
+                string.IsNullOrWhiteSpace(LocalPluginSearchText) ||
+                (p.DisplayName != null && p.DisplayName.Contains(LocalPluginSearchText, StringComparison.OrdinalIgnoreCase)) ||
+                (p.Author != null && p.Author.Contains(LocalPluginSearchText, StringComparison.OrdinalIgnoreCase)) ||
+                (p.Version != null && p.Version.Contains(LocalPluginSearchText, StringComparison.OrdinalIgnoreCase)));
+
+            LocalPlugins.Clear();
+            foreach (var p in filtered) LocalPlugins.Add(p);
+
+            // ソートを復元（プラグイン名は DisplayNameSortKey で日本語順）
+            var view = CollectionViewSource.GetDefaultView(LocalPlugins);
+            if (view != null)
+            {
+                view.SortDescriptions.Clear();
+                string sortField = _lastPluginSortField == "DisplayName" ? "DisplayNameSortKey" : _lastPluginSortField;
+                view.SortDescriptions.Add(new SortDescription(sortField, _lastPluginSortDirection));
             }
         }
 
@@ -1271,6 +2718,12 @@ namespace YukkuriMovieMaker4Hub
                 RefreshRecentProjects();
             }
         }
+
+        private void OpenWatchFolder_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is Button btn && btn.DataContext is string dir && Directory.Exists(dir))
+                Process.Start("explorer.exe", dir);
+        }
         private void OpenProject_Click(object sender, RoutedEventArgs e)
         {
             if (ProjectGrid.SelectedItem is ProjectFileItem project)
@@ -1284,16 +2737,6 @@ namespace YukkuriMovieMaker4Hub
             ShowYmmx = true;
             RefreshRecentProjects();
         }
-        private void ApplyLocalPluginFilter()
-        {
-            var filtered = _allLocalPlugins.Where(p =>
-                string.IsNullOrWhiteSpace(LocalPluginSearchText) ||
-                (p.DisplayName != null && p.DisplayName.Contains(LocalPluginSearchText, StringComparison.OrdinalIgnoreCase)));
-
-            LocalPlugins.Clear();
-            foreach (var p in filtered) LocalPlugins.Add(p);
-        }
-
         private void ApplyOnlinePluginFilter()
         {
             if (OnlinePlugins == null) return;
@@ -1310,12 +2753,35 @@ namespace YukkuriMovieMaker4Hub
             bool showDisabled = selectedTypes.Contains("配布終了");
 
             var filtered = _allOnlinePlugins.Where(p =>
-                (string.IsNullOrWhiteSpace(query) ||
-                (p.Name?.ToLower().Contains(query) ?? false) ||
-                (p.Author?.ToLower().Contains(query) ?? false) ||
-                (p.Description?.ToLower().Contains(query) ?? false)) &&
-                ((p.IsEnabled && selectedTypes.Contains(string.IsNullOrEmpty(p.Type) ? "その他" : p.Type)) || (!p.IsEnabled && showDisabled))
-            );
+            {
+                // 検索フィルタ（名前、作者、説明、バージョン）
+                if (!string.IsNullOrWhiteSpace(query))
+                {
+                    bool matchesSearch =
+                        (p.Name?.ToLower().Contains(query) ?? false) ||
+                        (p.Author?.ToLower().Contains(query) ?? false) ||
+                        (p.Description?.ToLower().Contains(query) ?? false) ||
+                        (p.LatestVersionName?.ToLower().Contains(query) ?? false) ||
+                        (p.LocalVersion?.ToLower().Contains(query) ?? false);
+
+                    if (!matchesSearch) return false;
+                }
+
+                // タイプフィルタ
+                bool typeMatch = (p.IsEnabled && selectedTypes.Contains(string.IsNullOrEmpty(p.Type) ? "その他" : p.Type)) ||
+                                (!p.IsEnabled && showDisabled);
+
+                if (!typeMatch) return false;
+
+                // ダウンロード状態フィルタ
+                bool isInstalled = p.LocalVersion != "-" && !string.IsNullOrEmpty(p.LocalVersion);
+
+                if (FilterDownloaded?.IsChecked == true && !isInstalled) return false;
+                if (FilterNotDownloaded?.IsChecked == true && isInstalled) return false;
+                if (FilterHasUpdate?.IsChecked == true && !p.HasUpdate) return false;
+
+                return true;
+            });
 
             OnlinePlugins.Clear();
             foreach (var p in filtered) OnlinePlugins.Add(p);
@@ -1368,6 +2834,130 @@ namespace YukkuriMovieMaker4Hub
             }
             catch (Exception ex) { MessageBox.Show($"{Translate.DownloadError} {ex.Message}"); }
             finally { RefreshLocalPlugins(); }
+        }
+
+        // Ctrl+Aで全選択
+        private void PluginListView_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.A && (Keyboard.Modifiers & ModifierKeys.Control) == ModifierKeys.Control)
+            {
+                if (PluginListView != null)
+                {
+                    PluginListView.SelectAll();
+                    e.Handled = true;
+                }
+            }
+        }
+
+        // 予約に追加
+        private void AddToQueue_Click(object sender, RoutedEventArgs e)
+        {
+            if (PluginListView == null) return;
+
+            // ListViewでハイライト選択されているアイテムにチェック（IsSelected）を付ける
+            var highlighted = PluginListView.SelectedItems.Cast<PluginCatalogItem>().ToList();
+            if (highlighted.Count == 0)
+            {
+                MessageBox.Show(Translate.SelectPluginToInstall);
+                return;
+            }
+
+            foreach (var plugin in highlighted)
+                plugin.IsSelected = true;
+        }
+        // リスト更新
+        private async void RefreshPluginList_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                await LoadOnlinePlugins();
+                RefreshLocalPlugins();
+                MessageBox.Show(Translate.RefreshListSuccess);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(string.Format(Translate.RefreshListFailed, ex.Message));
+            }
+        }
+
+        // 一括ダウンロード
+        private async void BulkDownloadSelected_Click(object sender, RoutedEventArgs e)
+        {
+            var selected = OnlinePlugins.Where(p => p.IsSelected).ToList();
+            if (selected.Count == 0)
+            {
+                MessageBox.Show(Translate.SelectDownloadPlugin);
+                return;
+            }
+
+            var bulkWindow = new BulkDownloadWindow(selected, Instances.ToList());
+            if (bulkWindow.ShowDialog() == true)
+            {
+                var selectedInstances = bulkWindow.SelectedInstances;
+                var selectedPlugins = bulkWindow.SelectedPlugins;
+
+                await ExecuteBulkDownload(selectedPlugins, selectedInstances);
+            }
+        }
+
+        // 一括ダウンロード実行
+        private async Task ExecuteBulkDownload(List<PluginCatalogItem> plugins, List<InstanceInfo> instances)
+        {
+            if (!EnsureYmmClosed()) return;
+
+            var progressWin = new DownloadProgressWindow();
+            progressWin.Owner = this;
+            progressWin.Show();
+
+            int totalTasks = plugins.Count * instances.Count;
+            int currentTask = 0;
+
+            foreach (var instance in instances)
+            {
+                foreach (var plugin in plugins)
+                {
+                    currentTask++;
+                    string statusMsg = $"[{currentTask}/{totalTasks}] {instance.Name} - {plugin.Name}";
+                    progressWin.UpdateStatus(statusMsg, ((double)(currentTask - 1) / totalTasks) * 100, $"{currentTask} / {totalTasks}");
+
+                    try
+                    {
+                        // バージョン情報がなければ取得
+                        if (plugin.Releases.Count == 0)
+                        {
+                            await LoadReleaseDetails(plugin);
+                        }
+
+                        // 最新版をセット
+                        plugin.SelectedVersion = plugin.Releases.FirstOrDefault();
+
+                        if (plugin.SelectedVersion != null)
+                        {
+                            await ExecuteDownload(plugin, instance, progressWin, true);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        progressWin.AddReadme(plugin.Name, $"【{instance.Name}】\n\n{Translate.LoadError}{ex.Message}");
+                    }
+
+                    progressWin.UpdateStatus(statusMsg, ((double)currentTask / totalTasks) * 100, $"{currentTask} / {totalTasks}");
+                }
+            }
+
+            RefreshLocalPlugins();
+            progressWin.ShowFinalClose();
+        }
+
+        private void ToggleViewMode_Click(object sender, RoutedEventArgs e)
+        {
+            IsViewTile = !IsViewTile;
+        }
+
+        // ダウンロード状態フィルタ変更
+        private void DownloadFilter_Changed(object sender, RoutedEventArgs e)
+        {
+            ApplyOnlinePluginFilter();
         }
     }
 }

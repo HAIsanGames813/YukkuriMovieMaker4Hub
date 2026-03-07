@@ -59,107 +59,224 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
 <data name="CurrentCulture" xml:space="preserve"><value>zh-cn</value></data>
-<data name="PreRelease" xml:space="preserve"><value>(预发布)</value></data>
-<data name="DownloadAndRun" xml:space="preserve"><value>※下载并运行 .ymme 文件。</value></data>
-<data name="GitHubApiSettings" xml:space="preserve"><value>GitHub API 设置</value></data>
-<data name="GitHubApiLimit" xml:space="preserve"><value>已达到 GitHub API 获取限制。如果您没有账号，请稍后再试。</value></data>
-<data name="CustomizeHub" xml:space="preserve"><value>自定义 Hub</value></data>
-<data name="HubSettings" xml:space="preserve"><value>Hub 设置</value></data>
-<data name="UiFont" xml:space="preserve"><value>UI 字体</value></data>
-<data name="WindowsStandard" xml:space="preserve"><value>Windows 标准</value></data>
-<data name="ExitHubOnYmm4Start" xml:space="preserve"><value>YMM4 启动时退出 Hub</value></data>
-<data name="Ymm4InfoSite" xml:space="preserve"><value>YMM4 信息站</value></data>
-<data name="Action" xml:space="preserve"><value>操作</value></data>
 <data name="AccessDenied" xml:space="preserve"><value>访问被拒绝</value></data>
-<data name="UpdateAvailable" xml:space="preserve"><value>有更新</value></data>
-<data name="ConfirmUpdate" xml:space="preserve"><value>是否更新？</value></data>
-<data name="UpdateDetails" xml:space="preserve"><value>更新内容</value></data>
-<data name="Instance" xml:space="preserve"><value>实例</value></data>
-<data name="SelectInstance" xml:space="preserve"><value>请选择实例。</value></data>
-<data name="InstanceName" xml:space="preserve"><value>实例名称</value></data>
-<data name="Install" xml:space="preserve"><value>安装</value></data>
-<data name="SelectInstallVersion" xml:space="preserve"><value>请选择要安装的版本和目标实例。</value></data>
-<data name="CannotBeUndone" xml:space="preserve"><value>此操作无法撤销。</value></data>
-<data name="Size" xml:space="preserve"><value>大小</value></data>
+<data name="Acquiring" xml:space="preserve"><value>获取中</value></data>
+<data name="Action" xml:space="preserve"><value>操作</value></data>
+<data name="Add" xml:space="preserve"><value>添加</value></data>
+<data name="AddFolder" xml:space="preserve"><value>添加文件夹</value></data>
+<data name="AdminPrivilegeRequired" xml:space="preserve"><value>需要管理员权限。请以管理员身份运行程序，或将其移动到可写文件夹。</value></data>
 <data name="All" xml:space="preserve"><value>全部</value></data>
+<data name="AudioEffects" xml:space="preserve"><value>音频效果</value></data>
+<data name="AvoidLimitSettings" xml:space="preserve"><value>这是为了避免插件获取限制的设置。如果频繁发生获取限制，请进行设置。</value></data>
+<data name="Black" xml:space="preserve"><value>黑色</value></data>
+<data name="BulkInstallCompleted" xml:space="preserve"><value>批量安装处理已完成。</value></data>
+<data name="CannotBeUndone" xml:space="preserve"><value>此操作无法撤销。</value></data>
+<data name="Character" xml:space="preserve"><value>立绘</value></data>
 <data name="CheckAll" xml:space="preserve"><value>全选</value></data>
-<data name="UncheckAll" xml:space="preserve"><value>取消全选</value></data>
-<data name="Others" xml:space="preserve"><value>其他</value></data>
-<data name="Dark" xml:space="preserve"><value>深色</value></data>
-<data name="TypeFilter" xml:space="preserve"><value>类型筛选</value></data>
-<data name="DownloadError" xml:space="preserve"><value>下载过程中发生错误：</value></data>
-<data name="Tools" xml:space="preserve"><value>工具</value></data>
-<data name="ThemeSettings" xml:space="preserve"><value>主题设置</value></data>
-<data name="TextCompletion" xml:space="preserve"><value>文本补全</value></data>
-<data name="Token" xml:space="preserve"><value>令牌</value></data>
-<data name="IssueToken" xml:space="preserve"><value>发行令牌</value></data>
-<data name="Niconico" xml:space="preserve"><value>niconico 动画</value></data>
-<data name="DeleteFailed" xml:space="preserve"><value>删除失败</value></data>
-<data name="SelectVersion" xml:space="preserve"><value>选择版本</value></data>
-<data name="Path" xml:space="preserve"><value>路径</value></data>
-<data name="FileName" xml:space="preserve"><value>文件名</value></data>
 <data name="ClearFilter" xml:space="preserve"><value>清除筛选</value></data>
+<data name="Confirm" xml:space="preserve"><value>确认</value></data>
+<data name="ConfirmBulkInstall" xml:space="preserve"><value>是否批量安装这些插件？</value></data>
+<data name="ConfirmDeletion" xml:space="preserve"><value>确认删除</value></data>
+<data name="ConfirmUpdate" xml:space="preserve"><value>是否更新？</value></data>
+<data name="CreateNew" xml:space="preserve"><value>新建</value></data>
+<data name="CurrentVersion" xml:space="preserve"><value>当前版本</value></data>
+<data name="CustomizeHub" xml:space="preserve"><value>自定义 Hub</value></data>
+<data name="Dark" xml:space="preserve"><value>深色</value></data>
+<data name="Delete" xml:space="preserve"><value>删除</value></data>
+<data name="DeleteCountPermanently" xml:space="preserve"><value>是否永久删除这些插件？</value></data>
+<data name="DeleteFailed" xml:space="preserve"><value>删除失败</value></data>
+<data name="DeletePermanently" xml:space="preserve"><value>是否将其永久删除？</value></data>
+<data name="DeleteSelected" xml:space="preserve"><value>删除所选内容</value></data>
+<data name="Disable" xml:space="preserve"><value>禁用</value></data>
+<data name="DistributionSite" xml:space="preserve"><value>发布网站</value></data>
+<data name="DownloadAndRun" xml:space="preserve"><value>※下载并运行 .ymme 文件。</value></data>
+<data name="DownloadError" xml:space="preserve"><value>下载过程中发生错误：</value></data>
+<data name="Enable" xml:space="preserve"><value>启用</value></data>
+<data name="EnableDisableSelected" xml:space="preserve"><value>启用/禁用所选内容</value></data>
+<data name="EndDistribution" xml:space="preserve"><value>停止发布</value></data>
+<data name="ExitHubOnYmm4Start" xml:space="preserve"><value>YMM4 启动时退出 Hub</value></data>
+<data name="ExitYmm4ForPlugin" xml:space="preserve"><value>是否为了插件操作而退出 YMM4？</value></data>
+<data name="Extension" xml:space="preserve"><value>扩展名</value></data>
+<data name="FileName" xml:space="preserve"><value>文件名</value></data>
 <data name="Folder" xml:space="preserve"><value>文件夹</value></data>
 <data name="FolderPath" xml:space="preserve"><value>文件夹路径</value></data>
-<data name="AddFolder" xml:space="preserve"><value>添加文件夹</value></data>
-<data name="SearchFont" xml:space="preserve"><value>搜索字体...</value></data>
-<data name="OpenPluginFolder" xml:space="preserve"><value>打开插件文件夹</value></data>
-<data name="PluginPortal" xml:space="preserve"><value>插件门户</value></data>
-<data name="SearchPlugins" xml:space="preserve"><value>搜索插件</value></data>
-<data name="PluginManagement" xml:space="preserve"><value>插件管理</value></data>
-<data name="PluginSearch" xml:space="preserve"><value>插件搜索</value></data>
-<data name="AvoidLimitSettings" xml:space="preserve"><value>这是为了避免插件获取限制的设置。如果频繁发生获取限制，请进行设置。</value></data>
-<data name="ExitYmm4ForPlugin" xml:space="preserve"><value>是否为了插件操作而退出 YMM4？</value></data>
-<data name="PluginName" xml:space="preserve"><value>插件名称</value></data>
-<data name="Black" xml:space="preserve"><value>黑色</value></data>
-<data name="SearchProject" xml:space="preserve"><value>按项目/项目名称搜索...</value></data>
-<data name="PortalLoadFailed" xml:space="preserve"><value>门户加载失败</value></data>
-<data name="Light" xml:space="preserve"><value>浅色</value></data>
-<data name="OpenLinkFailed" xml:space="preserve"><value>无法打开链接</value></data>
-<data name="RemoveFromHub" xml:space="preserve"><value>是否将其从 Hub 中删除？</value></data>
-<data name="DeletePermanently" xml:space="preserve"><value>是否将其永久删除？</value></data>
-<data name="VideoEffects" xml:space="preserve"><value>视频效果</value></data>
-<data name="AudioEffects" xml:space="preserve"><value>音频效果</value></data>
-<data name="SpeechSynthesis" xml:space="preserve"><value>语音合成</value></data>
-<data name="LoadAudio" xml:space="preserve"><value>加载音频</value></data>
+<data name="GitHubApiLimit" xml:space="preserve"><value>已达到 GitHub API 获取限制。如果您没有账号，请稍后再试。</value></data>
+<data name="GitHubApiSettings" xml:space="preserve"><value>GitHub API 设置</value></data>
+<data name="HubSettings" xml:space="preserve"><value>Hub 设置</value></data>
 <data name="Image" xml:space="preserve"><value>图像</value></data>
-<data name="LoadImage" xml:space="preserve"><value>加载图像</value></data>
-<data name="Overview" xml:space="preserve"><value>概要</value></data>
-<data name="Extension" xml:space="preserve"><value>扩展名</value></data>
-<data name="Confirm" xml:space="preserve"><value>确认</value></data>
-<data name="Launch" xml:space="preserve"><value>启动</value></data>
-<data name="DeleteCountPermanently" xml:space="preserve"><value>是否永久删除这些插件？</value></data>
-<data name="SearchLabel" xml:space="preserve"><value>搜索:</value></data>
-<data name="CurrentVersion" xml:space="preserve"><value>当前版本</value></data>
+<data name="Install" xml:space="preserve"><value>安装</value></data>
+<data name="InstallerNotFound" xml:space="preserve"><value>指定的实例中找不到安装程序。</value></data>
+<data name="Instance" xml:space="preserve"><value>实例</value></data>
+<data name="InstanceName" xml:space="preserve"><value>实例名称</value></data>
+<data name="IssueToken" xml:space="preserve"><value>发行令牌</value></data>
 <data name="LanguageSettings" xml:space="preserve"><value>语言设置</value></data>
 <data name="LastUpdate" xml:space="preserve"><value>最后更新时间</value></data>
 <data name="LatestVersion" xml:space="preserve"><value>最新版本</value></data>
-<data name="Delete" xml:space="preserve"><value>删除</value></data>
-<data name="ConfirmDeletion" xml:space="preserve"><value>确认删除</value></data>
-<data name="InstallerNotFound" xml:space="preserve"><value>指定的实例中找不到安装程序。</value></data>
-<data name="Acquiring" xml:space="preserve"><value>获取中</value></data>
-<data name="SceneTransition" xml:space="preserve"><value>场景切换</value></data>
-<data name="NoInfo" xml:space="preserve"><value>无信息</value></data>
-<data name="Status" xml:space="preserve"><value>状态</value></data>
-<data name="NewInstance" xml:space="preserve"><value>新实例</value></data>
-<data name="CreateNew" xml:space="preserve"><value>新建</value></data>
-<data name="Shapes" xml:space="preserve"><value>形状</value></data>
-<data name="Toggle" xml:space="preserve"><value>切换</value></data>
-<data name="DeleteSelected" xml:space="preserve"><value>删除所选内容</value></data>
-<data name="EnableDisableSelected" xml:space="preserve"><value>启用/禁用所选内容</value></data>
-<data name="OpenLastProject" xml:space="preserve"><value>打开上次的项目</value></data>
-<data name="Add" xml:space="preserve"><value>添加</value></data>
-<data name="VideoOutput" xml:space="preserve"><value>视频输出</value></data>
+<data name="Launch" xml:space="preserve"><value>启动</value></data>
+<data name="Light" xml:space="preserve"><value>浅色</value></data>
+<data name="LoadAudio" xml:space="preserve"><value>加载音频</value></data>
+<data name="LoadImage" xml:space="preserve"><value>加载图像</value></data>
 <data name="LoadVideo" xml:space="preserve"><value>加载视频</value></data>
-<data name="OperationSettings" xml:space="preserve"><value>操作设置</value></data>
-<data name="DistributionSite" xml:space="preserve"><value>发布网站</value></data>
-<data name="EndDistribution" xml:space="preserve"><value>停止发布</value></data>
-<data name="Transcription" xml:space="preserve"><value>转录</value></data>
-<data name="AdminPrivilegeRequired" xml:space="preserve"><value>需要管理员权限。请以管理员身份运行程序，或将其移动到可写文件夹。</value></data>
 <data name="MonitorEditFolder" xml:space="preserve"><value>监控编辑数据文件夹</value></data>
-<data name="Disable" xml:space="preserve"><value>禁用</value></data>
+<data name="NewInstance" xml:space="preserve"><value>新实例</value></data>
+<data name="Niconico" xml:space="preserve"><value>niconico 动画</value></data>
+<data name="NoInfo" xml:space="preserve"><value>无信息</value></data>
+<data name="OpenLastProject" xml:space="preserve"><value>打开上次的项目</value></data>
+<data name="OpenLinkFailed" xml:space="preserve"><value>无法打开链接</value></data>
+<data name="OpenPluginFolder" xml:space="preserve"><value>打开插件文件夹</value></data>
+<data name="OperationSettings" xml:space="preserve"><value>操作设置</value></data>
+<data name="Others" xml:space="preserve"><value>其他</value></data>
+<data name="Overview" xml:space="preserve"><value>概述</value></data>
+<data name="Path" xml:space="preserve"><value>路径</value></data>
 <data name="Pattern" xml:space="preserve"><value>图案</value></data>
-<data name="Enable" xml:space="preserve"><value>启用</value></data>
-<data name="Character" xml:space="preserve"><value>立绘</value></data>
+<data name="PluginManagement" xml:space="preserve"><value>插件管理</value></data>
+<data name="PluginName" xml:space="preserve"><value>插件名称</value></data>
+<data name="PluginPortal" xml:space="preserve"><value>插件门户</value></data>
+<data name="PluginSearch" xml:space="preserve"><value>插件搜索</value></data>
+<data name="PortalLoadFailed" xml:space="preserve"><value>门户加载失败</value></data>
+<data name="PreRelease" xml:space="preserve"><value>(预发布)</value></data>
+<data name="RemoveFromHub" xml:space="preserve"><value>是否将其从 Hub 中删除？</value></data>
 <data name="RestartRequired" xml:space="preserve"><value>(需重启)</value></data>
+<data name="SceneTransition" xml:space="preserve"><value>场景切换</value></data>
+<data name="SearchFont" xml:space="preserve"><value>搜索字体...</value></data>
+<data name="SearchLabel" xml:space="preserve"><value>搜索:</value></data>
+<data name="SearchPlugins" xml:space="preserve"><value>搜索插件</value></data>
+<data name="SearchProject" xml:space="preserve"><value>按项目/项目名称搜索...</value></data>
+<data name="SelectInstallVersion" xml:space="preserve"><value>请选择要安装的版本和目标实例。</value></data>
+<data name="SelectInstance" xml:space="preserve"><value>请选择实例。</value></data>
+<data name="SelectPluginsToInstall" xml:space="preserve"><value>请使用复选框选择要安装的插件。</value></data>
+<data name="SelectVersion" xml:space="preserve"><value>选择版本</value></data>
+<data name="Shapes" xml:space="preserve"><value>形状</value></data>
+<data name="Size" xml:space="preserve"><value>大小</value></data>
+<data name="SpeechSynthesis" xml:space="preserve"><value>语音合成</value></data>
+<data name="Status" xml:space="preserve"><value>状态</value></data>
+<data name="TextCompletion" xml:space="preserve"><value>文本补全</value></data>
+<data name="ThemeSettings" xml:space="preserve"><value>主题设置</value></data>
+<data name="Toggle" xml:space="preserve"><value>切换</value></data>
+<data name="Token" xml:space="preserve"><value>令牌</value></data>
+<data name="Tools" xml:space="preserve"><value>工具</value></data>
+<data name="Transcription" xml:space="preserve"><value>转录</value></data>
+<data name="TypeFilter" xml:space="preserve"><value>类型筛选</value></data>
+<data name="UiFont" xml:space="preserve"><value>UI 字体</value></data>
+<data name="UncheckAll" xml:space="preserve"><value>取消全选</value></data>
+<data name="UpdateAvailable" xml:space="preserve"><value>有更新</value></data>
+<data name="UpdateDetails" xml:space="preserve"><value>更新内容</value></data>
+<data name="VideoEffects" xml:space="preserve"><value>视频效果</value></data>
+<data name="VideoOutput" xml:space="preserve"><value>视频输出</value></data>
+<data name="WindowsStandard" xml:space="preserve"><value>Windows 标准</value></data>
+<data name="Ymm4InfoSite" xml:space="preserve"><value>YMM4 信息站</value></data>
+<data name="Filter" xml:space="preserve"><value>筛选</value></data>
+<data name="FileFormat" xml:space="preserve"><value>文件格式</value></data>
+<data name="Location" xml:space="preserve"><value>位置</value></data>
+<data name="IncludeBackup" xml:space="preserve"><value>包括备份</value></data>
+<data name="InstanceLabel" xml:space="preserve"><value>实例:</value></data>
+<data name="StatusColumn" xml:space="preserve"><value>状态</value></data>
+<data name="Enabled" xml:space="preserve"><value>已启用</value></data>
+<data name="Disabled" xml:space="preserve"><value>已禁用</value></data>
+<data name="TypeColumn" xml:space="preserve"><value>类型</value></data>
+<data name="AuthorColumn" xml:space="preserve"><value>作者</value></data>
+<data name="VersionColumn" xml:space="preserve"><value>版本</value></data>
+<data name="PublishedAt" xml:space="preserve"><value>发布时间</value></data>
+<data name="DownloadedAt" xml:space="preserve"><value>下载时间</value></data>
+<data name="UpdateColumn" xml:space="preserve"><value>更新</value></data>
+<data name="DownloadStatus" xml:space="preserve"><value>下载状态</value></data>
+<data name="Downloaded" xml:space="preserve"><value>已下载</value></data>
+<data name="NotDownloaded" xml:space="preserve"><value>未下载</value></data>
+<data name="HasUpdate" xml:space="preserve"><value>有更新</value></data>
+<data name="SortBy" xml:space="preserve"><value>排序方式</value></data>
+<data name="SortByName" xml:space="preserve"><value>按名称</value></data>
+<data name="SortByAuthor" xml:space="preserve"><value>按作者</value></data>
+<data name="SortByType" xml:space="preserve"><value>按类型</value></data>
+<data name="SortByStatus" xml:space="preserve"><value>按状态</value></data>
+<data name="SortByPublishDate" xml:space="preserve"><value>按首次发布日期</value></data>
+<data name="SortByLatestDate" xml:space="preserve"><value>按最新更新日期</value></data>
+<data name="SortDirection" xml:space="preserve"><value>排序方向</value></data>
+<data name="Ascending" xml:space="preserve"><value>升序</value></data>
+<data name="Descending" xml:space="preserve"><value>降序</value></data>
+<data name="AddToQueue" xml:space="preserve"><value>添加到队列</value></data>
+<data name="RefreshList" xml:space="preserve"><value>刷新列表</value></data>
+<data name="BulkDownload" xml:space="preserve"><value>批量下载</value></data>
+<data name="PluginSettings" xml:space="preserve"><value>插件设置</value></data>
+<data name="AutoUpdatePlugins" xml:space="preserve"><value>启动时自动更新插件</value></data>
+<data name="InstalledVersion" xml:space="preserve"><value>已安装: {0}</value></data>
+<data name="Download" xml:space="preserve"><value>下载</value></data>
+<data name="Update" xml:space="preserve"><value>更新</value></data>
+<data name="CheckOnSite" xml:space="preserve"><value>在网站上查看</value></data>
+<data name="FolderButton" xml:space="preserve"><value>文件夹</value></data>
+<data name="OpenFolderTooltip" xml:space="preserve"><value>打开文件夹</value></data>
+<data name="BulkInstallTitle" xml:space="preserve"><value>批量安装确认</value></data>
+<data name="BulkInstallFinalCheck" xml:space="preserve"><value>最终安装确认</value></data>
+<data name="InstallTargetInstance" xml:space="preserve"><value>安装目标实例:</value></data>
+<data name="StartInstall" xml:space="preserve"><value>开始安装</value></data>
+<data name="Cancel" xml:space="preserve"><value>取消</value></data>
+<data name="InstallProgress" xml:space="preserve"><value>安装进度</value></data>
+<data name="Preparing" xml:space="preserve"><value>准备中...</value></data>
+<data name="CompleteAndClose" xml:space="preserve"><value>完成并关闭</value></data>
+<data name="SelectPluginToInstall" xml:space="preserve"><value>请选择插件。</value></data>
+<data name="AddToQueueCount" xml:space="preserve"><value>已将{0}个插件添加到队列。（队列功能即将推出）</value></data>
+<data name="RefreshListSuccess" xml:space="preserve"><value>插件列表已更新。</value></data>
+<data name="RefreshListFailed" xml:space="preserve"><value>列表更新失败: {0}</value></data>
+<data name="SelectDownloadPlugin" xml:space="preserve"><value>请选择要下载的插件。</value></data>
+<data name="SkipNoRelease" xml:space="preserve"><value>未找到有效发布信息，已跳过下载。</value></data>
+<data name="SkipTitle" xml:space="preserve"><value>通知</value></data>
+<data name="ErrorNoDownloadVersion" xml:space="preserve"><value>错误: 没有可下载的版本</value></data>
+<data name="SkipUnsupportedFormat" xml:space="preserve"><value>已跳过: 不支持的格式 ({0})</value></data>
+<data name="DllInstalledMsg" xml:space="preserve"><value>.dll文件已安装到文件夹「{0}」。</value></data>
+<data name="NoReadme" xml:space="preserve"><value>不包含Readme。</value></data>
+<data name="NoDllFound" xml:space="preserve"><value>未找到有效的插件文件(DLL)。</value></data>
+<data name="RenameError" xml:space="preserve"><value>重命名失败。文件可能正在使用中。</value></data>
+<data name="TargetNotFound" xml:space="preserve"><value>未找到目标:</value></data>
+<data name="LoadError" xml:space="preserve"><value>错误:</value></data>
+<data name="CentralInfoUpdateFailed" xml:space="preserve"><value>更新info.json失败: {0}</value></data>
+<data name="CentralInfoSaveFailed" xml:space="preserve"><value>保存info.json失败: {0}</value></data>
+<data name="CentralInfoDeleteFailed" xml:space="preserve"><value>从info.json删除失败: {0}</value></data>
+<data name="PluginFolderNotFound" xml:space="preserve"><value>找不到插件文件夹。</value></data>
+<data name="FolderOpenError" xml:space="preserve"><value>无法打开文件夹: {0}</value></data>
+<data name="FolderNotFound" xml:space="preserve"><value>找不到文件夹。</value></data>
+<data name="ConfirmDeletePlugin" xml:space="preserve"><value>确定要删除吗？</value></data>
+<data name="RegenerateConfirm" xml:space="preserve"><value>从本地插件信息重新生成info.json。现有info.json将被覆盖。继续？</value></data>
+<data name="RegenerateSuccess" xml:space="preserve"><value>info.json已重新生成。已注册{0}个插件信息。</value></data>
+<data name="RegenerateFailed" xml:space="preserve"><value>重新生成info.json失败: {0}</value></data>
+<data name="ReloadPortalSuccess" xml:space="preserve"><value>插件门户已重新加载。</value></data>
+<data name="ReloadPortalFailed" xml:space="preserve"><value>重新加载插件门户失败: {0}</value></data>
+<data name="InstanceNotSelected" xml:space="preserve"><value>未选择实例。</value></data>
+<data name="UninstallMultipleConfirm" xml:space="preserve"><value>是否删除{0}个插件？</value></data>
+<data name="BulkDownloadInstance" xml:space="preserve"><value>请至少选择一个要安装的插件。</value></data>
+<data name="BulkDownloadSelectInstance" xml:space="preserve"><value>请选择安装目标实例。</value></data>
+<data name="VersionDownloadTooltip" xml:space="preserve"><value>直接下载此版本</value></data>
+<data name="DownloadInProgress" xml:space="preserve"><value>处理完成。请查看Readme并点击「完成」。</value></data>
+<data name="AddInstanceTitle" xml:space="preserve"><value>添加实例</value></data>
+<data name="SelectAddMethod" xml:space="preserve"><value>选择添加方式</value></data>
+<data name="NewDownload" xml:space="preserve"><value>新建下载</value></data>
+<data name="NewDownloadDesc" xml:space="preserve"><value>下载YMM4并创建新实例</value></data>
+<data name="AddExisting" xml:space="preserve"><value>添加现有</value></data>
+<data name="AddExistingDesc" xml:space="preserve"><value>添加已安装的YMM4</value></data>
+<data name="InstanceSetupTitle" xml:space="preserve"><value>实例设置</value></data>
+<data name="NewInstanceSetupTitle" xml:space="preserve"><value>新建实例设置</value></data>
+<data name="Edition" xml:space="preserve"><value>版本</value></data>
+<data name="NormalEdition" xml:space="preserve"><value>标准版</value></data>
+<data name="NormalEditionDesc" xml:space="preserve"><value>已预装 AquesTalk。</value></data>
+<data name="LiteEdition" xml:space="preserve"><value>Lite版</value></data>
+<data name="LiteEditionDesc" xml:space="preserve"><value>推荐给不使用 AquesTalk 的用户。</value></data>
+<data name="IconLabel" xml:space="preserve"><value>图标</value></data>
+<data name="UseExeIcon" xml:space="preserve"><value>（使用exe图标）</value></data>
+<data name="AutoSetExeIcon" xml:space="preserve"><value>（下载后自动设置exe图标）</value></data>
+<data name="SelectAnotherIcon" xml:space="preserve"><value>选择其他图标...</value></data>
+<data name="ResetToExeIcon" xml:space="preserve"><value>恢复为exe图标</value></data>
+<data name="InstanceNameLabel" xml:space="preserve"><value>实例名称</value></data>
+<data name="InstallFolder" xml:space="preserve"><value>安装目标文件夹</value></data>
+<data name="Browse" xml:space="preserve"><value>浏览...</value></data>
+<data name="InstallFolderNote" xml:space="preserve"><value>在所选文件夹内创建以实例名命名的子文件夹并解压</value></data>
+<data name="DownloadAndCreate" xml:space="preserve"><value>下载 &amp;&amp; 创建</value></data>
+<data name="FolderAlreadyExists" xml:space="preserve"><value>文件夹已存在，是否覆盖？</value></data>
+<data name="ExeNotFound" xml:space="preserve"><value>未找到YukkuriMovieMaker.exe，请手动确认。</value></data>
+<data name="DownloadUrlFailed" xml:space="preserve"><value>获取下载链接失败，请从官方网站手动下载。</value></data>
+<data name="InstallFailed" xml:space="preserve"><value>安装失败</value></data>
+<data name="CheckingLatestVersion" xml:space="preserve"><value>检查最新版本中...</value></data>
+<data name="Extracting" xml:space="preserve"><value>解压中...</value></data>
+<data name="Cleanup" xml:space="preserve"><value>清理中...</value></data>
+<data name="SelectExeTitle" xml:space="preserve"><value>选择YukkuriMovieMaker.exe</value></data>
+<data name="SelectIconTitle" xml:space="preserve"><value>选择图标图片</value></data>
+<data name="Complete" xml:space="preserve"><value>完成</value></data>
+<data name="Cancelled" xml:space="preserve"><value>已取消</value></data>
 </root>

@@ -4,7 +4,7 @@
         xmlns:local="clr-namespace:YukkuriMovieMaker4Hub"
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         x:Name="RootWindow"
-        Title="YukkuriMovieMaker4Hub" Height="800" Width="1200" 
+        Title="YukkuriMovieMaker4Hub" Height="800" Width="1200" MinHeight="500" MinWidth="800" 
         Background="{DynamicResource ThemeBrush}"
         FontFamily="{DynamicResource AppFont}">
     <Window.Resources>
@@ -12,6 +12,7 @@
         <local:BooleanToColorConverter x:Key="BooleanToColorConverter"/>
         <local:IsNotNullConverter x:Key="IsNotNullConverter"/>
         <BooleanToVisibilityConverter x:Key="BoolToVis"/>
+        <local:InstalledVersionConverter x:Key="InstalledVersionConverter"/>
 
         <FontFamily x:Key="AppFont">Segoe UI</FontFamily>
         <SolidColorBrush x:Key="ThemeBrush" Color="#252525"/>
@@ -184,6 +185,20 @@
                             <Border x:Name="HeaderBorder" Background="{TemplateBinding Background}" BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{TemplateBinding BorderBrush}" Padding="{TemplateBinding Padding}">
                                 <ContentPresenter x:Name="HeaderContent" VerticalAlignment="Center" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
                             </Border>
+                            <!-- 列幅リサイズ用グリップ -->
+                            <Thumb x:Name="PART_HeaderGripper" HorizontalAlignment="Right" Width="8" Cursor="SizeWE">
+                                <Thumb.Style>
+                                    <Style TargetType="Thumb">
+                                        <Setter Property="Template">
+                                            <Setter.Value>
+                                                <ControlTemplate TargetType="Thumb">
+                                                    <Border Background="Transparent" BorderThickness="0,0,2,0" BorderBrush="{DynamicResource BorderBrush}" Margin="0,4,0,4"/>
+                                                </ControlTemplate>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </Style>
+                                </Thumb.Style>
+                            </Thumb>
                         </Grid>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
@@ -210,6 +225,20 @@
                             <Border x:Name="HeaderBorder" Background="{TemplateBinding Background}" BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{TemplateBinding BorderBrush}" Padding="{TemplateBinding Padding}">
                                 <ContentPresenter VerticalAlignment="Center" HorizontalAlignment="Left"/>
                             </Border>
+                            <!-- 列幅リサイズ用グリップ -->
+                            <Thumb x:Name="PART_RightHeaderGripper" HorizontalAlignment="Right" Width="8" Cursor="SizeWE">
+                                <Thumb.Style>
+                                    <Style TargetType="Thumb">
+                                        <Setter Property="Template">
+                                            <Setter.Value>
+                                                <ControlTemplate TargetType="Thumb">
+                                                    <Border Background="Transparent" BorderThickness="0,0,2,0" BorderBrush="{DynamicResource BorderBrush}" Margin="0,4,0,4"/>
+                                                </ControlTemplate>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </Style>
+                                </Thumb.Style>
+                            </Thumb>
                         </Grid>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
@@ -355,7 +384,7 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
-        <Grid Grid.Column="0" Background="{DynamicResource PanelBrush}">
+        <Grid Grid.Column="0" Background="{DynamicResource PanelBrush}" MinHeight="300">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
@@ -449,7 +478,7 @@
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>
-            <StackPanel Grid.Row="2" Margin="10">
+            <StackPanel Grid.Row="2" Margin="10" MinHeight="90">
                 <Button Click="AddInstance_Click" Margin="0,3" Height="35">
                     <StackPanel Orientation="Horizontal">
                         <Path Style="{StaticResource IconPathStyle}" Width="15" Height="15" Data="M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z"/>
@@ -520,13 +549,13 @@
                         <UniformGrid Grid.Row="1" Columns="4" Margin="0,0,0,20">
                             <Button Click="LaunchInstance_Click" IsEnabled="{Binding SelectedInstance.IsRealInstance}" Height="60" Margin="5" Background="{DynamicResource AccentBrush}">
                                 <StackPanel Orientation="Horizontal">
-                                    <Path Fill="{DynamicResource TextBrush}" Width="20" Height="20" Stretch="Uniform" Margin="0,0,10,0" Data="M8,5.14V19.14L19,12.14L8,5.14Z"/>
-                                    <TextBlock Text="{x:Static local:Translate.Launch}" FontSize="16" FontWeight="Bold" Foreground="{DynamicResource TextBrush}" VerticalAlignment="Center"/>
+                                    <Path Fill="White" Width="20" Height="20" Stretch="Uniform" Margin="0,0,10,0" Data="M8,5.14V19.14L19,12.14L8,5.14Z"/>
+                                    <TextBlock Text="{x:Static local:Translate.Launch}" FontSize="16" FontWeight="Bold" Foreground="White" VerticalAlignment="Center"/>
                                 </StackPanel>
                             </Button>
                             <Button Click="OpenFolder_Click" IsEnabled="{Binding SelectedInstance.IsRealInstance}" Height="60" Margin="5">
                                 <StackPanel Orientation="Horizontal">
-                                    <Path Fill="{DynamicResource TextBrush}" Width="20" Height="20" Stretch="Uniform" Margin="0,0,10,0" Data="M10,4H4C2.89,4 2,4.89 2,6V18A2,2 0 0,0 4,20H20A2,2 0 0,0 22,18V8C22,6.89 21.1,6 20,6H12L10,4Z"/>
+                                    <Path Fill="White" Width="20" Height="20" Stretch="Uniform" Margin="0,0,10,0" Data="M10,4H4C2.89,4 2,4.89 2,6V18A2,2 0 0,0 4,20H20A2,2 0 0,0 22,18V8C22,6.89 21.1,6 20,6H12L10,4Z"/>
                                     <TextBlock Text="{x:Static local:Translate.Folder}" VerticalAlignment="Center"/>
                                 </StackPanel>
                             </Button>
@@ -555,22 +584,42 @@
                                 <Path IsHitTestVisible="False" Fill="{DynamicResource SubTextBrush}" Width="18" Height="18" Stretch="Uniform" HorizontalAlignment="Right" Margin="0,0,15,0" Data="M9.5,3A6.5,6.5 0 0,1 16,9.5C16,11.11 15.41,12.59 14.44,13.73L19.71,19L18.29,20.41L13.01,15.14C11.87,16.11 10.39,16.7 8.5,16.7A6.5,6.5 0 0,1 3,9.5A6.5,6.5 0 0,1 9.5,3M9.5,5A4.5,4.5 0 0,0 5,9.5A4.5,4.5 0 0,0 9.5,14A4.5,4.5 0 0,0 14,9.5A4.5,4.5 0 0,0 9.5,5Z"/>
                             </Grid>
 
-                            <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center" Margin="20,0,0,0">
-                                <CheckBox Content=".ymmp" IsChecked="{Binding ShowYmmp}" Style="{StaticResource ModernCheckBox}" Margin="0,0,15,0"/>
-                                <CheckBox Content=".ymmpx" IsChecked="{Binding ShowYmmpx}" Style="{StaticResource ModernCheckBox}" Margin="0,0,20,0"/>
-                                <CheckBox Content=".ymmx" IsChecked="{Binding ShowYmmx}" Style="{StaticResource ModernCheckBox}" Margin="0,0,20,0"/>
-                                <Button Content="{x:Static local:Translate.ClearFilter}" Click="ResetProjectFilters_Click" Padding="15,8" Background="Transparent" Foreground="{DynamicResource SubTextBrush}">
-                                    <Button.Style>
-                                        <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
-                                            <Style.Triggers>
-                                                <Trigger Property="IsMouseOver" Value="True">
-                                                    <Setter Property="Foreground" Value="{DynamicResource TextBrush}"/>
-                                                </Trigger>
-                                            </Style.Triggers>
+                            <Grid Grid.Column="1" VerticalAlignment="Center" Margin="20,0,0,0">
+                                <ToggleButton x:Name="ProjectFilterButton" Height="45" Width="120" Background="{DynamicResource ItemBrush}" BorderThickness="0">
+                                    <StackPanel Orientation="Horizontal">
+                                        <Path Fill="{DynamicResource TextBrush}" Width="18" Height="18" Stretch="Uniform" Margin="0,0,8,0" Data="M14,12V19.88C14.04,20.18 13.94,20.5 13.71,20.71C13.32,21.1 12.69,21.1 12.3,20.71L10.29,18.7C10.06,18.47 9.96,18.16 10,17.87V12H9.97L4.21,4.62C3.87,4.19 3.95,3.56 4.38,3.22C4.57,3.08 4.78,3 5,3V3H19V3C19.22,3 19.43,3.08 19.62,3.22C20.05,3.56 20.13,4.19 19.79,4.62L14.03,12H14Z"/>
+                                        <TextBlock Text="{x:Static local:Translate.Filter}" VerticalAlignment="Center" Foreground="{DynamicResource TextBrush}"/>
+                                    </StackPanel>
+                                    <ToggleButton.Style>
+                                        <Style TargetType="ToggleButton">
+                                            <Setter Property="Template">
+                                                <Setter.Value>
+                                                    <ControlTemplate TargetType="ToggleButton">
+                                                        <Border Background="{TemplateBinding Background}" BorderBrush="{DynamicResource ItemBrush}" BorderThickness="1" CornerRadius="4">
+                                                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                        </Border>
+                                                    </ControlTemplate>
+                                                </Setter.Value>
+                                            </Setter>
                                         </Style>
-                                    </Button.Style>
-                                </Button>
-                            </StackPanel>
+                                    </ToggleButton.Style>
+                                </ToggleButton>
+                                <Popup IsOpen="{Binding IsChecked, ElementName=ProjectFilterButton}" StaysOpen="False" PlacementTarget="{Binding ElementName=ProjectFilterButton}" Placement="Bottom">
+                                    <Border Background="{DynamicResource PanelBrush}" BorderBrush="{DynamicResource ItemBrush}" BorderThickness="1" Padding="15">
+                                        <StackPanel>
+                                            <TextBlock Text="{x:Static local:Translate.FileFormat}" FontWeight="Bold" Margin="0,0,0,10" Foreground="{DynamicResource TextBrush}"/>
+                                            <CheckBox Content=".ymmp" IsChecked="{Binding ShowYmmp}" Style="{StaticResource ModernCheckBox}" Margin="0,2"/>
+                                            <CheckBox Content=".ymmpx" IsChecked="{Binding ShowYmmpx}" Style="{StaticResource ModernCheckBox}" Margin="0,2"/>
+                                            <CheckBox Content=".ymmx" IsChecked="{Binding ShowYmmx}" Style="{StaticResource ModernCheckBox}" Margin="0,2"/>
+                                            <Separator Margin="0,10" Background="{DynamicResource TextBrush}"/>
+                                            <TextBlock Text="{x:Static local:Translate.Location}" FontWeight="Bold" Margin="0,0,0,10" Foreground="{DynamicResource TextBrush}"/>
+                                            <CheckBox Content="{x:Static local:Translate.IncludeBackup}" IsChecked="{Binding ShowBackup}" Style="{StaticResource ModernCheckBox}" Margin="0,2"/>
+                                            <Separator Margin="0,10" Background="{DynamicResource TextBrush}"/>
+                                            <Button Content="{x:Static local:Translate.ClearFilter}" Click="ResetProjectFilters_Click" HorizontalAlignment="Stretch" Padding="10,5" Background="Transparent" Foreground="{DynamicResource SubTextBrush}" Margin="0,5,0,0"/>
+                                        </StackPanel>
+                                    </Border>
+                                </Popup>
+                            </Grid>
                         </Grid>
 
                         <DataGrid x:Name="ProjectGrid" Grid.Row="3" ItemsSource="{Binding FilteredProjects}" Margin="5" MouseDoubleClick="OpenProject_Click">
@@ -654,16 +703,20 @@
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="*"/>
                         </Grid.RowDefinitions>
-                        <StackPanel Orientation="Horizontal" Margin="10,5">
+                        <StackPanel Orientation="Horizontal" Margin="10,5" VerticalAlignment="Center">
+                            <TextBlock Text="{x:Static local:Translate.InstanceLabel}" VerticalAlignment="Center" Margin="0,0,5,0" Foreground="{DynamicResource TextBrush}" FontWeight="Bold"/>
+                            <TextBlock Text="{Binding SelectedInstance.Name}" VerticalAlignment="Center" Margin="0,0,20,0" Foreground="{DynamicResource AccentBrush}" FontWeight="Bold"/>
                             <TextBlock Text="{x:Static local:Translate.SearchLabel}" VerticalAlignment="Center" Margin="0,0,5,0" Foreground="{DynamicResource TextBrush}"/>
-                            <TextBox Width="200" Text="{Binding LocalPluginSearchText, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,20,0" VerticalContentAlignment="Center"/>
-                            <Button Click="BulkToggle_Click" Content="{x:Static local:Translate.EnableDisableSelected}" Padding="15,5" Margin="0,0,10,0"/>
-                            <Button Click="BulkDelete_Click" Content="{x:Static local:Translate.DeleteSelected}" Padding="15,5"/>
-                            <Button Click="OpenPluginFolder_Click" Padding="10,5" Margin="10,0,0,0" ToolTip="{x:Static local:Translate.OpenPluginFolder}">
-                                <Path Fill="{DynamicResource TextBrush}" Width="20" Height="20" Stretch="Uniform" Margin="0,0,0,0" Data="M10,4H4C2.89,4 2,4.89 2,6V18A2,2 0 0,0 4,20H20A2,2 0 0,0 22,18V8C22,6.89 21.1,6 20,6H12L10,4Z"/>
+                            <TextBox Width="180" Text="{Binding LocalPluginSearchText, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,10,0" VerticalContentAlignment="Center" Height="28"/>
+                            <Button Click="BulkToggle_Click" Content="{x:Static local:Translate.EnableDisableSelected}" Padding="10,0" Margin="0,0,6,0" Height="28" Background="{DynamicResource ItemBrush}" Foreground="{DynamicResource TextBrush}"/>
+                            <Button Click="BulkDelete_Click" Content="{x:Static local:Translate.DeleteSelected}" Padding="10,0" Margin="0,0,6,0" Height="28" Background="{DynamicResource ItemBrush}" Foreground="{DynamicResource TextBrush}"/>
+                            <Button Click="OpenPluginDirectoryRoot_Click" Padding="10,0" Height="28" Background="{DynamicResource ItemBrush}" Foreground="{DynamicResource TextBrush}" ToolTip="{x:Static local:Translate.OpenPluginFolder}">
+                                <StackPanel Orientation="Horizontal">
+                                    <Path Fill="{DynamicResource TextBrush}" Width="14" Height="14" Stretch="Uniform" Margin="0,0,5,0" Data="M10,4H4C2.89,4 2,4.89 2,6V18A2,2 0 0,0 4,20H20A2,2 0 0,0 22,18V8C22,6.89 21.1,6 20,6H12L10,4Z"/>
+                                    <TextBlock Text="{x:Static local:Translate.FolderButton}" VerticalAlignment="Center"/>
+                                </StackPanel>
                             </Button>
                         </StackPanel>
-
                         <ListView x:Name="LocalPluginList" Grid.Row="1" ItemsSource="{Binding LocalPlugins}" Background="Transparent" BorderThickness="0">
                             <ListView.ItemContainerStyle>
                                 <Style TargetType="ListViewItem">
@@ -671,11 +724,12 @@
                                     <Setter Property="BorderThickness" Value="0"/>
                                     <Setter Property="Padding" Value="0"/>
                                     <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                                    <Setter Property="VerticalContentAlignment" Value="Center"/>
                                     <Setter Property="Template">
                                         <Setter.Value>
                                             <ControlTemplate TargetType="ListViewItem">
                                                 <Border x:Name="Bd" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}" SnapsToDevicePixels="true">
-                                                    <GridViewRowPresenter VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                                                    <GridViewRowPresenter HorizontalAlignment="Stretch" VerticalAlignment="Center"/>
                                                 </Border>
                                                 <ControlTemplate.Triggers>
                                                     <Trigger Property="IsMouseOver" Value="True">
@@ -692,45 +746,145 @@
                             </ListView.ItemContainerStyle>
                             <ListView.View>
                                 <GridView>
-                                    <GridViewColumn Width="400">
-                                        <GridViewColumnHeader Content="{x:Static local:Translate.PluginName}" Click="GridViewColumnHeader_Click"/>
+                                    <!-- プラグイン名 -->
+                                    <GridViewColumn Width="200">
+                                        <GridViewColumnHeader Content="{x:Static local:Translate.PluginName}" Click="GridViewColumnHeader_Click" Tag="DisplayName"/>
                                         <GridViewColumn.CellTemplate>
                                             <DataTemplate>
-                                                <TextBlock Text="{Binding DisplayName}" Padding="5" Foreground="{DynamicResource TextBrush}" VerticalAlignment="Center"/>
+                                                <TextBlock Text="{Binding DisplayName}" Padding="5,0" Foreground="{DynamicResource TextBrush}" VerticalAlignment="Center" TextTrimming="CharacterEllipsis"/>
                                             </DataTemplate>
                                         </GridViewColumn.CellTemplate>
                                     </GridViewColumn>
+
+                                    <!-- 切替ボタン -->
+                                    <GridViewColumn Width="68">
+                                        <GridViewColumnHeader Content="{x:Static local:Translate.Toggle}" Click="GridViewColumnHeader_Click" Tag="IsEnabled"/>
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <Button Click="TogglePlugin_Click" Width="56" Height="22" BorderThickness="0" HorizontalAlignment="Center">
+                                                    <Button.Style>
+                                                        <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+                                                            <Setter Property="Content" Value="{x:Static local:Translate.Toggle}"/>
+                                                            <Setter Property="Background" Value="{DynamicResource ItemBrush}"/>
+                                                            <Setter Property="Foreground" Value="{DynamicResource TextBrush}"/>
+                                                        </Style>
+                                                    </Button.Style>
+                                                </Button>
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+
+                                    <!-- 状態 -->
+                                    <GridViewColumn Width="52">
+                                        <GridViewColumnHeader Content="{x:Static local:Translate.StatusColumn}" Click="GridViewColumnHeader_Click" Tag="IsEnabled"/>
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <TextBlock FontWeight="SemiBold" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                                    <TextBlock.Style>
+                                                        <Style TargetType="TextBlock">
+                                                            <Setter Property="Text" Value="{x:Static local:Translate.Enabled}"/>
+                                                            <Setter Property="Foreground" Value="{DynamicResource AccentBrush}"/>
+                                                            <Style.Triggers>
+                                                                <DataTrigger Binding="{Binding IsEnabled}" Value="False">
+                                                                    <Setter Property="Text" Value="{x:Static local:Translate.Disabled}"/>
+                                                                    <Setter Property="Foreground" Value="{DynamicResource SubTextBrush}"/>
+                                                                </DataTrigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </TextBlock.Style>
+                                                </TextBlock>
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+
+                                    <!-- 削除ボタン -->
+                                    <GridViewColumn Width="64">
+                                        <GridViewColumnHeader Content="{x:Static local:Translate.Delete}" Tag="Delete"/>
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <Button Click="DeletePlugin_Click"
+                                                        Content="{x:Static local:Translate.Delete}"
+                                                        IsEnabled="{Binding IsSelectionValid}"
+                                                        Background="{DynamicResource ItemBrush}"
+                                                        Foreground="{DynamicResource TextBrush}"
+                                                        Width="52" Height="22" HorizontalAlignment="Center"/>
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+
+                                    <!-- タイプ -->
+                                    <GridViewColumn Width="96">
+                                        <GridViewColumnHeader Content="{x:Static local:Translate.TypeColumn}" Click="GridViewColumnHeader_Click" Tag="Type"/>
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Text="{Binding DisplayType}" Padding="5,0" Foreground="{DynamicResource SubTextBrush}" VerticalAlignment="Center" TextTrimming="CharacterEllipsis"/>
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+
+                                    <!-- 作者名 -->
                                     <GridViewColumn Width="100">
-                                        <GridViewColumnHeader Content="{x:Static local:Translate.Status}" Click="GridViewColumnHeader_Click"/>
+                                        <GridViewColumnHeader Content="{x:Static local:Translate.AuthorColumn}" Click="GridViewColumnHeader_Click" Tag="Author"/>
                                         <GridViewColumn.CellTemplate>
                                             <DataTemplate>
-                                                <TextBlock x:Name="StatusText" Text="{Binding IsEnabled, Converter={StaticResource BooleanToStatusConverter}}" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                                                <DataTemplate.Triggers>
-                                                    <DataTrigger Binding="{Binding IsEnabled}" Value="True">
-                                                        <Setter TargetName="StatusText" Property="Foreground" Value="{DynamicResource TextBrush}"/>
-                                                    </DataTrigger>
-                                                    <DataTrigger Binding="{Binding IsEnabled}" Value="False">
-                                                        <Setter TargetName="StatusText" Property="Foreground" Value="{DynamicResource SubTextBrush}"/>
-                                                    </DataTrigger>
-                                                </DataTemplate.Triggers>
+                                                <TextBlock Text="{Binding Author}" Padding="5,0" Foreground="{DynamicResource SubTextBrush}" VerticalAlignment="Center" TextTrimming="CharacterEllipsis"/>
                                             </DataTemplate>
                                         </GridViewColumn.CellTemplate>
                                     </GridViewColumn>
-                                    <GridViewColumn Header="{x:Static local:Translate.Action}" Width="200">
+
+                                    <!-- バージョン -->
+                                    <GridViewColumn Width="84">
+                                        <GridViewColumnHeader Content="{x:Static local:Translate.VersionColumn}" Click="GridViewColumnHeader_Click" Tag="Version"/>
                                         <GridViewColumn.CellTemplate>
                                             <DataTemplate>
-                                                <StackPanel Orientation="Horizontal">
-                                                    <Button Click="TogglePlugin_Click" 
-        Content="{x:Static local:Translate.Toggle}" 
-        IsEnabled="{Binding IsSelectionValid}"
-        Margin="2" 
-        Width="60"/>
-                                                    <Button Click="DeletePlugin_Click" 
-        Content="{x:Static local:Translate.Delete}" 
-        IsEnabled="{Binding IsSelectionValid}"
-        Margin="10,2,2,2" 
-        Width="60"/>
-                                                </StackPanel>
+                                                <TextBlock Text="{Binding Version}" Padding="5,0" Foreground="{DynamicResource SubTextBrush}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+
+                                    <!-- 公開日時 -->
+                                    <GridViewColumn Width="96">
+                                        <GridViewColumnHeader Content="{x:Static local:Translate.PublishedAt}" Click="GridViewColumnHeader_Click" Tag="PublishedAt"/>
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Text="{Binding DisplayPublishedAt}" Padding="5,0" Foreground="{DynamicResource SubTextBrush}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+
+                                    <!-- DL日時 -->
+                                    <GridViewColumn Width="120">
+                                        <GridViewColumnHeader Content="{x:Static local:Translate.DownloadedAt}" Click="GridViewColumnHeader_Click" Tag="DownloadedAt"/>
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Text="{Binding DisplayDownloadedAt}" Padding="5,0" Foreground="{DynamicResource SubTextBrush}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+
+                                    <!-- 更新ボタン -->
+                                    <GridViewColumn Width="64">
+                                        <GridViewColumnHeader Content="{x:Static local:Translate.UpdateColumn}" Click="GridViewColumnHeader_Click" Tag="HasUpdate"/>
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <Button Click="UpdateLocalPlugin_Click"
+                                                        Content="更新"
+                                                        Visibility="{Binding HasUpdate, Converter={StaticResource BoolToVis}}"
+                                                        Background="{DynamicResource AccentBrush}"
+                                                        Foreground="White"
+                                                        Width="52" Height="22" HorizontalAlignment="Center"/>
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+
+                                    <!-- フォルダボタン -->
+                                    <GridViewColumn Width="48">
+                                        <GridViewColumnHeader Content="📂" Tag="Folder"/>
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <Button Click="OpenLocalPluginFolder_Click" Width="36" Height="22" Background="Transparent" BorderThickness="1" BorderBrush="{DynamicResource BorderBrush}" HorizontalAlignment="Center" ToolTip="{x:Static local:Translate.OpenFolderTooltip}">
+                                                    <Path Data="M10,4H4C2.89,4 2,4.89 2,6V18A2,2 0 0,0 4,20H20A2,2 0 0,0 22,18V8C22,6.89 21.1,6 20,6H12L10,4Z" Fill="{DynamicResource TextBrush}" Stretch="Uniform" Width="12"/>
+                                                </Button>
                                             </DataTemplate>
                                         </GridViewColumn.CellTemplate>
                                     </GridViewColumn>
@@ -739,6 +893,7 @@
                         </ListView>
                     </Grid>
                 </TabItem>
+
 
                 <TabItem Header="{x:Static local:Translate.PluginPortal}">
                     <TabItem.Resources>
@@ -778,58 +933,136 @@
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="*"/>
                         </Grid.RowDefinitions>
+                        <StackPanel Grid.Row="0" Margin="10,5">
+                            <WrapPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                <StackPanel Orientation="Horizontal" Margin="0,5,20,5">
+                                    <TextBlock Text="{x:Static local:Translate.SearchPlugins}" VerticalAlignment="Center" Margin="0,0,5,0" Foreground="{DynamicResource TextBrush}"/>
+                                    <TextBox Text="{Binding OnlinePluginSearchText, UpdateSourceTrigger=PropertyChanged}" Width="200" Height="28" VerticalContentAlignment="Center" Tag="{x:Static local:Translate.SearchPlugins}" />
+                                    <Grid Margin="5,0,0,0">
+                                        <ToggleButton x:Name="FilterButton" Content="" FontFamily="Segoe MDL2 Assets" Width="32" Height="28">
+                                            <ToggleButton.Style>
+                                                <Style TargetType="ToggleButton">
+                                                    <Setter Property="Background" Value="{DynamicResource ItemBrush}"/>
+                                                    <Setter Property="Foreground" Value="{DynamicResource TextBrush}"/>
+                                                    <Setter Property="Template">
+                                                        <Setter.Value>
+                                                            <ControlTemplate TargetType="ToggleButton">
+                                                                <Border Background="{TemplateBinding Background}" CornerRadius="2">
+                                                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                                </Border>
+                                                            </ControlTemplate>
+                                                        </Setter.Value>
+                                                    </Setter>
+                                                    <Style.Triggers>
+                                                        <Trigger Property="IsMouseOver" Value="True">
+                                                            <Setter Property="Background" Value="#555555"/>
+                                                        </Trigger>
+                                                        <Trigger Property="IsChecked" Value="True">
+                                                            <Setter Property="Background" Value="#666666"/>
+                                                        </Trigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </ToggleButton.Style>
+                                        </ToggleButton>
+                                        <Popup IsOpen="{Binding IsChecked, ElementName=FilterButton}" StaysOpen="False" PlacementTarget="{Binding ElementName=FilterButton}" Placement="Bottom">
+                                            <Border Background="{DynamicResource PanelBrush}" BorderBrush="{DynamicResource ItemBrush}" BorderThickness="1" Padding="10">
+                                                <Grid>
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="200"/>
+                                                        <ColumnDefinition Width="200"/>
+                                                    </Grid.ColumnDefinitions>
 
-                        <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="10,5">
-                            <TextBlock Text="{x:Static local:Translate.SearchPlugins}" VerticalAlignment="Center" Margin="0,0,5,0" Foreground="{DynamicResource TextBrush}"/>
-                            <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
-                                <TextBox Text="{Binding OnlinePluginSearchText, UpdateSourceTrigger=PropertyChanged}" Width="300" Tag="{x:Static local:Translate.SearchPlugins}" />
+                                                    <!-- 左列 -->
+                                                    <StackPanel Grid.Column="0" Margin="0,0,10,0">
+                                                        <TextBlock Text="{x:Static local:Translate.TypeFilter}" FontWeight="Bold" Margin="0,0,0,10" Foreground="{DynamicResource TextBrush}"/>
+                                                        <ItemsControl ItemsSource="{Binding PluginTypeFilters}">
+                                                            <ItemsControl.ItemTemplate>
+                                                                <DataTemplate>
+                                                                    <CheckBox Content="{Binding DisplayName}" IsChecked="{Binding IsSelected}" Foreground="{DynamicResource TextBrush}" Margin="0,2"/>
+                                                                </DataTemplate>
+                                                            </ItemsControl.ItemTemplate>
+                                                        </ItemsControl>
+                                                        <Separator Margin="0,10" Background="{DynamicResource TextBrush}"/>
+                                                        <Button Content="{x:Static local:Translate.CheckAll}" Click="AllCheck_Click" Margin="0,2"/>
+                                                        <Button Content="{x:Static local:Translate.UncheckAll}" Click="NoneCheck_Click" Margin="0,2"/>
+                                                    </StackPanel>
 
-                                <Grid Margin="5,0,0,0">
-                                    <ToggleButton x:Name="FilterButton" Content="" FontFamily="Segoe MDL2 Assets" Width="40">
-                                        <ToggleButton.Style>
-                                            <Style TargetType="ToggleButton">
-                                                <Setter Property="Background" Value="{DynamicResource ItemBrush}"/>
-                                                <Setter Property="Foreground" Value="{DynamicResource TextBrush}"/>
-                                                <Setter Property="Template">
+                                                    <!-- 右列 -->
+                                                    <StackPanel Grid.Column="1">
+                                                        <TextBlock Text="{x:Static local:Translate.DownloadStatus}" FontWeight="Bold" Margin="0,0,0,10" Foreground="{DynamicResource TextBrush}"/>
+                                                        <RadioButton x:Name="FilterAll" Content="{x:Static local:Translate.All}" IsChecked="True" Foreground="{DynamicResource TextBrush}" Margin="0,2" Checked="DownloadFilter_Changed" GroupName="DownloadFilter"/>
+                                                        <RadioButton x:Name="FilterDownloaded" Content="{x:Static local:Translate.Downloaded}" Foreground="{DynamicResource TextBrush}" Margin="0,2" Checked="DownloadFilter_Changed" GroupName="DownloadFilter"/>
+                                                        <RadioButton x:Name="FilterNotDownloaded" Content="{x:Static local:Translate.NotDownloaded}" Foreground="{DynamicResource TextBrush}" Margin="0,2" Checked="DownloadFilter_Changed" GroupName="DownloadFilter"/>
+                                                        <RadioButton x:Name="FilterHasUpdate" Content="{x:Static local:Translate.HasUpdate}" Foreground="{DynamicResource TextBrush}" Margin="0,2" Checked="DownloadFilter_Changed" GroupName="DownloadFilter"/>
+
+                                                        <Separator Margin="0,10" Background="{DynamicResource TextBrush}"/>
+                                                        <TextBlock Text="{x:Static local:Translate.SortBy}" FontWeight="Bold" Margin="0,0,0,10" Foreground="{DynamicResource TextBrush}"/>
+                                                        <RadioButton x:Name="SortByName" Content="{x:Static local:Translate.SortByName}" Foreground="{DynamicResource TextBrush}" Margin="0,2" Checked="SortOrder_Changed" GroupName="SortOrder"/>
+                                                        <RadioButton x:Name="SortByAuthor" Content="{x:Static local:Translate.SortByAuthor}" Foreground="{DynamicResource TextBrush}" Margin="0,2" Checked="SortOrder_Changed" GroupName="SortOrder"/>
+                                                        <RadioButton x:Name="SortByType" Content="{x:Static local:Translate.SortByType}" Foreground="{DynamicResource TextBrush}" Margin="0,2" Checked="SortOrder_Changed" GroupName="SortOrder"/>
+                                                        <RadioButton x:Name="SortByStatus" Content="{x:Static local:Translate.SortByStatus}" Foreground="{DynamicResource TextBrush}" Margin="0,2" Checked="SortOrder_Changed" GroupName="SortOrder"/>
+                                                        <RadioButton x:Name="SortByPublishDate" Content="{x:Static local:Translate.SortByPublishDate}" IsChecked="True" Foreground="{DynamicResource TextBrush}" Margin="0,2" Checked="SortOrder_Changed" GroupName="SortOrder"/>
+                                                        <RadioButton x:Name="SortByLatestDate" Content="{x:Static local:Translate.SortByLatestDate}" Foreground="{DynamicResource TextBrush}" Margin="0,2" Checked="SortOrder_Changed" GroupName="SortOrder"/>
+
+                                                        <Separator Margin="0,10" Background="{DynamicResource TextBrush}"/>
+                                                        <TextBlock Text="{x:Static local:Translate.SortDirection}" FontWeight="Bold" Margin="0,0,0,10" Foreground="{DynamicResource TextBrush}"/>
+                                                        <RadioButton x:Name="SortAscendingDir" Content="{x:Static local:Translate.Ascending}" Foreground="{DynamicResource TextBrush}" Margin="0,2" Checked="SortOrder_Changed" GroupName="SortDirection"/>
+                                                        <RadioButton x:Name="SortDescendingDir" Content="{x:Static local:Translate.Descending}" IsChecked="True" Foreground="{DynamicResource TextBrush}" Margin="0,2" Checked="SortOrder_Changed" GroupName="SortDirection"/>
+                                                    </StackPanel>
+                                                </Grid>
+                                            </Border>
+                                        </Popup>
+                                    </Grid>
+                                </StackPanel>
+
+                                <StackPanel Orientation="Horizontal" Margin="0,5,0,5">
+                                    <Button Click="AddToQueue_Click" Padding="10,0" Margin="0,0,5,0" Height="28" Background="{DynamicResource ItemBrush}" Foreground="{DynamicResource TextBrush}" BorderThickness="0" ToolTip="{x:Static local:Translate.AddToQueue}">
+                                        <StackPanel Orientation="Horizontal">
+                                            <Path Data="M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z" Fill="{DynamicResource TextBrush}" Stretch="Uniform" Width="16" Height="16" Margin="0,0,5,0"/>
+                                            <TextBlock Text="{x:Static local:Translate.AddToQueue}" VerticalAlignment="Center"/>
+                                        </StackPanel>
+                                    </Button>
+                                    <Button Click="RefreshPluginList_Click" Padding="10,0" Height="28" Background="{DynamicResource ItemBrush}" Foreground="{DynamicResource TextBrush}" BorderThickness="0" ToolTip="{x:Static local:Translate.RefreshList}" Margin="0,0,5,0">
+                                        <StackPanel Orientation="Horizontal">
+                                            <Path Data="M17.65,6.35C16.2,4.9 14.21,4 12,4A8,8 0 0,0 4,12A8,8 0 0,0 12,20C15.73,20 18.84,17.45 19.73,14H17.65C16.83,16.33 14.61,18 12,18A6,6 0 0,1 6,12A6,6 0 0,1 12,6C13.66,6 15.14,6.69 16.22,7.78L13,11H20V4L17.65,6.35Z" Fill="{DynamicResource TextBrush}" Stretch="Uniform" Width="16" Height="16" Margin="0,0,5,0"/>
+                                            <TextBlock Text="{x:Static local:Translate.RefreshList}" VerticalAlignment="Center"/>
+                                        </StackPanel>
+                                    </Button>
+                                    <Button Click="BulkDownloadSelected_Click" Padding="10,0" Height="28" Background="{DynamicResource AccentBrush}" Foreground="White" BorderThickness="0" ToolTip="{x:Static local:Translate.BulkDownload}" Margin="0,0,20,0">
+                                        <StackPanel Orientation="Horizontal">
+                                            <Path Data="M5,20H19V18H5M19,9H15V3H9V9H5L12,16L19,9Z" Fill="White" Stretch="Uniform" Width="16" Height="16" Margin="0,0,5,0"/>
+                                            <TextBlock Text="{x:Static local:Translate.BulkDownload}" VerticalAlignment="Center"/>
+                                        </StackPanel>
+                                    </Button>
+                                    <!-- サイズ変更バー -->
+                                    <TextBlock Text="A" FontSize="10" VerticalAlignment="Center" Foreground="{DynamicResource SubTextBrush}" Margin="0,0,4,0"/>
+                                    <Slider x:Name="ItemSizeSlider" Width="100" Minimum="200" Maximum="600" Value="{Binding ItemSize, Mode=TwoWay}" TickFrequency="10.0" IsSnapToTickEnabled="True" VerticalAlignment="Center"/>
+                                    <TextBlock Text="A" FontSize="18" VerticalAlignment="Center" Foreground="{DynamicResource SubTextBrush}" Margin="4,0,8,0"/>
+                                    <!-- タイル/リスト切替ボタン -->
+                                    <Button Click="ToggleViewMode_Click" Width="28" Height="28" Background="{DynamicResource ItemBrush}" BorderThickness="0" ToolTip="{x:Static local:Translate.Toggle}" Padding="5">
+                                        <Button.Style>
+                                            <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+                                                <Setter Property="Content">
                                                     <Setter.Value>
-                                                        <ControlTemplate TargetType="ToggleButton">
-                                                            <Border Background="{TemplateBinding Background}" CornerRadius="2">
-                                                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                                                            </Border>
-                                                        </ControlTemplate>
+                                                        <!-- タイルアイコン（デフォルト） -->
+                                                        <Path Data="M3,3H10V10H3V3M13,3H21V10H13V3M3,13H10V21H3V13M13,13H21V21H13V13" Fill="{DynamicResource TextBrush}" Stretch="Uniform" Width="16" Height="16"/>
                                                     </Setter.Value>
                                                 </Setter>
                                                 <Style.Triggers>
-                                                    <Trigger Property="IsMouseOver" Value="True">
-                                                        <Setter Property="Background" Value="#555555"/>
-                                                    </Trigger>
-                                                    <Trigger Property="IsChecked" Value="True">
-                                                        <Setter Property="Background" Value="#666666"/>
-                                                    </Trigger>
+                                                    <!-- リスト表示中はリストアイコン -->
+                                                    <DataTrigger Binding="{Binding IsViewTile}" Value="False">
+                                                        <Setter Property="Content">
+                                                            <Setter.Value>
+                                                                <Path Data="M3,5H21V7H3V5M3,10H21V12H3V10M3,15H21V17H3V15M3,20H21V22H3V20" Fill="{DynamicResource TextBrush}" Stretch="Uniform" Width="16" Height="16"/>
+                                                            </Setter.Value>
+                                                        </Setter>
+                                                    </DataTrigger>
                                                 </Style.Triggers>
                                             </Style>
-                                        </ToggleButton.Style>
-                                    </ToggleButton>
-                                    <Popup IsOpen="{Binding IsChecked, ElementName=FilterButton}" StaysOpen="False" PlacementTarget="{Binding ElementName=FilterButton}" Placement="Bottom">
-                                        <Border Background="{DynamicResource PanelBrush}" BorderBrush="{DynamicResource ItemBrush}" BorderThickness="1" Padding="10" Width="200">
-                                            <StackPanel>
-                                                <TextBlock Text="{x:Static local:Translate.TypeFilter}" FontWeight="Bold" Margin="0,0,0,10" Foreground="{DynamicResource TextBrush}"/>
-                                                <ItemsControl ItemsSource="{Binding PluginTypeFilters}">
-                                                    <ItemsControl.ItemTemplate>
-                                                        <DataTemplate>
-                                                            <CheckBox Content="{Binding DisplayName}" IsChecked="{Binding IsSelected}" Foreground="{DynamicResource TextBrush}" Margin="0,2"/>
-                                                        </DataTemplate>
-                                                    </ItemsControl.ItemTemplate>
-                                                </ItemsControl>
-                                                <Separator Margin="0,10" Background="{DynamicResource TextBrush}"/>
-                                                <Button Content="{x:Static local:Translate.CheckAll}" Click="AllCheck_Click" Margin="0,2"/>
-                                                <Button Content="{x:Static local:Translate.UncheckAll}" Click="NoneCheck_Click" Margin="0,2"/>
-                                            </StackPanel>
-                                        </Border>
-                                    </Popup>
-
-                                </Grid>
-                            </StackPanel>
+                                        </Button.Style>
+                                    </Button>
+                                </StackPanel>
+                            </WrapPanel>
                         </StackPanel>
 
                         <Grid Grid.Row="1">
@@ -838,32 +1071,225 @@
                                 <ColumnDefinition Width="400"/>
                             </Grid.ColumnDefinitions>
 
-                            <ListView Grid.Column="0" ItemsSource="{Binding OnlinePlugins}" SelectedItem="{Binding SelectedOnlinePlugin}" Background="Transparent" BorderThickness="0">
+                            <ListView x:Name="PluginListView" Grid.Column="0" ItemsSource="{Binding OnlinePlugins}" SelectedItem="{Binding SelectedOnlinePlugin}" Background="Transparent" BorderThickness="0" ScrollViewer.HorizontalScrollBarVisibility="Disabled" PreviewMouseWheel="ListView_PreviewMouseWheel" PreviewKeyDown="PluginListView_PreviewKeyDown" SelectionMode="Extended" SelectionChanged="PluginListView_SelectionChanged">
+                                <ListView.Style>
+                                    <Style TargetType="ListView">
+                                        <Setter Property="ItemsPanel">
+                                            <Setter.Value>
+                                                <ItemsPanelTemplate>
+                                                    <WrapPanel IsItemsHost="True" Grid.IsSharedSizeScope="True"/>
+                                                </ItemsPanelTemplate>
+                                            </Setter.Value>
+                                        </Setter>
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding IsViewTile, RelativeSource={RelativeSource AncestorType=Window}}" Value="False">
+                                                <Setter Property="ItemsPanel">
+                                                    <Setter.Value>
+                                                        <ItemsPanelTemplate>
+                                                            <VirtualizingStackPanel IsItemsHost="True"/>
+                                                        </ItemsPanelTemplate>
+                                                    </Setter.Value>
+                                                </Setter>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </ListView.Style>
                                 <ListView.ItemTemplate>
                                     <DataTemplate>
-                                        <Border BorderBrush="{DynamicResource BorderBrush}" BorderThickness="0,0,0,1" Padding="15">
-                                            <StackPanel>
-                                                <TextBlock Text="{Binding Name}" FontSize="16" FontWeight="Bold" Foreground="{DynamicResource TextBrush}"/>
-                                                <TextBlock Text="{Binding Author}" Foreground="{DynamicResource SubTextBrush}" FontSize="12" Margin="0,5,0,0"/>
-                                            </StackPanel>
-                                        </Border>
+                                        <!-- DataTemplateは子1つのみ → Gridでラップ -->
+                                        <Grid>
+                                            <!-- タイル表示 -->
+                                            <Border Width="{Binding Value, ElementName=ItemSizeSlider}" Margin="5" Background="{DynamicResource ItemBrush}" CornerRadius="5" Padding="12">
+                                                <Border.Style>
+                                                    <Style TargetType="Border">
+                                                        <Setter Property="Visibility" Value="Visible"/>
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding IsViewTile, RelativeSource={RelativeSource AncestorType=Window}}" Value="False">
+                                                                <Setter Property="Visibility" Value="Collapsed"/>
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </Border.Style>
+                                                <Grid>
+                                                    <Grid.RowDefinitions>
+                                                        <RowDefinition Height="*"/>
+                                                        <RowDefinition Height="Auto"/>
+                                                    </Grid.RowDefinitions>
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="Auto"/>
+                                                        <ColumnDefinition Width="*"/>
+                                                    </Grid.ColumnDefinitions>
+                                                    <CheckBox IsChecked="{Binding IsSelected}" VerticalAlignment="Top" Margin="0,5,10,0"/>
+                                                    <StackPanel Grid.Column="1" VerticalAlignment="Top" Margin="0,0,0,10">
+                                                        <TextBlock Text="{Binding Name}" FontSize="14" FontWeight="Bold" Foreground="{DynamicResource TextBrush}" TextWrapping="Wrap"/>
+                                                        <TextBlock Text="{Binding Author}" Foreground="{DynamicResource SubTextBrush}" FontSize="11"/>
+                                                        <TextBlock Foreground="{DynamicResource AccentBrush}" FontSize="11">
+                                                            <TextBlock.Style>
+                                                                <Style TargetType="TextBlock">
+                                                                    <Setter Property="Text" Value="{Binding LocalVersion, Converter={StaticResource InstalledVersionConverter}}"/>
+                                                                    <Style.Triggers>
+                                                                        <DataTrigger Binding="{Binding LocalVersion}" Value="">
+                                                                            <Setter Property="Visibility" Value="Collapsed"/>
+                                                                        </DataTrigger>
+                                                                        <DataTrigger Binding="{Binding LocalVersion}" Value="-">
+                                                                            <Setter Property="Visibility" Value="Collapsed"/>
+                                                                        </DataTrigger>
+                                                                    </Style.Triggers>
+                                                                </Style>
+                                                            </TextBlock.Style>
+                                                        </TextBlock>
+                                                    </StackPanel>
+                                                    <Grid Grid.Row="1" Grid.Column="1" VerticalAlignment="Bottom">
+                                                        <Button Click="DirectDownload_Click" Height="30" BorderThickness="0">
+                                                            <Button.Style>
+                                                                <Style TargetType="Button">
+                                                                    <Setter Property="Background" Value="{DynamicResource AccentBrush}"/>
+                                                                    <Setter Property="Content" Value="{x:Static local:Translate.Download}"/>
+                                                                    <Setter Property="Foreground" Value="White"/>
+                                                                    <Setter Property="IsEnabled" Value="True"/>
+                                                                    <Style.Triggers>
+                                                                        <DataTrigger Binding="{Binding LocalStatus}" Value="UpToDate">
+                                                                            <Setter Property="Background" Value="{DynamicResource ItemBrush}"/>
+                                                                            <Setter Property="Content" Value="{x:Static local:Translate.Downloaded}"/>
+                                                                            <Setter Property="IsEnabled" Value="False"/>
+                                                                            <Setter Property="Foreground" Value="{DynamicResource SubTextBrush}"/>
+                                                                        </DataTrigger>
+                                                                        <DataTrigger Binding="{Binding HasUpdate}" Value="True">
+                                                                            <Setter Property="Background" Value="#FBC02D"/>
+                                                                            <Setter Property="Content" Value="{x:Static local:Translate.Update}"/>
+                                                                            <Setter Property="Foreground" Value="Black"/>
+                                                                            <Setter Property="IsEnabled" Value="True"/>
+                                                                        </DataTrigger>
+                                                                        <DataTrigger Binding="{Binding IsEnabled}" Value="False">
+                                                                            <Setter Property="Background" Value="{DynamicResource ItemBrush}"/>
+                                                                            <Setter Property="Content" Value="{x:Static local:Translate.EndDistribution}"/>
+                                                                            <Setter Property="IsEnabled" Value="False"/>
+                                                                            <Setter Property="Foreground" Value="{DynamicResource SubTextBrush}"/>
+                                                                        </DataTrigger>
+                                                                        <DataTrigger Binding="{Binding HasNoRelease}" Value="True">
+                                                                            <Setter Property="Background" Value="{DynamicResource ItemBrush}"/>
+                                                                            <Setter Property="Content" Value="{x:Static local:Translate.EndDistribution}"/>
+                                                                            <Setter Property="IsEnabled" Value="False"/>
+                                                                            <Setter Property="Foreground" Value="{DynamicResource SubTextBrush}"/>
+                                                                        </DataTrigger>
+                                                                        <MultiDataTrigger>
+                                                                            <MultiDataTrigger.Conditions>
+                                                                                <Condition Binding="{Binding IsAssetDownloadable}" Value="False"/>
+                                                                                <Condition Binding="{Binding HasNoRelease}" Value="False"/>
+                                                                                <Condition Binding="{Binding LocalStatus}" Value="NotInstalled"/>
+                                                                                <Condition Binding="{Binding IsEnabled}" Value="True"/>
+                                                                            </MultiDataTrigger.Conditions>
+                                                                            <Setter Property="Background" Value="{DynamicResource AccentBrush}"/>
+                                                                            <Setter Property="Content" Value="{x:Static local:Translate.CheckOnSite}"/>
+                                                                            <Setter Property="Foreground" Value="White"/>
+                                                                            <Setter Property="IsEnabled" Value="True"/>
+                                                                        </MultiDataTrigger>
+                                                                    </Style.Triggers>
+                                                                </Style>
+                                                            </Button.Style>
+                                                        </Button>
+                                                    </Grid>
+                                                </Grid>
+                                            </Border>
+
+                                            <!-- リスト表示 -->
+                                            <Grid Margin="2,1">
+                                                <Grid.Style>
+                                                    <Style TargetType="Grid">
+                                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding IsViewTile, RelativeSource={RelativeSource AncestorType=Window}}" Value="False">
+                                                                <Setter Property="Visibility" Value="Visible"/>
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </Grid.Style>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="Auto"/>
+                                                    <ColumnDefinition Width="180"/>
+                                                    <ColumnDefinition Width="120"/>
+                                                    <ColumnDefinition Width="80"/>
+                                                    <ColumnDefinition Width="*"/>
+                                                    <ColumnDefinition Width="120"/>
+                                                </Grid.ColumnDefinitions>
+                                                <CheckBox Grid.Column="0" IsChecked="{Binding IsSelected}" VerticalAlignment="Center" Margin="4,0,8,0"/>
+                                                <TextBlock Grid.Column="1" Text="{Binding Name}" FontWeight="Bold" Foreground="{DynamicResource TextBrush}" VerticalAlignment="Center" TextTrimming="CharacterEllipsis"/>
+                                                <TextBlock Grid.Column="2" Text="{Binding Author}" Foreground="{DynamicResource SubTextBrush}" VerticalAlignment="Center" TextTrimming="CharacterEllipsis"/>
+                                                <TextBlock Grid.Column="3" Text="{Binding LatestVersionName}" Foreground="{DynamicResource SubTextBrush}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                                <TextBlock Grid.Column="4" Text="{Binding Description}" Foreground="{DynamicResource SubTextBrush}" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" Margin="8,0"/>
+                                                <Button Grid.Column="5" Click="DirectDownload_Click" Height="26" BorderThickness="0" Margin="4,2">
+                                                    <Button.Style>
+                                                        <Style TargetType="Button">
+                                                            <Setter Property="Background" Value="{DynamicResource AccentBrush}"/>
+                                                            <Setter Property="Content" Value="{x:Static local:Translate.Download}"/>
+                                                            <Setter Property="Foreground" Value="White"/>
+                                                            <Setter Property="IsEnabled" Value="True"/>
+                                                            <Style.Triggers>
+                                                                <DataTrigger Binding="{Binding LocalStatus}" Value="UpToDate">
+                                                                    <Setter Property="Background" Value="{DynamicResource ItemBrush}"/>
+                                                                    <Setter Property="Content" Value="{x:Static local:Translate.Downloaded}"/>
+                                                                    <Setter Property="IsEnabled" Value="False"/>
+                                                                    <Setter Property="Foreground" Value="{DynamicResource SubTextBrush}"/>
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding HasUpdate}" Value="True">
+                                                                    <Setter Property="Background" Value="#FBC02D"/>
+                                                                    <Setter Property="Content" Value="{x:Static local:Translate.Update}"/>
+                                                                    <Setter Property="Foreground" Value="Black"/>
+                                                                    <Setter Property="IsEnabled" Value="True"/>
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding IsEnabled}" Value="False">
+                                                                    <Setter Property="Background" Value="{DynamicResource ItemBrush}"/>
+                                                                    <Setter Property="Content" Value="{x:Static local:Translate.EndDistribution}"/>
+                                                                    <Setter Property="IsEnabled" Value="False"/>
+                                                                    <Setter Property="Foreground" Value="{DynamicResource SubTextBrush}"/>
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding HasNoRelease}" Value="True">
+                                                                    <Setter Property="Background" Value="{DynamicResource ItemBrush}"/>
+                                                                    <Setter Property="Content" Value="{x:Static local:Translate.EndDistribution}"/>
+                                                                    <Setter Property="IsEnabled" Value="False"/>
+                                                                    <Setter Property="Foreground" Value="{DynamicResource SubTextBrush}"/>
+                                                                </DataTrigger>
+                                                                <MultiDataTrigger>
+                                                                    <MultiDataTrigger.Conditions>
+                                                                        <Condition Binding="{Binding IsAssetDownloadable}" Value="False"/>
+                                                                        <Condition Binding="{Binding HasNoRelease}" Value="False"/>
+                                                                        <Condition Binding="{Binding LocalStatus}" Value="NotInstalled"/>
+                                                                        <Condition Binding="{Binding IsEnabled}" Value="True"/>
+                                                                    </MultiDataTrigger.Conditions>
+                                                                    <Setter Property="Background" Value="{DynamicResource AccentBrush}"/>
+                                                                    <Setter Property="Content" Value="{x:Static local:Translate.CheckOnSite}"/>
+                                                                    <Setter Property="Foreground" Value="White"/>
+                                                                    <Setter Property="IsEnabled" Value="True"/>
+                                                                </MultiDataTrigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </Button.Style>
+                                                </Button>
+                                            </Grid>
+                                        </Grid>
                                     </DataTemplate>
                                 </ListView.ItemTemplate>
                                 <ListView.ItemContainerStyle>
-                                    <Style TargetType="ListBoxItem">
+                                    <Style TargetType="ListViewItem">
+                                        <!-- HorizontalContentAlignment を明示指定することで
+                                             WrapPanel 切り替え時の RelativeSource FindAncestor
+                                             バインディングエラー (Error 4) を解消 -->
+                                        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                                        <Setter Property="VerticalContentAlignment" Value="Center"/>
                                         <Setter Property="Background" Value="Transparent"/>
                                         <Setter Property="Template">
                                             <Setter.Value>
-                                                <ControlTemplate TargetType="ListBoxItem">
-                                                    <Border x:Name="Bd" Background="{TemplateBinding Background}">
+                                                <ControlTemplate TargetType="ListViewItem">
+                                                    <Border x:Name="Bd" Background="{TemplateBinding Background}" CornerRadius="5">
                                                         <ContentPresenter/>
                                                     </Border>
                                                     <ControlTemplate.Triggers>
                                                         <Trigger Property="IsSelected" Value="True">
-                                                            <Setter TargetName="Bd" Property="Background" Value="{DynamicResource AccentBrush}"/>
+                                                            <Setter TargetName="Bd" Property="BorderBrush" Value="{DynamicResource AccentBrush}"/>
+                                                            <Setter TargetName="Bd" Property="BorderThickness" Value="1"/>
                                                         </Trigger>
                                                         <Trigger Property="IsMouseOver" Value="True">
-                                                            <Setter TargetName="Bd" Property="Background" Value="{DynamicResource ItemBrush}"/>
+                                                            <Setter TargetName="Bd" Property="Background" Value="#1AFFFFFF"/>
                                                         </Trigger>
                                                     </ControlTemplate.Triggers>
                                                 </ControlTemplate>
@@ -887,11 +1313,11 @@
                                             </Grid.ColumnDefinitions>
                                             <StackPanel>
                                                 <TextBlock Text="{x:Static local:Translate.LatestVersion}" FontWeight="Bold" Foreground="{DynamicResource TextBrush}"/>
-                                                <TextBlock Text="{Binding SelectedOnlinePlugin.LatestVersionName}" Foreground="Orange" FontWeight="Bold" FontSize="16"/>
+                                                <TextBlock Text="{Binding SelectedOnlinePlugin.LatestVersionName}" Foreground="{DynamicResource AccentBrush}" FontWeight="Bold" FontSize="16"/>
                                             </StackPanel>
                                             <Button Grid.Column="1" Click="InstallPlugin_Click" Background="{DynamicResource AccentBrush}" Padding="20,10" IsEnabled="{Binding SelectedOnlinePlugin.SelectedVersion, Converter={StaticResource IsNotNullConverter}}">
                                                 <StackPanel Orientation="Horizontal">
-                                                    <Path Fill="{DynamicResource TextBrush}" Width="16" Height="16" Stretch="Uniform" Margin="0,0,10,0" Data="M5,20H19V18H5M19,9H15V3H9V9H5L12,16L19,9Z"/>
+                                                    <Path Fill="White" Width="16" Height="16" Stretch="Uniform" Margin="0,0,10,0" Data="M5,20H19V18H5M19,9H15V3H9V9H5L12,16L19,9Z"/>
                                                     <TextBlock Text="{x:Static local:Translate.Install}" FontWeight="Bold" VerticalAlignment="Center" Foreground="{DynamicResource TextBrush}"/>
                                                 </StackPanel>
                                             </Button>
@@ -908,8 +1334,30 @@
          Height="150" Margin="0,0,0,15"
          Background="{DynamicResource ItemBrush}"
          BorderBrush="{DynamicResource BorderBrush}"
-         BorderThickness="1">
+         BorderThickness="1"
+         HorizontalContentAlignment="Stretch">
                                                 <ListBox.Resources>
+                                                    <Style TargetType="{x:Type ListBoxItem}">
+                                                        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                                                        <Setter Property="Background" Value="Transparent"/>
+                                                        <Setter Property="Template">
+                                                            <Setter.Value>
+                                                                <ControlTemplate TargetType="{x:Type ListBoxItem}">
+                                                                    <Border x:Name="Bd" Background="{TemplateBinding Background}" SnapsToDevicePixels="true">
+                                                                        <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                                                                    </Border>
+                                                                    <ControlTemplate.Triggers>
+                                                                        <Trigger Property="IsSelected" Value="true">
+                                                                            <Setter TargetName="Bd" Property="Background" Value="{DynamicResource AccentBrush}"/>
+                                                                        </Trigger>
+                                                                        <Trigger Property="IsMouseOver" Value="true">
+                                                                            <Setter TargetName="Bd" Property="Background" Value="#1AFFFFFF"/>
+                                                                        </Trigger>
+                                                                    </ControlTemplate.Triggers>
+                                                                </ControlTemplate>
+                                                            </Setter.Value>
+                                                        </Setter>
+                                                    </Style>
                                                     <Style TargetType="{x:Type ScrollBar}">
                                                         <Setter Property="Width" Value="8"/>
                                                         <Setter Property="Template">
@@ -935,15 +1383,27 @@
                                                 </ListBox.Resources>
                                                 <ListBox.ItemTemplate>
                                                     <DataTemplate>
-                                                        <Grid Margin="2">
+                                                        <Grid Margin="5,2">
                                                             <Grid.ColumnDefinitions>
+                                                                <ColumnDefinition Width="Auto"/>
                                                                 <ColumnDefinition Width="Auto"/>
                                                                 <ColumnDefinition Width="*"/>
                                                                 <ColumnDefinition Width="Auto"/>
                                                             </Grid.ColumnDefinitions>
-                                                            <TextBlock Grid.Column="0" Text="{Binding TagName}" Foreground="{DynamicResource TextBrush}" FontWeight="Bold"/>
-                                                            <TextBlock Grid.Column="1" Text="{x:Static local:Translate.PreRelease}" Foreground="Orange" Visibility="{Binding Prerelease, Converter={StaticResource BoolToVis}}" Margin="5,0,0,0"/>
-                                                            <TextBlock Grid.Column="2" Text="{Binding PublishedAt, StringFormat=' - {0:yyyy/MM/dd}'}" Foreground="{DynamicResource SubTextBrush}" Margin="5,0,0,0"/>
+                                                            <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
+                                                                <TextBlock Text="{Binding TagName}" Foreground="{DynamicResource TextBrush}" FontWeight="Bold"/>
+                                                                <TextBlock Text="{x:Static local:Translate.PreRelease}" Foreground="Orange" Visibility="{Binding Prerelease, Converter={StaticResource BoolToVis}}" Margin="5,0,0,0"/>
+                                                            </StackPanel>
+
+                                                            <TextBlock Grid.Column="1" Text="{Binding PublishedAt, StringFormat=' - {0:yyyy/MM/dd}'}" Foreground="{DynamicResource SubTextBrush}" Margin="5,0,0,0" VerticalAlignment="Center"/>
+
+                                                            <Button Grid.Column="3" Click="VersionDownload_Click" Width="28" Height="28" Padding="5" Background="Transparent" BorderThickness="0" HorizontalAlignment="Right" VerticalAlignment="Center">
+                                                                <Path Data="M19,13V19H5V13H3V19C3,20.1 3.9,21 5,21H19C20.1,21 21,20.1 21,19V13H19M13,12.5L15.59,9.91L17,11.33L12,16.33L7,11.33L8.41,9.91L11,12.5V3H13V12.5Z" 
+                      Fill="{DynamicResource TextBrush}" Stretch="Uniform" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                                <Button.ToolTip>
+                                                                    <Binding Source="{x:Static local:Translate.VersionDownloadTooltip}"/>
+                                                                </Button.ToolTip>
+                                                            </Button>
                                                         </Grid>
                                                     </DataTemplate>
                                                 </ListBox.ItemTemplate>
@@ -979,6 +1439,7 @@
                             <TextBlock Text="{x:Static local:Translate.OperationSettings}" Margin="0,10,0,5" Foreground="{DynamicResource SubTextBrush}"/>
                             <CheckBox IsChecked="{Binding CloseOnLaunch}" Content="{x:Static local:Translate.ExitHubOnYmm4Start}" Margin="0,0,0,10" Style="{StaticResource ModernCheckBox}"/>
 
+                            <TextBlock Text="{x:Static local:Translate.PluginSettings}" FontSize="18" FontWeight="Bold" Margin="0,20,0,10" Foreground="{DynamicResource TextBrush}"/>
                             <TextBlock Text="{x:Static local:Translate.ThemeSettings}" Margin="0,10,0,5" Foreground="{DynamicResource SubTextBrush}"/>
                             <ComboBox SelectedValue="{Binding SelectedTheme}" SelectedValuePath="Tag" Height="35">
                                 <ComboBoxItem Content="{x:Static local:Translate.WindowsStandard}" Tag="{x:Static local:AppTheme.Windows}"/>
@@ -1012,45 +1473,23 @@
                                             <Grid.ColumnDefinitions>
                                                 <ColumnDefinition Width="*"/>
                                                 <ColumnDefinition Width="Auto"/>
+                                                <ColumnDefinition Width="Auto"/>
                                             </Grid.ColumnDefinitions>
                                             <TextBox Text="{Binding .}" IsReadOnly="True" VerticalContentAlignment="Center" Tag="{x:Static local:Translate.FolderPath}"/>
-                                            <Button Grid.Column="1" Click="RemoveProjectDir_Click" Content="{x:Static local:Translate.Delete}" Margin="5,0,0,0"/>
+                                            <Button Grid.Column="1" Click="OpenWatchFolder_Click" Margin="5,0,0,0" Padding="8,0" Height="35" Background="{DynamicResource ItemBrush}" BorderThickness="0" ToolTip="{x:Static local:Translate.OpenFolderTooltip}">
+                                                <Path Data="M10,4H4C2.89,4 2,4.89 2,6V18A2,2 0 0,0 4,20H20A2,2 0 0,0 22,18V8C22,6.89 21.1,6 20,6H12L10,4Z" Fill="{DynamicResource TextBrush}" Stretch="Uniform" Width="16" Height="16"/>
+                                            </Button>
+                                            <Button Grid.Column="2" Click="RemoveProjectDir_Click" Content="{x:Static local:Translate.Delete}" Margin="5,0,0,0"/>
                                         </Grid>
                                     </DataTemplate>
                                 </ItemsControl.ItemTemplate>
                             </ItemsControl>
-                            <TextBlock Text="{x:Static local:Translate.GitHubApiSettings}" FontSize="18" FontWeight="Bold" Margin="0,30,0,10" Foreground="{DynamicResource TextBrush}"/>
-                            <TextBlock Text="{x:Static local:Translate.GitHubApiLimit}" Foreground="{DynamicResource SubTextBrush}" TextWrapping="Wrap" Margin="0,0,0,10"/>
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="Auto"/>
-                                    <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="Auto"/>
-                                </Grid.ColumnDefinitions>
-                                <TextBlock Text="{x:Static local:Translate.Token}" VerticalAlignment="Center" Margin="0,0,10,0" Foreground="{DynamicResource TextBrush}"/>
-                                <PasswordBox x:Name="GitHubTokenBox" 
-                 Grid.Column="1" 
-                 PasswordChanged="GitHubTokenBox_PasswordChanged" 
-                 Padding="5"
-                 Background="{DynamicResource ItemBrush}"
-                 Foreground="{DynamicResource TextBrush}"
-                 BorderBrush="{DynamicResource SubTextBrush}"
-                 BorderThickness="1"/>
-                                <Button Content="{x:Static local:Translate.IssueToken}" 
-            Grid.Column="2" 
-            Click="IssueToken_Click"
-            Margin="10,0,0,0"
-            Padding="10,5"
-            Background="{DynamicResource AccentBrush}"
-            Foreground="{DynamicResource TextBrush}"
-            BorderThickness="0"/>
-                            </Grid>
 
 
                         </StackPanel>
-                        
+
                     </Grid>
-                    
+
                 </TabItem>
             </TabControl>
         </Grid>

@@ -59,107 +59,224 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
 <data name="CurrentCulture" xml:space="preserve"><value>id-id</value></data>
-<data name="PreRelease" xml:space="preserve"><value>(Prarilis)</value></data>
-<data name="DownloadAndRun" xml:space="preserve"><value>※File .ymme akan diunduh dan dijalankan.</value></data>
-<data name="GitHubApiSettings" xml:space="preserve"><value>Pengaturan API GitHub</value></data>
-<data name="GitHubApiLimit" xml:space="preserve"><value>Batas pengambilan API GitHub telah tercapai. Jika Anda tidak memiliki akun, silakan coba lagi nanti.</value></data>
-<data name="CustomizeHub" xml:space="preserve"><value>Kustomisasi Hub</value></data>
-<data name="HubSettings" xml:space="preserve"><value>Pengaturan Hub</value></data>
-<data name="UiFont" xml:space="preserve"><value>Font UI</value></data>
-<data name="WindowsStandard" xml:space="preserve"><value>Standar Windows</value></data>
-<data name="ExitHubOnYmm4Start" xml:space="preserve"><value>Keluar dari Hub saat YMM4 dimulai</value></data>
-<data name="Ymm4InfoSite" xml:space="preserve"><value>Situs Informasi YMM4</value></data>
-<data name="Action" xml:space="preserve"><value>Aksi</value></data>
 <data name="AccessDenied" xml:space="preserve"><value>Akses ditolak</value></data>
-<data name="UpdateAvailable" xml:space="preserve"><value>Pembaruan tersedia</value></data>
-<data name="ConfirmUpdate" xml:space="preserve"><value>Apakah Anda ingin memperbarui?</value></data>
-<data name="UpdateDetails" xml:space="preserve"><value>Detail Pembaruan</value></data>
-<data name="Instance" xml:space="preserve"><value>Instans</value></data>
-<data name="SelectInstance" xml:space="preserve"><value>Silakan pilih instans.</value></data>
-<data name="InstanceName" xml:space="preserve"><value>Nama Instans</value></data>
-<data name="Install" xml:space="preserve"><value>Instal</value></data>
-<data name="SelectInstallVersion" xml:space="preserve"><value>Silakan pilih versi yang akan diinstal dan instans target.</value></data>
-<data name="CannotBeUndone" xml:space="preserve"><value>Tindakan ini tidak dapat dibatalkan.</value></data>
-<data name="Size" xml:space="preserve"><value>Ukuran</value></data>
+<data name="Acquiring" xml:space="preserve"><value>Mengambil</value></data>
+<data name="Action" xml:space="preserve"><value>Aksi</value></data>
+<data name="Add" xml:space="preserve"><value>Tambah</value></data>
+<data name="AddFolder" xml:space="preserve"><value>Tambah Folder</value></data>
+<data name="AdminPrivilegeRequired" xml:space="preserve"><value>Hak istimewa administrator diperlukan. Silakan jalankan program sebagai administrator atau pindahkan ke folder yang dapat ditulis.</value></data>
 <data name="All" xml:space="preserve"><value>Semua</value></data>
+<data name="AudioEffects" xml:space="preserve"><value>Efek Audio</value></data>
+<data name="AvoidLimitSettings" xml:space="preserve"><value>Pengaturan ini untuk menghindari batasan pengambilan plugin. Atur ini jika batasan sering terjadi.</value></data>
+<data name="Black" xml:space="preserve"><value>Hitam</value></data>
+<data name="BulkInstallCompleted" xml:space="preserve"><value>اكتملت عملية التثبيت الجماعي.</value></data>
+<data name="CannotBeUndone" xml:space="preserve"><value>Tindakan ini tidak dapat dibatalkan.</value></data>
+<data name="Character" xml:space="preserve"><value>Gambar Karakter</value></data>
 <data name="CheckAll" xml:space="preserve"><value>Centang Semua</value></data>
-<data name="UncheckAll" xml:space="preserve"><value>Hapus Semua Centang</value></data>
-<data name="Others" xml:space="preserve"><value>Lainnya</value></data>
-<data name="Dark" xml:space="preserve"><value>Gelap</value></data>
-<data name="TypeFilter" xml:space="preserve"><value>Filter Tipe</value></data>
-<data name="DownloadError" xml:space="preserve"><value>Terjadi kesalahan saat mengunduh:</value></data>
-<data name="Tools" xml:space="preserve"><value>Alat</value></data>
-<data name="ThemeSettings" xml:space="preserve"><value>Pengaturan Tema</value></data>
-<data name="TextCompletion" xml:space="preserve"><value>Penyelesaian Teks</value></data>
-<data name="Token" xml:space="preserve"><value>Token</value></data>
-<data name="IssueToken" xml:space="preserve"><value>Terbitkan Token</value></data>
-<data name="Niconico" xml:space="preserve"><value>Niconico</value></data>
-<data name="DeleteFailed" xml:space="preserve"><value>Gagal menghapus</value></data>
-<data name="SelectVersion" xml:space="preserve"><value>Pilih Versi</value></data>
-<data name="Path" xml:space="preserve"><value>Jalur</value></data>
-<data name="FileName" xml:space="preserve"><value>Nama File</value></data>
 <data name="ClearFilter" xml:space="preserve"><value>Hapus Filter</value></data>
+<data name="Confirm" xml:space="preserve"><value>Konfirmasi</value></data>
+<data name="ConfirmBulkInstall" xml:space="preserve"><value>هل تريد تثبيت هذه الملحقات دفعة واحدة؟</value></data>
+<data name="ConfirmDeletion" xml:space="preserve"><value>Konfirmasi Penghapusan</value></data>
+<data name="ConfirmUpdate" xml:space="preserve"><value>Apakah Anda ingin memperbarui?</value></data>
+<data name="CreateNew" xml:space="preserve"><value>Buat Baru</value></data>
+<data name="CurrentVersion" xml:space="preserve"><value>Versi Saat Ini</value></data>
+<data name="CustomizeHub" xml:space="preserve"><value>Kustomisasi Hub</value></data>
+<data name="Dark" xml:space="preserve"><value>Gelap</value></data>
+<data name="Delete" xml:space="preserve"><value>Hapus</value></data>
+<data name="DeleteCountPermanently" xml:space="preserve"><value>Apakah Anda ingin menghapus plugin ini secara permanen?</value></data>
+<data name="DeleteFailed" xml:space="preserve"><value>Gagal menghapus</value></data>
+<data name="DeletePermanently" xml:space="preserve"><value>Apakah Anda ingin menghapus ini secara permanen?</value></data>
+<data name="DeleteSelected" xml:space="preserve"><value>Hapus yang Dipilih</value></data>
+<data name="Disable" xml:space="preserve"><value>Nonaktifkan</value></data>
+<data name="DistributionSite" xml:space="preserve"><value>Situs Distribusi</value></data>
+<data name="DownloadAndRun" xml:space="preserve"><value>※File .ymme akan diunduh dan dijalankan.</value></data>
+<data name="DownloadError" xml:space="preserve"><value>Terjadi kesalahan saat mengunduh:</value></data>
+<data name="Enable" xml:space="preserve"><value>Aktifkan</value></data>
+<data name="EnableDisableSelected" xml:space="preserve"><value>Aktifkan/Nonaktifkan yang Dipilih</value></data>
+<data name="EndDistribution" xml:space="preserve"><value>Distribusi Berakhir</value></data>
+<data name="ExitHubOnYmm4Start" xml:space="preserve"><value>Keluar dari Hub saat YMM4 dimulai</value></data>
+<data name="ExitYmm4ForPlugin" xml:space="preserve"><value>Apakah Anda ingin keluar dari YMM4 untuk operasi plugin?</value></data>
+<data name="Extension" xml:space="preserve"><value>Ekstensi</value></data>
+<data name="FileName" xml:space="preserve"><value>Nama File</value></data>
 <data name="Folder" xml:space="preserve"><value>Folder</value></data>
 <data name="FolderPath" xml:space="preserve"><value>Jalur Folder</value></data>
-<data name="AddFolder" xml:space="preserve"><value>Tambah Folder</value></data>
-<data name="SearchFont" xml:space="preserve"><value>Cari font...</value></data>
-<data name="OpenPluginFolder" xml:space="preserve"><value>Buka Folder Plugin</value></data>
-<data name="PluginPortal" xml:space="preserve"><value>Portal Plugin</value></data>
-<data name="SearchPlugins" xml:space="preserve"><value>Cari Plugin</value></data>
-<data name="PluginManagement" xml:space="preserve"><value>Manajemen Plugin</value></data>
-<data name="PluginSearch" xml:space="preserve"><value>Pencarian Plugin</value></data>
-<data name="AvoidLimitSettings" xml:space="preserve"><value>Pengaturan ini untuk menghindari batasan pengambilan plugin. Atur ini jika batasan sering terjadi.</value></data>
-<data name="ExitYmm4ForPlugin" xml:space="preserve"><value>Apakah Anda ingin keluar dari YMM4 untuk operasi plugin?</value></data>
-<data name="PluginName" xml:space="preserve"><value>Nama Plugin</value></data>
-<data name="Black" xml:space="preserve"><value>Hitam</value></data>
-<data name="SearchProject" xml:space="preserve"><value>Cari berdasarkan proyek/nama proyek...</value></data>
-<data name="PortalLoadFailed" xml:space="preserve"><value>Gagal memuat portal</value></data>
-<data name="Light" xml:space="preserve"><value>Terang</value></data>
-<data name="OpenLinkFailed" xml:space="preserve"><value>Gagal membuka tautan</value></data>
-<data name="RemoveFromHub" xml:space="preserve"><value>Apakah Anda ingin menghapus ini dari Hub?</value></data>
-<data name="DeletePermanently" xml:space="preserve"><value>Apakah Anda ingin menghapus ini secara permanen?</value></data>
-<data name="VideoEffects" xml:space="preserve"><value>Efek Video</value></data>
-<data name="AudioEffects" xml:space="preserve"><value>Efek Audio</value></data>
-<data name="SpeechSynthesis" xml:space="preserve"><value>Sintesis Suara</value></data>
-<data name="LoadAudio" xml:space="preserve"><value>Muat Audio</value></data>
+<data name="GitHubApiLimit" xml:space="preserve"><value>Batas pengambilan API GitHub telah tercapai. Jika Anda tidak memiliki akun, silakan coba lagi nanti.</value></data>
+<data name="GitHubApiSettings" xml:space="preserve"><value>Pengaturan API GitHub</value></data>
+<data name="HubSettings" xml:space="preserve"><value>Pengaturan Hub</value></data>
 <data name="Image" xml:space="preserve"><value>Gambar</value></data>
-<data name="LoadImage" xml:space="preserve"><value>Muat Gambar</value></data>
-<data name="Overview" xml:space="preserve"><value>Ringkasan</value></data>
-<data name="Extension" xml:space="preserve"><value>Ekstensi</value></data>
-<data name="Confirm" xml:space="preserve"><value>Konfirmasi</value></data>
-<data name="Launch" xml:space="preserve"><value>Luncurkan</value></data>
-<data name="DeleteCountPermanently" xml:space="preserve"><value>Apakah Anda ingin menghapus plugin ini secara permanen?</value></data>
-<data name="SearchLabel" xml:space="preserve"><value>Cari:</value></data>
-<data name="CurrentVersion" xml:space="preserve"><value>Versi Saat Ini</value></data>
+<data name="Install" xml:space="preserve"><value>Instal</value></data>
+<data name="InstallerNotFound" xml:space="preserve"><value>Pemasang tidak ditemukan di instans yang ditentukan.</value></data>
+<data name="Instance" xml:space="preserve"><value>Instans</value></data>
+<data name="InstanceName" xml:space="preserve"><value>Nama Instans</value></data>
+<data name="IssueToken" xml:space="preserve"><value>Terbitkan Token</value></data>
 <data name="LanguageSettings" xml:space="preserve"><value>Pengaturan Bahasa</value></data>
 <data name="LastUpdate" xml:space="preserve"><value>Pembaruan Terakhir</value></data>
 <data name="LatestVersion" xml:space="preserve"><value>Versi Terbaru</value></data>
-<data name="Delete" xml:space="preserve"><value>Hapus</value></data>
-<data name="ConfirmDeletion" xml:space="preserve"><value>Konfirmasi Penghapusan</value></data>
-<data name="InstallerNotFound" xml:space="preserve"><value>Pemasang tidak ditemukan di instans yang ditentukan.</value></data>
-<data name="Acquiring" xml:space="preserve"><value>Mengambil</value></data>
-<data name="SceneTransition" xml:space="preserve"><value>Transisi Adegan</value></data>
-<data name="NoInfo" xml:space="preserve"><value>Tidak Ada Informasi</value></data>
-<data name="Status" xml:space="preserve"><value>Status</value></data>
-<data name="NewInstance" xml:space="preserve"><value>Instans Baru</value></data>
-<data name="CreateNew" xml:space="preserve"><value>Buat Baru</value></data>
-<data name="Shapes" xml:space="preserve"><value>Bentuk</value></data>
-<data name="Toggle" xml:space="preserve"><value>Alihkan</value></data>
-<data name="DeleteSelected" xml:space="preserve"><value>Hapus yang Dipilih</value></data>
-<data name="EnableDisableSelected" xml:space="preserve"><value>Aktifkan/Nonaktifkan yang Dipilih</value></data>
-<data name="OpenLastProject" xml:space="preserve"><value>Buka Proyek Terakhir</value></data>
-<data name="Add" xml:space="preserve"><value>Tambah</value></data>
-<data name="VideoOutput" xml:space="preserve"><value>Output Video</value></data>
+<data name="Launch" xml:space="preserve"><value>Luncurkan</value></data>
+<data name="Light" xml:space="preserve"><value>Terang</value></data>
+<data name="LoadAudio" xml:space="preserve"><value>Muat Audio</value></data>
+<data name="LoadImage" xml:space="preserve"><value>Muat Gambar</value></data>
 <data name="LoadVideo" xml:space="preserve"><value>Muat Video</value></data>
-<data name="OperationSettings" xml:space="preserve"><value>Pengaturan Operasi</value></data>
-<data name="DistributionSite" xml:space="preserve"><value>Situs Distribusi</value></data>
-<data name="EndDistribution" xml:space="preserve"><value>Distribusi Berakhir</value></data>
-<data name="Transcription" xml:space="preserve"><value>Transkripsi</value></data>
-<data name="AdminPrivilegeRequired" xml:space="preserve"><value>Hak istimewa administrator diperlukan. Silakan jalankan program sebagai administrator atau pindahkan ke folder yang dapat ditulis.</value></data>
 <data name="MonitorEditFolder" xml:space="preserve"><value>Pantau folder data edit</value></data>
-<data name="Disable" xml:space="preserve"><value>Nonaktifkan</value></data>
+<data name="NewInstance" xml:space="preserve"><value>Instans Baru</value></data>
+<data name="Niconico" xml:space="preserve"><value>Niconico</value></data>
+<data name="NoInfo" xml:space="preserve"><value>Tidak Ada Informasi</value></data>
+<data name="OpenLastProject" xml:space="preserve"><value>Buka Proyek Terakhir</value></data>
+<data name="OpenLinkFailed" xml:space="preserve"><value>Gagal membuka tautan</value></data>
+<data name="OpenPluginFolder" xml:space="preserve"><value>Buka Folder Plugin</value></data>
+<data name="OperationSettings" xml:space="preserve"><value>Pengaturan Operasi</value></data>
+<data name="Others" xml:space="preserve"><value>Lainnya</value></data>
+<data name="Overview" xml:space="preserve"><value>Ringkasan</value></data>
+<data name="Path" xml:space="preserve"><value>Jalur</value></data>
 <data name="Pattern" xml:space="preserve"><value>Pola</value></data>
-<data name="Enable" xml:space="preserve"><value>Aktifkan</value></data>
-<data name="Character" xml:space="preserve"><value>Gambar Karakter</value></data>
+<data name="PluginManagement" xml:space="preserve"><value>Manajemen Plugin</value></data>
+<data name="PluginName" xml:space="preserve"><value>Nama Plugin</value></data>
+<data name="PluginPortal" xml:space="preserve"><value>Portal Plugin</value></data>
+<data name="PluginSearch" xml:space="preserve"><value>Pencarian Plugin</value></data>
+<data name="PortalLoadFailed" xml:space="preserve"><value>Gagal memuat portal</value></data>
+<data name="PreRelease" xml:space="preserve"><value>(Prarilis)</value></data>
+<data name="RemoveFromHub" xml:space="preserve"><value>Apakah Anda ingin menghapus ini dari Hub?</value></data>
 <data name="RestartRequired" xml:space="preserve"><value>(Perlu Mulai Ulang)</value></data>
+<data name="SceneTransition" xml:space="preserve"><value>Transisi Adegan</value></data>
+<data name="SearchFont" xml:space="preserve"><value>Cari font...</value></data>
+<data name="SearchLabel" xml:space="preserve"><value>Cari:</value></data>
+<data name="SearchPlugins" xml:space="preserve"><value>Cari Plugin</value></data>
+<data name="SearchProject" xml:space="preserve"><value>Cari berdasarkan proyek/nama proyek...</value></data>
+<data name="SelectInstallVersion" xml:space="preserve"><value>Silakan pilih versi yang akan diinstal dan instans target.</value></data>
+<data name="SelectInstance" xml:space="preserve"><value>Silakan pilih instans.</value></data>
+<data name="SelectPluginsToInstall" xml:space="preserve"><value>يرجى تحديد الملحقات المراد تثبيتها باستخدام مربعات الاختيار.</value></data>
+<data name="SelectVersion" xml:space="preserve"><value>Pilih Versi</value></data>
+<data name="Shapes" xml:space="preserve"><value>Bentuk</value></data>
+<data name="Size" xml:space="preserve"><value>Ukuran</value></data>
+<data name="SpeechSynthesis" xml:space="preserve"><value>Sintesis Suara</value></data>
+<data name="Status" xml:space="preserve"><value>Status</value></data>
+<data name="TextCompletion" xml:space="preserve"><value>Penyelesaian Teks</value></data>
+<data name="ThemeSettings" xml:space="preserve"><value>Pengaturan Tema</value></data>
+<data name="Toggle" xml:space="preserve"><value>Alihkan</value></data>
+<data name="Token" xml:space="preserve"><value>Token</value></data>
+<data name="Tools" xml:space="preserve"><value>Alat</value></data>
+<data name="Transcription" xml:space="preserve"><value>Transkripsi</value></data>
+<data name="TypeFilter" xml:space="preserve"><value>Filter Tipe</value></data>
+<data name="UiFont" xml:space="preserve"><value>Font UI</value></data>
+<data name="UncheckAll" xml:space="preserve"><value>Hapus Semua Centang</value></data>
+<data name="UpdateAvailable" xml:space="preserve"><value>Pembaruan tersedia</value></data>
+<data name="UpdateDetails" xml:space="preserve"><value>Detail Pembaruan</value></data>
+<data name="VideoEffects" xml:space="preserve"><value>Efek Video</value></data>
+<data name="VideoOutput" xml:space="preserve"><value>Output Video</value></data>
+<data name="WindowsStandard" xml:space="preserve"><value>Standar Windows</value></data>
+<data name="Ymm4InfoSite" xml:space="preserve"><value>Situs Informasi YMM4</value></data>
+<data name="Filter" xml:space="preserve"><value>Filter</value></data>
+<data name="FileFormat" xml:space="preserve"><value>Format File</value></data>
+<data name="Location" xml:space="preserve"><value>Lokasi</value></data>
+<data name="IncludeBackup" xml:space="preserve"><value>Sertakan Cadangan</value></data>
+<data name="InstanceLabel" xml:space="preserve"><value>Instance:</value></data>
+<data name="StatusColumn" xml:space="preserve"><value>Status</value></data>
+<data name="Enabled" xml:space="preserve"><value>Diaktifkan</value></data>
+<data name="Disabled" xml:space="preserve"><value>Dinonaktifkan</value></data>
+<data name="TypeColumn" xml:space="preserve"><value>Tipe</value></data>
+<data name="AuthorColumn" xml:space="preserve"><value>Penulis</value></data>
+<data name="VersionColumn" xml:space="preserve"><value>Versi</value></data>
+<data name="PublishedAt" xml:space="preserve"><value>Diterbitkan</value></data>
+<data name="DownloadedAt" xml:space="preserve"><value>Diunduh</value></data>
+<data name="UpdateColumn" xml:space="preserve"><value>Perbarui</value></data>
+<data name="DownloadStatus" xml:space="preserve"><value>Status Unduhan</value></data>
+<data name="Downloaded" xml:space="preserve"><value>Sudah Diunduh</value></data>
+<data name="NotDownloaded" xml:space="preserve"><value>Belum Diunduh</value></data>
+<data name="HasUpdate" xml:space="preserve"><value>Ada Pembaruan</value></data>
+<data name="SortBy" xml:space="preserve"><value>Urutkan</value></data>
+<data name="SortByName" xml:space="preserve"><value>Berdasarkan Nama</value></data>
+<data name="SortByAuthor" xml:space="preserve"><value>Berdasarkan Penulis</value></data>
+<data name="SortByType" xml:space="preserve"><value>Berdasarkan Tipe</value></data>
+<data name="SortByStatus" xml:space="preserve"><value>Berdasarkan Status</value></data>
+<data name="SortByPublishDate" xml:space="preserve"><value>Berdasarkan Pertama Terbit</value></data>
+<data name="SortByLatestDate" xml:space="preserve"><value>Berdasarkan Pembaruan Terbaru</value></data>
+<data name="SortDirection" xml:space="preserve"><value>Arah Urutan</value></data>
+<data name="Ascending" xml:space="preserve"><value>Menaik</value></data>
+<data name="Descending" xml:space="preserve"><value>Menurun</value></data>
+<data name="AddToQueue" xml:space="preserve"><value>Tambah ke Antrian</value></data>
+<data name="RefreshList" xml:space="preserve"><value>Segarkan Daftar</value></data>
+<data name="BulkDownload" xml:space="preserve"><value>Unduh Massal</value></data>
+<data name="PluginSettings" xml:space="preserve"><value>Pengaturan Plugin</value></data>
+<data name="AutoUpdatePlugins" xml:space="preserve"><value>Perbarui otomatis plugin saat startup</value></data>
+<data name="InstalledVersion" xml:space="preserve"><value>Terinstal: {0}</value></data>
+<data name="Download" xml:space="preserve"><value>Unduh</value></data>
+<data name="Update" xml:space="preserve"><value>Perbarui</value></data>
+<data name="CheckOnSite" xml:space="preserve"><value>Cek di Situs</value></data>
+<data name="FolderButton" xml:space="preserve"><value>Folder</value></data>
+<data name="OpenFolderTooltip" xml:space="preserve"><value>Buka Folder</value></data>
+<data name="BulkInstallTitle" xml:space="preserve"><value>Konfirmasi Instalasi Massal</value></data>
+<data name="BulkInstallFinalCheck" xml:space="preserve"><value>Konfirmasi instalasi akhir</value></data>
+<data name="InstallTargetInstance" xml:space="preserve"><value>Instance Target:</value></data>
+<data name="StartInstall" xml:space="preserve"><value>Mulai Instalasi</value></data>
+<data name="Cancel" xml:space="preserve"><value>Batal</value></data>
+<data name="InstallProgress" xml:space="preserve"><value>Progress Instalasi</value></data>
+<data name="Preparing" xml:space="preserve"><value>Mempersiapkan...</value></data>
+<data name="CompleteAndClose" xml:space="preserve"><value>Selesai &amp; Tutup</value></data>
+<data name="SelectPluginToInstall" xml:space="preserve"><value>Silakan pilih plugin.</value></data>
+<data name="AddToQueueCount" xml:space="preserve"><value>Menambahkan {0} plugin ke antrian.(Fitur antrian akan segera tersedia)</value></data>
+<data name="RefreshListSuccess" xml:space="preserve"><value>Daftar plugin diperbarui.</value></data>
+<data name="RefreshListFailed" xml:space="preserve"><value>Gagal memperbarui daftar: {0}</value></data>
+<data name="SelectDownloadPlugin" xml:space="preserve"><value>Silakan pilih plugin untuk diunduh.</value></data>
+<data name="SkipNoRelease" xml:space="preserve"><value>Informasi rilis valid tidak ditemukan. Unduhan dilewati.</value></data>
+<data name="SkipTitle" xml:space="preserve"><value>Pemberitahuan</value></data>
+<data name="ErrorNoDownloadVersion" xml:space="preserve"><value>Kesalahan: Tidak ada versi yang bisa diunduh</value></data>
+<data name="SkipUnsupportedFormat" xml:space="preserve"><value>Dilewati: Format tidak didukung ({0})</value></data>
+<data name="DllInstalledMsg" xml:space="preserve"><value>File .dll telah dipasang ke folder '{0}'.</value></data>
+<data name="NoReadme" xml:space="preserve"><value>Tidak ada Readme.</value></data>
+<data name="NoDllFound" xml:space="preserve"><value>File plugin (DLL) yang valid tidak ditemukan.</value></data>
+<data name="RenameError" xml:space="preserve"><value>Gagal mengganti nama. File mungkin sedang digunakan.</value></data>
+<data name="TargetNotFound" xml:space="preserve"><value>Target tidak ditemukan:</value></data>
+<data name="LoadError" xml:space="preserve"><value>Kesalahan:</value></data>
+<data name="CentralInfoUpdateFailed" xml:space="preserve"><value>Gagal memperbarui info.json: {0}</value></data>
+<data name="CentralInfoSaveFailed" xml:space="preserve"><value>Gagal menyimpan info.json: {0}</value></data>
+<data name="CentralInfoDeleteFailed" xml:space="preserve"><value>Gagal menghapus dari info.json: {0}</value></data>
+<data name="PluginFolderNotFound" xml:space="preserve"><value>Folder plugin tidak ditemukan.</value></data>
+<data name="FolderOpenError" xml:space="preserve"><value>Gagal membuka folder: {0}</value></data>
+<data name="FolderNotFound" xml:space="preserve"><value>Folder tidak ditemukan.</value></data>
+<data name="ConfirmDeletePlugin" xml:space="preserve"><value>Apakah Anda yakin ingin menghapus?</value></data>
+<data name="RegenerateConfirm" xml:space="preserve"><value>Regenerasi info.json dari data plugin lokal.info.json yang ada akan ditimpa. Lanjutkan?</value></data>
+<data name="RegenerateSuccess" xml:space="preserve"><value>info.json telah diregenerasi.{0} plugin telah terdaftar.</value></data>
+<data name="RegenerateFailed" xml:space="preserve"><value>Gagal meregenerasi info.json: {0}</value></data>
+<data name="ReloadPortalSuccess" xml:space="preserve"><value>Portal plugin dimuat ulang.</value></data>
+<data name="ReloadPortalFailed" xml:space="preserve"><value>Gagal memuat ulang portal plugin: {0}</value></data>
+<data name="InstanceNotSelected" xml:space="preserve"><value>Tidak ada instance yang dipilih.</value></data>
+<data name="UninstallMultipleConfirm" xml:space="preserve"><value>Hapus {0} plugin?</value></data>
+<data name="BulkDownloadInstance" xml:space="preserve"><value>Silakan pilih setidaknya satu plugin untuk dipasang.</value></data>
+<data name="BulkDownloadSelectInstance" xml:space="preserve"><value>Silakan pilih instance target.</value></data>
+<data name="VersionDownloadTooltip" xml:space="preserve"><value>Unduh versi ini langsung</value></data>
+<data name="DownloadInProgress" xml:space="preserve"><value>Proses selesai. Periksa Readme dan tekan 'Tutup'.</value></data>
+<data name="AddInstanceTitle" xml:space="preserve"><value>Tambah Instans</value></data>
+<data name="SelectAddMethod" xml:space="preserve"><value>Pilih cara menambah</value></data>
+<data name="NewDownload" xml:space="preserve"><value>Unduhan Baru</value></data>
+<data name="NewDownloadDesc" xml:space="preserve"><value>Unduh YMM4 dan buat instans baru</value></data>
+<data name="AddExisting" xml:space="preserve"><value>Tambah yang Ada</value></data>
+<data name="AddExistingDesc" xml:space="preserve"><value>Tambah YMM4 yang sudah terinstal</value></data>
+<data name="InstanceSetupTitle" xml:space="preserve"><value>Pengaturan Instans</value></data>
+<data name="NewInstanceSetupTitle" xml:space="preserve"><value>Pengaturan Instans Baru</value></data>
+<data name="Edition" xml:space="preserve"><value>Edisi</value></data>
+<data name="NormalEdition" xml:space="preserve"><value>Standar</value></data>
+<data name="NormalEditionDesc" xml:space="preserve"><value>AquesTalk مثبت مسبقًا.</value></data>
+<data name="LiteEdition" xml:space="preserve"><value>Lite</value></data>
+<data name="LiteEditionDesc" xml:space="preserve"><value>موصى به لأولئك الذين لا يستخدمون AquesTalk.</value></data>
+<data name="IconLabel" xml:space="preserve"><value>Ikon</value></data>
+<data name="UseExeIcon" xml:space="preserve"><value>（Gunakan ikon exe）</value></data>
+<data name="AutoSetExeIcon" xml:space="preserve"><value>（Ikon exe diatur otomatis setelah unduhan）</value></data>
+<data name="SelectAnotherIcon" xml:space="preserve"><value>Pilih ikon lain...</value></data>
+<data name="ResetToExeIcon" xml:space="preserve"><value>Setel ulang ke ikon exe</value></data>
+<data name="InstanceNameLabel" xml:space="preserve"><value>Nama Instans</value></data>
+<data name="InstallFolder" xml:space="preserve"><value>Folder Instalasi</value></data>
+<data name="Browse" xml:space="preserve"><value>Telusuri...</value></data>
+<data name="InstallFolderNote" xml:space="preserve"><value>Diekstrak ke dalam subfolder bernama sesuai instans</value></data>
+<data name="DownloadAndCreate" xml:space="preserve"><value>Unduh &amp;&amp; Buat</value></data>
+<data name="FolderAlreadyExists" xml:space="preserve"><value>Folder sudah ada. Timpa?</value></data>
+<data name="ExeNotFound" xml:space="preserve"><value>YukkuriMovieMaker.exe tidak ditemukan. Periksa secara manual.</value></data>
+<data name="DownloadUrlFailed" xml:space="preserve"><value>Gagal mendapatkan URL unduhan. Unduh secara manual dari situs resmi.</value></data>
+<data name="InstallFailed" xml:space="preserve"><value>Instalasi gagal</value></data>
+<data name="CheckingLatestVersion" xml:space="preserve"><value>Memeriksa versi terbaru...</value></data>
+<data name="Extracting" xml:space="preserve"><value>Mengekstrak...</value></data>
+<data name="Cleanup" xml:space="preserve"><value>Membersihkan...</value></data>
+<data name="SelectExeTitle" xml:space="preserve"><value>Pilih YukkuriMovieMaker.exe</value></data>
+<data name="SelectIconTitle" xml:space="preserve"><value>Pilih gambar ikon</value></data>
+<data name="Complete" xml:space="preserve"><value>Selesai</value></data>
+<data name="Cancelled" xml:space="preserve"><value>Dibatalkan</value></data>
 </root>

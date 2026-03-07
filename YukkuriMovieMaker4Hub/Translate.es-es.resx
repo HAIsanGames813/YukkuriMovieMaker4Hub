@@ -59,107 +59,224 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
 <data name="CurrentCulture" xml:space="preserve"><value>es-es</value></data>
-<data name="PreRelease" xml:space="preserve"><value>(Prerrelease)</value></data>
-<data name="DownloadAndRun" xml:space="preserve"><value>*El archivo .ymme se descargará y ejecutará.</value></data>
-<data name="GitHubApiSettings" xml:space="preserve"><value>Ajustes de la API de GitHub</value></data>
-<data name="GitHubApiLimit" xml:space="preserve"><value>Se ha alcanzado el límite de la API de GitHub. Si no tiene una cuenta, inténtelo de nuevo más tarde.</value></data>
-<data name="CustomizeHub" xml:space="preserve"><value>Personalizar Hub</value></data>
-<data name="HubSettings" xml:space="preserve"><value>Ajustes de Hub</value></data>
-<data name="UiFont" xml:space="preserve"><value>Fuente de la IU</value></data>
-<data name="WindowsStandard" xml:space="preserve"><value>Estándar de Windows</value></data>
-<data name="ExitHubOnYmm4Start" xml:space="preserve"><value>Cerrar Hub al iniciar YMM4</value></data>
-<data name="Ymm4InfoSite" xml:space="preserve"><value>Sitio de información de YMM4</value></data>
-<data name="Action" xml:space="preserve"><value>Acción</value></data>
 <data name="AccessDenied" xml:space="preserve"><value>Acceso denegado</value></data>
-<data name="UpdateAvailable" xml:space="preserve"><value>Actualización disponible</value></data>
-<data name="ConfirmUpdate" xml:space="preserve"><value>¿Desea actualizar?</value></data>
-<data name="UpdateDetails" xml:space="preserve"><value>Detalles de la actualización</value></data>
-<data name="Instance" xml:space="preserve"><value>Instancia</value></data>
-<data name="SelectInstance" xml:space="preserve"><value>Por favor, seleccione una instancia.</value></data>
-<data name="InstanceName" xml:space="preserve"><value>Nombre de la instancia</value></data>
-<data name="Install" xml:space="preserve"><value>Instalar</value></data>
-<data name="SelectInstallVersion" xml:space="preserve"><value>Seleccione la versión a instalar y la instancia de destino.</value></data>
-<data name="CannotBeUndone" xml:space="preserve"><value>Esta acción no se puede deshacer.</value></data>
-<data name="Size" xml:space="preserve"><value>Tamaño</value></data>
+<data name="Acquiring" xml:space="preserve"><value>Obteniendo</value></data>
+<data name="Action" xml:space="preserve"><value>Acción</value></data>
+<data name="Add" xml:space="preserve"><value>Añadir</value></data>
+<data name="AddFolder" xml:space="preserve"><value>Añadir carpeta</value></data>
+<data name="AdminPrivilegeRequired" xml:space="preserve"><value>Se requieren privilegios de administrador. Ejecute el programa como administrador o muévalo a una carpeta con permisos de escritura.</value></data>
 <data name="All" xml:space="preserve"><value>Todo</value></data>
+<data name="AudioEffects" xml:space="preserve"><value>Efectos de audio</value></data>
+<data name="AvoidLimitSettings" xml:space="preserve"><value>Este ajuste sirve para evitar los límites de obtención de plugins. Configúrelo si ocurre con frecuencia.</value></data>
+<data name="Black" xml:space="preserve"><value>Negro</value></data>
+<data name="BulkInstallCompleted" xml:space="preserve"><value>Proses penginstalan massal telah selesai.</value></data>
+<data name="CannotBeUndone" xml:space="preserve"><value>Esta acción no se puede deshacer.</value></data>
+<data name="Character" xml:space="preserve"><value>Ilustración de personaje</value></data>
 <data name="CheckAll" xml:space="preserve"><value>Marcar todo</value></data>
-<data name="UncheckAll" xml:space="preserve"><value>Desmarcar todo</value></data>
-<data name="Others" xml:space="preserve"><value>Otros</value></data>
-<data name="Dark" xml:space="preserve"><value>Oscuro</value></data>
-<data name="TypeFilter" xml:space="preserve"><value>Filtro de tipo</value></data>
-<data name="DownloadError" xml:space="preserve"><value>Se produjo un error durante la descarga:</value></data>
-<data name="Tools" xml:space="preserve"><value>Herramientas</value></data>
-<data name="ThemeSettings" xml:space="preserve"><value>Ajustes de tema</value></data>
-<data name="TextCompletion" xml:space="preserve"><value>Completado de texto</value></data>
-<data name="Token" xml:space="preserve"><value>Token</value></data>
-<data name="IssueToken" xml:space="preserve"><value>Emitir token</value></data>
-<data name="Niconico" xml:space="preserve"><value>Niconico</value></data>
-<data name="DeleteFailed" xml:space="preserve"><value>Error al eliminar</value></data>
-<data name="SelectVersion" xml:space="preserve"><value>Seleccionar versión</value></data>
-<data name="Path" xml:space="preserve"><value>Ruta</value></data>
-<data name="FileName" xml:space="preserve"><value>Nombre de archivo</value></data>
 <data name="ClearFilter" xml:space="preserve"><value>Limpiar filtro</value></data>
+<data name="Confirm" xml:space="preserve"><value>Confirmar</value></data>
+<data name="ConfirmBulkInstall" xml:space="preserve"><value>Apakah Anda ingin menginstal plugin ini secara massal?</value></data>
+<data name="ConfirmDeletion" xml:space="preserve"><value>Confirmar eliminación</value></data>
+<data name="ConfirmUpdate" xml:space="preserve"><value>¿Desea actualizar?</value></data>
+<data name="CreateNew" xml:space="preserve"><value>Crear nuevo</value></data>
+<data name="CurrentVersion" xml:space="preserve"><value>Versión actual</value></data>
+<data name="CustomizeHub" xml:space="preserve"><value>Personalizar Hub</value></data>
+<data name="Dark" xml:space="preserve"><value>Oscuro</value></data>
+<data name="Delete" xml:space="preserve"><value>Eliminar</value></data>
+<data name="DeleteCountPermanently" xml:space="preserve"><value>¿Desea eliminar permanentemente estos plugins?</value></data>
+<data name="DeleteFailed" xml:space="preserve"><value>Error al eliminar</value></data>
+<data name="DeletePermanently" xml:space="preserve"><value>¿Desea eliminar esto permanentemente?</value></data>
+<data name="DeleteSelected" xml:space="preserve"><value>Eliminar seleccionado</value></data>
+<data name="Disable" xml:space="preserve"><value>Desactivar</value></data>
+<data name="DistributionSite" xml:space="preserve"><value>Sitio de distribución</value></data>
+<data name="DownloadAndRun" xml:space="preserve"><value>*El archivo .ymme se descargará y ejecutará.</value></data>
+<data name="DownloadError" xml:space="preserve"><value>Se produjo un error durante la descarga:</value></data>
+<data name="Enable" xml:space="preserve"><value>Activar</value></data>
+<data name="EnableDisableSelected" xml:space="preserve"><value>Activar/desactivar seleccionado</value></data>
+<data name="EndDistribution" xml:space="preserve"><value>Fin de la distribución</value></data>
+<data name="ExitHubOnYmm4Start" xml:space="preserve"><value>Cerrar Hub al iniciar YMM4</value></data>
+<data name="ExitYmm4ForPlugin" xml:space="preserve"><value>¿Desea cerrar YMM4 para realizar operaciones con plugins?</value></data>
+<data name="Extension" xml:space="preserve"><value>Extensión</value></data>
+<data name="FileName" xml:space="preserve"><value>Nombre de archivo</value></data>
 <data name="Folder" xml:space="preserve"><value>Carpeta</value></data>
 <data name="FolderPath" xml:space="preserve"><value>Ruta de la carpeta</value></data>
-<data name="AddFolder" xml:space="preserve"><value>Añadir carpeta</value></data>
-<data name="SearchFont" xml:space="preserve"><value>Buscar fuentes...</value></data>
-<data name="OpenPluginFolder" xml:space="preserve"><value>Abrir carpeta de plugins</value></data>
-<data name="PluginPortal" xml:space="preserve"><value>Portal de plugins</value></data>
-<data name="SearchPlugins" xml:space="preserve"><value>Buscar plugins</value></data>
-<data name="PluginManagement" xml:space="preserve"><value>Gestión de plugins</value></data>
-<data name="PluginSearch" xml:space="preserve"><value>Búsqueda de plugins</value></data>
-<data name="AvoidLimitSettings" xml:space="preserve"><value>Este ajuste sirve para evitar los límites de obtención de plugins. Configúrelo si ocurre con frecuencia.</value></data>
-<data name="ExitYmm4ForPlugin" xml:space="preserve"><value>¿Desea cerrar YMM4 para realizar operaciones con plugins?</value></data>
-<data name="PluginName" xml:space="preserve"><value>Nombre del plugin</value></data>
-<data name="Black" xml:space="preserve"><value>Negro</value></data>
-<data name="SearchProject" xml:space="preserve"><value>Buscar por proyecto/nombre del proyecto...</value></data>
-<data name="PortalLoadFailed" xml:space="preserve"><value>Error al cargar el portal</value></data>
-<data name="Light" xml:space="preserve"><value>Claro</value></data>
-<data name="OpenLinkFailed" xml:space="preserve"><value>No se pudo abrir el enlace</value></data>
-<data name="RemoveFromHub" xml:space="preserve"><value>¿Desea eliminar esto de Hub?</value></data>
-<data name="DeletePermanently" xml:space="preserve"><value>¿Desea eliminar esto permanentemente?</value></data>
-<data name="VideoEffects" xml:space="preserve"><value>Efectos de video</value></data>
-<data name="AudioEffects" xml:space="preserve"><value>Efectos de audio</value></data>
-<data name="SpeechSynthesis" xml:space="preserve"><value>Síntesis de voz</value></data>
-<data name="LoadAudio" xml:space="preserve"><value>Cargar audio</value></data>
+<data name="GitHubApiLimit" xml:space="preserve"><value>Se ha alcanzado el límite de la API de GitHub. Si no tiene una cuenta, inténtelo de nuevo más tarde.</value></data>
+<data name="GitHubApiSettings" xml:space="preserve"><value>Ajustes de la API de GitHub</value></data>
+<data name="HubSettings" xml:space="preserve"><value>Ajustes de Hub</value></data>
 <data name="Image" xml:space="preserve"><value>Imagen</value></data>
-<data name="LoadImage" xml:space="preserve"><value>Cargar imagen</value></data>
-<data name="Overview" xml:space="preserve"><value>Resumen</value></data>
-<data name="Extension" xml:space="preserve"><value>Extensión</value></data>
-<data name="Confirm" xml:space="preserve"><value>Confirmar</value></data>
-<data name="Launch" xml:space="preserve"><value>Iniciar</value></data>
-<data name="DeleteCountPermanently" xml:space="preserve"><value>¿Desea eliminar permanentemente estos plugins?</value></data>
-<data name="SearchLabel" xml:space="preserve"><value>Buscar:</value></data>
-<data name="CurrentVersion" xml:space="preserve"><value>Versión actual</value></data>
+<data name="Install" xml:space="preserve"><value>Instalar</value></data>
+<data name="InstallerNotFound" xml:space="preserve"><value>No se encontró el instalador en la instancia especificada.</value></data>
+<data name="Instance" xml:space="preserve"><value>Instancia</value></data>
+<data name="InstanceName" xml:space="preserve"><value>Nombre de la instancia</value></data>
+<data name="IssueToken" xml:space="preserve"><value>Emitir token</value></data>
 <data name="LanguageSettings" xml:space="preserve"><value>Ajustes de idioma</value></data>
 <data name="LastUpdate" xml:space="preserve"><value>Última actualización</value></data>
 <data name="LatestVersion" xml:space="preserve"><value>Última versión</value></data>
-<data name="Delete" xml:space="preserve"><value>Eliminar</value></data>
-<data name="ConfirmDeletion" xml:space="preserve"><value>Confirmar eliminación</value></data>
-<data name="InstallerNotFound" xml:space="preserve"><value>No se encontró el instalador en la instancia especificada.</value></data>
-<data name="Acquiring" xml:space="preserve"><value>Obteniendo</value></data>
-<data name="SceneTransition" xml:space="preserve"><value>Transición de escena</value></data>
-<data name="NoInfo" xml:space="preserve"><value>Sin información</value></data>
-<data name="Status" xml:space="preserve"><value>Estado</value></data>
-<data name="NewInstance" xml:space="preserve"><value>Nueva instancia</value></data>
-<data name="CreateNew" xml:space="preserve"><value>Crear nuevo</value></data>
-<data name="Shapes" xml:space="preserve"><value>Formas</value></data>
-<data name="Toggle" xml:space="preserve"><value>Alternar</value></data>
-<data name="DeleteSelected" xml:space="preserve"><value>Eliminar seleccionado</value></data>
-<data name="EnableDisableSelected" xml:space="preserve"><value>Activar/desactivar seleccionado</value></data>
-<data name="OpenLastProject" xml:space="preserve"><value>Abrir último proyecto</value></data>
-<data name="Add" xml:space="preserve"><value>Añadir</value></data>
-<data name="VideoOutput" xml:space="preserve"><value>Salida de video</value></data>
+<data name="Launch" xml:space="preserve"><value>Iniciar</value></data>
+<data name="Light" xml:space="preserve"><value>Claro</value></data>
+<data name="LoadAudio" xml:space="preserve"><value>Cargar audio</value></data>
+<data name="LoadImage" xml:space="preserve"><value>Cargar imagen</value></data>
 <data name="LoadVideo" xml:space="preserve"><value>Cargar video</value></data>
-<data name="OperationSettings" xml:space="preserve"><value>Ajustes de operación</value></data>
-<data name="DistributionSite" xml:space="preserve"><value>Sitio de distribución</value></data>
-<data name="EndDistribution" xml:space="preserve"><value>Fin de la distribución</value></data>
-<data name="Transcription" xml:space="preserve"><value>Transcripción</value></data>
-<data name="AdminPrivilegeRequired" xml:space="preserve"><value>Se requieren privilegios de administrador. Ejecute el programa como administrador o muévalo a una carpeta con permisos de escritura.</value></data>
 <data name="MonitorEditFolder" xml:space="preserve"><value>Monitorear carpeta de datos de edición</value></data>
-<data name="Disable" xml:space="preserve"><value>Desactivar</value></data>
+<data name="NewInstance" xml:space="preserve"><value>Nueva instancia</value></data>
+<data name="Niconico" xml:space="preserve"><value>Niconico</value></data>
+<data name="NoInfo" xml:space="preserve"><value>Sin información</value></data>
+<data name="OpenLastProject" xml:space="preserve"><value>Abrir último proyecto</value></data>
+<data name="OpenLinkFailed" xml:space="preserve"><value>No se pudo abrir el enlace</value></data>
+<data name="OpenPluginFolder" xml:space="preserve"><value>Abrir carpeta de plugins</value></data>
+<data name="OperationSettings" xml:space="preserve"><value>Ajustes de operación</value></data>
+<data name="Others" xml:space="preserve"><value>Otros</value></data>
+<data name="Overview" xml:space="preserve"><value>Resumen</value></data>
+<data name="Path" xml:space="preserve"><value>Ruta</value></data>
 <data name="Pattern" xml:space="preserve"><value>Patrón</value></data>
-<data name="Enable" xml:space="preserve"><value>Activar</value></data>
-<data name="Character" xml:space="preserve"><value>Ilustración de personaje</value></data>
+<data name="PluginManagement" xml:space="preserve"><value>Gestión de plugins</value></data>
+<data name="PluginName" xml:space="preserve"><value>Nombre del plugin</value></data>
+<data name="PluginPortal" xml:space="preserve"><value>Portal de plugins</value></data>
+<data name="PluginSearch" xml:space="preserve"><value>Búsqueda de plugins</value></data>
+<data name="PortalLoadFailed" xml:space="preserve"><value>Error al cargar el portal</value></data>
+<data name="PreRelease" xml:space="preserve"><value>(Prerrelease)</value></data>
+<data name="RemoveFromHub" xml:space="preserve"><value>¿Desea eliminar esto de Hub?</value></data>
 <data name="RestartRequired" xml:space="preserve"><value>(Requiere reinicio)</value></data>
+<data name="SceneTransition" xml:space="preserve"><value>Transición de escena</value></data>
+<data name="SearchFont" xml:space="preserve"><value>Buscar fuentes...</value></data>
+<data name="SearchLabel" xml:space="preserve"><value>Buscar:</value></data>
+<data name="SearchPlugins" xml:space="preserve"><value>Buscar plugins</value></data>
+<data name="SearchProject" xml:space="preserve"><value>Buscar por proyecto/nombre del proyecto...</value></data>
+<data name="SelectInstallVersion" xml:space="preserve"><value>Seleccione la versión a instalar y la instancia de destino.</value></data>
+<data name="SelectInstance" xml:space="preserve"><value>Por favor, seleccione una instancia.</value></data>
+<data name="SelectPluginsToInstall" xml:space="preserve"><value>Silakan pilih plugin yang akan diinstal menggunakan kotak centang.</value></data>
+<data name="SelectVersion" xml:space="preserve"><value>Seleccionar versión</value></data>
+<data name="Shapes" xml:space="preserve"><value>Formas</value></data>
+<data name="Size" xml:space="preserve"><value>Tamaño</value></data>
+<data name="SpeechSynthesis" xml:space="preserve"><value>Síntesis de voz</value></data>
+<data name="Status" xml:space="preserve"><value>Estado</value></data>
+<data name="TextCompletion" xml:space="preserve"><value>Completado de texto</value></data>
+<data name="ThemeSettings" xml:space="preserve"><value>Ajustes de tema</value></data>
+<data name="Toggle" xml:space="preserve"><value>Alternar</value></data>
+<data name="Token" xml:space="preserve"><value>Token</value></data>
+<data name="Tools" xml:space="preserve"><value>Herramientas</value></data>
+<data name="Transcription" xml:space="preserve"><value>Transcripción</value></data>
+<data name="TypeFilter" xml:space="preserve"><value>Filtro de tipo</value></data>
+<data name="UiFont" xml:space="preserve"><value>Fuente de la IU</value></data>
+<data name="UncheckAll" xml:space="preserve"><value>Desmarcar todo</value></data>
+<data name="UpdateAvailable" xml:space="preserve"><value>Actualización disponible</value></data>
+<data name="UpdateDetails" xml:space="preserve"><value>Detalles de la actualización</value></data>
+<data name="VideoEffects" xml:space="preserve"><value>Efectos de video</value></data>
+<data name="VideoOutput" xml:space="preserve"><value>Salida de video</value></data>
+<data name="WindowsStandard" xml:space="preserve"><value>Estándar de Windows</value></data>
+<data name="Ymm4InfoSite" xml:space="preserve"><value>Sitio de información de YMM4</value></data>
+<data name="Filter" xml:space="preserve"><value>Filtro</value></data>
+<data name="FileFormat" xml:space="preserve"><value>Formato de archivo</value></data>
+<data name="Location" xml:space="preserve"><value>Ubicación</value></data>
+<data name="IncludeBackup" xml:space="preserve"><value>Incluir copia de seguridad</value></data>
+<data name="InstanceLabel" xml:space="preserve"><value>Instancia:</value></data>
+<data name="StatusColumn" xml:space="preserve"><value>Estado</value></data>
+<data name="Enabled" xml:space="preserve"><value>Habilitado</value></data>
+<data name="Disabled" xml:space="preserve"><value>Deshabilitado</value></data>
+<data name="TypeColumn" xml:space="preserve"><value>Tipo</value></data>
+<data name="AuthorColumn" xml:space="preserve"><value>Autor</value></data>
+<data name="VersionColumn" xml:space="preserve"><value>Versión</value></data>
+<data name="PublishedAt" xml:space="preserve"><value>Publicado el</value></data>
+<data name="DownloadedAt" xml:space="preserve"><value>Descargado el</value></data>
+<data name="UpdateColumn" xml:space="preserve"><value>Actualizar</value></data>
+<data name="DownloadStatus" xml:space="preserve"><value>Estado de descarga</value></data>
+<data name="Downloaded" xml:space="preserve"><value>Descargado</value></data>
+<data name="NotDownloaded" xml:space="preserve"><value>No descargado</value></data>
+<data name="HasUpdate" xml:space="preserve"><value>Con actualización</value></data>
+<data name="SortBy" xml:space="preserve"><value>Ordenar por</value></data>
+<data name="SortByName" xml:space="preserve"><value>Por nombre</value></data>
+<data name="SortByAuthor" xml:space="preserve"><value>Por autor</value></data>
+<data name="SortByType" xml:space="preserve"><value>Por tipo</value></data>
+<data name="SortByStatus" xml:space="preserve"><value>Por estado</value></data>
+<data name="SortByPublishDate" xml:space="preserve"><value>Por primera publicación</value></data>
+<data name="SortByLatestDate" xml:space="preserve"><value>Por última actualización</value></data>
+<data name="SortDirection" xml:space="preserve"><value>Dirección de orden</value></data>
+<data name="Ascending" xml:space="preserve"><value>Ascendente</value></data>
+<data name="Descending" xml:space="preserve"><value>Descendente</value></data>
+<data name="AddToQueue" xml:space="preserve"><value>Agregar a la cola</value></data>
+<data name="RefreshList" xml:space="preserve"><value>Actualizar lista</value></data>
+<data name="BulkDownload" xml:space="preserve"><value>Descarga masiva</value></data>
+<data name="PluginSettings" xml:space="preserve"><value>Configuración de plugins</value></data>
+<data name="AutoUpdatePlugins" xml:space="preserve"><value>Actualizar automáticamente plugins al iniciar</value></data>
+<data name="InstalledVersion" xml:space="preserve"><value>Instalado: {0}</value></data>
+<data name="Download" xml:space="preserve"><value>Descargar</value></data>
+<data name="Update" xml:space="preserve"><value>Actualizar</value></data>
+<data name="CheckOnSite" xml:space="preserve"><value>Ver en sitio</value></data>
+<data name="FolderButton" xml:space="preserve"><value>Carpeta</value></data>
+<data name="OpenFolderTooltip" xml:space="preserve"><value>Abrir carpeta</value></data>
+<data name="BulkInstallTitle" xml:space="preserve"><value>Confirmación de instalación masiva</value></data>
+<data name="BulkInstallFinalCheck" xml:space="preserve"><value>Confirmación final de instalación</value></data>
+<data name="InstallTargetInstance" xml:space="preserve"><value>Instancia de destino:</value></data>
+<data name="StartInstall" xml:space="preserve"><value>Iniciar instalación</value></data>
+<data name="Cancel" xml:space="preserve"><value>Cancelar</value></data>
+<data name="InstallProgress" xml:space="preserve"><value>Progreso de instalación</value></data>
+<data name="Preparing" xml:space="preserve"><value>Preparando...</value></data>
+<data name="CompleteAndClose" xml:space="preserve"><value>Completar y cerrar</value></data>
+<data name="SelectPluginToInstall" xml:space="preserve"><value>Por favor seleccione un plugin.</value></data>
+<data name="AddToQueueCount" xml:space="preserve"><value>Se agregaron {0} plugin(s) a la cola.(La función de cola se implementará próximamente)</value></data>
+<data name="RefreshListSuccess" xml:space="preserve"><value>Lista de plugins actualizada.</value></data>
+<data name="RefreshListFailed" xml:space="preserve"><value>Error al actualizar la lista: {0}</value></data>
+<data name="SelectDownloadPlugin" xml:space="preserve"><value>Por favor seleccione los plugins a descargar.</value></data>
+<data name="SkipNoRelease" xml:space="preserve"><value>No se encontró información de lanzamiento válida. Descarga omitida.</value></data>
+<data name="SkipTitle" xml:space="preserve"><value>Aviso</value></data>
+<data name="ErrorNoDownloadVersion" xml:space="preserve"><value>Error: No hay versión descargable</value></data>
+<data name="SkipUnsupportedFormat" xml:space="preserve"><value>Omitido: Formato no compatible ({0})</value></data>
+<data name="DllInstalledMsg" xml:space="preserve"><value>Archivo .dll instalado en la carpeta '{0}'.</value></data>
+<data name="NoReadme" xml:space="preserve"><value>No se incluye Readme.</value></data>
+<data name="NoDllFound" xml:space="preserve"><value>No se encontró ningún archivo de plugin (DLL) válido.</value></data>
+<data name="RenameError" xml:space="preserve"><value>Error al renombrar. El archivo puede estar en uso.</value></data>
+<data name="TargetNotFound" xml:space="preserve"><value>Objetivo no encontrado:</value></data>
+<data name="LoadError" xml:space="preserve"><value>Error:</value></data>
+<data name="CentralInfoUpdateFailed" xml:space="preserve"><value>Error al actualizar info.json: {0}</value></data>
+<data name="CentralInfoSaveFailed" xml:space="preserve"><value>Error al guardar info.json: {0}</value></data>
+<data name="CentralInfoDeleteFailed" xml:space="preserve"><value>Error al eliminar de info.json: {0}</value></data>
+<data name="PluginFolderNotFound" xml:space="preserve"><value>Carpeta de plugins no encontrada.</value></data>
+<data name="FolderOpenError" xml:space="preserve"><value>No se pudo abrir la carpeta: {0}</value></data>
+<data name="FolderNotFound" xml:space="preserve"><value>Carpeta no encontrada.</value></data>
+<data name="ConfirmDeletePlugin" xml:space="preserve"><value>¿Está seguro de que desea eliminar?</value></data>
+<data name="RegenerateConfirm" xml:space="preserve"><value>Regenerar info.json desde plugins locales.El existente será sobrescrito. ¿Continuar?</value></data>
+<data name="RegenerateSuccess" xml:space="preserve"><value>info.json regenerado.{0} plugin(s) registrado(s).</value></data>
+<data name="RegenerateFailed" xml:space="preserve"><value>Error al regenerar info.json: {0}</value></data>
+<data name="ReloadPortalSuccess" xml:space="preserve"><value>Portal de plugins recargado.</value></data>
+<data name="ReloadPortalFailed" xml:space="preserve"><value>Error al recargar el portal de plugins: {0}</value></data>
+<data name="InstanceNotSelected" xml:space="preserve"><value>No se ha seleccionado ninguna instancia.</value></data>
+<data name="UninstallMultipleConfirm" xml:space="preserve"><value>¿Eliminar {0} plugin(s)?</value></data>
+<data name="BulkDownloadInstance" xml:space="preserve"><value>Por favor seleccione al menos un plugin para instalar.</value></data>
+<data name="BulkDownloadSelectInstance" xml:space="preserve"><value>Por favor seleccione la instancia de destino.</value></data>
+<data name="VersionDownloadTooltip" xml:space="preserve"><value>Descargar esta versión directamente</value></data>
+<data name="DownloadInProgress" xml:space="preserve"><value>Proceso completo. Revise el Readme y pulse 'Cerrar'.</value></data>
+<data name="AddInstanceTitle" xml:space="preserve"><value>Agregar instancia</value></data>
+<data name="SelectAddMethod" xml:space="preserve"><value>Seleccionar método</value></data>
+<data name="NewDownload" xml:space="preserve"><value>Nueva descarga</value></data>
+<data name="NewDownloadDesc" xml:space="preserve"><value>Descargar YMM4 y crear nueva instancia</value></data>
+<data name="AddExisting" xml:space="preserve"><value>Agregar existente</value></data>
+<data name="AddExistingDesc" xml:space="preserve"><value>Agregar YMM4 instalado</value></data>
+<data name="InstanceSetupTitle" xml:space="preserve"><value>Configuración de instancia</value></data>
+<data name="NewInstanceSetupTitle" xml:space="preserve"><value>Configurar nueva instancia</value></data>
+<data name="Edition" xml:space="preserve"><value>Edición</value></data>
+<data name="NormalEdition" xml:space="preserve"><value>Estándar</value></data>
+<data name="NormalEditionDesc" xml:space="preserve"><value>AquesTalk sudah terpasang.</value></data>
+<data name="LiteEdition" xml:space="preserve"><value>Lite</value></data>
+<data name="LiteEditionDesc" xml:space="preserve"><value>Direkomendasikan bagi yang tidak menggunakan AquesTalk.</value></data>
+<data name="IconLabel" xml:space="preserve"><value>Ícono</value></data>
+<data name="UseExeIcon" xml:space="preserve"><value>(Usar ícono del exe)</value></data>
+<data name="AutoSetExeIcon" xml:space="preserve"><value>(Ícono del exe se establece automáticamente)</value></data>
+<data name="SelectAnotherIcon" xml:space="preserve"><value>Seleccionar otro ícono...</value></data>
+<data name="ResetToExeIcon" xml:space="preserve"><value>Restablecer al ícono del exe</value></data>
+<data name="InstanceNameLabel" xml:space="preserve"><value>Nombre de instancia</value></data>
+<data name="InstallFolder" xml:space="preserve"><value>Carpeta de instalación</value></data>
+<data name="Browse" xml:space="preserve"><value>Explorar...</value></data>
+<data name="InstallFolderNote" xml:space="preserve"><value>Extrae en una subcarpeta con el nombre de la instancia</value></data>
+<data name="DownloadAndCreate" xml:space="preserve"><value>Descargar &amp;&amp; Crear</value></data>
+<data name="FolderAlreadyExists" xml:space="preserve"><value>¿La carpeta ya existe. ¿Sobrescribir?</value></data>
+<data name="ExeNotFound" xml:space="preserve"><value>No se encontró YukkuriMovieMaker.exe. Verifique manualmente.</value></data>
+<data name="DownloadUrlFailed" xml:space="preserve"><value>Error al obtener la URL de descarga. Descargue manualmente desde el sitio oficial.</value></data>
+<data name="InstallFailed" xml:space="preserve"><value>Error de instalación</value></data>
+<data name="CheckingLatestVersion" xml:space="preserve"><value>Verificando última versión...</value></data>
+<data name="Extracting" xml:space="preserve"><value>Extrayendo...</value></data>
+<data name="Cleanup" xml:space="preserve"><value>Limpiando...</value></data>
+<data name="SelectExeTitle" xml:space="preserve"><value>Seleccionar YukkuriMovieMaker.exe</value></data>
+<data name="SelectIconTitle" xml:space="preserve"><value>Seleccionar imagen de ícono</value></data>
+<data name="Complete" xml:space="preserve"><value>Completo</value></data>
+<data name="Cancelled" xml:space="preserve"><value>Cancelado</value></data>
 </root>

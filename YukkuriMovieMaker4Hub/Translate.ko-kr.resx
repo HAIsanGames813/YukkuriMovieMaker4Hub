@@ -59,107 +59,224 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
 <data name="CurrentCulture" xml:space="preserve"><value>ko-kr</value></data>
-<data name="PreRelease" xml:space="preserve"><value>(프리릴리스)</value></data>
-<data name="DownloadAndRun" xml:space="preserve"><value>※.ymme 파일을 다운로드하여 실행합니다。</value></data>
-<data name="GitHubApiSettings" xml:space="preserve"><value>GitHub API 설정</value></data>
-<data name="GitHubApiLimit" xml:space="preserve"><value>GitHub API 호출 제한에 도달했습니다. 계정이 없는 경우 잠시 후 다시 시도해 주세요。</value></data>
-<data name="CustomizeHub" xml:space="preserve"><value>Hub 커스터마이징</value></data>
-<data name="HubSettings" xml:space="preserve"><value>Hub 설정</value></data>
-<data name="UiFont" xml:space="preserve"><value>UI 글꼴</value></data>
-<data name="WindowsStandard" xml:space="preserve"><value>Windows 표준</value></data>
-<data name="ExitHubOnYmm4Start" xml:space="preserve"><value>YMM4 실행 시 Hub 종료</value></data>
-<data name="Ymm4InfoSite" xml:space="preserve"><value>YMM4 정보 사이트</value></data>
-<data name="Action" xml:space="preserve"><value>액션</value></data>
 <data name="AccessDenied" xml:space="preserve"><value>액세스가 거부되었습니다</value></data>
-<data name="UpdateAvailable" xml:space="preserve"><value>업데이트 있음</value></data>
-<data name="ConfirmUpdate" xml:space="preserve"><value>업데이트하시겠습니까?</value></data>
-<data name="UpdateDetails" xml:space="preserve"><value>업데이트 내용</value></data>
-<data name="Instance" xml:space="preserve"><value>인스턴스</value></data>
-<data name="SelectInstance" xml:space="preserve"><value>인스턴스를 선택해 주세요.</value></data>
-<data name="InstanceName" xml:space="preserve"><value>인스턴스 이름</value></data>
-<data name="Install" xml:space="preserve"><value>설치</value></data>
-<data name="SelectInstallVersion" xml:space="preserve"><value>설치할 버전과 대상 인스턴스를 선택해 주세요。</value></data>
-<data name="CannotBeUndone" xml:space="preserve"><value>이 작업은 되돌릴 수 없습니다。</value></data>
-<data name="Size" xml:space="preserve"><value>크기</value></data>
+<data name="Acquiring" xml:space="preserve"><value>취득 중</value></data>
+<data name="Action" xml:space="preserve"><value>액션</value></data>
+<data name="Add" xml:space="preserve"><value>추가</value></data>
+<data name="AddFolder" xml:space="preserve"><value>폴더 추가</value></data>
+<data name="AdminPrivilegeRequired" xml:space="preserve"><value>관리자 권한이 필요합니다. 프로그램을 관리자 권한으로 실행하거나 쓰기 가능한 폴더로 이동해 주세요.</value></data>
 <data name="All" xml:space="preserve"><value>전체</value></data>
+<data name="AudioEffects" xml:space="preserve"><value>음성 이펙트</value></data>
+<data name="AvoidLimitSettings" xml:space="preserve"><value>플러그인 취득 제한을 피하기 위한 설정입니다. 취득 제한이 빈번하게 발생하는 경우 설정해 주세요。</value></data>
+<data name="Black" xml:space="preserve"><value>블랙</value></data>
+<data name="BulkInstallCompleted" xml:space="preserve"><value>일괄 설치 처리가 완료되었습니다.</value></data>
+<data name="CannotBeUndone" xml:space="preserve"><value>이 작업은 되돌릴 수 없습니다。</value></data>
+<data name="Character" xml:space="preserve"><value>스탠딩 일러스트</value></data>
 <data name="CheckAll" xml:space="preserve"><value>모두 선택</value></data>
-<data name="UncheckAll" xml:space="preserve"><value>모두 해제</value></data>
-<data name="Others" xml:space="preserve"><value>기타</value></data>
-<data name="Dark" xml:space="preserve"><value>다크</value></data>
-<data name="TypeFilter" xml:space="preserve"><value>타입 필터</value></data>
-<data name="DownloadError" xml:space="preserve"><value>다운로드 중 오류가 발생했습니다:</value></data>
-<data name="Tools" xml:space="preserve"><value>도구</value></data>
-<data name="ThemeSettings" xml:space="preserve"><value>테마 설정</value></data>
-<data name="TextCompletion" xml:space="preserve"><value>텍스트 보완</value></data>
-<data name="Token" xml:space="preserve"><value>토큰</value></data>
-<data name="IssueToken" xml:space="preserve"><value>토큰 발행</value></data>
-<data name="Niconico" xml:space="preserve"><value>니코니코 동화</value></data>
-<data name="DeleteFailed" xml:space="preserve"><value>삭제 실패</value></data>
-<data name="SelectVersion" xml:space="preserve"><value>버전 선택</value></data>
-<data name="Path" xml:space="preserve"><value>경로</value></data>
-<data name="FileName" xml:space="preserve"><value>파일명</value></data>
 <data name="ClearFilter" xml:space="preserve"><value>필터 해제</value></data>
+<data name="Confirm" xml:space="preserve"><value>확인</value></data>
+<data name="ConfirmBulkInstall" xml:space="preserve"><value>개 플러그인을 일괄 설치하시겠습니까?</value></data>
+<data name="ConfirmDeletion" xml:space="preserve"><value>삭제 확인</value></data>
+<data name="ConfirmUpdate" xml:space="preserve"><value>업데이트하시겠습니까?</value></data>
+<data name="CreateNew" xml:space="preserve"><value>새로 만들기</value></data>
+<data name="CurrentVersion" xml:space="preserve"><value>현재 버전</value></data>
+<data name="CustomizeHub" xml:space="preserve"><value>Hub 커스터마이징</value></data>
+<data name="Dark" xml:space="preserve"><value>다크</value></data>
+<data name="Delete" xml:space="preserve"><value>삭제</value></data>
+<data name="DeleteCountPermanently" xml:space="preserve"><value>개의 플러그인을 완전히 삭제하시겠습니까?</value></data>
+<data name="DeleteFailed" xml:space="preserve"><value>삭제 실패</value></data>
+<data name="DeletePermanently" xml:space="preserve"><value>을(를) 완전히 삭제하시겠습니까?</value></data>
+<data name="DeleteSelected" xml:space="preserve"><value>선택 항목 삭제</value></data>
+<data name="Disable" xml:space="preserve"><value>비활성화</value></data>
+<data name="DistributionSite" xml:space="preserve"><value>배포 사이트</value></data>
+<data name="DownloadAndRun" xml:space="preserve"><value>※.ymme 파일을 다운로드하여 실행합니다。</value></data>
+<data name="DownloadError" xml:space="preserve"><value>다운로드 중 오류가 발생했습니다:</value></data>
+<data name="Enable" xml:space="preserve"><value>활성화</value></data>
+<data name="EnableDisableSelected" xml:space="preserve"><value>선택 항목 활성화/비활성화</value></data>
+<data name="EndDistribution" xml:space="preserve"><value>배포 종료</value></data>
+<data name="ExitHubOnYmm4Start" xml:space="preserve"><value>YMM4 실행 시 Hub 종료</value></data>
+<data name="ExitYmm4ForPlugin" xml:space="preserve"><value>플러그인 조작을 위해 YMM4를 종료하시겠습니까?</value></data>
+<data name="Extension" xml:space="preserve"><value>확장자</value></data>
+<data name="FileName" xml:space="preserve"><value>파일명</value></data>
 <data name="Folder" xml:space="preserve"><value>폴더</value></data>
 <data name="FolderPath" xml:space="preserve"><value>폴더 경로</value></data>
-<data name="AddFolder" xml:space="preserve"><value>폴더 추가</value></data>
-<data name="SearchFont" xml:space="preserve"><value>글꼴 검색...</value></data>
-<data name="OpenPluginFolder" xml:space="preserve"><value>플러그인 폴더 열기</value></data>
-<data name="PluginPortal" xml:space="preserve"><value>플러그인 포털</value></data>
-<data name="SearchPlugins" xml:space="preserve"><value>플러그인 검색</value></data>
-<data name="PluginManagement" xml:space="preserve"><value>플러그인 관리</value></data>
-<data name="PluginSearch" xml:space="preserve"><value>플러그인 검색</value></data>
-<data name="AvoidLimitSettings" xml:space="preserve"><value>플러그인 취득 제한을 피하기 위한 설정입니다. 취득 제한이 빈번하게 발생하는 경우 설정해 주세요。</value></data>
-<data name="ExitYmm4ForPlugin" xml:space="preserve"><value>플러그인 조작을 위해 YMM4를 종료하시겠습니까?</value></data>
-<data name="PluginName" xml:space="preserve"><value>플러그인 이름</value></data>
-<data name="Black" xml:space="preserve"><value>블랙</value></data>
-<data name="SearchProject" xml:space="preserve"><value>프로젝트·프로젝트 이름으로 검색...</value></data>
-<data name="PortalLoadFailed" xml:space="preserve"><value>포털 로드 실패</value></data>
-<data name="Light" xml:space="preserve"><value>라이트</value></data>
-<data name="OpenLinkFailed" xml:space="preserve"><value>링크를 열 수 없습니다</value></data>
-<data name="RemoveFromHub" xml:space="preserve"><value>을(를) Hub에서 삭제하시겠습니까?</value></data>
-<data name="DeletePermanently" xml:space="preserve"><value>을(를) 완전히 삭제하시겠습니까?</value></data>
-<data name="VideoEffects" xml:space="preserve"><value>영상 이펙트</value></data>
-<data name="AudioEffects" xml:space="preserve"><value>음성 이펙트</value></data>
-<data name="SpeechSynthesis" xml:space="preserve"><value>음성 합성</value></data>
-<data name="LoadAudio" xml:space="preserve"><value>음성 불러오기</value></data>
+<data name="GitHubApiLimit" xml:space="preserve"><value>GitHub API 호출 제한에 도달했습니다. 계정이 없는 경우 잠시 후 다시 시도해 주세요。</value></data>
+<data name="GitHubApiSettings" xml:space="preserve"><value>GitHub API 설정</value></data>
+<data name="HubSettings" xml:space="preserve"><value>Hub 설정</value></data>
 <data name="Image" xml:space="preserve"><value>이미지</value></data>
-<data name="LoadImage" xml:space="preserve"><value>이미지 불러오기</value></data>
-<data name="Overview" xml:space="preserve"><value>개요</value></data>
-<data name="Extension" xml:space="preserve"><value>확장자</value></data>
-<data name="Confirm" xml:space="preserve"><value>확인</value></data>
-<data name="Launch" xml:space="preserve"><value>실행</value></data>
-<data name="DeleteCountPermanently" xml:space="preserve"><value>개의 플러그인을 완전히 삭제하시겠습니까?</value></data>
-<data name="SearchLabel" xml:space="preserve"><value>검색:</value></data>
-<data name="CurrentVersion" xml:space="preserve"><value>현재 버전</value></data>
+<data name="Install" xml:space="preserve"><value>설치</value></data>
+<data name="InstallerNotFound" xml:space="preserve"><value>지정된 인스턴스에서 설치 프로그램을 찾을 수 없습니다。</value></data>
+<data name="Instance" xml:space="preserve"><value>인스턴스</value></data>
+<data name="InstanceName" xml:space="preserve"><value>인스턴스 이름</value></data>
+<data name="IssueToken" xml:space="preserve"><value>토큰 발행</value></data>
 <data name="LanguageSettings" xml:space="preserve"><value>언어 설정</value></data>
 <data name="LastUpdate" xml:space="preserve"><value>최종 갱신 일시</value></data>
 <data name="LatestVersion" xml:space="preserve"><value>최신 버전</value></data>
-<data name="Delete" xml:space="preserve"><value>삭제</value></data>
-<data name="ConfirmDeletion" xml:space="preserve"><value>삭제 확인</value></data>
-<data name="InstallerNotFound" xml:space="preserve"><value>지정된 인스턴스에서 설치 프로그램을 찾을 수 없습니다。</value></data>
-<data name="Acquiring" xml:space="preserve"><value>취득 중</value></data>
-<data name="SceneTransition" xml:space="preserve"><value>장면 전환</value></data>
-<data name="NoInfo" xml:space="preserve"><value>정보 없음</value></data>
-<data name="Status" xml:space="preserve"><value>상태</value></data>
-<data name="NewInstance" xml:space="preserve"><value>새 인스턴스</value></data>
-<data name="CreateNew" xml:space="preserve"><value>새로 만들기</value></data>
-<data name="Shapes" xml:space="preserve"><value>도형</value></data>
-<data name="Toggle" xml:space="preserve"><value>전환</value></data>
-<data name="DeleteSelected" xml:space="preserve"><value>선택 항목 삭제</value></data>
-<data name="EnableDisableSelected" xml:space="preserve"><value>선택 항목 활성화/비활성화</value></data>
-<data name="OpenLastProject" xml:space="preserve"><value>이전 프로젝트 열기</value></data>
-<data name="Add" xml:space="preserve"><value>추가</value></data>
-<data name="VideoOutput" xml:space="preserve"><value>동영상 출력</value></data>
+<data name="Launch" xml:space="preserve"><value>실행</value></data>
+<data name="Light" xml:space="preserve"><value>라이트</value></data>
+<data name="LoadAudio" xml:space="preserve"><value>음성 불러오기</value></data>
+<data name="LoadImage" xml:space="preserve"><value>이미지 불러오기</value></data>
 <data name="LoadVideo" xml:space="preserve"><value>동영상 불러오기</value></data>
-<data name="OperationSettings" xml:space="preserve"><value>동작 설정</value></data>
-<data name="DistributionSite" xml:space="preserve"><value>배포 사이트</value></data>
-<data name="EndDistribution" xml:space="preserve"><value>배포 종료</value></data>
-<data name="Transcription" xml:space="preserve"><value>기록</value></data>
-<data name="AdminPrivilegeRequired" xml:space="preserve"><value>관리자 권한이 필요합니다. 프로그램을 관리자 권한으로 실행하거나 쓰기 가능한 폴더로 이동해 주세요.</value></data>
 <data name="MonitorEditFolder" xml:space="preserve"><value>편집 데이터 폴더 감시</value></data>
-<data name="Disable" xml:space="preserve"><value>비활성화</value></data>
+<data name="NewInstance" xml:space="preserve"><value>새 인스턴스</value></data>
+<data name="Niconico" xml:space="preserve"><value>니코니코 동화</value></data>
+<data name="NoInfo" xml:space="preserve"><value>정보 없음</value></data>
+<data name="OpenLastProject" xml:space="preserve"><value>이전 프로젝트 열기</value></data>
+<data name="OpenLinkFailed" xml:space="preserve"><value>링크를 열 수 없습니다</value></data>
+<data name="OpenPluginFolder" xml:space="preserve"><value>플러그인 폴더 열기</value></data>
+<data name="OperationSettings" xml:space="preserve"><value>동작 설정</value></data>
+<data name="Others" xml:space="preserve"><value>기타</value></data>
+<data name="Overview" xml:space="preserve"><value>개요</value></data>
+<data name="Path" xml:space="preserve"><value>경로</value></data>
 <data name="Pattern" xml:space="preserve"><value>무늬</value></data>
-<data name="Enable" xml:space="preserve"><value>활성화</value></data>
-<data name="Character" xml:space="preserve"><value>스탠딩 일러스트</value></data>
+<data name="PluginManagement" xml:space="preserve"><value>플러그인 관리</value></data>
+<data name="PluginName" xml:space="preserve"><value>플러그인 이름</value></data>
+<data name="PluginPortal" xml:space="preserve"><value>플러그인 포털</value></data>
+<data name="PluginSearch" xml:space="preserve"><value>플러그인 검색</value></data>
+<data name="PortalLoadFailed" xml:space="preserve"><value>포털 로드 실패</value></data>
+<data name="PreRelease" xml:space="preserve"><value>(프리릴리스)</value></data>
+<data name="RemoveFromHub" xml:space="preserve"><value>을(를) Hub에서 삭제하시겠습니까?</value></data>
 <data name="RestartRequired" xml:space="preserve"><value>(재시작 필요)</value></data>
+<data name="SceneTransition" xml:space="preserve"><value>장면 전환</value></data>
+<data name="SearchFont" xml:space="preserve"><value>글꼴 검색...</value></data>
+<data name="SearchLabel" xml:space="preserve"><value>검색:</value></data>
+<data name="SearchPlugins" xml:space="preserve"><value>플러그인 검색</value></data>
+<data name="SearchProject" xml:space="preserve"><value>프로젝트·프로젝트 이름으로 검색...</value></data>
+<data name="SelectInstallVersion" xml:space="preserve"><value>설치할 버전과 대상 인스턴스를 선택해 주세요。</value></data>
+<data name="SelectInstance" xml:space="preserve"><value>인스턴스를 선택해 주세요.</value></data>
+<data name="SelectPluginsToInstall" xml:space="preserve"><value>설치할 플러그인을 체크박스로 선택해 주세요.</value></data>
+<data name="SelectVersion" xml:space="preserve"><value>버전 선택</value></data>
+<data name="Shapes" xml:space="preserve"><value>도형</value></data>
+<data name="Size" xml:space="preserve"><value>크기</value></data>
+<data name="SpeechSynthesis" xml:space="preserve"><value>음성 합성</value></data>
+<data name="Status" xml:space="preserve"><value>상태</value></data>
+<data name="TextCompletion" xml:space="preserve"><value>텍스트 보완</value></data>
+<data name="ThemeSettings" xml:space="preserve"><value>테마 설정</value></data>
+<data name="Toggle" xml:space="preserve"><value>전환</value></data>
+<data name="Token" xml:space="preserve"><value>토큰</value></data>
+<data name="Tools" xml:space="preserve"><value>도구</value></data>
+<data name="Transcription" xml:space="preserve"><value>기록</value></data>
+<data name="TypeFilter" xml:space="preserve"><value>타입 필터</value></data>
+<data name="UiFont" xml:space="preserve"><value>UI 글꼴</value></data>
+<data name="UncheckAll" xml:space="preserve"><value>모두 해제</value></data>
+<data name="UpdateAvailable" xml:space="preserve"><value>업데이트 있음</value></data>
+<data name="UpdateDetails" xml:space="preserve"><value>업데이트 내용</value></data>
+<data name="VideoEffects" xml:space="preserve"><value>영상 이펙트</value></data>
+<data name="VideoOutput" xml:space="preserve"><value>동영상 출력</value></data>
+<data name="WindowsStandard" xml:space="preserve"><value>Windows 표준</value></data>
+<data name="Ymm4InfoSite" xml:space="preserve"><value>YMM4 정보 사이트</value></data>
+<data name="Filter" xml:space="preserve"><value>필터</value></data>
+<data name="FileFormat" xml:space="preserve"><value>파일 형식</value></data>
+<data name="Location" xml:space="preserve"><value>위치</value></data>
+<data name="IncludeBackup" xml:space="preserve"><value>백업 포함</value></data>
+<data name="InstanceLabel" xml:space="preserve"><value>인스턴스:</value></data>
+<data name="StatusColumn" xml:space="preserve"><value>상태</value></data>
+<data name="Enabled" xml:space="preserve"><value>활성화</value></data>
+<data name="Disabled" xml:space="preserve"><value>비활성화</value></data>
+<data name="TypeColumn" xml:space="preserve"><value>유형</value></data>
+<data name="AuthorColumn" xml:space="preserve"><value>작성자</value></data>
+<data name="VersionColumn" xml:space="preserve"><value>버전</value></data>
+<data name="PublishedAt" xml:space="preserve"><value>공개 일시</value></data>
+<data name="DownloadedAt" xml:space="preserve"><value>다운로드 일시</value></data>
+<data name="UpdateColumn" xml:space="preserve"><value>업데이트</value></data>
+<data name="DownloadStatus" xml:space="preserve"><value>다운로드 상태</value></data>
+<data name="Downloaded" xml:space="preserve"><value>다운로드됨</value></data>
+<data name="NotDownloaded" xml:space="preserve"><value>미다운로드</value></data>
+<data name="HasUpdate" xml:space="preserve"><value>업데이트 있음</value></data>
+<data name="SortBy" xml:space="preserve"><value>정렬 기준</value></data>
+<data name="SortByName" xml:space="preserve"><value>이름순</value></data>
+<data name="SortByAuthor" xml:space="preserve"><value>작성자순</value></data>
+<data name="SortByType" xml:space="preserve"><value>유형순</value></data>
+<data name="SortByStatus" xml:space="preserve"><value>상태순</value></data>
+<data name="SortByPublishDate" xml:space="preserve"><value>초공개일 순</value></data>
+<data name="SortByLatestDate" xml:space="preserve"><value>최신 업데이트 순</value></data>
+<data name="SortDirection" xml:space="preserve"><value>정렬 방향</value></data>
+<data name="Ascending" xml:space="preserve"><value>오름차순</value></data>
+<data name="Descending" xml:space="preserve"><value>내림차순</value></data>
+<data name="AddToQueue" xml:space="preserve"><value>대기열에 추가</value></data>
+<data name="RefreshList" xml:space="preserve"><value>목록 새로고침</value></data>
+<data name="BulkDownload" xml:space="preserve"><value>일괄 다운로드</value></data>
+<data name="PluginSettings" xml:space="preserve"><value>플러그인 설정</value></data>
+<data name="AutoUpdatePlugins" xml:space="preserve"><value>시작 시 플러그인 자동 업데이트</value></data>
+<data name="InstalledVersion" xml:space="preserve"><value>설치됨: {0}</value></data>
+<data name="Download" xml:space="preserve"><value>다운로드</value></data>
+<data name="Update" xml:space="preserve"><value>업데이트</value></data>
+<data name="CheckOnSite" xml:space="preserve"><value>사이트에서 확인</value></data>
+<data name="FolderButton" xml:space="preserve"><value>폴더</value></data>
+<data name="OpenFolderTooltip" xml:space="preserve"><value>폴더 열기</value></data>
+<data name="BulkInstallTitle" xml:space="preserve"><value>일괄 설치 확인</value></data>
+<data name="BulkInstallFinalCheck" xml:space="preserve"><value>설치 내용 최종 확인</value></data>
+<data name="InstallTargetInstance" xml:space="preserve"><value>설치 대상 인스턴스:</value></data>
+<data name="StartInstall" xml:space="preserve"><value>설치 시작</value></data>
+<data name="Cancel" xml:space="preserve"><value>취소</value></data>
+<data name="InstallProgress" xml:space="preserve"><value>설치 진행</value></data>
+<data name="Preparing" xml:space="preserve"><value>준비 중...</value></data>
+<data name="CompleteAndClose" xml:space="preserve"><value>완료 후 닫기</value></data>
+<data name="SelectPluginToInstall" xml:space="preserve"><value>플러그인을 선택해 주세요.</value></data>
+<data name="AddToQueueCount" xml:space="preserve"><value>{0}개의 플러그인을 대기열에 추가했습니다.(대기열 기능 곧 구현 예정)</value></data>
+<data name="RefreshListSuccess" xml:space="preserve"><value>플러그인 목록을 업데이트했습니다.</value></data>
+<data name="RefreshListFailed" xml:space="preserve"><value>목록 업데이트 실패: {0}</value></data>
+<data name="SelectDownloadPlugin" xml:space="preserve"><value>다운로드할 플러그인을 선택해 주세요.</value></data>
+<data name="SkipNoRelease" xml:space="preserve"><value>유효한 릴리스 정보를 찾을 수 없어 다운로드를 건너뜁니다.</value></data>
+<data name="SkipTitle" xml:space="preserve"><value>알림</value></data>
+<data name="ErrorNoDownloadVersion" xml:space="preserve"><value>오류: 다운로드 가능한 버전이 없습니다</value></data>
+<data name="SkipUnsupportedFormat" xml:space="preserve"><value>건너뜀: 지원되지 않는 형식 ({0})</value></data>
+<data name="DllInstalledMsg" xml:space="preserve"><value>.dll 파일을 폴더 '{0}'에 설치했습니다.</value></data>
+<data name="NoReadme" xml:space="preserve"><value>Readme가 포함되어 있지 않습니다.</value></data>
+<data name="NoDllFound" xml:space="preserve"><value>유효한 플러그인 파일(DLL)을 찾을 수 없습니다.</value></data>
+<data name="RenameError" xml:space="preserve"><value>이름 바꾸기에 실패했습니다. 파일이 사용 중일 수 있습니다.</value></data>
+<data name="TargetNotFound" xml:space="preserve"><value>대상을 찾을 수 없습니다:</value></data>
+<data name="LoadError" xml:space="preserve"><value>오류:</value></data>
+<data name="CentralInfoUpdateFailed" xml:space="preserve"><value>info.json 업데이트 실패: {0}</value></data>
+<data name="CentralInfoSaveFailed" xml:space="preserve"><value>info.json 저장 실패: {0}</value></data>
+<data name="CentralInfoDeleteFailed" xml:space="preserve"><value>info.json에서 삭제 실패: {0}</value></data>
+<data name="PluginFolderNotFound" xml:space="preserve"><value>플러그인 폴더를 찾을 수 없습니다.</value></data>
+<data name="FolderOpenError" xml:space="preserve"><value>폴더를 열 수 없습니다: {0}</value></data>
+<data name="FolderNotFound" xml:space="preserve"><value>폴더를 찾을 수 없습니다.</value></data>
+<data name="ConfirmDeletePlugin" xml:space="preserve"><value>정말로 삭제하시겠습니까?</value></data>
+<data name="RegenerateConfirm" xml:space="preserve"><value>로컬 플러그인 정보에서 info.json을 재생성합니다.기존 info.json이 덮어씌워집니다. 계속하시겠습니까?</value></data>
+<data name="RegenerateSuccess" xml:space="preserve"><value>info.json이 재생성되었습니다.{0}개의 플러그인 정보가 등록되었습니다.</value></data>
+<data name="RegenerateFailed" xml:space="preserve"><value>info.json 재생성 실패: {0}</value></data>
+<data name="ReloadPortalSuccess" xml:space="preserve"><value>플러그인 포털이 다시 로드되었습니다.</value></data>
+<data name="ReloadPortalFailed" xml:space="preserve"><value>플러그인 포털 다시 로드 실패: {0}</value></data>
+<data name="InstanceNotSelected" xml:space="preserve"><value>인스턴스가 선택되지 않았습니다.</value></data>
+<data name="UninstallMultipleConfirm" xml:space="preserve"><value>{0}개의 플러그인을 삭제하시겠습니까?</value></data>
+<data name="BulkDownloadInstance" xml:space="preserve"><value>설치할 플러그인을 최소 1개 선택해 주세요.</value></data>
+<data name="BulkDownloadSelectInstance" xml:space="preserve"><value>설치 대상 인스턴스를 선택해 주세요.</value></data>
+<data name="VersionDownloadTooltip" xml:space="preserve"><value>이 버전 직접 다운로드</value></data>
+<data name="DownloadInProgress" xml:space="preserve"><value>처리가 완료되었습니다. Readme를 확인 후 '완료'를 누르세요.</value></data>
+<data name="AddInstanceTitle" xml:space="preserve"><value>인스턴스 추가</value></data>
+<data name="SelectAddMethod" xml:space="preserve"><value>추가 방법 선택</value></data>
+<data name="NewDownload" xml:space="preserve"><value>새로 다운로드</value></data>
+<data name="NewDownloadDesc" xml:space="preserve"><value>YMM4를 다운로드하여 새 인스턴스 생성</value></data>
+<data name="AddExisting" xml:space="preserve"><value>기존 추가</value></data>
+<data name="AddExistingDesc" xml:space="preserve"><value>이미 설치된 YMM4 추가</value></data>
+<data name="InstanceSetupTitle" xml:space="preserve"><value>인스턴스 설정</value></data>
+<data name="NewInstanceSetupTitle" xml:space="preserve"><value>새 인스턴스 설정</value></data>
+<data name="Edition" xml:space="preserve"><value>에디션</value></data>
+<data name="NormalEdition" xml:space="preserve"><value>일반판</value></data>
+<data name="NormalEditionDesc" xml:space="preserve"><value>AquesTalk이 기본으로 탑재되어 있습니다.</value></data>
+<data name="LiteEdition" xml:space="preserve"><value>Lite판</value></data>
+<data name="LiteEditionDesc" xml:space="preserve"><value>AquesTalk을 사용하지 않는 분들께 추천합니다.</value></data>
+<data name="IconLabel" xml:space="preserve"><value>아이콘</value></data>
+<data name="UseExeIcon" xml:space="preserve"><value>（exe 아이콘 사용）</value></data>
+<data name="AutoSetExeIcon" xml:space="preserve"><value>（다운로드 후 exe 아이콘 자동 설정）</value></data>
+<data name="SelectAnotherIcon" xml:space="preserve"><value>다른 아이콘 선택...</value></data>
+<data name="ResetToExeIcon" xml:space="preserve"><value>exe 아이콘으로 초기화</value></data>
+<data name="InstanceNameLabel" xml:space="preserve"><value>인스턴스 이름</value></data>
+<data name="InstallFolder" xml:space="preserve"><value>설치 대상 폴더</value></data>
+<data name="Browse" xml:space="preserve"><value>찾아보기...</value></data>
+<data name="InstallFolderNote" xml:space="preserve"><value>선택한 폴더 안에 인스턴스 이름 폴더를 만들어 압축 해제</value></data>
+<data name="DownloadAndCreate" xml:space="preserve"><value>다운로드 &amp;&amp; 만들기</value></data>
+<data name="FolderAlreadyExists" xml:space="preserve"><value>폴더가 이미 존재합니다. 덮어쓰시겠습니까?</value></data>
+<data name="ExeNotFound" xml:space="preserve"><value>YukkuriMovieMaker.exe를 찾을 수 없습니다. 수동으로 확인해주세요.</value></data>
+<data name="DownloadUrlFailed" xml:space="preserve"><value>다운로드 URL 가져오기 실패. 공식 사이트에서 수동으로 다운로드하세요.</value></data>
+<data name="InstallFailed" xml:space="preserve"><value>설치 실패</value></data>
+<data name="CheckingLatestVersion" xml:space="preserve"><value>최신 버전 확인 중...</value></data>
+<data name="Extracting" xml:space="preserve"><value>압축 해제 중...</value></data>
+<data name="Cleanup" xml:space="preserve"><value>정리 중...</value></data>
+<data name="SelectExeTitle" xml:space="preserve"><value>YukkuriMovieMaker.exe 선택</value></data>
+<data name="SelectIconTitle" xml:space="preserve"><value>아이콘 이미지 선택</value></data>
+<data name="Complete" xml:space="preserve"><value>완료</value></data>
+<data name="Cancelled" xml:space="preserve"><value>취소됨</value></data>
 </root>

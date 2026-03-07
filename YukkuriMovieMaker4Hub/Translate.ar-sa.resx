@@ -59,107 +59,224 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
 <data name="CurrentCulture" xml:space="preserve"><value>ar-sa</value></data>
-<data name="PreRelease" xml:space="preserve"><value>(ما قبل الإصدار)</value></data>
-<data name="DownloadAndRun" xml:space="preserve"><value>سيتم تنزيل ملف .ymme وتشغيله.※</value></data>
-<data name="GitHubApiSettings" xml:space="preserve"><value>إعدادات GitHub API</value></data>
-<data name="GitHubApiLimit" xml:space="preserve"><value>تم الوصول إلى حد واجهة برمجة تطبيقات GitHub. إذا لم يكن لديك حساب، يرجى المحاولة مرة أخرى لاحقًا。</value></data>
-<data name="CustomizeHub" xml:space="preserve"><value>تخصيص Hub</value></data>
-<data name="HubSettings" xml:space="preserve"><value>إعدادات Hub</value></data>
-<data name="UiFont" xml:space="preserve"><value>خط واجهة المستخدم</value></data>
-<data name="WindowsStandard" xml:space="preserve"><value>قياسي ويندوز</value></data>
-<data name="ExitHubOnYmm4Start" xml:space="preserve"><value>إغلاق Hub عند بدء تشغيل YMM4</value></data>
-<data name="Ymm4InfoSite" xml:space="preserve"><value>موقع معلومات YMM4</value></data>
-<data name="Action" xml:space="preserve"><value>إجراء</value></data>
 <data name="AccessDenied" xml:space="preserve"><value>تم رفض الوصول</value></data>
-<data name="UpdateAvailable" xml:space="preserve"><value>تحديث متاح</value></data>
-<data name="ConfirmUpdate" xml:space="preserve"><value>هل تريد التحديث؟</value></data>
-<data name="UpdateDetails" xml:space="preserve"><value>تفاصيل التحديث</value></data>
-<data name="Instance" xml:space="preserve"><value>مثيل</value></data>
-<data name="SelectInstance" xml:space="preserve"><value>يرجى تحديد مثيل.</value></data>
-<data name="InstanceName" xml:space="preserve"><value>اسم المثيل</value></data>
-<data name="Install" xml:space="preserve"><value>تثبيت</value></data>
-<data name="SelectInstallVersion" xml:space="preserve"><value>يرجى تحديد الإصدار المراد تثبيته والمثيل المستهدف。</value></data>
-<data name="CannotBeUndone" xml:space="preserve"><value>لا يمكن التراجع عن هذا الإجراء。</value></data>
-<data name="Size" xml:space="preserve"><value>الحجم</value></data>
+<data name="Acquiring" xml:space="preserve"><value>جاري الجلب</value></data>
+<data name="Action" xml:space="preserve"><value>إجراء</value></data>
+<data name="Add" xml:space="preserve"><value>إضافة</value></data>
+<data name="AddFolder" xml:space="preserve"><value>إضافة مجلد</value></data>
+<data name="AdminPrivilegeRequired" xml:space="preserve"><value>تتطلب صلاحيات المسؤول. يرجى تشغيل البرنامج كمسؤول أو نقله إلى مجلد قابل للكتابة.</value></data>
 <data name="All" xml:space="preserve"><value>الكل</value></data>
+<data name="AudioEffects" xml:space="preserve"><value>تأثيرات صوتية</value></data>
+<data name="AvoidLimitSettings" xml:space="preserve"><value>هذا الإعداد لتجنب قيود جلب الملحقات. قم بضبطه إذا كانت القيود تحدث بشكل متكرر。</value></data>
+<data name="Black" xml:space="preserve"><value>أسود</value></data>
+<data name="BulkInstallCompleted" xml:space="preserve"><value>El proceso de instalación por lotes se ha completado.</value></data>
+<data name="CannotBeUndone" xml:space="preserve"><value>لا يمكن التراجع عن هذا الإجراء。</value></data>
+<data name="Character" xml:space="preserve"><value>صورة شخصية واقفة</value></data>
 <data name="CheckAll" xml:space="preserve"><value>تحديد الكل</value></data>
-<data name="UncheckAll" xml:space="preserve"><value>إلغاء تحديد الكل</value></data>
-<data name="Others" xml:space="preserve"><value>آخرون</value></data>
-<data name="Dark" xml:space="preserve"><value>داكن</value></data>
-<data name="TypeFilter" xml:space="preserve"><value>فلتر النوع</value></data>
-<data name="DownloadError" xml:space="preserve"><value>حدث خطأ أثناء التنزيل:</value></data>
-<data name="Tools" xml:space="preserve"><value>أدوات</value></data>
-<data name="ThemeSettings" xml:space="preserve"><value>إعدادات المظهر</value></data>
-<data name="TextCompletion" xml:space="preserve"><value>إكمال النص</value></data>
-<data name="Token" xml:space="preserve"><value>رمز</value></data>
-<data name="IssueToken" xml:space="preserve"><value>إصدار رمز</value></data>
-<data name="Niconico" xml:space="preserve"><value>نيكو نيكو دوغا</value></data>
-<data name="DeleteFailed" xml:space="preserve"><value>فشل في الحذف</value></data>
-<data name="SelectVersion" xml:space="preserve"><value>تحديد الإصدار</value></data>
-<data name="Path" xml:space="preserve"><value>مسار</value></data>
-<data name="FileName" xml:space="preserve"><value>اسم الملف</value></data>
 <data name="ClearFilter" xml:space="preserve"><value>مسح الفلتر</value></data>
+<data name="Confirm" xml:space="preserve"><value>تأكيد</value></data>
+<data name="ConfirmBulkInstall" xml:space="preserve"><value>¿Desea instalar estos plugins por lotes?</value></data>
+<data name="ConfirmDeletion" xml:space="preserve"><value>تأكيد الحذف</value></data>
+<data name="ConfirmUpdate" xml:space="preserve"><value>هل تريد التحديث؟</value></data>
+<data name="CreateNew" xml:space="preserve"><value>إنشاء جديد</value></data>
+<data name="CurrentVersion" xml:space="preserve"><value>الإصدار الحالي</value></data>
+<data name="CustomizeHub" xml:space="preserve"><value>تخصيص Hub</value></data>
+<data name="Dark" xml:space="preserve"><value>داكن</value></data>
+<data name="Delete" xml:space="preserve"><value>حذف</value></data>
+<data name="DeleteCountPermanently" xml:space="preserve"><value>هل تريد حذف هذه الملحقات نهائيًا؟</value></data>
+<data name="DeleteFailed" xml:space="preserve"><value>فشل في الحذف</value></data>
+<data name="DeletePermanently" xml:space="preserve"><value>هل تريد حذفه نهائيًا؟</value></data>
+<data name="DeleteSelected" xml:space="preserve"><value>حذف المحدد</value></data>
+<data name="Disable" xml:space="preserve"><value>تعطيل</value></data>
+<data name="DistributionSite" xml:space="preserve"><value>موقع التوزيع</value></data>
+<data name="DownloadAndRun" xml:space="preserve"><value>سيتم تنزيل ملف .ymme وتشغيله.※</value></data>
+<data name="DownloadError" xml:space="preserve"><value>حدث خطأ أثناء التنزيل:</value></data>
+<data name="Enable" xml:space="preserve"><value>تفعيل</value></data>
+<data name="EnableDisableSelected" xml:space="preserve"><value>تفعيل/تعطيل المحدد</value></data>
+<data name="EndDistribution" xml:space="preserve"><value>نهاية التوزيع</value></data>
+<data name="ExitHubOnYmm4Start" xml:space="preserve"><value>إغلاق Hub عند بدء تشغيل YMM4</value></data>
+<data name="ExitYmm4ForPlugin" xml:space="preserve"><value>هل تريد إغلاق YMM4 لعمليات الملحقات؟</value></data>
+<data name="Extension" xml:space="preserve"><value>امتداد</value></data>
+<data name="FileName" xml:space="preserve"><value>اسم الملف</value></data>
 <data name="Folder" xml:space="preserve"><value>مجلد</value></data>
 <data name="FolderPath" xml:space="preserve"><value>مسار المجلد</value></data>
-<data name="AddFolder" xml:space="preserve"><value>إضافة مجلد</value></data>
-<data name="SearchFont" xml:space="preserve"><value>البحث عن الخطوط...</value></data>
-<data name="OpenPluginFolder" xml:space="preserve"><value>فتح مجلد الملحقات</value></data>
-<data name="PluginPortal" xml:space="preserve"><value>بوابة الملحقات</value></data>
-<data name="SearchPlugins" xml:space="preserve"><value>البحث عن الملحقات</value></data>
-<data name="PluginManagement" xml:space="preserve"><value>إدارة الملحقات</value></data>
-<data name="PluginSearch" xml:space="preserve"><value>بحث الملحقات</value></data>
-<data name="AvoidLimitSettings" xml:space="preserve"><value>هذا الإعداد لتجنب قيود جلب الملحقات. قم بضبطه إذا كانت القيود تحدث بشكل متكرر。</value></data>
-<data name="ExitYmm4ForPlugin" xml:space="preserve"><value>هل تريد إغلاق YMM4 لعمليات الملحقات؟</value></data>
-<data name="PluginName" xml:space="preserve"><value>اسم الملحق</value></data>
-<data name="Black" xml:space="preserve"><value>أسود</value></data>
-<data name="SearchProject" xml:space="preserve"><value>البحث حسب المشروع/اسم المشروع...</value></data>
-<data name="PortalLoadFailed" xml:space="preserve"><value>فشل تحميل البوابة</value></data>
-<data name="Light" xml:space="preserve"><value>فاتح</value></data>
-<data name="OpenLinkFailed" xml:space="preserve"><value>فشل في فتح الرابط</value></data>
-<data name="RemoveFromHub" xml:space="preserve"><value>هل تريد إزالته من Hub؟</value></data>
-<data name="DeletePermanently" xml:space="preserve"><value>هل تريد حذفه نهائيًا؟</value></data>
-<data name="VideoEffects" xml:space="preserve"><value>تأثيرات الفيديو</value></data>
-<data name="AudioEffects" xml:space="preserve"><value>تأثيرات صوتية</value></data>
-<data name="SpeechSynthesis" xml:space="preserve"><value>تركيب الكلام</value></data>
-<data name="LoadAudio" xml:space="preserve"><value>تحميل الصوت</value></data>
+<data name="GitHubApiLimit" xml:space="preserve"><value>تم الوصول إلى حد واجهة برمجة تطبيقات GitHub. إذا لم يكن لديك حساب، يرجى المحاولة مرة أخرى لاحقًا。</value></data>
+<data name="GitHubApiSettings" xml:space="preserve"><value>إعدادات GitHub API</value></data>
+<data name="HubSettings" xml:space="preserve"><value>إعدادات Hub</value></data>
 <data name="Image" xml:space="preserve"><value>صورة</value></data>
-<data name="LoadImage" xml:space="preserve"><value>تحميل الصورة</value></data>
-<data name="Overview" xml:space="preserve"><value>نظرة عامة</value></data>
-<data name="Extension" xml:space="preserve"><value>امتداد</value></data>
-<data name="Confirm" xml:space="preserve"><value>تأكيد</value></data>
-<data name="Launch" xml:space="preserve"><value>تشغيل</value></data>
-<data name="DeleteCountPermanently" xml:space="preserve"><value>هل تريد حذف هذه الملحقات نهائيًا؟</value></data>
-<data name="SearchLabel" xml:space="preserve"><value>بحث:</value></data>
-<data name="CurrentVersion" xml:space="preserve"><value>الإصدار الحالي</value></data>
+<data name="Install" xml:space="preserve"><value>تثبيت</value></data>
+<data name="InstallerNotFound" xml:space="preserve"><value>لم يتم العثور على برنامج التثبيت في المثيل المحدد。</value></data>
+<data name="Instance" xml:space="preserve"><value>مثيل</value></data>
+<data name="InstanceName" xml:space="preserve"><value>اسم المثيل</value></data>
+<data name="IssueToken" xml:space="preserve"><value>إصدار رمز</value></data>
 <data name="LanguageSettings" xml:space="preserve"><value>إعدادات اللغة</value></data>
 <data name="LastUpdate" xml:space="preserve"><value>آخر تحديث</value></data>
 <data name="LatestVersion" xml:space="preserve"><value>أحدث إصدار</value></data>
-<data name="Delete" xml:space="preserve"><value>حذف</value></data>
-<data name="ConfirmDeletion" xml:space="preserve"><value>تأكيد الحذف</value></data>
-<data name="InstallerNotFound" xml:space="preserve"><value>لم يتم العثور على برنامج التثبيت في المثيل المحدد。</value></data>
-<data name="Acquiring" xml:space="preserve"><value>جاري الجلب</value></data>
-<data name="SceneTransition" xml:space="preserve"><value>انتقال المشهد</value></data>
-<data name="NoInfo" xml:space="preserve"><value>لا توجد معلومات</value></data>
-<data name="Status" xml:space="preserve"><value>الحالة</value></data>
-<data name="NewInstance" xml:space="preserve"><value>مثيل جديد</value></data>
-<data name="CreateNew" xml:space="preserve"><value>إنشاء جديد</value></data>
-<data name="Shapes" xml:space="preserve"><value>أشكال</value></data>
-<data name="Toggle" xml:space="preserve"><value>تبديل</value></data>
-<data name="DeleteSelected" xml:space="preserve"><value>حذف المحدد</value></data>
-<data name="EnableDisableSelected" xml:space="preserve"><value>تفعيل/تعطيل المحدد</value></data>
-<data name="OpenLastProject" xml:space="preserve"><value>فتح المشروع الأخير</value></data>
-<data name="Add" xml:space="preserve"><value>إضافة</value></data>
-<data name="VideoOutput" xml:space="preserve"><value>إخراج الفيديو</value></data>
+<data name="Launch" xml:space="preserve"><value>تشغيل</value></data>
+<data name="Light" xml:space="preserve"><value>فاتح</value></data>
+<data name="LoadAudio" xml:space="preserve"><value>تحميل الصوت</value></data>
+<data name="LoadImage" xml:space="preserve"><value>تحميل الصورة</value></data>
 <data name="LoadVideo" xml:space="preserve"><value>تحميل الفيديو</value></data>
-<data name="OperationSettings" xml:space="preserve"><value>إعدادات التشغيل</value></data>
-<data name="DistributionSite" xml:space="preserve"><value>موقع التوزيع</value></data>
-<data name="EndDistribution" xml:space="preserve"><value>نهاية التوزيع</value></data>
-<data name="Transcription" xml:space="preserve"><value>نسخ النص</value></data>
-<data name="AdminPrivilegeRequired" xml:space="preserve"><value>تتطلب صلاحيات المسؤول. يرجى تشغيل البرنامج كمسؤول أو نقله إلى مجلد قابل للكتابة.</value></data>
 <data name="MonitorEditFolder" xml:space="preserve"><value>مراقبة مجلد بيانات التحرير</value></data>
-<data name="Disable" xml:space="preserve"><value>تعطيل</value></data>
+<data name="NewInstance" xml:space="preserve"><value>مثيل جديد</value></data>
+<data name="Niconico" xml:space="preserve"><value>نيكو نيكو دوغا</value></data>
+<data name="NoInfo" xml:space="preserve"><value>لا توجد معلومات</value></data>
+<data name="OpenLastProject" xml:space="preserve"><value>فتح المشروع الأخير</value></data>
+<data name="OpenLinkFailed" xml:space="preserve"><value>فشل في فتح الرابط</value></data>
+<data name="OpenPluginFolder" xml:space="preserve"><value>فتح مجلد الملحقات</value></data>
+<data name="OperationSettings" xml:space="preserve"><value>إعدادات التشغيل</value></data>
+<data name="Others" xml:space="preserve"><value>آخرون</value></data>
+<data name="Overview" xml:space="preserve"><value>نظرة عامة</value></data>
+<data name="Path" xml:space="preserve"><value>مسار</value></data>
 <data name="Pattern" xml:space="preserve"><value>نمط</value></data>
-<data name="Enable" xml:space="preserve"><value>تفعيل</value></data>
-<data name="Character" xml:space="preserve"><value>صورة شخصية واقفة</value></data>
+<data name="PluginManagement" xml:space="preserve"><value>إدارة الملحقات</value></data>
+<data name="PluginName" xml:space="preserve"><value>اسم الملحق</value></data>
+<data name="PluginPortal" xml:space="preserve"><value>بوابة الملحقات</value></data>
+<data name="PluginSearch" xml:space="preserve"><value>بحث الملحقات</value></data>
+<data name="PortalLoadFailed" xml:space="preserve"><value>فشل تحميل البوابة</value></data>
+<data name="PreRelease" xml:space="preserve"><value>(ما قبل الإصدار)</value></data>
+<data name="RemoveFromHub" xml:space="preserve"><value>هل تريد إزالته من Hub؟</value></data>
 <data name="RestartRequired" xml:space="preserve"><value>(يتطلب إعادة التشغيل)</value></data>
+<data name="SceneTransition" xml:space="preserve"><value>انتقال المشهد</value></data>
+<data name="SearchFont" xml:space="preserve"><value>البحث عن الخطوط...</value></data>
+<data name="SearchLabel" xml:space="preserve"><value>بحث:</value></data>
+<data name="SearchPlugins" xml:space="preserve"><value>البحث عن الملحقات</value></data>
+<data name="SearchProject" xml:space="preserve"><value>البحث حسب المشروع/اسم المشروع...</value></data>
+<data name="SelectInstallVersion" xml:space="preserve"><value>يرجى تحديد الإصدار المراد تثبيته والمثيل المستهدف。</value></data>
+<data name="SelectInstance" xml:space="preserve"><value>يرجى تحديد مثيل.</value></data>
+<data name="SelectPluginsToInstall" xml:space="preserve"><value>Seleccione los plugins que desea instalar usando las casillas de verificación.</value></data>
+<data name="SelectVersion" xml:space="preserve"><value>تحديد الإصدار</value></data>
+<data name="Shapes" xml:space="preserve"><value>أشكال</value></data>
+<data name="Size" xml:space="preserve"><value>الحجم</value></data>
+<data name="SpeechSynthesis" xml:space="preserve"><value>تركيب الكلام</value></data>
+<data name="Status" xml:space="preserve"><value>الحالة</value></data>
+<data name="TextCompletion" xml:space="preserve"><value>إكمال النص</value></data>
+<data name="ThemeSettings" xml:space="preserve"><value>إعدادات المظهر</value></data>
+<data name="Toggle" xml:space="preserve"><value>تبديل</value></data>
+<data name="Token" xml:space="preserve"><value>رمز</value></data>
+<data name="Tools" xml:space="preserve"><value>أدوات</value></data>
+<data name="Transcription" xml:space="preserve"><value>نسخ النص</value></data>
+<data name="TypeFilter" xml:space="preserve"><value>فلتر النوع</value></data>
+<data name="UiFont" xml:space="preserve"><value>خط واجهة المستخدم</value></data>
+<data name="UncheckAll" xml:space="preserve"><value>إلغاء تحديد الكل</value></data>
+<data name="UpdateAvailable" xml:space="preserve"><value>تحديث متاح</value></data>
+<data name="UpdateDetails" xml:space="preserve"><value>تفاصيل التحديث</value></data>
+<data name="VideoEffects" xml:space="preserve"><value>تأثيرات الفيديو</value></data>
+<data name="VideoOutput" xml:space="preserve"><value>إخراج الفيديو</value></data>
+<data name="WindowsStandard" xml:space="preserve"><value>قياسي ويندوز</value></data>
+<data name="Ymm4InfoSite" xml:space="preserve"><value>موقع معلومات YMM4</value></data>
+<data name="Filter" xml:space="preserve"><value>تصفية</value></data>
+<data name="FileFormat" xml:space="preserve"><value>تنسيق الملف</value></data>
+<data name="Location" xml:space="preserve"><value>الموقع</value></data>
+<data name="IncludeBackup" xml:space="preserve"><value>تضمين النسخ الاحتياطي</value></data>
+<data name="InstanceLabel" xml:space="preserve"><value>مثيل:</value></data>
+<data name="StatusColumn" xml:space="preserve"><value>الحالة</value></data>
+<data name="Enabled" xml:space="preserve"><value>ممكّن</value></data>
+<data name="Disabled" xml:space="preserve"><value>معطّل</value></data>
+<data name="TypeColumn" xml:space="preserve"><value>النوع</value></data>
+<data name="AuthorColumn" xml:space="preserve"><value>المؤلف</value></data>
+<data name="VersionColumn" xml:space="preserve"><value>الإصدار</value></data>
+<data name="PublishedAt" xml:space="preserve"><value>تاريخ النشر</value></data>
+<data name="DownloadedAt" xml:space="preserve"><value>تاريخ التنزيل</value></data>
+<data name="UpdateColumn" xml:space="preserve"><value>تحديث</value></data>
+<data name="DownloadStatus" xml:space="preserve"><value>حالة التنزيل</value></data>
+<data name="Downloaded" xml:space="preserve"><value>تم التنزيل</value></data>
+<data name="NotDownloaded" xml:space="preserve"><value>لم يتم التنزيل</value></data>
+<data name="HasUpdate" xml:space="preserve"><value>يوجد تحديث</value></data>
+<data name="SortBy" xml:space="preserve"><value>ترتيب حسب</value></data>
+<data name="SortByName" xml:space="preserve"><value>حسب الاسم</value></data>
+<data name="SortByAuthor" xml:space="preserve"><value>حسب المؤلف</value></data>
+<data name="SortByType" xml:space="preserve"><value>حسب النوع</value></data>
+<data name="SortByStatus" xml:space="preserve"><value>حسب الحالة</value></data>
+<data name="SortByPublishDate" xml:space="preserve"><value>حسب تاريخ النشر الأول</value></data>
+<data name="SortByLatestDate" xml:space="preserve"><value>حسب آخر تحديث</value></data>
+<data name="SortDirection" xml:space="preserve"><value>اتجاه الترتيب</value></data>
+<data name="Ascending" xml:space="preserve"><value>تصاعدي</value></data>
+<data name="Descending" xml:space="preserve"><value>تنازلي</value></data>
+<data name="AddToQueue" xml:space="preserve"><value>إضافة إلى قائمة الانتظار</value></data>
+<data name="RefreshList" xml:space="preserve"><value>تحديث القائمة</value></data>
+<data name="BulkDownload" xml:space="preserve"><value>تنزيل مجمّع</value></data>
+<data name="PluginSettings" xml:space="preserve"><value>إعدادات المكوّنات الإضافية</value></data>
+<data name="AutoUpdatePlugins" xml:space="preserve"><value>تحديث المكوّنات الإضافية تلقائياً</value></data>
+<data name="InstalledVersion" xml:space="preserve"><value>مثبّت: {0}</value></data>
+<data name="Download" xml:space="preserve"><value>تنزيل</value></data>
+<data name="Update" xml:space="preserve"><value>تحديث</value></data>
+<data name="CheckOnSite" xml:space="preserve"><value>التحقق على الموقع</value></data>
+<data name="FolderButton" xml:space="preserve"><value>مجلد</value></data>
+<data name="OpenFolderTooltip" xml:space="preserve"><value>فتح المجلد</value></data>
+<data name="BulkInstallTitle" xml:space="preserve"><value>تأكيد التثبيت المجمّع</value></data>
+<data name="BulkInstallFinalCheck" xml:space="preserve"><value>التأكيد النهائي للتثبيت</value></data>
+<data name="InstallTargetInstance" xml:space="preserve"><value>مثيل الهدف:</value></data>
+<data name="StartInstall" xml:space="preserve"><value>بدء التثبيت</value></data>
+<data name="Cancel" xml:space="preserve"><value>إلغاء</value></data>
+<data name="InstallProgress" xml:space="preserve"><value>تقدم التثبيت</value></data>
+<data name="Preparing" xml:space="preserve"><value>جارٍ التحضير...</value></data>
+<data name="CompleteAndClose" xml:space="preserve"><value>إتمام وإغلاق</value></data>
+<data name="SelectPluginToInstall" xml:space="preserve"><value>الرجاء اختيار مكوّن إضافي.</value></data>
+<data name="AddToQueueCount" xml:space="preserve"><value>تمت إضافة {0} مكوّن(ات) إلى قائمة الانتظار.(الميزة قادمة قريباً)</value></data>
+<data name="RefreshListSuccess" xml:space="preserve"><value>تم تحديث قائمة المكوّنات الإضافية.</value></data>
+<data name="RefreshListFailed" xml:space="preserve"><value>فشل تحديث القائمة: {0}</value></data>
+<data name="SelectDownloadPlugin" xml:space="preserve"><value>الرجاء اختيار المكوّنات الإضافية للتنزيل.</value></data>
+<data name="SkipNoRelease" xml:space="preserve"><value>لم يتم العثور على معلومات إصدار صالحة. تم تخطي التنزيل.</value></data>
+<data name="SkipTitle" xml:space="preserve"><value>إشعار</value></data>
+<data name="ErrorNoDownloadVersion" xml:space="preserve"><value>خطأ: لا يوجد إصدار قابل للتنزيل</value></data>
+<data name="SkipUnsupportedFormat" xml:space="preserve"><value>تم التخطي: تنسيق غير مدعوم ({0})</value></data>
+<data name="DllInstalledMsg" xml:space="preserve"><value>تم تثبيت ملف .dll في المجلد '{0}'.</value></data>
+<data name="NoReadme" xml:space="preserve"><value>لا يوجد ملف Readme.</value></data>
+<data name="NoDllFound" xml:space="preserve"><value>لم يتم العثور على ملف مكوّن إضافي (DLL) صالح.</value></data>
+<data name="RenameError" xml:space="preserve"><value>فشل إعادة التسمية. قد يكون الملف قيد الاستخدام.</value></data>
+<data name="TargetNotFound" xml:space="preserve"><value>الهدف غير موجود:</value></data>
+<data name="LoadError" xml:space="preserve"><value>خطأ:</value></data>
+<data name="CentralInfoUpdateFailed" xml:space="preserve"><value>فشل تحديث info.json: {0}</value></data>
+<data name="CentralInfoSaveFailed" xml:space="preserve"><value>فشل حفظ info.json: {0}</value></data>
+<data name="CentralInfoDeleteFailed" xml:space="preserve"><value>فشل الحذف من info.json: {0}</value></data>
+<data name="PluginFolderNotFound" xml:space="preserve"><value>لم يتم العثور على مجلد المكوّنات الإضافية.</value></data>
+<data name="FolderOpenError" xml:space="preserve"><value>تعذّر فتح المجلد: {0}</value></data>
+<data name="FolderNotFound" xml:space="preserve"><value>المجلد غير موجود.</value></data>
+<data name="ConfirmDeletePlugin" xml:space="preserve"><value>هل أنت متأكد من الحذف؟</value></data>
+<data name="RegenerateConfirm" xml:space="preserve"><value>إعادة إنشاء info.json من بيانات المكوّنات الإضافية المحلية.سيتم استبدال info.json الموجود. متابعة؟</value></data>
+<data name="RegenerateSuccess" xml:space="preserve"><value>تمت إعادة إنشاء info.json.تم تسجيل {0} مكوّن(ات) إضافي(ة).</value></data>
+<data name="RegenerateFailed" xml:space="preserve"><value>فشل إعادة إنشاء info.json: {0}</value></data>
+<data name="ReloadPortalSuccess" xml:space="preserve"><value>تم إعادة تحميل بوابة المكوّنات الإضافية.</value></data>
+<data name="ReloadPortalFailed" xml:space="preserve"><value>فشل إعادة تحميل بوابة المكوّنات الإضافية: {0}</value></data>
+<data name="InstanceNotSelected" xml:space="preserve"><value>لم يتم تحديد أي مثيل.</value></data>
+<data name="UninstallMultipleConfirm" xml:space="preserve"><value>هل تريد حذف {0} مكوّن(ات) إضافي(ة)؟</value></data>
+<data name="BulkDownloadInstance" xml:space="preserve"><value>الرجاء اختيار مكوّن إضافي واحد على الأقل للتثبيت.</value></data>
+<data name="BulkDownloadSelectInstance" xml:space="preserve"><value>الرجاء اختيار المثيل الهدف.</value></data>
+<data name="VersionDownloadTooltip" xml:space="preserve"><value>تنزيل هذا الإصدار مباشرة</value></data>
+<data name="DownloadInProgress" xml:space="preserve"><value>اكتملت العملية. راجع ملف Readme واضغط 'إغلاق'.</value></data>
+<data name="AddInstanceTitle" xml:space="preserve"><value>إضافة نسخة</value></data>
+<data name="SelectAddMethod" xml:space="preserve"><value>اختر طريقة الإضافة</value></data>
+<data name="NewDownload" xml:space="preserve"><value>تنزيل جديد</value></data>
+<data name="NewDownloadDesc" xml:space="preserve"><value>تنزيل YMM4 وإنشاء نسخة جديدة</value></data>
+<data name="AddExisting" xml:space="preserve"><value>إضافة موجود</value></data>
+<data name="AddExistingDesc" xml:space="preserve"><value>إضافة YMM4 مثبت مسبقاً</value></data>
+<data name="InstanceSetupTitle" xml:space="preserve"><value>إعدادات النسخة</value></data>
+<data name="NewInstanceSetupTitle" xml:space="preserve"><value>إعداد نسخة جديدة</value></data>
+<data name="Edition" xml:space="preserve"><value>إصدار</value></data>
+<data name="NormalEdition" xml:space="preserve"><value>الإصدار القياسي</value></data>
+<data name="NormalEditionDesc" xml:space="preserve"><value>AquesTalk ya viene instalado.</value></data>
+<data name="LiteEdition" xml:space="preserve"><value>إصدار Lite</value></data>
+<data name="LiteEditionDesc" xml:space="preserve"><value>Recomendado para quienes no utilizan AquesTalk.</value></data>
+<data name="IconLabel" xml:space="preserve"><value>أيقونة</value></data>
+<data name="UseExeIcon" xml:space="preserve"><value>（استخدام أيقونة exe）</value></data>
+<data name="AutoSetExeIcon" xml:space="preserve"><value>（سيتم ضبط أيقونة exe تلقائياً بعد التنزيل）</value></data>
+<data name="SelectAnotherIcon" xml:space="preserve"><value>اختر أيقونة أخرى...</value></data>
+<data name="ResetToExeIcon" xml:space="preserve"><value>إعادة تعيين أيقونة exe</value></data>
+<data name="InstanceNameLabel" xml:space="preserve"><value>اسم النسخة</value></data>
+<data name="InstallFolder" xml:space="preserve"><value>مجلد التثبيت</value></data>
+<data name="Browse" xml:space="preserve"><value>استعراض...</value></data>
+<data name="InstallFolderNote" xml:space="preserve"><value>يتم الاستخراج في مجلد فرعي باسم النسخة</value></data>
+<data name="DownloadAndCreate" xml:space="preserve"><value>تنزيل &amp;&amp; إنشاء</value></data>
+<data name="FolderAlreadyExists" xml:space="preserve"><value>المجلد موجود بالفعل. هل تريد الكتابة فوقه؟</value></data>
+<data name="ExeNotFound" xml:space="preserve"><value>لم يتم العثور على YukkuriMovieMaker.exe. يرجى التحقق يدوياً.</value></data>
+<data name="DownloadUrlFailed" xml:space="preserve"><value>فشل الحصول على رابط التنزيل. يرجى التنزيل يدوياً من الموقع الرسمي.</value></data>
+<data name="InstallFailed" xml:space="preserve"><value>فشل التثبيت</value></data>
+<data name="CheckingLatestVersion" xml:space="preserve"><value>جاري التحقق من أحدث إصدار...</value></data>
+<data name="Extracting" xml:space="preserve"><value>جاري الاستخراج...</value></data>
+<data name="Cleanup" xml:space="preserve"><value>جاري التنظيف...</value></data>
+<data name="SelectExeTitle" xml:space="preserve"><value>اختر YukkuriMovieMaker.exe</value></data>
+<data name="SelectIconTitle" xml:space="preserve"><value>اختر صورة الأيقونة</value></data>
+<data name="Complete" xml:space="preserve"><value>مكتمل</value></data>
+<data name="Cancelled" xml:space="preserve"><value>تم الإلغاء</value></data>
 </root>
