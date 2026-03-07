@@ -357,7 +357,7 @@
                     <ControlTemplate TargetType="TextBox">
                         <Grid>
                             <Border x:Name="border" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="4"/>
-                            <ScrollViewer x:Name="PART_ContentHost" Focusable="false" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden" Margin="-13,0"/>
+                            <ScrollViewer x:Name="PART_ContentHost" Focusable="false" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden" Margin="0,0"/>
                             <TextBlock x:Name="placeholder" IsHitTestVisible="False" Text="{TemplateBinding Tag}" VerticalAlignment="Center" Margin="12,0" Foreground="{DynamicResource SubTextBrush}" Visibility="Collapsed"/>
                         </Grid>
                         <ControlTemplate.Triggers>
@@ -747,7 +747,7 @@
                             <ListView.View>
                                 <GridView>
                                     <!-- プラグイン名 -->
-                                    <GridViewColumn Width="200">
+                                    <GridViewColumn Width="300">
                                         <GridViewColumnHeader Content="{x:Static local:Translate.PluginName}" Click="GridViewColumnHeader_Click" Tag="DisplayName"/>
                                         <GridViewColumn.CellTemplate>
                                             <DataTemplate>
@@ -757,7 +757,7 @@
                                     </GridViewColumn>
 
                                     <!-- 切替ボタン -->
-                                    <GridViewColumn Width="68">
+                                    <GridViewColumn Width="80">
                                         <GridViewColumnHeader Content="{x:Static local:Translate.Toggle}" Click="GridViewColumnHeader_Click" Tag="IsEnabled"/>
                                         <GridViewColumn.CellTemplate>
                                             <DataTemplate>
@@ -775,7 +775,7 @@
                                     </GridViewColumn>
 
                                     <!-- 状態 -->
-                                    <GridViewColumn Width="52">
+                                    <GridViewColumn Width="80">
                                         <GridViewColumnHeader Content="{x:Static local:Translate.StatusColumn}" Click="GridViewColumnHeader_Click" Tag="IsEnabled"/>
                                         <GridViewColumn.CellTemplate>
                                             <DataTemplate>
@@ -798,7 +798,7 @@
                                     </GridViewColumn>
 
                                     <!-- 削除ボタン -->
-                                    <GridViewColumn Width="64">
+                                    <GridViewColumn Width="80">
                                         <GridViewColumnHeader Content="{x:Static local:Translate.Delete}" Tag="Delete"/>
                                         <GridViewColumn.CellTemplate>
                                             <DataTemplate>
@@ -813,7 +813,7 @@
                                     </GridViewColumn>
 
                                     <!-- タイプ -->
-                                    <GridViewColumn Width="96">
+                                    <GridViewColumn Width="120">
                                         <GridViewColumnHeader Content="{x:Static local:Translate.TypeColumn}" Click="GridViewColumnHeader_Click" Tag="Type"/>
                                         <GridViewColumn.CellTemplate>
                                             <DataTemplate>
@@ -823,7 +823,7 @@
                                     </GridViewColumn>
 
                                     <!-- 作者名 -->
-                                    <GridViewColumn Width="100">
+                                    <GridViewColumn Width="150">
                                         <GridViewColumnHeader Content="{x:Static local:Translate.AuthorColumn}" Click="GridViewColumnHeader_Click" Tag="Author"/>
                                         <GridViewColumn.CellTemplate>
                                             <DataTemplate>
@@ -833,7 +833,7 @@
                                     </GridViewColumn>
 
                                     <!-- バージョン -->
-                                    <GridViewColumn Width="84">
+                                    <GridViewColumn Width="100">
                                         <GridViewColumnHeader Content="{x:Static local:Translate.VersionColumn}" Click="GridViewColumnHeader_Click" Tag="Version"/>
                                         <GridViewColumn.CellTemplate>
                                             <DataTemplate>
@@ -843,7 +843,7 @@
                                     </GridViewColumn>
 
                                     <!-- 公開日時 -->
-                                    <GridViewColumn Width="96">
+                                    <GridViewColumn Width="100">
                                         <GridViewColumnHeader Content="{x:Static local:Translate.PublishedAt}" Click="GridViewColumnHeader_Click" Tag="PublishedAt"/>
                                         <GridViewColumn.CellTemplate>
                                             <DataTemplate>
@@ -853,26 +853,11 @@
                                     </GridViewColumn>
 
                                     <!-- DL日時 -->
-                                    <GridViewColumn Width="120">
+                                    <GridViewColumn Width="140">
                                         <GridViewColumnHeader Content="{x:Static local:Translate.DownloadedAt}" Click="GridViewColumnHeader_Click" Tag="DownloadedAt"/>
                                         <GridViewColumn.CellTemplate>
                                             <DataTemplate>
                                                 <TextBlock Text="{Binding DisplayDownloadedAt}" Padding="5,0" Foreground="{DynamicResource SubTextBrush}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                                            </DataTemplate>
-                                        </GridViewColumn.CellTemplate>
-                                    </GridViewColumn>
-
-                                    <!-- 更新ボタン -->
-                                    <GridViewColumn Width="64">
-                                        <GridViewColumnHeader Content="{x:Static local:Translate.UpdateColumn}" Click="GridViewColumnHeader_Click" Tag="HasUpdate"/>
-                                        <GridViewColumn.CellTemplate>
-                                            <DataTemplate>
-                                                <Button Click="UpdateLocalPlugin_Click"
-                                                        Content="更新"
-                                                        Visibility="{Binding HasUpdate, Converter={StaticResource BoolToVis}}"
-                                                        Background="{DynamicResource AccentBrush}"
-                                                        Foreground="White"
-                                                        Width="52" Height="22" HorizontalAlignment="Center"/>
                                             </DataTemplate>
                                         </GridViewColumn.CellTemplate>
                                     </GridViewColumn>
