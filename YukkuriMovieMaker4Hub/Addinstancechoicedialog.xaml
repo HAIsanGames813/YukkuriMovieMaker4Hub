@@ -56,7 +56,7 @@
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
                 </Button.Template>
-                <StackPanel Margin="16,20" HorizontalAlignment="Center">
+                <StackPanel Margin="10,10" HorizontalAlignment="Center">
                     <!-- ダウンロードアイコン（下矢印＋トレイ） -->
                     <Viewbox Width="36" Height="36" Margin="0,0,0,10">
                         <Path Fill="{DynamicResource TextBrush}" Stretch="Uniform"
@@ -89,7 +89,7 @@
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
                 </Button.Template>
-                <StackPanel Margin="16,20" HorizontalAlignment="Center">
+                <StackPanel Margin="10,10" HorizontalAlignment="Center">
                     <!-- フォルダアイコン -->
                     <Viewbox Width="36" Height="36" Margin="0,0,0,10">
                         <Path Fill="{DynamicResource TextBrush}" Stretch="Uniform"
