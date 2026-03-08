@@ -671,6 +671,8 @@ namespace YukkuriMovieMaker4Hub
         public Array ThemeModes => Enum.GetValues(typeof(AppTheme));
         private readonly InstanceInfo _dummyInstance = new InstanceInfo { Name = Translate.SelectInstance, ExePath = string.Empty };
 
+        public string HubTitle => $"YukkuriMovieMaker4Hub  v{HubVersion}";
+
         private InstanceInfo? _selectedInstance;
         public InstanceInfo SelectedInstance
         {
@@ -831,7 +833,8 @@ namespace YukkuriMovieMaker4Hub
             runningTimer.Tick += (s, e) => RefreshRunningStatus();
             runningTimer.Start();
         }
-        private static readonly string HubVersion = "4.1.1";
+        private static readonly string HubVersion =
+            System.Reflection.Assembly.GetExecutingAssembly().GetName().Version?.ToString(3) ?? "0.0.0";
         private async Task CheckForHubUpdateAsync()
         {
             try
