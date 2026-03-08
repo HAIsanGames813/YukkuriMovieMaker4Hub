@@ -831,7 +831,7 @@ namespace YukkuriMovieMaker4Hub
             runningTimer.Tick += (s, e) => RefreshRunningStatus();
             runningTimer.Start();
         }
-        private static readonly string HubVersion = "4.0.0";
+        private static readonly string HubVersion = "4.1.0";
         private async Task CheckForHubUpdateAsync()
         {
             try
