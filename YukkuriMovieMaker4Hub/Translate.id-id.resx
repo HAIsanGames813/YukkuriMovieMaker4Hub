@@ -279,4 +279,5 @@
 <data name="SelectIconTitle" xml:space="preserve"><value>Pilih gambar ikon</value></data>
 <data name="Complete" xml:space="preserve"><value>Selesai</value></data>
 <data name="Cancelled" xml:space="preserve"><value>Dibatalkan</value></data>
+<data name="StartingUp" xml:space="preserve"><value>قيد التشغيل</value></data>
 </root>

@@ -279,4 +279,5 @@
 <data name="SelectIconTitle" xml:space="preserve"><value>アイコン画像を選択</value></data>
 <data name="Complete" xml:space="preserve"><value>完了</value></data>
 <data name="Cancelled" xml:space="preserve"><value>キャンセル済み</value></data>
+<data name="StartingUp" xml:space="preserve"><value>起動中</value></data>
 </root>

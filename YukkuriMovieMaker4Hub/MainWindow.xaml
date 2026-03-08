@@ -505,7 +505,7 @@
                                 <TextBlock Text="{Binding Name}" FontSize="13" Foreground="{DynamicResource TextBrush}" TextTrimming="CharacterEllipsis" VerticalAlignment="Center" Margin="4,0,0,0"/>
                             </StackPanel>
                             <!-- 起動中バッジ（右端固定） -->
-                            <TextBlock Grid.Column="2" Text="起動中" FontSize="10" Foreground="{DynamicResource AccentBrush}" FontWeight="Bold" VerticalAlignment="Center" Margin="4,0,0,0">
+                            <TextBlock Grid.Column="2" Text="{x:Static local:Translate.StartingUp}" FontSize="10" Foreground="{DynamicResource AccentBrush}" FontWeight="Bold" VerticalAlignment="Center" Margin="4,0,0,0">
                                 <TextBlock.Style>
                                     <Style TargetType="TextBlock">
                                         <Setter Property="Visibility" Value="Collapsed"/>
