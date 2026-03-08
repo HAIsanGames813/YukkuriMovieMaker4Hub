@@ -106,6 +106,8 @@ namespace YukkuriMovieMaker4Hub
         public string LanguageCode { get; set; } = "ja-JP";
         [JsonPropertyName("itemSize")]
         public double ItemSize { get; set; } = 300;
+        [JsonPropertyName("instancePanelWidth")]
+        public double InstancePanelWidth { get; set; } = 320;
     }
     public class YmmUpdateItem
     {
@@ -187,6 +189,10 @@ namespace YukkuriMovieMaker4Hub
         private bool _hasUpdate;
         [JsonIgnore]
         public bool HasUpdate { get => _hasUpdate; set { _hasUpdate = value; OnPropertyChanged(nameof(HasUpdate)); } }
+
+        private bool _isRunning;
+        [JsonIgnore]
+        public bool IsRunning { get => _isRunning; set { _isRunning = value; OnPropertyChanged(nameof(IsRunning)); } }
 
         private bool _isSelected;
         [JsonIgnore]
@@ -372,22 +378,25 @@ namespace YukkuriMovieMaker4Hub
         {
             get
             {
-                if (IsDirectory && Directory.Exists(FullPath))
+                if (IsDirectory)
                 {
-                    // ディレクトリの場合：中に.dll.disabledファイルがあれば無効
-                    var disabledDlls = Directory.GetFiles(FullPath, "*.dll.disabled", SearchOption.AllDirectories);
-                    if (disabledDlls.Length > 0) return false;
+                    // ディレクトリの場合：フォルダ名の先頭が _ なら無効
+                    string dirName = Path.GetFileName(FullPath);
+                    if (dirName.StartsWith("_")) return false;
 
-                    // .dllファイルがあれば有効
-                    var enabledDlls = Directory.GetFiles(FullPath, "*.dll", SearchOption.AllDirectories);
-                    return enabledDlls.Length > 0;
+                    // フォルダが存在し、中に .dll があれば有効
+                    if (Directory.Exists(FullPath))
+                    {
+                        var enabledDlls = Directory.GetFiles(FullPath, "*.dll", SearchOption.AllDirectories);
+                        return enabledDlls.Length > 0;
+                    }
+                    return true;
                 }
-                else if (!IsDirectory)
+                else
                 {
                     // ファイルの場合：.disabledで終わっていれば無効
                     return !FullPath.EndsWith(".disabled");
                 }
-                return true;
             }
         }
         public bool IsSelectionValid => FullPath != "DUMMY_NONE_SELECTED";
@@ -413,6 +422,8 @@ namespace YukkuriMovieMaker4Hub
 
         // 日本語名順ソート用：先頭の _ や . を除去した読み名
         public string DisplayNameSortKey => DisplayName.TrimStart('_', '.', ' ');
+
+        public void NotifyPathChanged() => OnPropertyChanged(nameof(IsEnabled));
     }
     public class FontItem
     {
@@ -787,6 +798,10 @@ namespace YukkuriMovieMaker4Hub
             InitializeComponent();
             this.DataContext = this;
 
+            // インスタンスパネルの初期幅を復元
+            if (InstancePanelColumn != null)
+                InstancePanelColumn.Width = new GridLength(_currentSettings.InstancePanelWidth);
+
             _selectedLanguage = Languages.FirstOrDefault(l => l.Code == langCode) ?? Languages[0];
             OnPropertyChanged(nameof(SelectedLanguage));
 
@@ -810,6 +825,11 @@ namespace YukkuriMovieMaker4Hub
             _ = CheckYmmUpdates();
             _ = CheckForHubUpdateAsync();
             _ = LoadOnlinePlugins();
+
+            // 起動中インスタンスのポーリングタイマー（2秒間隔）
+            var runningTimer = new System.Windows.Threading.DispatcherTimer { Interval = TimeSpan.FromSeconds(2) };
+            runningTimer.Tick += (s, e) => RefreshRunningStatus();
+            runningTimer.Start();
         }
         private static readonly string HubVersion = "4.0.0";
         private async Task CheckForHubUpdateAsync()
@@ -1008,6 +1028,32 @@ namespace YukkuriMovieMaker4Hub
             }
         }
 
+        // 各インスタンスの起動状態を更新する
+        private void RefreshRunningStatus()
+        {
+            foreach (var instance in Instances)
+            {
+                if (string.IsNullOrEmpty(instance.ExePath)) { instance.IsRunning = false; continue; }
+                string procName = Path.GetFileNameWithoutExtension(instance.ExePath);
+                instance.IsRunning = Process.GetProcessesByName(procName)
+                    .Any(p =>
+                    {
+                        try { return string.Equals(p.MainModule?.FileName, instance.ExePath, StringComparison.OrdinalIgnoreCase); }
+                        catch { return false; }
+                    });
+            }
+        }
+
+        // インスタンスパネル幅グリッパー：ドラッグ完了時に保存
+        private void InstancePanelSplitter_DragCompleted(object sender, System.Windows.Controls.Primitives.DragCompletedEventArgs e)
+        {
+            if (InstancePanelColumn != null)
+            {
+                _currentSettings.InstancePanelWidth = InstancePanelColumn.ActualWidth;
+                SaveAll();
+            }
+        }
+
         private void SaveAll()
         {
             try
@@ -1028,6 +1074,67 @@ namespace YukkuriMovieMaker4Hub
             {
                 MessageBox.Show($"Save Error: {ex.Message}");
             }
+        }
+
+        // --- インスタンスリスト ドラッグ&ドロップ並び替え ---
+        private Point _instanceDragStart;
+        private InstanceInfo? _instanceDragItem;
+        private bool _instanceDragging = false;
+
+        private void InstanceList_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            _instanceDragStart = e.GetPosition(null);
+            _instanceDragItem = null;
+            _instanceDragging = false;
+
+            // クリックされた ListBoxItem の DataContext を取得
+            var element = e.OriginalSource as DependencyObject;
+            while (element != null && !(element is ListBoxItem))
+                element = System.Windows.Media.VisualTreeHelper.GetParent(element);
+            if (element is ListBoxItem item && item.DataContext is InstanceInfo info)
+                _instanceDragItem = info;
+        }
+
+        private void InstanceList_PreviewMouseMove(object sender, MouseEventArgs e)
+        {
+            if (e.LeftButton != MouseButtonState.Pressed || _instanceDragItem == null || _instanceDragging)
+                return;
+
+            var pos = e.GetPosition(null);
+            var diff = pos - _instanceDragStart;
+            // 長押し判定の代わりに最小ドラッグ距離で開始（SystemParameters 準拠）
+            if (Math.Abs(diff.X) < SystemParameters.MinimumHorizontalDragDistance &&
+                Math.Abs(diff.Y) < SystemParameters.MinimumVerticalDragDistance)
+                return;
+
+            _instanceDragging = true;
+            DragDrop.DoDragDrop(InstanceListBox, _instanceDragItem, DragDropEffects.Move);
+            _instanceDragging = false;
+            _instanceDragItem = null;
+        }
+
+        private void InstanceList_Drop(object sender, DragEventArgs e)
+        {
+            if (_instanceDragItem == null) return;
+
+            // ドロップ先の ListBoxItem を特定
+            var element = e.OriginalSource as DependencyObject;
+            while (element != null && !(element is ListBoxItem))
+                element = System.Windows.Media.VisualTreeHelper.GetParent(element);
+
+            InstanceInfo? target = null;
+            if (element is ListBoxItem dropItem && dropItem.DataContext is InstanceInfo ti)
+                target = ti;
+
+            if (target == null || target == _instanceDragItem) return;
+
+            int fromIndex = Instances.IndexOf(_instanceDragItem);
+            int toIndex = Instances.IndexOf(target);
+            if (fromIndex < 0 || toIndex < 0) return;
+
+            Instances.Move(fromIndex, toIndex);
+            InstanceListBox.SelectedItem = _instanceDragItem;
+            SaveAll();
         }
 
         private async void AddInstance_Click(object sender, RoutedEventArgs e)
@@ -1815,7 +1922,10 @@ namespace YukkuriMovieMaker4Hub
                 }
 
                 var dirs = Directory.GetDirectories(SelectedInstance.PluginDirectory);
-                var files = Directory.GetFiles(SelectedInstance.PluginDirectory, "*.dll");
+                // 直下の .dll（有効）と .dll.disabled（無効）を両方列挙
+                var files = Directory.GetFiles(SelectedInstance.PluginDirectory, "*.dll")
+                    .Concat(Directory.GetFiles(SelectedInstance.PluginDirectory, "*.dll.disabled"))
+                    .ToArray();
                 bool infoUpdated = false;
 
                 foreach (var path in dirs.Concat(files))
@@ -1823,6 +1933,14 @@ namespace YukkuriMovieMaker4Hub
                     var info = new LocalPluginInfo();
                     info.FullPath = path;
                     info.IsDirectory = Directory.Exists(path);
+
+                    // ディレクトリの場合：内部に .dll または .dll.disabled が1つもなければスキップ
+                    if (info.IsDirectory)
+                    {
+                        bool hasDll = Directory.EnumerateFiles(path, "*.dll", SearchOption.AllDirectories).Any()
+                                   || Directory.EnumerateFiles(path, "*.dll.disabled", SearchOption.AllDirectories).Any();
+                        if (!hasDll) continue;
+                    }
 
                     // プラグイン名を取得（ディレクトリ/ファイル名から）
                     string pluginFileName = Path.GetFileName(path);
@@ -2068,10 +2186,27 @@ namespace YukkuriMovieMaker4Hub
             FilteredProjects.Clear();
             foreach (var p in filtered.OrderByDescending(x => x.LastWriteTime)) FilteredProjects.Add(p);
         }
+        /// <summary>
+        /// 操作対象インスタンス（SelectedInstance）のプロセスのみを確認・終了する。
+        /// インスタンスのexeパスが特定できない場合や、そのプロセスが起動していない場合は即 true を返す。
+        /// </summary>
         private bool EnsureYmmClosed()
         {
-            var processes = Process.GetProcessesByName("YukkuriMovieMaker");
+            // SelectedInstance の exe パスから対象プロセスを特定する
+            string? targetExe = SelectedInstance?.ExePath;
+            if (string.IsNullOrEmpty(targetExe)) return true;
+
+            string targetName = Path.GetFileNameWithoutExtension(targetExe);
+            var processes = Process.GetProcessesByName(targetName)
+                .Where(p =>
+                {
+                    try { return string.Equals(p.MainModule?.FileName, targetExe, StringComparison.OrdinalIgnoreCase); }
+                    catch { return false; }
+                })
+                .ToArray();
+
             if (processes.Length == 0) return true;
+
             if (MessageBox.Show(Translate.ExitYmm4ForPlugin, Translate.Confirm, MessageBoxButton.YesNo) == MessageBoxResult.Yes)
             {
                 foreach (var p in processes) { try { p.CloseMainWindow(); if (!p.WaitForExit(3000)) p.Kill(); } catch { } }
@@ -2090,17 +2225,21 @@ namespace YukkuriMovieMaker4Hub
 
         private void DeletePluginFromPortal_Click(object sender, RoutedEventArgs e)
         {
+            if (!EnsureYmmClosed()) return;
             if (sender is Button btn && btn.DataContext is PluginCatalogItem onlinePlugin)
             {
                 var local = FindLocalPlugin(onlinePlugin);
-                if (local != null) DeleteOne(local);
+                if (local != null)
+                {
+                    DeleteOne(local);
+                    RefreshLocalPlugins();
+                }
             }
         }
 
         private void ToggleOne(LocalPluginInfo plugin)
         {
             if (SelectedInstance == null) return;
-            if (!EnsureYmmClosed()) return;
 
             string currentPath = plugin.FullPath;
 
@@ -2118,32 +2257,24 @@ namespace YukkuriMovieMaker4Hub
             {
                 if (isDirectory)
                 {
-                    // ディレクトリの場合：中の全DLLファイルに.disabledを付け外し
-                    var dllFiles = Directory.GetFiles(currentPath, "*.dll", SearchOption.AllDirectories);
+                    // ディレクトリの場合：フォルダ名先頭の _ を付け外しで有効/無効切替
+                    string parentDir = Path.GetDirectoryName(currentPath) ?? string.Empty;
+                    string dirName = Path.GetFileName(currentPath);
 
                     if (plugin.IsEnabled)
                     {
-                        // 有効 -> 無効：全DLLに.disabledを追加
-                        foreach (var dllPath in dllFiles)
-                        {
-                            if (!dllPath.EndsWith(".disabled"))
-                            {
-                                File.Move(dllPath, dllPath + ".disabled");
-                            }
-                        }
+                        // 有効 -> 無効：フォルダ名先頭に _ を追加
+                        string newPath = Path.Combine(parentDir, "_" + dirName);
+                        Directory.Move(currentPath, newPath);
+                        plugin.FullPath = newPath;
                     }
                     else
                     {
-                        // 無効 -> 有効：全.dll.disabledから.disabledを削除
-                        var disabledFiles = Directory.GetFiles(currentPath, "*.dll.disabled", SearchOption.AllDirectories);
-                        foreach (var disabledPath in disabledFiles)
-                        {
-                            if (disabledPath.EndsWith(".dll.disabled"))
-                            {
-                                string newPath = disabledPath.Substring(0, disabledPath.Length - 9); // ".disabled"を削除
-                                File.Move(disabledPath, newPath);
-                            }
-                        }
+                        // 無効 -> 有効：フォルダ名先頭の _ を除去
+                        string baseName = dirName.StartsWith("_") ? dirName.Substring(1) : dirName;
+                        string newPath = Path.Combine(parentDir, baseName);
+                        Directory.Move(currentPath, newPath);
+                        plugin.FullPath = newPath;
                     }
                 }
                 else
@@ -2168,7 +2299,7 @@ namespace YukkuriMovieMaker4Hub
                     }
                 }
 
-                RefreshLocalPlugins();
+                plugin.NotifyPathChanged();
             }
             catch (Exception ex)
             {
@@ -2178,10 +2309,6 @@ namespace YukkuriMovieMaker4Hub
 
         private void DeleteOne(LocalPluginInfo plugin)
         {
-            if (!EnsureYmmClosed()) return;
-            var result = MessageBox.Show($"{Translate.ConfirmDeletePlugin}\n{plugin.DisplayName}", Translate.Confirm, MessageBoxButton.YesNo, MessageBoxImage.Warning);
-            if (result != MessageBoxResult.Yes) return;
-
             try
             {
                 // プラグイン名を取得（_プレフィックスや.disabled拡張子を除去）
@@ -2205,8 +2332,6 @@ namespace YukkuriMovieMaker4Hub
                 {
                     RemoveFromCentralPluginsInfo(SelectedInstance.PluginDirectory, actualName);
                 }
-
-                RefreshLocalPlugins();
             }
             catch (Exception ex) { MessageBox.Show(ex.Message); }
         }
@@ -2236,29 +2361,57 @@ namespace YukkuriMovieMaker4Hub
 
         private void BulkToggle_Click(object sender, RoutedEventArgs e)
         {
-            var selected = LocalPlugins.Where(p => p.IsSelectionValid).ToList();
+            var selected = LocalPluginList?.SelectedItems.Cast<LocalPluginInfo>().Where(p => p.IsSelectionValid).ToList()
+                           ?? new List<LocalPluginInfo>();
             if (selected.Count == 0 || !EnsureYmmClosed()) return;
             foreach (var p in selected) ToggleOne(p);
+            RefreshLocalPlugins();
         }
 
         private void TogglePlugin_Click(object sender, RoutedEventArgs e)
         {
-            if (sender is Button btn && btn.DataContext is LocalPluginInfo plugin)
+            if (!EnsureYmmClosed()) return;
+
+            // LocalPluginList でハイライト選択されている全アイテムを取得
+            List<LocalPluginInfo> targets = new List<LocalPluginInfo>();
+            if (LocalPluginList != null && LocalPluginList.SelectedItems.Count > 0)
             {
-                if (!EnsureYmmClosed()) return;
-                ToggleOne(plugin);
+                targets = LocalPluginList.SelectedItems.Cast<LocalPluginInfo>().ToList();
             }
+            else if (sender is Button btn && btn.DataContext is LocalPluginInfo single)
+            {
+                targets.Add(single);
+            }
+
+            if (targets.Count == 0) return;
+
+            foreach (var plugin in targets)
+                ToggleOne(plugin);
+
+            RefreshLocalPlugins();
         }
 
         private void DeletePlugin_Click(object sender, RoutedEventArgs e)
         {
-            if (sender is Button btn && btn.DataContext is LocalPluginInfo plugin)
+            // LocalPluginList でハイライト選択されている全アイテムを取得
+            List<LocalPluginInfo> targets = new List<LocalPluginInfo>();
+            if (LocalPluginList != null && LocalPluginList.SelectedItems.Count > 0)
             {
-                if (MessageBox.Show($"{plugin.DisplayName}{Translate.DeletePermanently}\n{Translate.CannotBeUndone}", Translate.ConfirmDeletion, MessageBoxButton.YesNo, MessageBoxImage.Warning) != MessageBoxResult.Yes) return;
-                if (!EnsureYmmClosed()) return;
-                DeleteOne(plugin);
-                RefreshLocalPlugins();
+                targets = LocalPluginList.SelectedItems.Cast<LocalPluginInfo>().Where(p => p.IsSelectionValid).ToList();
             }
+            else if (sender is Button btn && btn.DataContext is LocalPluginInfo single)
+            {
+                targets.Add(single);
+            }
+
+            if (targets.Count == 0) return;
+
+            if (!EnsureYmmClosed()) return;
+
+            foreach (var plugin in targets)
+                DeleteOne(plugin);
+
+            RefreshLocalPlugins();
         }
 
         private void EnablePlugin_Click(object sender, RoutedEventArgs e)
@@ -2280,6 +2433,7 @@ namespace YukkuriMovieMaker4Hub
                 var local = FindLocalPlugin(SelectedOnlinePlugin);
                 if (local != null && !local.IsEnabled) ToggleOne(local);
             }
+            RefreshLocalPlugins();
         }
 
         private void DisablePlugin_Click(object sender, RoutedEventArgs e)
@@ -2301,13 +2455,14 @@ namespace YukkuriMovieMaker4Hub
                 var local = FindLocalPlugin(SelectedOnlinePlugin);
                 if (local != null && local.IsEnabled) ToggleOne(local);
             }
+            RefreshLocalPlugins();
         }
 
         private void TogglePluginEnabled_Click(object sender, RoutedEventArgs e)
         {
             if (SelectedOnlinePlugin == null) return;
             var local = FindLocalPlugin(SelectedOnlinePlugin);
-            if (local != null) ToggleOne(local);
+            if (local != null) { ToggleOne(local); RefreshLocalPlugins(); }
         }
 
         private void UninstallPlugin_Click(object sender, RoutedEventArgs e)
@@ -2318,25 +2473,21 @@ namespace YukkuriMovieMaker4Hub
             if (PluginListView != null && PluginListView.SelectedItems.Count > 1)
             {
                 var selectedPlugins = PluginListView.SelectedItems.Cast<PluginCatalogItem>().ToList();
-                var result = MessageBox.Show(
-                    string.Format(Translate.UninstallMultipleConfirm, selectedPlugins.Count),
-                    Translate.Confirm,
-                    MessageBoxButton.YesNo,
-                    MessageBoxImage.Warning);
-
-                if (result == MessageBoxResult.Yes)
+                foreach (var plugin in selectedPlugins)
                 {
-                    foreach (var plugin in selectedPlugins)
-                    {
-                        var local = FindLocalPlugin(plugin);
-                        if (local != null) DeleteOne(local);
-                    }
+                    var local = FindLocalPlugin(plugin);
+                    if (local != null) DeleteOne(local);
                 }
+                RefreshLocalPlugins();
             }
             else if (SelectedOnlinePlugin != null)
             {
                 var local = FindLocalPlugin(SelectedOnlinePlugin);
-                if (local != null) DeleteOne(local);
+                if (local != null)
+                {
+                    DeleteOne(local);
+                    RefreshLocalPlugins();
+                }
             }
         }
 
@@ -2554,9 +2705,9 @@ namespace YukkuriMovieMaker4Hub
         }
         private void BulkDelete_Click(object sender, RoutedEventArgs e)
         {
-            var selected = LocalPlugins.Where(p => p.IsSelectionValid).ToList();
+            var selected = LocalPluginList?.SelectedItems.Cast<LocalPluginInfo>().Where(p => p.IsSelectionValid).ToList()
+                           ?? new List<LocalPluginInfo>();
             if (selected.Count == 0) return;
-            if (MessageBox.Show($"{selected.Count}{Translate.DeleteCountPermanently}\n{Translate.CannotBeUndone}", Translate.ConfirmDeletion, MessageBoxButton.YesNo, MessageBoxImage.Warning) != MessageBoxResult.Yes) return;
             if (!EnsureYmmClosed()) return;
             foreach (var p in selected) DeleteOne(p);
             RefreshLocalPlugins();

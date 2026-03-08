@@ -357,7 +357,7 @@
                     <ControlTemplate TargetType="TextBox">
                         <Grid>
                             <Border x:Name="border" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="4"/>
-                            <ScrollViewer x:Name="PART_ContentHost" Focusable="false" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden" Margin="0,0"/>
+                            <ScrollViewer x:Name="PART_ContentHost" Focusable="false" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden" Margin="-13,0"/>
                             <TextBlock x:Name="placeholder" IsHitTestVisible="False" Text="{TemplateBinding Tag}" VerticalAlignment="Center" Margin="12,0" Foreground="{DynamicResource SubTextBrush}" Visibility="Collapsed"/>
                         </Grid>
                         <ControlTemplate.Triggers>
@@ -380,7 +380,8 @@
 
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="320"/>
+            <ColumnDefinition x:Name="InstancePanelColumn" Width="320" MinWidth="160" MaxWidth="600"/>
+            <ColumnDefinition Width="4"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
@@ -418,7 +419,35 @@
 
             <TextBlock Text="{x:Static local:Translate.Instance}" Margin="10" FontWeight="Bold" Foreground="{DynamicResource TextBrush}"/>
 
-            <ListBox x:Name="InstanceListBox" Grid.Row="1" ItemsSource="{Binding Instances}" SelectedItem="{Binding SelectedInstance}" Background="Transparent" BorderThickness="0" Margin="5">
+            <ListBox x:Name="InstanceListBox" Grid.Row="1" ItemsSource="{Binding Instances}" SelectedItem="{Binding SelectedInstance}" Background="Transparent" BorderThickness="0" Margin="5"
+                     AllowDrop="True"
+                     PreviewMouseLeftButtonDown="InstanceList_PreviewMouseLeftButtonDown"
+                     PreviewMouseMove="InstanceList_PreviewMouseMove"
+                     Drop="InstanceList_Drop">
+                <ListBox.ItemContainerStyle>
+                    <Style TargetType="ListBoxItem">
+                        <Setter Property="Padding" Value="0"/>
+                        <Setter Property="Background" Value="Transparent"/>
+                        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="ListBoxItem">
+                                    <Border x:Name="Bd" Background="{TemplateBinding Background}" CornerRadius="4" Margin="0,1">
+                                        <ContentPresenter/>
+                                    </Border>
+                                    <ControlTemplate.Triggers>
+                                        <Trigger Property="IsSelected" Value="True">
+                                            <Setter TargetName="Bd" Property="Background" Value="{DynamicResource ItemBrush}"/>
+                                        </Trigger>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter Property="Cursor" Value="SizeAll"/>
+                                        </Trigger>
+                                    </ControlTemplate.Triggers>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </ListBox.ItemContainerStyle>
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <Grid Margin="2">
@@ -462,6 +491,7 @@
                                 </Ellipse>
                             </Grid>
 
+                            <!-- ボタン群 + インスタンス名（左寄せ） -->
                             <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
                                 <Button Style="{StaticResource QuickActionButtonStyle}" Click="InstanceLaunch_Click" ToolTip="{x:Static local:Translate.Launch}">
                                     <Path Fill="{DynamicResource TextBrush}" Width="14" Height="14" Stretch="Uniform" Data="M8,5.14V19.14L19,12.14L8,5.14Z"/>
@@ -472,8 +502,21 @@
                                 <Button Style="{StaticResource QuickActionButtonStyle}" Click="InstanceCreateNewProject_Click" ToolTip="{x:Static local:Translate.CreateNew}">
                                     <Path Fill="{DynamicResource TextBrush}" Width="14" Height="14" Stretch="Uniform" Data="M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z"/>
                                 </Button>
+                                <TextBlock Text="{Binding Name}" FontSize="13" Foreground="{DynamicResource TextBrush}" TextTrimming="CharacterEllipsis" VerticalAlignment="Center" Margin="4,0,0,0"/>
                             </StackPanel>
-                            <TextBlock Grid.Column="2" Text="{Binding Name}" VerticalAlignment="Center" FontSize="13" Foreground="{DynamicResource TextBrush}" TextTrimming="CharacterEllipsis"/>
+                            <!-- 起動中バッジ（右端固定） -->
+                            <TextBlock Grid.Column="2" Text="起動中" FontSize="10" Foreground="{DynamicResource AccentBrush}" FontWeight="Bold" VerticalAlignment="Center" Margin="4,0,0,0">
+                                <TextBlock.Style>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding IsRunning}" Value="True">
+                                                <Setter Property="Visibility" Value="Visible"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBlock.Style>
+                            </TextBlock>
                         </Grid>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
@@ -494,7 +537,26 @@
             </StackPanel>
         </Grid>
 
-        <Grid Grid.Column="1" Margin="5">
+        <!-- インスタンスパネル幅変更グリッパー -->
+        <GridSplitter Grid.Column="1"
+                      Width="4"
+                      HorizontalAlignment="Stretch"
+                      VerticalAlignment="Stretch"
+                      Background="{DynamicResource BorderBrush}"
+                      Cursor="SizeWE"
+                      DragCompleted="InstancePanelSplitter_DragCompleted">
+            <GridSplitter.Style>
+                <Style TargetType="GridSplitter">
+                    <Style.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Background" Value="{DynamicResource AccentBrush}"/>
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </GridSplitter.Style>
+        </GridSplitter>
+
+        <Grid Grid.Column="2" Margin="5">
             <TabControl Background="Transparent" BorderThickness="0" SelectionChanged="TabControl_SelectionChanged">
                 <TabItem Header="{x:Static local:Translate.Overview}">
                     <Grid Margin="20">
@@ -747,7 +809,7 @@
                             <ListView.View>
                                 <GridView>
                                     <!-- プラグイン名 -->
-                                    <GridViewColumn Width="300">
+                                    <GridViewColumn Width="200">
                                         <GridViewColumnHeader Content="{x:Static local:Translate.PluginName}" Click="GridViewColumnHeader_Click" Tag="DisplayName"/>
                                         <GridViewColumn.CellTemplate>
                                             <DataTemplate>
@@ -757,7 +819,7 @@
                                     </GridViewColumn>
 
                                     <!-- 切替ボタン -->
-                                    <GridViewColumn Width="80">
+                                    <GridViewColumn Width="68">
                                         <GridViewColumnHeader Content="{x:Static local:Translate.Toggle}" Click="GridViewColumnHeader_Click" Tag="IsEnabled"/>
                                         <GridViewColumn.CellTemplate>
                                             <DataTemplate>
@@ -775,7 +837,7 @@
                                     </GridViewColumn>
 
                                     <!-- 状態 -->
-                                    <GridViewColumn Width="80">
+                                    <GridViewColumn Width="52">
                                         <GridViewColumnHeader Content="{x:Static local:Translate.StatusColumn}" Click="GridViewColumnHeader_Click" Tag="IsEnabled"/>
                                         <GridViewColumn.CellTemplate>
                                             <DataTemplate>
@@ -798,7 +860,7 @@
                                     </GridViewColumn>
 
                                     <!-- 削除ボタン -->
-                                    <GridViewColumn Width="80">
+                                    <GridViewColumn Width="64">
                                         <GridViewColumnHeader Content="{x:Static local:Translate.Delete}" Tag="Delete"/>
                                         <GridViewColumn.CellTemplate>
                                             <DataTemplate>
@@ -813,7 +875,7 @@
                                     </GridViewColumn>
 
                                     <!-- タイプ -->
-                                    <GridViewColumn Width="120">
+                                    <GridViewColumn Width="96">
                                         <GridViewColumnHeader Content="{x:Static local:Translate.TypeColumn}" Click="GridViewColumnHeader_Click" Tag="Type"/>
                                         <GridViewColumn.CellTemplate>
                                             <DataTemplate>
@@ -823,7 +885,7 @@
                                     </GridViewColumn>
 
                                     <!-- 作者名 -->
-                                    <GridViewColumn Width="150">
+                                    <GridViewColumn Width="100">
                                         <GridViewColumnHeader Content="{x:Static local:Translate.AuthorColumn}" Click="GridViewColumnHeader_Click" Tag="Author"/>
                                         <GridViewColumn.CellTemplate>
                                             <DataTemplate>
@@ -833,7 +895,7 @@
                                     </GridViewColumn>
 
                                     <!-- バージョン -->
-                                    <GridViewColumn Width="100">
+                                    <GridViewColumn Width="84">
                                         <GridViewColumnHeader Content="{x:Static local:Translate.VersionColumn}" Click="GridViewColumnHeader_Click" Tag="Version"/>
                                         <GridViewColumn.CellTemplate>
                                             <DataTemplate>
@@ -843,7 +905,7 @@
                                     </GridViewColumn>
 
                                     <!-- 公開日時 -->
-                                    <GridViewColumn Width="100">
+                                    <GridViewColumn Width="96">
                                         <GridViewColumnHeader Content="{x:Static local:Translate.PublishedAt}" Click="GridViewColumnHeader_Click" Tag="PublishedAt"/>
                                         <GridViewColumn.CellTemplate>
                                             <DataTemplate>
@@ -853,11 +915,26 @@
                                     </GridViewColumn>
 
                                     <!-- DL日時 -->
-                                    <GridViewColumn Width="140">
+                                    <GridViewColumn Width="120">
                                         <GridViewColumnHeader Content="{x:Static local:Translate.DownloadedAt}" Click="GridViewColumnHeader_Click" Tag="DownloadedAt"/>
                                         <GridViewColumn.CellTemplate>
                                             <DataTemplate>
                                                 <TextBlock Text="{Binding DisplayDownloadedAt}" Padding="5,0" Foreground="{DynamicResource SubTextBrush}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+
+                                    <!-- 更新ボタン -->
+                                    <GridViewColumn Width="64">
+                                        <GridViewColumnHeader Content="{x:Static local:Translate.UpdateColumn}" Click="GridViewColumnHeader_Click" Tag="HasUpdate"/>
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <Button Click="UpdateLocalPlugin_Click"
+                                                        Content="更新"
+                                                        Visibility="{Binding HasUpdate, Converter={StaticResource BoolToVis}}"
+                                                        Background="{DynamicResource AccentBrush}"
+                                                        Foreground="White"
+                                                        Width="52" Height="22" HorizontalAlignment="Center"/>
                                             </DataTemplate>
                                         </GridViewColumn.CellTemplate>
                                     </GridViewColumn>
