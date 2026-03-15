@@ -505,9 +505,9 @@
                                 <TextBlock Text="{Binding Name}" FontSize="13" Foreground="{DynamicResource TextBrush}" TextTrimming="CharacterEllipsis" VerticalAlignment="Center" Margin="4,0,0,0"/>
                             </StackPanel>
                             <!-- 起動中バッジ（右端固定） -->
-                            <TextBlock Grid.Column="2" Text="{x:Static local:Translate.StartingUp}" FontSize="10" Foreground="{DynamicResource AccentBrush}" FontWeight="Bold" VerticalAlignment="Center" Margin="4,0,0,0">
-                                <TextBlock.Style>
-                                    <Style TargetType="TextBlock">
+                            <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center">
+                                <StackPanel.Style>
+                                    <Style TargetType="StackPanel">
                                         <Setter Property="Visibility" Value="Collapsed"/>
                                         <Style.Triggers>
                                             <DataTrigger Binding="{Binding IsRunning}" Value="True">
@@ -515,8 +515,31 @@
                                             </DataTrigger>
                                         </Style.Triggers>
                                     </Style>
-                                </TextBlock.Style>
-                            </TextBlock>
+                                </StackPanel.Style>
+
+                                <TextBlock Text="{x:Static local:Translate.StartingUp}"
+               FontSize="10" Foreground="{DynamicResource AccentBrush}" FontWeight="Bold"
+               VerticalAlignment="Center" Margin="4,0,4,0"/>
+
+                                <Button Click="ForceKillInstance_Click"
+            ToolTip="{x:Static local:Translate.ForceKillInstance}"
+            Width="18" Height="18" Padding="0"
+            Background="#CC2222" BorderThickness="0"
+            VerticalAlignment="Center">
+                                    <Button.Template>
+                                        <ControlTemplate TargetType="Button">
+                                            <Border x:Name="bd" Background="{TemplateBinding Background}" CornerRadius="2">
+                                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                            </Border>
+                                            <ControlTemplate.Triggers>
+                                                <Trigger Property="IsMouseOver" Value="True">
+                                                    <Setter TargetName="bd" Property="Background" Value="#FF4444"/>
+                                                </Trigger>
+                                            </ControlTemplate.Triggers>
+                                        </ControlTemplate>
+                                    </Button.Template>
+                                </Button>
+                            </StackPanel>
                         </Grid>
                     </DataTemplate>
                 </ListBox.ItemTemplate>

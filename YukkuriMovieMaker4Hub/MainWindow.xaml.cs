@@ -2833,7 +2833,25 @@ namespace YukkuriMovieMaker4Hub
             var instance = (sender as FrameworkElement)?.DataContext as InstanceInfo;
             LaunchYmm(instance, "CreateNewProject");
         }
+        private void ForceKillInstance_Click(object sender, RoutedEventArgs e)
+        {
+            var instance = (sender as FrameworkElement)?.DataContext as InstanceInfo;
+            if (instance == null || string.IsNullOrEmpty(instance.ExePath)) return;
 
+            string procName = Path.GetFileNameWithoutExtension(instance.ExePath);
+            var processes = Process.GetProcessesByName(procName)
+                .Where(p =>
+                {
+                    try { return string.Equals(p.MainModule?.FileName, instance.ExePath, StringComparison.OrdinalIgnoreCase); }
+                    catch { return false; }
+                })
+                .ToArray();
+
+            foreach (var p in processes)
+            {
+                try { p.Kill(); } catch { }
+            }
+        }
         private void LaunchInstance_Click(object sender, RoutedEventArgs e)
         {
             LaunchYmm(SelectedInstance);

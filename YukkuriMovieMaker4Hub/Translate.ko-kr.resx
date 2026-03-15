@@ -280,4 +280,5 @@
 <data name="Complete" xml:space="preserve"><value>완료</value></data>
 <data name="Cancelled" xml:space="preserve"><value>취소됨</value></data>
 <data name="StartingUp" xml:space="preserve"><value>시작 중</value></data>
+<data name="ForceKillInstance" xml:space="preserve"><value>강제 종료</value></data>
 </root>
