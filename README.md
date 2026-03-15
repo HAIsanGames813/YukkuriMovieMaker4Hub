@@ -1,4 +1,4 @@
-<img width="1920" height="1080" alt="YukkuriMovieMaker4Hub" src="https://github.com/user-attachments/assets/2430f4d0-62b9-42e0-918e-2b13a06470ef" />
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/de594537-9ba6-4d59-8ead-490c614a065a" />
 
 # YukkuriMovieMaker4Hub
 ゆっくりムービーメーカー4のハブソフトです
@@ -107,6 +107,9 @@ YMM4を前回のプロジェクト、新規プロジェクト、ymmpから開く
 **ーー修正ーー**  
 ・「起動中」の文字が多言語化対応できていなかった問題を修正  
 ・アプデ機能の正しくアプデできない問題を修正  
+#### 4.1.2
+**ーー修正ーー**  
+・プラグイン管理リストの幅のデフォルト値が小さくなっていた問題を修正  
 
 ## 利用規約
 自作発言禁止、以上！
