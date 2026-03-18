@@ -281,4 +281,86 @@
 <data name="Cancelled" xml:space="preserve"><value>Cancelled</value></data>
 <data name="StartingUp" xml:space="preserve"><value>Starting up</value></data>
 <data name="ForceKillInstance" xml:space="preserve"><value>Force Quit</value></data>
+<data name="RemoveFromQueue" xml:space="preserve"><value>Remove from Queue</value></data>
+<data name="SelectPluginToRemoveFromQueue" xml:space="preserve"><value>Please select a plugin to remove</value></data>
+<data name="HideExePath" xml:space="preserve"><value>Hide folder paths</value></data>
+<data name="InstanceSettingsDialogTitle" xml:space="preserve"><value>Instance Settings</value></data>
+<data name="ExePathLabel" xml:space="preserve"><value>Reference exe path</value></data>
+<data name="ReInheritSettings" xml:space="preserve"><value>Re-inherit Settings</value></data>
+<data name="ReInheritSettingsDesc" xml:space="preserve"><value>Copy settings from another instance to this one</value></data>
+<data name="ReInheritExecute" xml:space="preserve"><value>Select source and execute...</value></data>
+<data name="Apply" xml:space="preserve"><value>Apply</value></data>
+<data name="InheritSettingsTitle" xml:space="preserve"><value>Inherit Settings</value></data>
+<data name="InheritSettingsNote" xml:space="preserve"><value>YMM4 was launched once to generate settings. Select files to inherit. ◯ marks recommended files.</value></data>
+<data name="UseInheritSettings" xml:space="preserve"><value>Use settings inheritance</value></data>
+<data name="InheritExecute" xml:space="preserve"><value>Execute Inherit</value></data>
+<data name="Skip" xml:space="preserve"><value>Skip</value></data>
+<data name="InheritSettingsLaunching" xml:space="preserve"><value>Launching once to generate settings folder...</value></data>
+<data name="InheritComplete" xml:space="preserve"><value>Inherited {0} settings file(s)</value></data>
+<data name="InheritFailed" xml:space="preserve"><value>Settings inheritance failed</value></data>
+<data name="SettingsFolderNotFound" xml:space="preserve"><value>Settings folder not found. Please launch YMM4 once first.</value></data>
+<data name="AddInstanceFailed" xml:space="preserve"><value>Failed to add instance: {0}</value></data>
+<data name="ImageLoadFailed" xml:space="preserve"><value>Image load failed</value></data>
+<data name="MetaControlSettings" xml:space="preserve"><value>Timing curve editor templates</value></data>
+<data name="MetaKanjiToYomi" xml:space="preserve"><value>Pronunciation conversion engine</value></data>
+<data name="MetaUserDictionary" xml:space="preserve"><value>User dictionary</value></data>
+<data name="MetaPen" xml:space="preserve"><value>Pen tool settings</value></data>
+<data name="MetaGemini" xml:space="preserve"><value>AI text generation (Gemini)</value></data>
+<data name="MetaGrok" xml:space="preserve"><value>AI text generation (Grok)</value></data>
+<data name="MetaAIOther" xml:space="preserve"><value>AI text generation (Other)</value></data>
+<data name="MetaBrowser" xml:space="preserve"><value>Browser settings</value></data>
+<data name="MetaExplorer" xml:space="preserve"><value>Explorer bookmark settings</value></data>
+<data name="MetaNotepad" xml:space="preserve"><value>Notepad settings</value></data>
+<data name="MetaPluginPortal" xml:space="preserve"><value>Plugin portal settings</value></data>
+<data name="MetaAivis" xml:space="preserve"><value>Voice synth (AivisSpeech)</value></data>
+<data name="MetaKotodama" xml:space="preserve"><value>Voice synth (Kotodama)</value></data>
+<data name="MetaVoiSona" xml:space="preserve"><value>Voice synth (VoiSonaTalk)</value></data>
+<data name="MetaFFmpeg" xml:space="preserve"><value>FFmpeg output templates</value></data>
+<data name="MetaMF" xml:space="preserve"><value>MFVideo export settings</value></data>
+<data name="MetaPngWav" xml:space="preserve"><value>Sequential PNG+WAV output</value></data>
+<data name="MetaPluginLoader" xml:space="preserve"><value>Plugin info display</value></data>
+<data name="MetaOpenAIToken" xml:space="preserve"><value>AI text generation (Token)</value></data>
+<data name="MetaChatGPT" xml:space="preserve"><value>AI text generation (ChatGPT)</value></data>
+<data name="MetaAIVoice" xml:space="preserve"><value>Voice synth (AIVOICE)</value></data>
+<data name="MetaAquesTalk" xml:space="preserve"><value>Voice synth (AquesTalk)</value></data>
+<data name="MetaCeVIO" xml:space="preserve"><value>Voice synth (CeVIO)</value></data>
+<data name="MetaCharaListWidth" xml:space="preserve"><value>Character list display width</value></data>
+<data name="MetaCharacter" xml:space="preserve"><value>Character settings</value></data>
+<data name="MetaCoeFont" xml:space="preserve"><value>Voice synth (CoeFont)</value></data>
+<data name="MetaCoeiroink2" xml:space="preserve"><value>Voice synth (COEIROINK2)</value></data>
+<data name="MetaColor" xml:space="preserve"><value>Color palette settings</value></data>
+<data name="MetaShortcut" xml:space="preserve"><value>Shortcut key settings</value></data>
+<data name="MetaDevMode" xml:space="preserve"><value>Developer mode settings</value></data>
+<data name="MetaEffectView" xml:space="preserve"><value>Effect view settings</value></data>
+<data name="MetaEffectDefault" xml:space="preserve"><value>Item default settings</value></data>
+<data name="MetaFile" xml:space="preserve"><value>File settings</value></data>
+<data name="MetaFont" xml:space="preserve"><value>Font settings</value></data>
+<data name="MetaSearch" xml:space="preserve"><value>Search settings</value></data>
+<data name="MetaTimeline" xml:space="preserve"><value>Timeline settings</value></data>
+<data name="MetaVoicepeak" xml:space="preserve"><value>Voice synth (VOICEPEAK)</value></data>
+<data name="MetaVoicevox" xml:space="preserve"><value>Voice synth (VOICEVOX)</value></data>
+<data name="MetaYMMSettings" xml:space="preserve"><value>UI, processing and window layout</value></data>
+<data name="IconScale" xml:space="preserve"><value>Scale</value></data>
+<data name="IconOffsetX" xml:space="preserve"><value>Offset X</value></data>
+<data name="IconOffsetY" xml:space="preserve"><value>Offset Y</value></data>
+<data name="IconBgType" xml:space="preserve"><value>Background</value></data>
+<data name="IconBgNone" xml:space="preserve"><value>None</value></data>
+<data name="IconBgSolid" xml:space="preserve"><value>Solid</value></data>
+<data name="IconBgGradient" xml:space="preserve"><value>Gradient</value></data>
+<data name="IconBgColor1" xml:space="preserve"><value>Color 1</value></data>
+<data name="IconBgColor2" xml:space="preserve"><value>Color 2</value></data>
+<data name="ColorPickerTitle" xml:space="preserve"><value>Select Color</value></data>
+<data name="SelectSourceInstance" xml:space="preserve"><value>Select Source Instance</value></data>
+<data name="SelectSourceInstanceDesc" xml:space="preserve"><value>Select the instance to inherit settings from</value></data>
+<data name="NoOtherInstance" xml:space="preserve"><value>No other instance available to inherit from</value></data>
+<data name="OpenSite" xml:space="preserve"><value>Open Site</value></data>
+<data name="IconDragHint" xml:space="preserve"><value>Drag image to adjust position</value></data>
+<data name="IconEditorTitle" xml:space="preserve"><value>Icon Settings</value></data>
+<data name="OpenIconEditor" xml:space="preserve"><value>Configure Icon...</value></data>
+<data name="ResetToExeIconShort" xml:space="preserve"><value>Reset to Default</value></data>
+<data name="IconBgImage" xml:space="preserve"><value>Image</value></data>
+<data name="SelectBgImage" xml:space="preserve"><value>Select Background Image</value></data>
+<data name="GradientAngle" xml:space="preserve"><value>Angle</value></data>
+<data name="IconWheelHint" xml:space="preserve"><value>(scroll to zoom)</value></data>
+<data name="AutoOpenSiteOnBulkDownload" xml:space="preserve"><value>Auto-open site check during bulk download</value></data>
 </root>

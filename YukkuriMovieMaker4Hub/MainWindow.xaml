@@ -458,12 +458,35 @@
                             </Grid.ColumnDefinitions>
 
                             <Grid Grid.Column="0" Width="32" Height="32" Margin="0,0,10,0">
-                                <Ellipse Fill="{DynamicResource BorderBrush}"/>
-                                <Image Source="{Binding IconImage}" Stretch="UniformToFill">
-                                    <Image.Clip>
-                                        <EllipseGeometry Center="16,16" RadiusX="16" RadiusY="16"/>
-                                    </Image.Clip>
-                                </Image>
+                                <Grid.Clip>
+                                    <EllipseGeometry Center="16,16" RadiusX="16" RadiusY="16"/>
+                                </Grid.Clip>
+                                <!-- 背景（Ellipse 形状） -->
+                                <Ellipse Width="32" Height="32"
+                                         Fill="{Binding IconBgBrush, Converter={x:Static local:InstanceInfoBgConverter.Instance}}"/>
+                                <!-- アイコン画像：Viewboxで140px仮想座標→32pxにスケール -->
+                                <Viewbox Width="32" Height="32" Stretch="None">
+                                    <Grid Width="140" Height="140">
+                                        <Grid.LayoutTransform>
+                                            <ScaleTransform ScaleX="0.2286" ScaleY="0.2286"/>
+                                        </Grid.LayoutTransform>
+                                        <Image Source="{Binding IconImage}" Stretch="Uniform"
+                                               Width="140" Height="140"
+                                               RenderTransformOrigin="0.5,0.5">
+                                            <Image.RenderTransform>
+                                                <TransformGroup>
+                                                    <ScaleTransform ScaleX="{Binding IconScale}" ScaleY="{Binding IconScale}"/>
+                                                    <TranslateTransform X="{Binding IconOffsetX}" Y="{Binding IconOffsetY}"/>
+                                                </TransformGroup>
+                                            </Image.RenderTransform>
+                                        </Image>
+                                    </Grid>
+                                </Viewbox>
+                                <!-- アクセントカラーのリング -->
+                                <Ellipse Width="32" Height="32"
+                                         Stroke="{DynamicResource AccentBrush}" StrokeThickness="2"
+                                         Fill="Transparent" Opacity="0.7"
+                                         IsHitTestVisible="False"/>
                                 <Path Fill="{DynamicResource SubTextBrush}" Width="16" Height="16" Stretch="Uniform" VerticalAlignment="Center" HorizontalAlignment="Center" Data="M12,4A4,4 0 0,1 16,8A4,4 0 0,1 12,12A4,4 0 0,1 8,8A4,4 0 0,1 12,4M12,6A2,2 0 0,0 10,8A2,2 0 0,0 12,10A2,2 0 0,0 14,8A2,2 0 0,0 12,6M12,13C14.67,13 20,14.33 20,17V20H4V17C4,14.33 9.33,13 12,13M12,14.9C9.03,14.9 5.9,16.36 5.9,17V18.1H18.1V17C18.1,16.36 14.97,14.9 12,14.9Z">
                                     <Path.Style>
                                         <Style TargetType="Path">
@@ -591,24 +614,63 @@
                         </Grid.RowDefinitions>
 
                         <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,20">
-                            <Button Width="80" Height="80" Click="ChangeIcon_Click" Padding="0"
-            IsEnabled="{Binding SelectedInstance.IsRealInstance}">
+                            <!-- アイコン（クリック不可・設定はダイアログから） -->
+                            <Border Width="80" Height="80" CornerRadius="4">
                                 <Grid>
-                                    <Border Background="{DynamicResource ItemBrush}" CornerRadius="4"/>
-                                    <Image Source="{Binding SelectedInstance.IconImage}" Stretch="UniformToFill">
-                                        <Image.Clip>
-                                            <RectangleGeometry Rect="0,0,80,80" RadiusX="4" RadiusY="4"/>
-                                        </Image.Clip>
-                                    </Image>
+                                    <Grid.Clip>
+                                        <RectangleGeometry Rect="0,0,80,80" RadiusX="4" RadiusY="4"/>
+                                    </Grid.Clip>
+                                    <Rectangle Width="80" Height="80"
+                                               Fill="{Binding SelectedInstance.IconBgBrush, Converter={x:Static local:InstanceInfoBgConverter.Instance}}"/>
+                                    <!-- Viewboxで140px仮想座標→80pxにスケール -->
+                                    <Viewbox Width="80" Height="80" Stretch="None">
+                                        <Grid Width="140" Height="140">
+                                            <Grid.LayoutTransform>
+                                                <ScaleTransform ScaleX="0.5714" ScaleY="0.5714"/>
+                                            </Grid.LayoutTransform>
+                                            <Image Source="{Binding SelectedInstance.IconImage}" Stretch="Uniform"
+                                                   Width="140" Height="140"
+                                                   RenderTransformOrigin="0.5,0.5">
+                                                <Image.RenderTransform>
+                                                    <TransformGroup>
+                                                        <ScaleTransform ScaleX="{Binding SelectedInstance.IconScale}" ScaleY="{Binding SelectedInstance.IconScale}"/>
+                                                        <TranslateTransform X="{Binding SelectedInstance.IconOffsetX}" Y="{Binding SelectedInstance.IconOffsetY}"/>
+                                                    </TransformGroup>
+                                                </Image.RenderTransform>
+                                            </Image>
+                                        </Grid>
+                                    </Viewbox>
                                 </Grid>
-                            </Button>
+                            </Border>
                             <StackPanel Margin="20,0">
                                 <StackPanel Orientation="Horizontal">
-                                    <TextBox Text="{Binding SelectedInstance.Name, UpdateSourceTrigger=PropertyChanged}" 
-                     IsEnabled="{Binding SelectedInstance.IsRealInstance}"
-                     FontSize="24" Background="Transparent" BorderThickness="0,0,0,1" Width="Auto" HorizontalAlignment="Left" Tag="{x:Static local:Translate.InstanceName}"/>
+                                    <!-- インスタンス名（読み取り専用） -->
+                                    <TextBlock Text="{Binding SelectedInstance.Name}"
+                                               FontSize="24" Foreground="{DynamicResource TextBrush}" VerticalAlignment="Center"/>
+                                    <!-- 設定ボタン（右上） -->
+                                    <Button Click="InstanceSettings_Click"
+                                            IsEnabled="{Binding SelectedInstance.IsRealInstance}"
+                                            Width="28" Height="28" Padding="5" Margin="10,0,0,0"
+                                            Background="{DynamicResource ItemBrush}" BorderThickness="0"
+                                            ToolTip="{x:Static local:Translate.InstanceSettingsDialogTitle}">
+                                        <Path Data="M12,15.5A3.5,3.5 0 0,1 8.5,12A3.5,3.5 0 0,1 12,8.5A3.5,3.5 0 0,1 15.5,12A3.5,3.5 0 0,1 12,15.5M19.43,12.97C19.47,12.65 19.5,12.33 19.5,12C19.5,11.67 19.47,11.34 19.43,11L21.54,9.37C21.73,9.22 21.78,8.95 21.66,8.73L19.66,5.27C19.54,5.05 19.27,4.96 19.05,5.05L16.56,6.05C16.04,5.66 15.5,5.32 14.87,5.07L14.5,2.42C14.46,2.18 14.25,2 14,2H10C9.75,2 9.54,2.18 9.5,2.42L9.13,5.07C8.5,5.32 7.96,5.66 7.44,6.05L4.95,5.05C4.73,4.96 4.46,5.05 4.34,5.27L2.34,8.73C2.21,8.95 2.27,9.22 2.46,9.37L4.57,11C4.53,11.34 4.5,11.67 4.5,12C4.5,12.33 4.53,12.65 4.57,12.97L2.46,14.63C2.27,14.78 2.21,15.05 2.34,15.27L4.34,18.73C4.46,18.95 4.73,19.03 4.95,18.95L7.44,17.94C7.96,18.34 8.5,18.68 9.13,18.93L9.5,21.58C9.54,21.82 9.75,22 10,22H14C14.25,22 14.46,21.82 14.5,21.58L14.87,18.93C15.5,18.68 16.04,18.34 16.56,17.94L19.05,18.95C19.27,19.03 19.54,18.95 19.66,18.73L21.66,15.27C21.78,15.05 21.73,14.78 21.54,14.63L19.43,12.97Z"
+                                              Fill="{DynamicResource TextBrush}" Stretch="Uniform"/>
+                                    </Button>
                                 </StackPanel>
-                                <TextBlock Text="{Binding SelectedInstance.ExePath}" Foreground="{DynamicResource SubTextBrush}" Margin="0,10" FontSize="10"/>
+                                <!-- exeパス（HideExePath=trueのとき非表示） -->
+                                <TextBlock Text="{Binding SelectedInstance.ExePath}"
+                                           Foreground="{DynamicResource SubTextBrush}" Margin="0,10" FontSize="10">
+                                    <TextBlock.Style>
+                                        <Style TargetType="TextBlock">
+                                            <Setter Property="Visibility" Value="Visible"/>
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding HideExePath}" Value="True">
+                                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </TextBlock.Style>
+                                </TextBlock>
                                 <Button Content="{x:Static local:Translate.UpdateAvailable}" Click="ShowUpdateInfo_Click" Foreground="#2E7D32" FontWeight="Bold" VerticalAlignment="Bottom" Margin="0,0,0,5" Cursor="Hand" Background="Transparent" BorderThickness="0">
                                     <Button.Style>
                                         <Style TargetType="Button">
@@ -1092,6 +1154,12 @@
                                             <TextBlock Text="{x:Static local:Translate.AddToQueue}" VerticalAlignment="Center"/>
                                         </StackPanel>
                                     </Button>
+                                    <Button Click="RemoveFromQueue_Click" Padding="10,0" Margin="0,0,5,0" Height="28" Background="{DynamicResource ItemBrush}" Foreground="{DynamicResource TextBrush}" BorderThickness="0" ToolTip="{x:Static local:Translate.RemoveFromQueue}">
+                                        <StackPanel Orientation="Horizontal">
+                                            <Path Data="M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z" Fill="#E57373" Stretch="Uniform" Width="16" Height="16" Margin="0,0,5,0"/>
+                                            <TextBlock Text="{x:Static local:Translate.RemoveFromQueue}" VerticalAlignment="Center"/>
+                                        </StackPanel>
+                                    </Button>
                                     <Button Click="RefreshPluginList_Click" Padding="10,0" Height="28" Background="{DynamicResource ItemBrush}" Foreground="{DynamicResource TextBrush}" BorderThickness="0" ToolTip="{x:Static local:Translate.RefreshList}" Margin="0,0,5,0">
                                         <StackPanel Orientation="Horizontal">
                                             <Path Data="M17.65,6.35C16.2,4.9 14.21,4 12,4A8,8 0 0,0 4,12A8,8 0 0,0 12,20C15.73,20 18.84,17.45 19.73,14H17.65C16.83,16.33 14.61,18 12,18A6,6 0 0,1 6,12A6,6 0 0,1 12,6C13.66,6 15.14,6.69 16.22,7.78L13,11H20V4L17.65,6.35Z" Fill="{DynamicResource TextBrush}" Stretch="Uniform" Width="16" Height="16" Margin="0,0,5,0"/>
@@ -1482,7 +1550,42 @@
 
                                         <TextBlock Text="{x:Static local:Translate.DownloadAndRun}" Margin="0,10,0,0" Foreground="{DynamicResource SubTextBrush}" FontSize="11" TextWrapping="Wrap"/>
 
-                                        <ItemsControl ItemsSource="{Binding SelectedOnlinePlugin.AllLinks}" Margin="0,20,0,0">
+                                        <!-- サイトで確認（DL不可 かつ BestSiteUrlあり のときだけ表示） -->
+                                        <Button Click="OpenBestSite_Click"
+                                                Margin="0,16,0,0" Padding="12,6"
+                                                HorizontalAlignment="Left"
+                                                ToolTip="{Binding SelectedOnlinePlugin.BestSiteUrl}">
+                                            <Button.Style>
+                                                <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+                                                    <!-- デフォルトは非表示 -->
+                                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                                    <Style.Triggers>
+                                                        <!-- DL不可 かつ BestSiteUrl あり のときだけ表示 -->
+                                                        <MultiDataTrigger>
+                                                            <MultiDataTrigger.Conditions>
+                                                                <Condition Binding="{Binding SelectedOnlinePlugin.IsAssetDownloadable}" Value="False"/>
+                                                                <Condition Binding="{Binding SelectedOnlinePlugin.BestSiteUrl}" Value="{x:Null}"/>
+                                                            </MultiDataTrigger.Conditions>
+                                                            <Setter Property="Visibility" Value="Collapsed"/>
+                                                        </MultiDataTrigger>
+                                                        <MultiDataTrigger>
+                                                            <MultiDataTrigger.Conditions>
+                                                                <Condition Binding="{Binding SelectedOnlinePlugin.IsAssetDownloadable}" Value="False"/>
+                                                            </MultiDataTrigger.Conditions>
+                                                            <Setter Property="Visibility" Value="Visible"/>
+                                                        </MultiDataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </Button.Style>
+                                            <StackPanel Orientation="Horizontal">
+                                                <Path Data="M14,3V5H17.59L7.76,14.83L9.17,16.24L19,6.41V10H21V3M19,19H5V5H12V3H5C3.89,3 3,3.9 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V12H19V19Z"
+                                                      Fill="{DynamicResource TextBrush}" Stretch="Uniform" Width="14" Height="14" Margin="0,0,6,0"/>
+                                                <TextBlock Text="{x:Static local:Translate.OpenSite}"/>
+                                            </StackPanel>
+                                        </Button>
+
+                                        <!-- 全リンク一覧 -->
+                                        <ItemsControl ItemsSource="{Binding SelectedOnlinePlugin.AllLinks}" Margin="0,8,0,0">
                                             <ItemsControl.ItemTemplate>
                                                 <DataTemplate>
                                                     <Button Click="OpenUrl_Click" Tag="{Binding Url}" Margin="0,2" HorizontalContentAlignment="Left">
@@ -1508,6 +1611,8 @@
 
                             <TextBlock Text="{x:Static local:Translate.OperationSettings}" Margin="0,10,0,5" Foreground="{DynamicResource SubTextBrush}"/>
                             <CheckBox IsChecked="{Binding CloseOnLaunch}" Content="{x:Static local:Translate.ExitHubOnYmm4Start}" Margin="0,0,0,10" Style="{StaticResource ModernCheckBox}"/>
+                            <CheckBox IsChecked="{Binding HideExePath}" Content="{x:Static local:Translate.HideExePath}" Margin="0,0,0,10" Style="{StaticResource ModernCheckBox}"/>
+                            <CheckBox IsChecked="{Binding AutoOpenSiteOnBulkDownload}" Content="{x:Static local:Translate.AutoOpenSiteOnBulkDownload}" Margin="0,0,0,10" Style="{StaticResource ModernCheckBox}"/>
 
                             <TextBlock Text="{x:Static local:Translate.PluginSettings}" FontSize="18" FontWeight="Bold" Margin="0,20,0,10" Foreground="{DynamicResource TextBrush}"/>
                             <TextBlock Text="{x:Static local:Translate.ThemeSettings}" Margin="0,10,0,5" Foreground="{DynamicResource SubTextBrush}"/>
@@ -1545,7 +1650,18 @@
                                                 <ColumnDefinition Width="Auto"/>
                                                 <ColumnDefinition Width="Auto"/>
                                             </Grid.ColumnDefinitions>
-                                            <TextBox Text="{Binding .}" IsReadOnly="True" VerticalContentAlignment="Center" Tag="{x:Static local:Translate.FolderPath}"/>
+                                            <TextBox IsReadOnly="True" VerticalContentAlignment="Center" Tag="{x:Static local:Translate.FolderPath}">
+                                                <TextBox.Style>
+                                                    <Style TargetType="TextBox" BasedOn="{StaticResource {x:Type TextBox}}">
+                                                        <Setter Property="Text" Value="{Binding .}"/>
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding DataContext.HideExePath, RelativeSource={RelativeSource AncestorType=Window}}" Value="True">
+                                                                <Setter Property="Text" Value="●●●●●●●●●●●●●"/>
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </TextBox.Style>
+                                            </TextBox>
                                             <Button Grid.Column="1" Click="OpenWatchFolder_Click" Margin="5,0,0,0" Padding="8,0" Height="35" Background="{DynamicResource ItemBrush}" BorderThickness="0" ToolTip="{x:Static local:Translate.OpenFolderTooltip}">
                                                 <Path Data="M10,4H4C2.89,4 2,4.89 2,6V18A2,2 0 0,0 4,20H20A2,2 0 0,0 22,18V8C22,6.89 21.1,6 20,6H12L10,4Z" Fill="{DynamicResource TextBrush}" Stretch="Uniform" Width="16" Height="16"/>
                                             </Button>

@@ -135,25 +135,19 @@
                         <ColumnDefinition Width="12"/>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
-                    <Border Width="64" Height="64"
-                            BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1"
-                            Background="{DynamicResource PanelBrush}" CornerRadius="4">
-                        <Image x:Name="IconPreview" Stretch="Uniform" Margin="4"/>
+                    <!-- アイコンプレビュー（小） -->
+                    <Border Width="64" Height="64" CornerRadius="4" ClipToBounds="True"
+                            BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1">
+                        <Grid>
+                            <Rectangle x:Name="IconPreviewBg" Fill="Transparent"/>
+                            <Image x:Name="IconPreview" Stretch="Uniform" Margin="4"/>
+                        </Grid>
                     </Border>
                     <StackPanel Grid.Column="2" VerticalAlignment="Center">
-                        <TextBlock x:Name="IconSourceLabel" Text="{x:Static local:Translate.UseExeIcon}"
-                                   Foreground="{DynamicResource SubTextBrush}"
-                                   FontSize="10" Margin="0,0,0,8"/>
-                        <Button x:Name="SelectIconButton"
-                                Content="{x:Static local:Translate.SelectAnotherIcon}" Padding="12,6"
-                                Style="{StaticResource ActionButton}"
-                                Click="SelectIcon_Click"
-                                HorizontalAlignment="Left" Margin="0,0,0,6"/>
-                        <Button x:Name="ResetIconButton"
-                                Content="{x:Static local:Translate.ResetToExeIcon}" Padding="12,6"
-                                Style="{StaticResource ActionButton}"
-                                Click="ResetIcon_Click" IsEnabled="False"
-                                HorizontalAlignment="Left"/>
+                        <Button Content="{x:Static local:Translate.OpenIconEditor}"
+                                Padding="12,6" Style="{StaticResource ActionButton}"
+                                Click="OpenIconEditor_Click" HorizontalAlignment="Left"
+                                x:Name="IconEditorButton" IsEnabled="False"/>
                     </StackPanel>
                 </Grid>
 

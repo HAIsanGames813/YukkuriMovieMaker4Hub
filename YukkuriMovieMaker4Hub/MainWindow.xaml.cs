@@ -108,6 +108,10 @@ namespace YukkuriMovieMaker4Hub
         public double ItemSize { get; set; } = 300;
         [JsonPropertyName("instancePanelWidth")]
         public double InstancePanelWidth { get; set; } = 320;
+        [JsonPropertyName("hideExePath")]
+        public bool HideExePath { get; set; } = false;
+        public bool AutoOpenSiteOnBulkDownload { get; set; } = true;
+        public bool IsViewTile { get; set; } = true;
     }
     public class YmmUpdateItem
     {
@@ -194,6 +198,45 @@ namespace YukkuriMovieMaker4Hub
         [JsonIgnore]
         public bool IsRunning { get => _isRunning; set { _isRunning = value; OnPropertyChanged(nameof(IsRunning)); } }
 
+        // ── アイコン編集パラメータ ──
+        private double _iconScale = 1.0;
+        [JsonPropertyName("iconScale")]
+        public double IconScale { get => _iconScale; set { _iconScale = value; OnPropertyChanged(nameof(IconScale)); } }
+
+        private double _iconOffsetX = 0.0;
+        [JsonPropertyName("iconOffsetX")]
+        public double IconOffsetX { get => _iconOffsetX; set { _iconOffsetX = value; OnPropertyChanged(nameof(IconOffsetX)); } }
+
+        private double _iconOffsetY = 0.0;
+        [JsonPropertyName("iconOffsetY")]
+        public double IconOffsetY { get => _iconOffsetY; set { _iconOffsetY = value; OnPropertyChanged(nameof(IconOffsetY)); } }
+
+        // 背景種別: "None", "Solid", "Gradient"
+        private string _iconBgType = "None";
+        [JsonPropertyName("iconBgType")]
+        public string IconBgType { get => _iconBgType; set { _iconBgType = value; OnPropertyChanged(nameof(IconBgType)); NotifyBgChanged(); } }
+
+        private string _iconBgColor1 = "#FF444444";
+        [JsonPropertyName("iconBgColor1")]
+        public string IconBgColor1 { get => _iconBgColor1; set { _iconBgColor1 = value; OnPropertyChanged(nameof(IconBgColor1)); NotifyBgChanged(); } }
+
+        private string _iconBgColor2 = "#FF222222";
+        [JsonPropertyName("iconBgColor2")]
+        public string IconBgColor2 { get => _iconBgColor2; set { _iconBgColor2 = value; OnPropertyChanged(nameof(IconBgColor2)); NotifyBgChanged(); } }
+
+        private string? _iconBgImagePath;
+        [JsonPropertyName("iconBgImagePath")]
+        public string? IconBgImagePath { get => _iconBgImagePath; set { _iconBgImagePath = value; OnPropertyChanged(nameof(IconBgImagePath)); NotifyBgChanged(); } }
+
+        /// <summary>背景変更をバインディングに伝える自己参照プロパティ</summary>
+        [System.Text.Json.Serialization.JsonIgnore]
+        public InstanceInfo IconBgBrush => this;
+        private double _iconBgGradientAngle = 45.0;
+        [JsonPropertyName("iconBgGradientAngle")]
+        public double IconBgGradientAngle { get => _iconBgGradientAngle; set { _iconBgGradientAngle = value; OnPropertyChanged(nameof(IconBgGradientAngle)); NotifyBgChanged(); } }
+
+        private void NotifyBgChanged() => OnPropertyChanged(nameof(IconBgBrush));
+
         private bool _isSelected;
         [JsonIgnore]
         public bool IsSelected
@@ -250,12 +293,12 @@ namespace YukkuriMovieMaker4Hub
             try
             {
                 var host = new Uri(url).Host.ToLower();
-                if (host.Contains("github.com")) return "GitHub";
-                if (host.Contains("twitter.com") || host.Contains("x.com")) return "X (Twitter)";
                 if (host.Contains("booth.pm")) return "BOOTH";
+                if (host.Contains("ymm4-info.net")) return Translate.Ymm4InfoSite;
+                if (host.Contains("twitter.com") || host.Contains("x.com")) return "X (Twitter)";
                 if (host.Contains("youtube.com") || host.Contains("youtu.be")) return "YouTube";
                 if (host.Contains("nicovideo.jp")) return Translate.Niconico;
-                if (host.Contains("ymm4-info.net")) return Translate.Ymm4InfoSite;
+                if (host.Contains("github.com")) return "GitHub";
                 return host;
             }
             catch { return Translate.DistributionSite; }
@@ -302,7 +345,10 @@ namespace YukkuriMovieMaker4Hub
         public bool IsUnlinked { get => _isUnlinked; set { _isUnlinked = value; OnPropertyChanged(nameof(IsUnlinked)); } }
         private bool _isLocalEnabled = true;
         public bool IsLocalEnabled { get => _isLocalEnabled; set { _isLocalEnabled = value; OnPropertyChanged(nameof(IsLocalEnabled)); } }
-        public bool IsDirectDownloadSupported => !string.IsNullOrEmpty(Url) && Url.Contains("github.com");
+        /// <summary>Url または Links のいずれかに GitHub URL があれば DL可能とみなす</summary>
+        public bool IsDirectDownloadSupported =>
+            (!string.IsNullOrEmpty(Url) && Url.Contains("github.com"))
+            || (Links != null && Links.Any(l => l != null && l.Contains("github.com")));
         public bool IsInstalled => LocalStatus != PluginLocalStatus.NotInstalled;
 
         // リリースが取得済みで0件（GitHub URLはあるがリリースが存在しない）
@@ -330,8 +376,12 @@ namespace YukkuriMovieMaker4Hub
                 if (!ReleaseLoaded) return true; // 取得前は仮にtrueとして表示を崩さない
                 if (HasNoRelease) return false;
                 if (Releases == null || Releases.Count == 0) return false;
-                var fn = Releases[0].FileName.ToLower();
-                return fn.EndsWith(".ymme") || fn.EndsWith(".zip") || fn.EndsWith(".dll");
+                // いずれかのリリースに対応アセットがあればDL可能
+                return Releases.Any(r =>
+                {
+                    var fn = r.FileName.ToLower();
+                    return fn.EndsWith(".ymme") || fn.EndsWith(".zip") || fn.EndsWith(".dll");
+                });
             }
         }
         // プラグイン自体の初公開日（最も古いリリースの日付）
@@ -347,8 +397,14 @@ namespace YukkuriMovieMaker4Hub
                 if (!ReleaseLoaded) return Translate.Acquiring;
                 if (HasNoRelease) return Translate.EndDistribution;
                 if (Releases == null || Releases.Count == 0) return Translate.Acquiring;
-                if (!IsAssetDownloadable) return Translate.NoInfo; // 対応形式なし
-                return Releases[0].TagName;
+                if (!IsAssetDownloadable) return Translate.NoInfo; // 対応形式アセットなし
+                // 対応アセット付きリリースのタグ名を表示
+                var best = Releases.FirstOrDefault(r =>
+                {
+                    var fn = r.FileName.ToLower();
+                    return fn.EndsWith(".ymme") || fn.EndsWith(".zip") || fn.EndsWith(".dll");
+                });
+                return best?.TagName ?? Releases[0].TagName;
             }
         }
         public List<PluginLink> AllLinks
@@ -363,6 +419,31 @@ namespace YukkuriMovieMaker4Hub
                     try { list.Add(new PluginLink { Url = l }); } catch { }
                 }
                 return list.GroupBy(x => x.Url).Select(g => g.First()).ToList();
+            }
+        }
+
+        /// <summary>
+        /// BOOTH → 情報サイト → X → YouTube → その他 の優先順位で最初に見つかった URL を返す
+        /// </summary>
+        /// <summary>
+        /// BOOTH→情報サイト→X→YouTube→ニコニコ→その他 の優先順でサイトURLを返す。
+        /// DL可能(IsAssetDownloadable=true)でもサイトURLは提供するが、
+        /// XAMLのボタン表示制御は IsAssetDownloadable で行う。
+        /// </summary>
+        public string? BestSiteUrl
+        {
+            get
+            {
+                // GitHub以外のリンクを優先順で検索
+                var nonGh = AllLinks.Where(l => { try { return !new Uri(l.Url).Host.Contains("github.com"); } catch { return false; } }).ToList();
+                string? Find(IEnumerable<PluginLink> src, Func<string, bool> pred) =>
+                    src.FirstOrDefault(l => { try { return pred(new Uri(l.Url).Host); } catch { return false; } })?.Url;
+                return Find(nonGh, h => h.Contains("booth.pm"))
+                    ?? Find(nonGh, h => h.Contains("ymm4-info.net"))
+                    ?? Find(nonGh, h => h.Contains("twitter.com") || h.Contains("x.com"))
+                    ?? Find(nonGh, h => h.Contains("youtube.com") || h.Contains("youtu.be"))
+                    ?? Find(nonGh, h => h.Contains("nicovideo.jp"))
+                    ?? nonGh.FirstOrDefault()?.Url;
             }
         }
     }
@@ -468,6 +549,8 @@ namespace YukkuriMovieMaker4Hub
     }
 
     /// <summary>プラグインタイプの内部名→多言語表示名変換（LocalPluginInfo と PluginTypeFilterItem の両方から使用）</summary>
+    /// <summary>InstanceInfo の背景設定（Solid/Gradient/None）を Rectangle で描画するコントロール</summary>
+
     public static class PluginTypeHelper
     {
         public static string GetDisplayName(string internalName) => internalName switch
@@ -559,11 +642,10 @@ namespace YukkuriMovieMaker4Hub
             set { _hasAnyNew = value; OnPropertyChanged(nameof(HasAnyNew)); }
         }
 
-        private bool _isViewTile = true;
         public bool IsViewTile
         {
-            get => _isViewTile;
-            set { _isViewTile = value; OnPropertyChanged(nameof(IsViewTile)); }
+            get => _currentSettings.IsViewTile;
+            set { _currentSettings.IsViewTile = value; SaveAll(); OnPropertyChanged(nameof(IsViewTile)); }
         }
 
         // ソート順保存用
@@ -711,6 +793,16 @@ namespace YukkuriMovieMaker4Hub
         {
             get => _currentSettings.CloseOnLaunch;
             set { _currentSettings.CloseOnLaunch = value; SaveAll(); OnPropertyChanged(nameof(CloseOnLaunch)); }
+        }
+        public bool HideExePath
+        {
+            get => _currentSettings.HideExePath;
+            set { _currentSettings.HideExePath = value; SaveAll(); OnPropertyChanged(nameof(HideExePath)); }
+        }
+        public bool AutoOpenSiteOnBulkDownload
+        {
+            get => _currentSettings.AutoOpenSiteOnBulkDownload;
+            set { _currentSettings.AutoOpenSiteOnBulkDownload = value; SaveAll(); OnPropertyChanged(nameof(AutoOpenSiteOnBulkDownload)); }
         }
         private string _lastSortField = "DisplayName";
         private ListSortDirection _lastSortDir = ListSortDirection.Ascending;
@@ -1160,16 +1252,20 @@ namespace YukkuriMovieMaker4Hub
                     {
                         Name = setupDialog.InstanceName ?? "YukkuriMovieMaker4",
                         ExePath = setupDialog.ResultExePath,
-                        IconPath = setupDialog.IconPath  // nullの場合IconImageがexeから自動取得
                     };
+                    setupDialog.CopyIconSettingsTo(newInstance);
                     newInstance.PropertyChanged += (s, ev) => SaveAll();
                     Instances.Add(newInstance);
                     SelectedInstance = newInstance;
                     SaveAll();
+
+                    // 引き継ぎファイルのコピー
+                    if (setupDialog.InheritedSettingFiles.Count > 0)
+                        CopyInheritedSettings(setupDialog.InheritedSettingFiles, newInstance);
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show($"インスタンスの追加に失敗しました: {ex.Message}");
+                    MessageBox.Show(string.Format(Translate.AddInstanceFailed, ex.Message));
                 }
             }
             else
@@ -1195,8 +1291,8 @@ namespace YukkuriMovieMaker4Hub
                     {
                         Name = setupDialog.InstanceName ?? defaultName,
                         ExePath = exePath,
-                        IconPath = setupDialog.IconPath  // nullの場合IconImageがexeから自動取得
                     };
+                    setupDialog.CopyIconSettingsTo(newInstance);
                     newInstance.PropertyChanged += (s, ev) => SaveAll();
                     Instances.Add(newInstance);
                     SelectedInstance = newInstance;
@@ -1350,18 +1446,51 @@ namespace YukkuriMovieMaker4Hub
                         var isPrerelease = rel.GetProperty("prerelease").GetBoolean();
                         var assets = rel.GetProperty("assets");
 
-                        if (assets.GetArrayLength() > 0)
+                        // 対応拡張子（.ymme/.zip/.dll）のアセットを優先して選ぶ
+                        GitHubReleaseDetail? detail = null;
+                        foreach (var asset in assets.EnumerateArray())
                         {
-                            var firstAsset = assets[0];
-                            releaseList.Add(new GitHubReleaseDetail
+                            var assetName = asset.GetProperty("name").GetString() ?? "";
+                            var lower = assetName.ToLower();
+                            if (lower.EndsWith(".ymme") || lower.EndsWith(".zip") || lower.EndsWith(".dll"))
+                            {
+                                detail = new GitHubReleaseDetail
+                                {
+                                    TagName = tagName,
+                                    PublishedAt = publishedAt,
+                                    Prerelease = isPrerelease,
+                                    BrowserDownloadUrl = asset.GetProperty("browser_download_url").GetString() ?? "",
+                                    FileName = assetName
+                                };
+                                break; // 最初の対応アセットで確定
+                            }
+                        }
+                        // 対応アセットがなくてもリリース自体は記録（アセットなし扱い）
+                        if (detail == null && assets.GetArrayLength() > 0)
+                        {
+                            var first = assets[0];
+                            detail = new GitHubReleaseDetail
                             {
                                 TagName = tagName,
                                 PublishedAt = publishedAt,
                                 Prerelease = isPrerelease,
-                                BrowserDownloadUrl = firstAsset.GetProperty("browser_download_url").GetString() ?? "",
-                                FileName = firstAsset.GetProperty("name").GetString() ?? ""
-                            });
+                                BrowserDownloadUrl = "",
+                                FileName = first.GetProperty("name").GetString() ?? ""
+                            };
                         }
+                        else if (detail == null)
+                        {
+                            // アセット0のリリース（タグのみ）も記録
+                            detail = new GitHubReleaseDetail
+                            {
+                                TagName = tagName,
+                                PublishedAt = publishedAt,
+                                Prerelease = isPrerelease,
+                                BrowserDownloadUrl = "",
+                                FileName = ""
+                            };
+                        }
+                        releaseList.Add(detail);
                     }
 
                     // UIスレッドでデータをセット
@@ -1369,7 +1498,12 @@ namespace YukkuriMovieMaker4Hub
                         plugin.Releases = new ObservableCollection<GitHubReleaseDetail>(releaseList);
                         if (plugin.Releases.Count > 0)
                         {
-                            plugin.SelectedVersion = plugin.Releases[0];
+                            // 対応アセット付きリリースを優先して SelectedVersion に設定
+                            plugin.SelectedVersion = plugin.Releases.FirstOrDefault(r =>
+                            {
+                                var fn = r.FileName.ToLower();
+                                return fn.EndsWith(".ymme") || fn.EndsWith(".zip") || fn.EndsWith(".dll");
+                            }) ?? plugin.Releases[0];
                             plugin.HasNoRelease = false;
                         }
                         else
@@ -1379,6 +1513,7 @@ namespace YukkuriMovieMaker4Hub
                         plugin.ReleaseLoaded = true;
                         plugin.OnPropertyChanged(nameof(plugin.LatestVersionName));
                         plugin.OnPropertyChanged(nameof(plugin.IsAssetDownloadable));
+                        plugin.OnPropertyChanged(nameof(plugin.HasUpdate));
                         plugin.OnPropertyChanged(nameof(plugin.FirstPublishedAt));
                         plugin.OnPropertyChanged(nameof(plugin.LatestPublishedAt));
                     });
@@ -1514,6 +1649,18 @@ namespace YukkuriMovieMaker4Hub
         {
             var plugin = (sender as Button)?.DataContext as PluginCatalogItem ?? SelectedOnlinePlugin;
             if (plugin == null || SelectedInstance == null) return;
+
+            // DL不可（サイトで確認状態）のときは BestSiteUrl を規定ブラウザで開く
+            if (!plugin.IsAssetDownloadable)
+            {
+                var url = plugin.BestSiteUrl;
+                if (!string.IsNullOrEmpty(url))
+                {
+                    try { Process.Start(new ProcessStartInfo(url) { UseShellExecute = true }); }
+                    catch (Exception ex) { MessageBox.Show(Translate.OpenLinkFailed + ex.Message); }
+                }
+                return;
+            }
 
             if (!plugin.IsEnabled || plugin.Releases == null || plugin.Releases.Count == 0)
             {
@@ -1885,6 +2032,15 @@ namespace YukkuriMovieMaker4Hub
                 try { Process.Start(new ProcessStartInfo(url) { UseShellExecute = true }); }
                 catch (Exception ex) { MessageBox.Show(Translate.OpenLinkFailed + ex.Message); }
             }
+        }
+
+        // BOOTH→情報サイト→X→YouTube→ニコニコ→その他 の優先順位で開く
+        private void OpenBestSite_Click(object sender, RoutedEventArgs e)
+        {
+            var url = SelectedOnlinePlugin?.BestSiteUrl;
+            if (string.IsNullOrEmpty(url)) return;
+            try { Process.Start(new ProcessStartInfo(url) { UseShellExecute = true }); }
+            catch (Exception ex) { MessageBox.Show(Translate.OpenLinkFailed + ex.Message); }
         }
 
         private void RefreshLocalPlugins()
@@ -2867,7 +3023,53 @@ namespace YukkuriMovieMaker4Hub
             LaunchYmm(SelectedInstance, "CreateNewProject");
         }
         private void OpenFolder_Click(object sender, RoutedEventArgs e) { if (SelectedInstance != null) Process.Start("explorer.exe", SelectedInstance.RootDirectory); }
-        private void ChangeIcon_Click(object sender, RoutedEventArgs e) { if (SelectedInstance == null) return; var d = new OpenFileDialog { Filter = Translate.Image + "|*.png;*.jpg;*.ico" }; if (d.ShowDialog() == true) SelectedInstance.IconPath = d.FileName; }
+        private void InstanceSettings_Click(object sender, RoutedEventArgs e)
+        {
+            if (SelectedInstance == null || !SelectedInstance.IsRealInstance) return;
+            var dlg = new InstanceSettingsDialog(SelectedInstance) { Owner = this };
+            dlg.ShowDialog();
+            SaveAll();
+        }
+
+        /// <summary>引き継ぎ対象ファイルをコピーする（新規DL時・再引き継ぎ共通）</summary>
+        private void CopyInheritedSettings(System.Collections.Generic.List<string> files, InstanceInfo target)
+        {
+            if (SelectedInstance == null || string.IsNullOrEmpty(SelectedInstance.ExePath)) return;
+            try
+            {
+                // コピー元：現在選択インスタンスの最新バージョンフォルダ
+                string srcSettings = Path.Combine(SelectedInstance.RootDirectory, "user", "setting");
+                string srcBase = srcSettings;
+                if (Directory.Exists(srcSettings))
+                {
+                    var vDirs = new DirectoryInfo(srcSettings).GetDirectories()
+                        .OrderByDescending(d => d.LastWriteTime).ToArray();
+                    if (vDirs.Length > 0) srcBase = vDirs[0].FullName;
+                }
+
+                // コピー先：新インスタンスの最新バージョンフォルダ
+                string dstSettings = Path.Combine(target.RootDirectory, "user", "setting");
+                string dstBase = dstSettings;
+                if (Directory.Exists(dstSettings))
+                {
+                    var vDirs = new DirectoryInfo(dstSettings).GetDirectories()
+                        .OrderByDescending(d => d.LastWriteTime).ToArray();
+                    if (vDirs.Length > 0) dstBase = vDirs[0].FullName;
+                }
+                if (!Directory.Exists(dstBase)) Directory.CreateDirectory(dstBase);
+
+                foreach (var fn in files)
+                {
+                    string src = Path.Combine(srcBase, fn);
+                    string dst = Path.Combine(dstBase, fn);
+                    if (File.Exists(src)) File.Copy(src, dst, overwrite: true);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"{Translate.InheritFailed}\n{ex.Message}");
+            }
+        }
         private void AddProjectDir_Click(object sender, RoutedEventArgs e)
         {
             var d = new OpenFolderDialog();
@@ -2955,8 +3157,10 @@ namespace YukkuriMovieMaker4Hub
                 return true;
             });
 
+            // LatestPublishedAt 降順（新しい順）でソート
+            var sorted = filtered.OrderByDescending(p => p.LatestPublishedAt).ToList();
             OnlinePlugins.Clear();
-            foreach (var p in filtered) OnlinePlugins.Add(p);
+            foreach (var p in sorted) OnlinePlugins.Add(p);
         }
 
         private void AllCheck_Click(object sender, RoutedEventArgs e)
@@ -3026,7 +3230,6 @@ namespace YukkuriMovieMaker4Hub
         {
             if (PluginListView == null) return;
 
-            // ListViewでハイライト選択されているアイテムにチェック（IsSelected）を付ける
             var highlighted = PluginListView.SelectedItems.Cast<PluginCatalogItem>().ToList();
             if (highlighted.Count == 0)
             {
@@ -3036,6 +3239,21 @@ namespace YukkuriMovieMaker4Hub
 
             foreach (var plugin in highlighted)
                 plugin.IsSelected = true;
+        }
+
+        private void RemoveFromQueue_Click(object sender, RoutedEventArgs e)
+        {
+            if (PluginListView == null) return;
+
+            var highlighted = PluginListView.SelectedItems.Cast<PluginCatalogItem>().ToList();
+            if (highlighted.Count == 0)
+            {
+                MessageBox.Show(Translate.SelectPluginToRemoveFromQueue);
+                return;
+            }
+
+            foreach (var plugin in highlighted)
+                plugin.IsSelected = false;
         }
         // リスト更新
         private async void RefreshPluginList_Click(object sender, RoutedEventArgs e)
@@ -3106,6 +3324,17 @@ namespace YukkuriMovieMaker4Hub
                         if (plugin.SelectedVersion != null)
                         {
                             await ExecuteDownload(plugin, instance, progressWin, true);
+                        }
+                        else if (_currentSettings.AutoOpenSiteOnBulkDownload
+                                 && !string.IsNullOrEmpty(plugin.BestSiteUrl))
+                        {
+                            // DL不可（サイトで確認）プラグインはブラウザで開く
+                            try
+                            {
+                                System.Diagnostics.Process.Start(
+                                new System.Diagnostics.ProcessStartInfo(plugin.BestSiteUrl) { UseShellExecute = true });
+                            }
+                            catch { }
                         }
                     }
                     catch (Exception ex)

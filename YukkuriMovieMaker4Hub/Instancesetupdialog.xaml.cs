@@ -1,5 +1,7 @@
 ﻿using Microsoft.Win32;
 using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.IO.Compression;
@@ -20,11 +22,17 @@ namespace YukkuriMovieMaker4Hub
 
         public bool IsNewDownload { get; }
         public string? InstanceName => NameTextBox.Text.Trim();
-        public string? IconPath { get; private set; }
+        public string? IconPath => _iconInfo.IconPath;
         public string? ResultExePath { get; private set; }
+        // 引き継ぎ対象ファイルリスト（ファイル名のみ）
+        public List<string> InheritedSettingFiles { get; private set; } = new List<string>();
 
-        private string? _customIconPath = null;
+        /// <summary>アイコン設定を一時保持するダミーInstanceInfo</summary>
+        private readonly InstanceInfo _iconInfo = new InstanceInfo();
         private CancellationTokenSource? _cts;
+        // 新規DL時の初期インストール先：Hub exeと同階層の instance フォルダ
+        private static string DefaultInstallBase =>
+            Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "instance");
 
         // ────────────────────────────────────────
         // コンストラクタ
@@ -43,98 +51,104 @@ namespace YukkuriMovieMaker4Hub
                 OkButton.Content = Translate.DownloadAndCreate;
                 EditionPanel.Visibility = Visibility.Visible;
                 InstallFolderPanel.Visibility = Visibility.Visible;
-                // DL前でもカスタムアイコンを自由に設定できる
-                IconSourceLabel.Text = Translate.AutoSetExeIcon;
-                SelectIconButton.IsEnabled = true;
-                ResetIconButton.IsEnabled = false;
+                // DL前でもアイコン設定可能（exeなし状態でも開く）
+                if (IconEditorButton != null) IconEditorButton.IsEnabled = true;
             }
             else
             {
                 TitleText.Text = Translate.InstanceSetupTitle;
                 OkButton.Content = Translate.Add;
-                IconSourceLabel.Text = Translate.UseExeIcon;
+                if (IconEditorButton != null) IconEditorButton.IsEnabled = true;
             }
 
             if (!string.IsNullOrEmpty(defaultName))
                 NameTextBox.Text = defaultName;
+
+            // 新規DL時：インストール先の初期値を instance フォルダに設定
+            if (isNewDownload)
+            {
+                string defaultBase = DefaultInstallBase;
+                if (!Directory.Exists(defaultBase))
+                    try { Directory.CreateDirectory(defaultBase); } catch { }
+                InstallFolderTextBox.Text = defaultBase;
+            }
         }
 
         /// <summary>既存exe追加用：exeパスを渡してアイコンを自動設定</summary>
         public InstanceSetupDialog(string exePath, string defaultName) : this(false, defaultName)
         {
-            LoadExeIcon(exePath);
+            _iconInfo.ExePath = exePath;
+            if (IconEditorButton != null) IconEditorButton.IsEnabled = true;
+            RefreshIconPreview();
         }
 
         // ────────────────────────────────────────
-        // アイコン操作
+        // アイコン設定
         // ────────────────────────────────────────
 
-        private void LoadExeIcon(string exePath)
+        private void OpenIconEditor_Click(object sender, RoutedEventArgs e)
         {
-            if (!File.Exists(exePath)) return;
-            try
-            {
-                var icon = System.Drawing.Icon.ExtractAssociatedIcon(exePath);
-                if (icon == null) return;
-                var bs = Imaging.CreateBitmapSourceFromHIcon(
-                    icon.Handle, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
-                bs.Freeze();
-                IconPreview.Source = bs;
-                _customIconPath = null;
-                IconPath = null;
-                IconSourceLabel.Text = Translate.UseExeIcon;
-                ResetIconButton.IsEnabled = false;
-            }
-            catch { }
+            var dlg = new IconEditorDialog(_iconInfo) { Owner = this };
+            if (dlg.ShowDialog() != true) return;
+            _iconInfo.IconPath = dlg.ResultIconPath;
+            _iconInfo.IconScale = dlg.ResultScale;
+            _iconInfo.IconOffsetX = dlg.ResultOffsetX;
+            _iconInfo.IconOffsetY = dlg.ResultOffsetY;
+            _iconInfo.IconBgType = dlg.ResultBgType;
+            _iconInfo.IconBgColor1 = dlg.ResultBgColor1;
+            _iconInfo.IconBgColor2 = dlg.ResultBgColor2;
+            _iconInfo.IconBgGradientAngle = dlg.ResultBgGradientAngle;
+            _iconInfo.IconBgImagePath = dlg.ResultBgImagePath;
+            RefreshIconPreview();
         }
 
-        private void SelectIcon_Click(object sender, RoutedEventArgs e)
+        /// <summary>アイコン設定を対象 InstanceInfo にコピーする</summary>
+        public void CopyIconSettingsTo(InstanceInfo target)
         {
-            var dialog = new Microsoft.Win32.OpenFileDialog
-            {
-                Title = Translate.SelectIconTitle,
-                Filter = "画像ファイル|*.png;*.jpg;*.jpeg;*.bmp;*.ico|すべてのファイル|*.*"
-            };
-            if (dialog.ShowDialog() == true)
-            {
-                try
-                {
-                    var bmp = new BitmapImage();
-                    bmp.BeginInit();
-                    bmp.UriSource = new Uri(dialog.FileName);
-                    bmp.CacheOption = BitmapCacheOption.OnLoad;
-                    bmp.EndInit();
-                    bmp.Freeze();
-                    IconPreview.Source = bmp;
-                    _customIconPath = dialog.FileName;
-                    IconPath = dialog.FileName;
-                    IconSourceLabel.Text = System.IO.Path.GetFileName(dialog.FileName);
-                    ResetIconButton.IsEnabled = true;
-                }
-                catch
-                {
-                    System.Windows.MessageBox.Show("Image load failed.",
-                        "エラー", MessageBoxButton.OK, MessageBoxImage.Warning);
-                }
-            }
+            target.IconPath = _iconInfo.IconPath;
+            target.IconScale = _iconInfo.IconScale;
+            target.IconOffsetX = _iconInfo.IconOffsetX;
+            target.IconOffsetY = _iconInfo.IconOffsetY;
+            target.IconBgType = _iconInfo.IconBgType;
+            target.IconBgColor1 = _iconInfo.IconBgColor1;
+            target.IconBgColor2 = _iconInfo.IconBgColor2;
+            target.IconBgGradientAngle = _iconInfo.IconBgGradientAngle;
+            target.IconBgImagePath = _iconInfo.IconBgImagePath;
         }
 
-        private void ResetIcon_Click(object sender, RoutedEventArgs e)
+        /// <summary>小プレビューを更新する</summary>
+        private void RefreshIconPreview()
         {
-            _customIconPath = null;
-            IconPath = null;
-            ResetIconButton.IsEnabled = false;
-            if (!string.IsNullOrEmpty(ResultExePath))
+            // 背景
+            if (IconPreviewBg != null)
             {
-                LoadExeIcon(ResultExePath);
-                // LoadExeIcon内でIconSourceLabel.Textが更新される
+                switch (_iconInfo.IconBgType)
+                {
+                    case "Solid":
+                        try
+                        {
+                            IconPreviewBg.Fill = new System.Windows.Media.SolidColorBrush(
+                            (System.Windows.Media.Color)System.Windows.Media.ColorConverter.ConvertFromString(_iconInfo.IconBgColor1));
+                        }
+                        catch { }
+                        break;
+                    case "Gradient":
+                        try
+                        {
+                            var c1 = (System.Windows.Media.Color)System.Windows.Media.ColorConverter.ConvertFromString(_iconInfo.IconBgColor1);
+                            var c2 = (System.Windows.Media.Color)System.Windows.Media.ColorConverter.ConvertFromString(_iconInfo.IconBgColor2);
+                            IconPreviewBg.Fill = new System.Windows.Media.LinearGradientBrush(c1, c2, _iconInfo.IconBgGradientAngle);
+                        }
+                        catch { }
+                        break;
+                    default:
+                        IconPreviewBg.Fill = System.Windows.Media.Brushes.Transparent;
+                        break;
+                }
             }
-            else
-            {
-                // DL前はexeがないのでプレビューを空にしてラベルを自動設定に戻す
-                IconPreview.Source = null;
-                IconSourceLabel.Text = Translate.AutoSetExeIcon;
-            }
+            // 画像
+            if (IconPreview == null) return;
+            IconPreview.Source = _iconInfo.IconImage;
         }
 
         // ────────────────────────────────────────
@@ -302,19 +316,15 @@ namespace YukkuriMovieMaker4Hub
 
                 ResultExePath = exePath;
 
-                // ⑥ アイコン処理：カスタムアイコン未設定の場合のみexeアイコンをプレビュー
-                if (_customIconPath == null)
-                {
-                    // カスタム未設定 → exeアイコンを自動表示
-                    LoadExeIcon(exePath);
-                    IconSourceLabel.Text = Translate.UseExeIcon;
-                }
-                else
-                {
-                    // カスタム設定済み → そのまま維持（プレビューもIconPathも変更しない）
-                    ResetIconButton.IsEnabled = true;
-                }
-                SelectIconButton.IsEnabled = true;
+                // ⑥ アイコン設定ボタンを有効化
+                _iconInfo.ExePath = exePath;
+                if (IconEditorButton != null) IconEditorButton.IsEnabled = true;
+                RefreshIconPreview();
+
+                // ⑦ 設定引き継ぎ：一度起動してsettingsフォルダを生成してからダイアログを出す
+                SetStatus(Translate.InheritSettingsLaunching, 100);
+                await LaunchOnceAndWaitAsync(exePath);
+                ShowInheritDialog(exePath);
 
                 DialogResult = true;
             }
@@ -399,6 +409,44 @@ namespace YukkuriMovieMaker4Hub
         {
             OkButton.IsEnabled = true;
             CancelButton.IsEnabled = true;
+        }
+
+        // ────────────────────────────────────────
+        // 設定引き継ぎ
+        // ────────────────────────────────────────
+
+        /// <summary>初回起動してsettingsフォルダを生成させ、終了を待つ</summary>
+        private async Task LaunchOnceAndWaitAsync(string exePath)
+        {
+            try
+            {
+                var psi = new System.Diagnostics.ProcessStartInfo(exePath) { UseShellExecute = true };
+                var proc = System.Diagnostics.Process.Start(psi);
+                if (proc == null) return;
+                // 最大15秒待ってsettingsフォルダが生成されるのを確認
+                string settingsDir = Path.Combine(Path.GetDirectoryName(exePath) ?? "", "user", "setting");
+                for (int i = 0; i < 30; i++)
+                {
+                    await Task.Delay(500);
+                    if (Directory.Exists(settingsDir) && Directory.GetDirectories(settingsDir).Length > 0) break;
+                }
+                // YMM4を閉じる
+                try { proc.CloseMainWindow(); proc.WaitForExit(3000); } catch { }
+                try { if (!proc.HasExited) proc.Kill(); } catch { }
+            }
+            catch { }
+        }
+
+        private void ShowInheritDialog(string exePath)
+        {
+            try
+            {
+                string settingsDir = Path.Combine(Path.GetDirectoryName(exePath) ?? "", "user", "setting");
+                var dlg = new SettingsInheritDialog(settingsDir) { Owner = this };
+                if (dlg.ShowDialog() == true)
+                    InheritedSettingFiles = dlg.SelectedFiles;
+            }
+            catch { }
         }
 
         protected override void OnClosed(EventArgs e)

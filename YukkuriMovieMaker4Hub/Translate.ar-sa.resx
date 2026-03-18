@@ -281,4 +281,86 @@
 <data name="Cancelled" xml:space="preserve"><value>تم الإلغاء</value></data>
 <data name="StartingUp" xml:space="preserve"><value>Iniciando</value></data>
 <data name="ForceKillInstance" xml:space="preserve"><value>إنهاء قسري</value></data>
+<data name="RemoveFromQueue" xml:space="preserve"><value>إزالة من قائمة الانتظار</value></data>
+<data name="SelectPluginToRemoveFromQueue" xml:space="preserve"><value>الرجاء تحديد مكون إضافي للإزالة</value></data>
+<data name="HideExePath" xml:space="preserve"><value>إخفاء مسارات المجلدات</value></data>
+<data name="InstanceSettingsDialogTitle" xml:space="preserve"><value>إعدادات النسخة</value></data>
+<data name="ExePathLabel" xml:space="preserve"><value>مسار exe المرجعي</value></data>
+<data name="ReInheritSettings" xml:space="preserve"><value>إعادة توارث الإعدادات</value></data>
+<data name="ReInheritSettingsDesc" xml:space="preserve"><value>نسخ ملفات الإعدادات من نسخة أخرى إلى هذه النسخة</value></data>
+<data name="ReInheritExecute" xml:space="preserve"><value>اختر المصدر وتنفيذ...</value></data>
+<data name="Apply" xml:space="preserve"><value>تطبيق</value></data>
+<data name="InheritSettingsTitle" xml:space="preserve"><value>توارث الإعدادات</value></data>
+<data name="InheritSettingsNote" xml:space="preserve"><value>تم تشغيل YMM4 مرة واحدة لإنشاء مجلد الإعدادات. حدد الملفات المراد توارثها. ◯ يشير إلى الملفات الموصى بها.</value></data>
+<data name="UseInheritSettings" xml:space="preserve"><value>استخدام توارث الإعدادات</value></data>
+<data name="InheritExecute" xml:space="preserve"><value>تنفيذ التوارث</value></data>
+<data name="Skip" xml:space="preserve"><value>تخطي</value></data>
+<data name="InheritSettingsLaunching" xml:space="preserve"><value>يتم التشغيل مرة واحدة لإنشاء مجلد الإعدادات...</value></data>
+<data name="InheritComplete" xml:space="preserve"><value>تم توارث {0} ملف إعدادات</value></data>
+<data name="InheritFailed" xml:space="preserve"><value>فشل توارث الإعدادات</value></data>
+<data name="SettingsFolderNotFound" xml:space="preserve"><value>لم يتم العثور على مجلد الإعدادات. يرجى تشغيل YMM4 مرة واحدة أولاً.</value></data>
+<data name="AddInstanceFailed" xml:space="preserve"><value>فشل إضافة النسخة: {0}</value></data>
+<data name="ImageLoadFailed" xml:space="preserve"><value>فشل تحميل الصورة</value></data>
+<data name="MetaControlSettings" xml:space="preserve"><value>قوالب محرر منحنيات التوقيت</value></data>
+<data name="MetaKanjiToYomi" xml:space="preserve"><value>محرك تحويل النطق</value></data>
+<data name="MetaUserDictionary" xml:space="preserve"><value>قاموس المستخدم</value></data>
+<data name="MetaPen" xml:space="preserve"><value>إعدادات أداة القلم</value></data>
+<data name="MetaGemini" xml:space="preserve"><value>إنشاء نص ذكاء اصطناعي (Gemini)</value></data>
+<data name="MetaGrok" xml:space="preserve"><value>إنشاء نص ذكاء اصطناعي (Grok)</value></data>
+<data name="MetaAIOther" xml:space="preserve"><value>إنشاء نص ذكاء اصطناعي (أخرى)</value></data>
+<data name="MetaBrowser" xml:space="preserve"><value>إعدادات المتصفح</value></data>
+<data name="MetaExplorer" xml:space="preserve"><value>إعدادات الإشارات المرجعية</value></data>
+<data name="MetaNotepad" xml:space="preserve"><value>إعدادات المفكرة</value></data>
+<data name="MetaPluginPortal" xml:space="preserve"><value>إعدادات بوابة المكونات الإضافية</value></data>
+<data name="MetaAivis" xml:space="preserve"><value>صوت اصطناعي (AivisSpeech)</value></data>
+<data name="MetaKotodama" xml:space="preserve"><value>صوت اصطناعي (Kotodama)</value></data>
+<data name="MetaVoiSona" xml:space="preserve"><value>صوت اصطناعي (VoiSonaTalk)</value></data>
+<data name="MetaFFmpeg" xml:space="preserve"><value>قوالب إخراج FFmpeg</value></data>
+<data name="MetaMF" xml:space="preserve"><value>إعدادات تصدير MFVideo</value></data>
+<data name="MetaPngWav" xml:space="preserve"><value>إخراج PNG+WAV المتسلسل</value></data>
+<data name="MetaPluginLoader" xml:space="preserve"><value>عرض معلومات المكونات الإضافية</value></data>
+<data name="MetaOpenAIToken" xml:space="preserve"><value>إنشاء نص (رمز مميز)</value></data>
+<data name="MetaChatGPT" xml:space="preserve"><value>إنشاء نص (ChatGPT)</value></data>
+<data name="MetaAIVoice" xml:space="preserve"><value>صوت اصطناعي (AIVOICE)</value></data>
+<data name="MetaAquesTalk" xml:space="preserve"><value>صوت اصطناعي (AquesTalk)</value></data>
+<data name="MetaCeVIO" xml:space="preserve"><value>صوت اصطناعي (CeVIO)</value></data>
+<data name="MetaCharaListWidth" xml:space="preserve"><value>عرض قائمة الشخصيات</value></data>
+<data name="MetaCharacter" xml:space="preserve"><value>إعدادات الشخصيات</value></data>
+<data name="MetaCoeFont" xml:space="preserve"><value>صوت اصطناعي (CoeFont)</value></data>
+<data name="MetaCoeiroink2" xml:space="preserve"><value>صوت اصطناعي (COEIROINK2)</value></data>
+<data name="MetaColor" xml:space="preserve"><value>إعدادات لوحة الألوان</value></data>
+<data name="MetaShortcut" xml:space="preserve"><value>مفاتيح الاختصار</value></data>
+<data name="MetaDevMode" xml:space="preserve"><value>وضع المطور</value></data>
+<data name="MetaEffectView" xml:space="preserve"><value>عرض التأثيرات</value></data>
+<data name="MetaEffectDefault" xml:space="preserve"><value>إعدادات العناصر الافتراضية</value></data>
+<data name="MetaFile" xml:space="preserve"><value>إعدادات الملفات</value></data>
+<data name="MetaFont" xml:space="preserve"><value>إعدادات الخط</value></data>
+<data name="MetaSearch" xml:space="preserve"><value>إعدادات البحث</value></data>
+<data name="MetaTimeline" xml:space="preserve"><value>إعدادات الجدول الزمني</value></data>
+<data name="MetaVoicepeak" xml:space="preserve"><value>صوت اصطناعي (VOICEPEAK)</value></data>
+<data name="MetaVoicevox" xml:space="preserve"><value>صوت اصطناعي (VOICEVOX)</value></data>
+<data name="MetaYMMSettings" xml:space="preserve"><value>إعدادات واجهة المستخدم والنافذة</value></data>
+<data name="IconScale" xml:space="preserve"><value>مقياس</value></data>
+<data name="IconOffsetX" xml:space="preserve"><value>إزاحة أفقية</value></data>
+<data name="IconOffsetY" xml:space="preserve"><value>إزاحة عمودية</value></data>
+<data name="IconBgType" xml:space="preserve"><value>الخلفية</value></data>
+<data name="IconBgNone" xml:space="preserve"><value>بلا</value></data>
+<data name="IconBgSolid" xml:space="preserve"><value>لون صلب</value></data>
+<data name="IconBgGradient" xml:space="preserve"><value>تدرج</value></data>
+<data name="IconBgColor1" xml:space="preserve"><value>اللون 1</value></data>
+<data name="IconBgColor2" xml:space="preserve"><value>اللون 2</value></data>
+<data name="ColorPickerTitle" xml:space="preserve"><value>اختر اللون</value></data>
+<data name="SelectSourceInstance" xml:space="preserve"><value>اختر مثيل المصدر</value></data>
+<data name="SelectSourceInstanceDesc" xml:space="preserve"><value>حدد المثيل الذي تريد توارث إعداداته</value></data>
+<data name="NoOtherInstance" xml:space="preserve"><value>لا يوجد مثيل آخر متاح للتوارث</value></data>
+<data name="OpenSite" xml:space="preserve"><value>فتح الموقع</value></data>
+<data name="IconDragHint" xml:space="preserve"><value>اسحب الصورة لضبط الموضع</value></data>
+<data name="IconEditorTitle" xml:space="preserve"><value>إعدادات الأيقونة</value></data>
+<data name="OpenIconEditor" xml:space="preserve"><value>ضبط الأيقونة...</value></data>
+<data name="ResetToExeIconShort" xml:space="preserve"><value>إعادة الأيقونة الافتراضية</value></data>
+<data name="IconBgImage" xml:space="preserve"><value>صورة</value></data>
+<data name="SelectBgImage" xml:space="preserve"><value>اختر صورة الخلفية</value></data>
+<data name="GradientAngle" xml:space="preserve"><value>زاوية</value></data>
+<data name="IconWheelHint" xml:space="preserve"><value>(عجلة للتكبير)</value></data>
+<data name="AutoOpenSiteOnBulkDownload" xml:space="preserve"><value>فتح الموقع تلقائيًا عند التنزيل الجماعي</value></data>
 </root>

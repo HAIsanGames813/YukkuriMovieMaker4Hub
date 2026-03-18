@@ -1,0 +1,178 @@
+﻿<Window x:Class="YukkuriMovieMaker4Hub.InstanceSettingsDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="clr-namespace:YukkuriMovieMaker4Hub"
+        Title="{x:Static local:Translate.InstanceSettingsDialogTitle}"
+        Height="660" Width="500"
+        Background="{DynamicResource ThemeBrush}"
+        FontFamily="{DynamicResource AppFont}"
+        WindowStartupLocation="CenterOwner" ResizeMode="CanResize">
+    <Window.Resources>
+        <FontFamily x:Key="AppFont">Segoe UI</FontFamily>
+        <SolidColorBrush x:Key="ThemeBrush"   Color="#252525"/>
+        <SolidColorBrush x:Key="PanelBrush"   Color="#333333"/>
+        <SolidColorBrush x:Key="ItemBrush"    Color="#444444"/>
+        <SolidColorBrush x:Key="AccentBrush"  Color="#2E7D32"/>
+        <SolidColorBrush x:Key="TextBrush"    Color="White"/>
+        <SolidColorBrush x:Key="SubTextBrush" Color="#AAAAAA"/>
+        <SolidColorBrush x:Key="BorderBrush"  Color="#555555"/>
+        <Style TargetType="TextBlock">
+            <Setter Property="Foreground" Value="{DynamicResource TextBrush}"/>
+        </Style>
+        <Style TargetType="TextBox">
+            <Setter Property="Background"      Value="{DynamicResource PanelBrush}"/>
+            <Setter Property="Foreground"      Value="{DynamicResource TextBrush}"/>
+            <Setter Property="BorderBrush"     Value="{DynamicResource BorderBrush}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Padding"         Value="6,4"/>
+            <Setter Property="CaretBrush"      Value="{DynamicResource TextBrush}"/>
+        </Style>
+        <Style x:Key="ActionButton" TargetType="Button">
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Foreground" Value="{DynamicResource TextBrush}"/>
+            <Setter Property="Background" Value="{DynamicResource ItemBrush}"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource BorderBrush}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="Bd" Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="4" Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"
+                                              TextBlock.Foreground="{TemplateBinding Foreground}"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Bd" Property="BorderBrush" Value="{DynamicResource AccentBrush}"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter TargetName="Bd" Property="Background" Value="{DynamicResource PanelBrush}"/>
+                                <Setter Property="Foreground" Value="{DynamicResource SubTextBrush}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock Text="{x:Static local:Translate.InstanceSettingsDialogTitle}"
+                   FontSize="16" FontWeight="Bold" Margin="0,0,0,16"/>
+
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+            <StackPanel>
+
+                <!-- アイコン設定ボタン -->
+                <TextBlock Text="{x:Static local:Translate.IconLabel}"
+                           Foreground="{DynamicResource SubTextBrush}" FontSize="11" Margin="0,0,0,8"/>
+                <Grid Margin="0,0,0,16">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="64"/>
+                        <ColumnDefinition Width="12"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <!-- アイコンプレビュー（小） -->
+                    <Border Width="64" Height="64" CornerRadius="4"
+                            BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1">
+                        <Grid>
+                            <Grid.Clip>
+                                <RectangleGeometry Rect="0,0,64,64" RadiusX="4" RadiusY="4"/>
+                            </Grid.Clip>
+                            <Rectangle x:Name="IconPreviewBg" Fill="Transparent"/>
+                            <!-- Viewboxで140px仮想座標→64pxにスケール -->
+                            <Viewbox Width="64" Height="64" Stretch="None">
+                                <Grid Width="140" Height="140">
+                                    <Grid.LayoutTransform>
+                                        <ScaleTransform ScaleX="0.4571" ScaleY="0.4571"/>
+                                    </Grid.LayoutTransform>
+                                    <Image x:Name="IconPreviewSmall" Stretch="Uniform"
+                                           Width="140" Height="140"
+                                           RenderTransformOrigin="0.5,0.5">
+                                        <Image.RenderTransform>
+                                            <TransformGroup>
+                                                <ScaleTransform x:Name="PreviewScaleXform" ScaleX="1" ScaleY="1"/>
+                                                <TranslateTransform x:Name="PreviewTranslateXform" X="0" Y="0"/>
+                                            </TransformGroup>
+                                        </Image.RenderTransform>
+                                    </Image>
+                                </Grid>
+                            </Viewbox>
+                        </Grid>
+                    </Border>
+                    <StackPanel Grid.Column="2" VerticalAlignment="Center">
+                        <Button Content="{x:Static local:Translate.OpenIconEditor}"
+                                Padding="12,6" Style="{StaticResource ActionButton}"
+                                Click="OpenIconEditor_Click" HorizontalAlignment="Left"/>
+                    </StackPanel>
+                </Grid>
+
+                <!-- インスタンス名 -->
+                <TextBlock Text="{x:Static local:Translate.InstanceNameLabel}"
+                           Foreground="{DynamicResource SubTextBrush}" FontSize="11" Margin="0,0,0,6"/>
+                <TextBox x:Name="NameTextBox" Margin="0,0,0,16"/>
+
+                <!-- 参照exeパス -->
+                <TextBlock Text="{x:Static local:Translate.ExePathLabel}"
+                           Foreground="{DynamicResource SubTextBrush}" FontSize="11" Margin="0,0,0,6"/>
+                <Grid Margin="0,0,0,16">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="8"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBox x:Name="ExePathTextBox" IsReadOnly="True"/>
+                    <Button Grid.Column="2" Content="{x:Static local:Translate.Browse}" Padding="12,6"
+                            Style="{StaticResource ActionButton}" Click="BrowseExe_Click"/>
+                </Grid>
+
+                <!-- 設定の再引き継ぎ -->
+                <Separator Background="{DynamicResource BorderBrush}" Margin="0,0,0,14"/>
+                <TextBlock Text="{x:Static local:Translate.ReInheritSettings}"
+                           FontSize="13" FontWeight="Bold" Margin="0,0,0,8"/>
+                <TextBlock Text="{x:Static local:Translate.ReInheritSettingsDesc}"
+                           Foreground="{DynamicResource SubTextBrush}" FontSize="11"
+                           TextWrapping="Wrap" Margin="0,0,0,10"/>
+                <Button Content="{x:Static local:Translate.ReInheritExecute}" Padding="14,7"
+                        Style="{StaticResource ActionButton}"
+                        Click="ReInherit_Click" HorizontalAlignment="Left"/>
+
+            </StackPanel>
+        </ScrollViewer>
+
+        <!-- ボタン -->
+        <Grid Grid.Row="2" Margin="0,14,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <Button Content="{x:Static local:Translate.Cancel}" Padding="16,8"
+                    Style="{StaticResource ActionButton}" Click="Cancel_Click"/>
+            <Button Grid.Column="2" Content="{x:Static local:Translate.Apply}" Padding="24,8"
+                    Click="Apply_Click" Foreground="White" BorderThickness="0">
+                <Button.Template>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="Bd" Background="{DynamicResource AccentBrush}" CornerRadius="4"
+                                Padding="{TemplateBinding Padding}">
+                            <TextBlock Text="{TemplateBinding Content}" Foreground="White" HorizontalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Bd" Property="Opacity" Value="0.85"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Button.Template>
+            </Button>
+        </Grid>
+    </Grid>
+</Window>

@@ -1,0 +1,103 @@
+﻿<Window x:Class="YukkuriMovieMaker4Hub.WpfColorPickerDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="clr-namespace:YukkuriMovieMaker4Hub"
+        Title="色の選択"
+        Height="320" Width="360"
+        Background="{DynamicResource ThemeBrush}"
+        FontFamily="{DynamicResource AppFont}"
+        WindowStartupLocation="CenterOwner" ResizeMode="NoResize">
+    <Window.Resources>
+        <FontFamily x:Key="AppFont">Segoe UI</FontFamily>
+        <SolidColorBrush x:Key="ThemeBrush"   Color="#252525"/>
+        <SolidColorBrush x:Key="PanelBrush"   Color="#333333"/>
+        <SolidColorBrush x:Key="ItemBrush"    Color="#444444"/>
+        <SolidColorBrush x:Key="AccentBrush"  Color="#2E7D32"/>
+        <SolidColorBrush x:Key="TextBrush"    Color="White"/>
+        <SolidColorBrush x:Key="SubTextBrush" Color="#AAAAAA"/>
+        <SolidColorBrush x:Key="BorderBrush"  Color="#555555"/>
+    </Window.Resources>
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel>
+            <!-- プレビュー -->
+            <Border x:Name="PreviewBorder" Height="48" CornerRadius="4" Margin="0,0,0,16"
+                    BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1"/>
+
+            <!-- R -->
+            <Grid Margin="0,0,0,6">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="16"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="46"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="R" Foreground="{DynamicResource TextBrush}" VerticalAlignment="Center"/>
+                <Slider x:Name="SliderR" Grid.Column="1" Minimum="0" Maximum="255" Value="68"
+                        ValueChanged="Slider_Changed" VerticalAlignment="Center" Margin="8,0"/>
+                <TextBox x:Name="BoxR" Grid.Column="2" Text="68" VerticalContentAlignment="Center"
+                         TextAlignment="Center" Background="{DynamicResource PanelBrush}" Foreground="{DynamicResource TextBrush}"
+                         BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" Padding="4,3"
+                         LostFocus="Box_LostFocus" Tag="R"/>
+            </Grid>
+            <!-- G -->
+            <Grid Margin="0,0,0,6">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="16"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="46"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="G" Foreground="{DynamicResource TextBrush}" VerticalAlignment="Center"/>
+                <Slider x:Name="SliderG" Grid.Column="1" Minimum="0" Maximum="255" Value="68"
+                        ValueChanged="Slider_Changed" VerticalAlignment="Center" Margin="8,0"/>
+                <TextBox x:Name="BoxG" Grid.Column="2" Text="68" VerticalContentAlignment="Center"
+                         TextAlignment="Center" Background="{DynamicResource PanelBrush}" Foreground="{DynamicResource TextBrush}"
+                         BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" Padding="4,3"
+                         LostFocus="Box_LostFocus" Tag="G"/>
+            </Grid>
+            <!-- B -->
+            <Grid Margin="0,0,0,12">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="16"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="46"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="B" Foreground="{DynamicResource TextBrush}" VerticalAlignment="Center"/>
+                <Slider x:Name="SliderB" Grid.Column="1" Minimum="0" Maximum="255" Value="68"
+                        ValueChanged="Slider_Changed" VerticalAlignment="Center" Margin="8,0"/>
+                <TextBox x:Name="BoxB" Grid.Column="2" Text="68" VerticalContentAlignment="Center"
+                         TextAlignment="Center" Background="{DynamicResource PanelBrush}" Foreground="{DynamicResource TextBrush}"
+                         BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" Padding="4,3"
+                         LostFocus="Box_LostFocus" Tag="B"/>
+            </Grid>
+            <!-- Hex -->
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="HEX" Foreground="{DynamicResource SubTextBrush}" FontSize="11" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                <TextBox x:Name="HexBox" Grid.Column="1"
+                         Background="{DynamicResource PanelBrush}" Foreground="{DynamicResource TextBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1"
+                         Padding="6,4" VerticalContentAlignment="Center"
+                         LostFocus="HexBox_LostFocus" KeyDown="HexBox_KeyDown"/>
+            </Grid>
+        </StackPanel>
+
+        <!-- ボタン -->
+        <Grid Grid.Row="1" Margin="0,16,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="8"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Button Content="{x:Static local:Translate.Cancel}" Click="Cancel_Click" Height="32"
+                    Background="{DynamicResource ItemBrush}" Foreground="{DynamicResource TextBrush}" BorderThickness="0"/>
+            <Button Grid.Column="2" Content="OK" Click="Ok_Click" Height="32"
+                    Background="{DynamicResource AccentBrush}" Foreground="White" BorderThickness="0"/>
+        </Grid>
+    </Grid>
+</Window>

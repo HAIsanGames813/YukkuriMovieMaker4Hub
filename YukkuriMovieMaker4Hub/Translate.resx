@@ -281,4 +281,86 @@
 <data name="Cancelled" xml:space="preserve"><value>キャンセル済み</value></data>
 <data name="StartingUp" xml:space="preserve"><value>起動中</value></data>
 <data name="ForceKillInstance" xml:space="preserve"><value>強制終了</value></data>
+<data name="RemoveFromQueue" xml:space="preserve"><value>予約から削除</value></data>
+<data name="SelectPluginToRemoveFromQueue" xml:space="preserve"><value>削除するプラグインを選択してください</value></data>
+<data name="HideExePath" xml:space="preserve"><value>フォルダパスを非表示にする</value></data>
+<data name="InstanceSettingsDialogTitle" xml:space="preserve"><value>インスタンスの設定</value></data>
+<data name="ExePathLabel" xml:space="preserve"><value>参照exeパス</value></data>
+<data name="ReInheritSettings" xml:space="preserve"><value>設定の再引き継ぎ</value></data>
+<data name="ReInheritSettingsDesc" xml:space="preserve"><value>別インスタンスの設定ファイルをこのインスタンスに上書きコピーします</value></data>
+<data name="ReInheritExecute" xml:space="preserve"><value>引き継ぎ元を選択して実行...</value></data>
+<data name="Apply" xml:space="preserve"><value>適用</value></data>
+<data name="InheritSettingsTitle" xml:space="preserve"><value>設定の引き継ぎ</value></data>
+<data name="InheritSettingsNote" xml:space="preserve"><value>YMM4を一度起動して設定フォルダを生成しました。引き継ぐ設定ファイルを選択してください。◯は推奨ファイルです。</value></data>
+<data name="UseInheritSettings" xml:space="preserve"><value>設定の引き継ぎを利用する</value></data>
+<data name="InheritExecute" xml:space="preserve"><value>引き継ぎを実行</value></data>
+<data name="Skip" xml:space="preserve"><value>スキップ</value></data>
+<data name="InheritSettingsLaunching" xml:space="preserve"><value>設定フォルダ生成のため一度起動します...</value></data>
+<data name="InheritComplete" xml:space="preserve"><value>設定ファイルを {0} 件引き継ぎました</value></data>
+<data name="InheritFailed" xml:space="preserve"><value>設定の引き継ぎに失敗しました</value></data>
+<data name="SettingsFolderNotFound" xml:space="preserve"><value>設定フォルダが見つかりません。先にYMM4を一度起動してください。</value></data>
+<data name="AddInstanceFailed" xml:space="preserve"><value>インスタンスの追加に失敗しました: {0}</value></data>
+<data name="ImageLoadFailed" xml:space="preserve"><value>画像の読み込みに失敗しました</value></data>
+<data name="MetaControlSettings" xml:space="preserve"><value>時間制御カーブエディタテンプレート</value></data>
+<data name="MetaKanjiToYomi" xml:space="preserve"><value>発音変換エンジン設定</value></data>
+<data name="MetaUserDictionary" xml:space="preserve"><value>ユーザー辞書</value></data>
+<data name="MetaPen" xml:space="preserve"><value>ペン機能設定</value></data>
+<data name="MetaGemini" xml:space="preserve"><value>AIテキスト生成 (Gemini)</value></data>
+<data name="MetaGrok" xml:space="preserve"><value>AIテキスト生成 (Grok)</value></data>
+<data name="MetaAIOther" xml:space="preserve"><value>AIテキスト生成 (その他)</value></data>
+<data name="MetaBrowser" xml:space="preserve"><value>ブラウザ設定</value></data>
+<data name="MetaExplorer" xml:space="preserve"><value>エクスプローラーブックマーク設定</value></data>
+<data name="MetaNotepad" xml:space="preserve"><value>メモ帳設定</value></data>
+<data name="MetaPluginPortal" xml:space="preserve"><value>プラグインポータル設定</value></data>
+<data name="MetaAivis" xml:space="preserve"><value>合成音声設定 (AivisSpeech)</value></data>
+<data name="MetaKotodama" xml:space="preserve"><value>合成音声設定 (Kotodama)</value></data>
+<data name="MetaVoiSona" xml:space="preserve"><value>合成音声設定 (VoiSonaTalk)</value></data>
+<data name="MetaFFmpeg" xml:space="preserve"><value>FFmpeg出力テンプレート</value></data>
+<data name="MetaMF" xml:space="preserve"><value>MFVideo書き出し設定</value></data>
+<data name="MetaPngWav" xml:space="preserve"><value>連番PNG+WAV出力設定</value></data>
+<data name="MetaPluginLoader" xml:space="preserve"><value>プラグイン情報表示設定</value></data>
+<data name="MetaOpenAIToken" xml:space="preserve"><value>AIテキスト生成 (トークン)</value></data>
+<data name="MetaChatGPT" xml:space="preserve"><value>AIテキスト生成 (ChatGPT)</value></data>
+<data name="MetaAIVoice" xml:space="preserve"><value>合成音声設定 (AIVOICE)</value></data>
+<data name="MetaAquesTalk" xml:space="preserve"><value>合成音声設定 (AquesTalk)</value></data>
+<data name="MetaCeVIO" xml:space="preserve"><value>合成音声設定 (CeVIO)</value></data>
+<data name="MetaCharaListWidth" xml:space="preserve"><value>キャラクター設定リスト表示幅</value></data>
+<data name="MetaCharacter" xml:space="preserve"><value>キャラクター設定</value></data>
+<data name="MetaCoeFont" xml:space="preserve"><value>合成音声設定 (CoeFont)</value></data>
+<data name="MetaCoeiroink2" xml:space="preserve"><value>合成音声設定 (COEIROINK2)</value></data>
+<data name="MetaColor" xml:space="preserve"><value>カラーパレット設定</value></data>
+<data name="MetaShortcut" xml:space="preserve"><value>ショートカットキー設定</value></data>
+<data name="MetaDevMode" xml:space="preserve"><value>開発者モード設定</value></data>
+<data name="MetaEffectView" xml:space="preserve"><value>エフェクトビュー設定</value></data>
+<data name="MetaEffectDefault" xml:space="preserve"><value>アイテムデフォルト設定</value></data>
+<data name="MetaFile" xml:space="preserve"><value>ファイル設定</value></data>
+<data name="MetaFont" xml:space="preserve"><value>フォント設定</value></data>
+<data name="MetaSearch" xml:space="preserve"><value>検索設定</value></data>
+<data name="MetaTimeline" xml:space="preserve"><value>タイムライン設定</value></data>
+<data name="MetaVoicepeak" xml:space="preserve"><value>合成音声設定 (VOICEPEAK)</value></data>
+<data name="MetaVoicevox" xml:space="preserve"><value>合成音声設定 (VOICEVOX)</value></data>
+<data name="MetaYMMSettings" xml:space="preserve"><value>UI・処理・ウィンドウ配置設定</value></data>
+<data name="IconScale" xml:space="preserve"><value>拡大率</value></data>
+<data name="IconOffsetX" xml:space="preserve"><value>横位置</value></data>
+<data name="IconOffsetY" xml:space="preserve"><value>縦位置</value></data>
+<data name="IconBgType" xml:space="preserve"><value>背景</value></data>
+<data name="IconBgNone" xml:space="preserve"><value>なし</value></data>
+<data name="IconBgSolid" xml:space="preserve"><value>単色</value></data>
+<data name="IconBgGradient" xml:space="preserve"><value>グラデーション</value></data>
+<data name="IconBgColor1" xml:space="preserve"><value>色1</value></data>
+<data name="IconBgColor2" xml:space="preserve"><value>色2</value></data>
+<data name="ColorPickerTitle" xml:space="preserve"><value>色の選択</value></data>
+<data name="SelectSourceInstance" xml:space="preserve"><value>引き継ぎ元インスタンスを選択</value></data>
+<data name="SelectSourceInstanceDesc" xml:space="preserve"><value>設定を引き継ぎたいインスタンスを選んでください</value></data>
+<data name="NoOtherInstance" xml:space="preserve"><value>引き継ぎ元になれる他のインスタンスがありません</value></data>
+<data name="OpenSite" xml:space="preserve"><value>サイトで確認</value></data>
+<data name="IconDragHint" xml:space="preserve"><value>画像をドラッグして位置を調整</value></data>
+<data name="IconEditorTitle" xml:space="preserve"><value>アイコンの設定</value></data>
+<data name="OpenIconEditor" xml:space="preserve"><value>アイコンを設定...</value></data>
+<data name="ResetToExeIconShort" xml:space="preserve"><value>初期アイコンに戻る</value></data>
+<data name="IconBgImage" xml:space="preserve"><value>画像</value></data>
+<data name="SelectBgImage" xml:space="preserve"><value>背景画像を選択</value></data>
+<data name="GradientAngle" xml:space="preserve"><value>角度</value></data>
+<data name="IconWheelHint" xml:space="preserve"><value>(ホイールで拡大縮小)</value></data>
+<data name="AutoOpenSiteOnBulkDownload" xml:space="preserve"><value>一括DL時にサイトで確認を自動で開く</value></data>
 </root>

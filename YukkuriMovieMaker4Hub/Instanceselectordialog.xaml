@@ -1,0 +1,74 @@
+﻿<Window x:Class="YukkuriMovieMaker4Hub.InstanceSelectorDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="clr-namespace:YukkuriMovieMaker4Hub"
+        Title="引き継ぎ元インスタンスを選択"
+        Height="340" Width="340"
+        Background="{DynamicResource ThemeBrush}"
+        FontFamily="{DynamicResource AppFont}"
+        WindowStartupLocation="CenterOwner" ResizeMode="NoResize">
+    <Window.Resources>
+        <FontFamily x:Key="AppFont">Segoe UI</FontFamily>
+        <SolidColorBrush x:Key="ThemeBrush"   Color="#252525"/>
+        <SolidColorBrush x:Key="PanelBrush"   Color="#333333"/>
+        <SolidColorBrush x:Key="ItemBrush"    Color="#444444"/>
+        <SolidColorBrush x:Key="AccentBrush"  Color="#2E7D32"/>
+        <SolidColorBrush x:Key="TextBrush"    Color="White"/>
+        <SolidColorBrush x:Key="SubTextBrush" Color="#AAAAAA"/>
+        <SolidColorBrush x:Key="BorderBrush"  Color="#555555"/>
+        <Style TargetType="TextBlock">
+            <Setter Property="Foreground" Value="{DynamicResource TextBrush}"/>
+        </Style>
+    </Window.Resources>
+
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock Text="設定を引き継ぎたいインスタンスを選んでください"
+                   Foreground="{DynamicResource SubTextBrush}" FontSize="11"
+                   TextWrapping="Wrap" Margin="0,0,0,12"/>
+
+        <ListBox x:Name="InstanceListBox" Grid.Row="1"
+                 Background="{DynamicResource PanelBrush}"
+                 BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1"
+                 MouseDoubleClick="ListBox_DoubleClick">
+            <ListBox.ItemContainerStyle>
+                <Style TargetType="ListBoxItem">
+                    <Setter Property="Padding" Value="10,8"/>
+                    <Setter Property="Foreground" Value="{DynamicResource TextBrush}"/>
+                    <Setter Property="Background" Value="Transparent"/>
+                </Style>
+            </ListBox.ItemContainerStyle>
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="{Binding IconImage}" Width="20" Height="20" Margin="0,0,8,0"/>
+                        <StackPanel VerticalAlignment="Center">
+                            <TextBlock Text="{Binding Name}" FontSize="13"/>
+                            <TextBlock Text="{Binding ExePath}" FontSize="9"
+                                       Foreground="{DynamicResource SubTextBrush}"
+                                       TextTrimming="CharacterEllipsis" MaxWidth="240"/>
+                        </StackPanel>
+                    </StackPanel>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+
+        <Grid Grid.Row="2" Margin="0,14,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="8"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Button Content="{x:Static local:Translate.Cancel}" Click="Cancel_Click" Height="32"
+                    Background="{DynamicResource ItemBrush}" Foreground="{DynamicResource TextBrush}"
+                    BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1"/>
+            <Button Grid.Column="2" Content="{x:Static local:Translate.Apply}" Click="Ok_Click" Height="32"
+                    Background="{DynamicResource AccentBrush}" Foreground="White" BorderThickness="0"/>
+        </Grid>
+    </Grid>
+</Window>

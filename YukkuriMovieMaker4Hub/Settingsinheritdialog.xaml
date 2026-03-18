@@ -1,0 +1,137 @@
+﻿<Window x:Class="YukkuriMovieMaker4Hub.SettingsInheritDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="clr-namespace:YukkuriMovieMaker4Hub"
+        Title="{x:Static local:Translate.InheritSettingsTitle}"
+        Height="600" Width="520"
+        Background="{DynamicResource ThemeBrush}"
+        FontFamily="{DynamicResource AppFont}"
+        WindowStartupLocation="CenterOwner" ResizeMode="CanResize">
+    <Window.Resources>
+        <FontFamily x:Key="AppFont">Segoe UI</FontFamily>
+        <SolidColorBrush x:Key="ThemeBrush"   Color="#252525"/>
+        <SolidColorBrush x:Key="PanelBrush"   Color="#333333"/>
+        <SolidColorBrush x:Key="ItemBrush"    Color="#444444"/>
+        <SolidColorBrush x:Key="AccentBrush"  Color="#2E7D32"/>
+        <SolidColorBrush x:Key="TextBrush"    Color="White"/>
+        <SolidColorBrush x:Key="SubTextBrush" Color="#AAAAAA"/>
+        <SolidColorBrush x:Key="BorderBrush"  Color="#555555"/>
+        <Style TargetType="TextBlock">
+            <Setter Property="Foreground" Value="{DynamicResource TextBrush}"/>
+        </Style>
+        <Style x:Key="ModernCheckBox" TargetType="CheckBox">
+            <Setter Property="Foreground" Value="{DynamicResource TextBrush}"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="CheckBox">
+                        <StackPanel Orientation="Horizontal">
+                            <Grid Width="16" Height="16" VerticalAlignment="Center">
+                                <Border x:Name="box" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="3" Background="{DynamicResource ItemBrush}"/>
+                                <Path x:Name="mark" Data="M1,4 L4,7 L9,1" Stroke="White" StrokeThickness="2" Visibility="Collapsed" Margin="2"/>
+                            </Grid>
+                            <ContentPresenter Margin="6,0,0,0" VerticalAlignment="Center"/>
+                        </StackPanel>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsChecked" Value="True">
+                                <Setter TargetName="box" Property="Background" Value="{DynamicResource AccentBrush}"/>
+                                <Setter TargetName="box" Property="BorderBrush" Value="{DynamicResource AccentBrush}"/>
+                                <Setter TargetName="mark" Property="Visibility" Value="Visible"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- タイトル -->
+        <TextBlock Text="{x:Static local:Translate.InheritSettingsTitle}"
+                   FontSize="16" FontWeight="Bold" Margin="0,0,0,8"/>
+
+        <!-- 注意文 -->
+        <Border Grid.Row="1" Background="{DynamicResource PanelBrush}" CornerRadius="4" Padding="12,8" Margin="0,0,0,12">
+            <TextBlock Text="{x:Static local:Translate.InheritSettingsNote}"
+                       Foreground="#FFA726" FontSize="11" TextWrapping="Wrap"/>
+        </Border>
+
+        <!-- 利用する/しないチェック -->
+        <CheckBox x:Name="UseInheritCheckBox" Grid.Row="2"
+                  Content="{x:Static local:Translate.UseInheritSettings}"
+                  Style="{StaticResource ModernCheckBox}"
+                  IsChecked="True"
+                  Checked="UseInherit_Changed" Unchecked="UseInherit_Changed"
+                  Margin="0,0,0,10"/>
+
+        <!-- ファイルリスト -->
+        <Border Grid.Row="3" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="4">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <!-- 全選択/全解除バー -->
+                <StackPanel Orientation="Horizontal" Background="{DynamicResource PanelBrush}" Margin="8,6">
+                    <Button x:Name="CheckAllButton" Content="{x:Static local:Translate.CheckAll}"
+                            Click="CheckAll_Click"
+                            Padding="8,3" Margin="0,0,6,0"
+                            Background="{DynamicResource ItemBrush}" Foreground="{DynamicResource TextBrush}"
+                            BorderThickness="1" BorderBrush="{DynamicResource BorderBrush}"/>
+                    <Button x:Name="UncheckAllButton" Content="{x:Static local:Translate.UncheckAll}"
+                            Click="UncheckAll_Click"
+                            Padding="8,3"
+                            Background="{DynamicResource ItemBrush}" Foreground="{DynamicResource TextBrush}"
+                            BorderThickness="1" BorderBrush="{DynamicResource BorderBrush}"/>
+                </StackPanel>
+                <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" Margin="4,0,4,4">
+                    <ItemsControl x:Name="FileList">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <CheckBox IsChecked="{Binding IsChecked, Mode=TwoWay}"
+                                          Style="{StaticResource ModernCheckBox}"
+                                          Margin="8,3">
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="{Binding DisplayName}" FontWeight="SemiBold"
+                                                   Foreground="{DynamicResource TextBrush}"/>
+                                        <TextBlock Text=" ○" Foreground="#FFA726" FontSize="11"
+                                                   VerticalAlignment="Center"
+                                                   Visibility="{Binding IsRecommended, Converter={x:Static local:BooleanToVisibilityStaticConverter.Instance}}"/>
+                                        <TextBlock Text="{Binding Description}" Margin="6,0,0,0"
+                                                   Foreground="{DynamicResource SubTextBrush}" FontSize="10"
+                                                   VerticalAlignment="Center"/>
+                                    </StackPanel>
+                                </CheckBox>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </ScrollViewer>
+            </Grid>
+        </Border>
+
+        <!-- ボタン -->
+        <Grid Grid.Row="4" Margin="0,14,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="8"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <Button Grid.Column="1" Content="{x:Static local:Translate.Skip}"
+                    Click="Skip_Click" Padding="16,8"
+                    Background="{DynamicResource ItemBrush}" Foreground="{DynamicResource TextBrush}"
+                    BorderThickness="1" BorderBrush="{DynamicResource BorderBrush}"/>
+            <Button Grid.Column="3" x:Name="OkButton"
+                    Content="{x:Static local:Translate.InheritExecute}"
+                    Click="Ok_Click" Padding="20,8" Background="{DynamicResource AccentBrush}"
+                    Foreground="White" BorderThickness="0"/>
+        </Grid>
+    </Grid>
+</Window>

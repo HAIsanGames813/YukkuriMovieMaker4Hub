@@ -281,4 +281,86 @@
 <data name="Cancelled" xml:space="preserve"><value>Cancelado</value></data>
 <data name="StartingUp" xml:space="preserve"><value>Memulai</value></data>
 <data name="ForceKillInstance" xml:space="preserve"><value>Forzar cierre</value></data>
+<data name="RemoveFromQueue" xml:space="preserve"><value>Quitar de la cola</value></data>
+<data name="SelectPluginToRemoveFromQueue" xml:space="preserve"><value>Seleccione el plugin a eliminar</value></data>
+<data name="HideExePath" xml:space="preserve"><value>Ocultar rutas de carpeta</value></data>
+<data name="InstanceSettingsDialogTitle" xml:space="preserve"><value>Configuración de instancia</value></data>
+<data name="ExePathLabel" xml:space="preserve"><value>Ruta exe de referencia</value></data>
+<data name="ReInheritSettings" xml:space="preserve"><value>Reinheritar configuración</value></data>
+<data name="ReInheritSettingsDesc" xml:space="preserve"><value>Copia los archivos de configuración de otra instancia a esta</value></data>
+<data name="ReInheritExecute" xml:space="preserve"><value>Seleccionar origen y ejecutar...</value></data>
+<data name="Apply" xml:space="preserve"><value>Aplicar</value></data>
+<data name="InheritSettingsTitle" xml:space="preserve"><value>Heredar configuración</value></data>
+<data name="InheritSettingsNote" xml:space="preserve"><value>YMM4 se inició una vez para generar la carpeta de configuración. Seleccione los archivos a heredar. ◯ indica archivos recomendados.</value></data>
+<data name="UseInheritSettings" xml:space="preserve"><value>Usar herencia de configuración</value></data>
+<data name="InheritExecute" xml:space="preserve"><value>Ejecutar herencia</value></data>
+<data name="Skip" xml:space="preserve"><value>Omitir</value></data>
+<data name="InheritSettingsLaunching" xml:space="preserve"><value>Iniciando una vez para generar la carpeta de configuración...</value></data>
+<data name="InheritComplete" xml:space="preserve"><value>{0} archivo(s) de configuración heredado(s)</value></data>
+<data name="InheritFailed" xml:space="preserve"><value>Error en la herencia de configuración</value></data>
+<data name="SettingsFolderNotFound" xml:space="preserve"><value>Carpeta de configuración no encontrada. Por favor inicie YMM4 una vez.</value></data>
+<data name="AddInstanceFailed" xml:space="preserve"><value>Error al agregar instancia: {0}</value></data>
+<data name="ImageLoadFailed" xml:space="preserve"><value>Error al cargar la imagen</value></data>
+<data name="MetaControlSettings" xml:space="preserve"><value>Plantillas de curvas de tiempo</value></data>
+<data name="MetaKanjiToYomi" xml:space="preserve"><value>Motor de conversión de pronunciación</value></data>
+<data name="MetaUserDictionary" xml:space="preserve"><value>Diccionario de usuario</value></data>
+<data name="MetaPen" xml:space="preserve"><value>Configuración herramienta pluma</value></data>
+<data name="MetaGemini" xml:space="preserve"><value>Generación de texto IA (Gemini)</value></data>
+<data name="MetaGrok" xml:space="preserve"><value>Generación de texto IA (Grok)</value></data>
+<data name="MetaAIOther" xml:space="preserve"><value>Generación de texto IA (Otros)</value></data>
+<data name="MetaBrowser" xml:space="preserve"><value>Configuración del navegador</value></data>
+<data name="MetaExplorer" xml:space="preserve"><value>Configuración de marcadores</value></data>
+<data name="MetaNotepad" xml:space="preserve"><value>Configuración bloc de notas</value></data>
+<data name="MetaPluginPortal" xml:space="preserve"><value>Configuración portal de plugins</value></data>
+<data name="MetaAivis" xml:space="preserve"><value>Voz sintetizada (AivisSpeech)</value></data>
+<data name="MetaKotodama" xml:space="preserve"><value>Voz sintetizada (Kotodama)</value></data>
+<data name="MetaVoiSona" xml:space="preserve"><value>Voz sintetizada (VoiSonaTalk)</value></data>
+<data name="MetaFFmpeg" xml:space="preserve"><value>Plantillas FFmpeg</value></data>
+<data name="MetaMF" xml:space="preserve"><value>Exportación MFVideo</value></data>
+<data name="MetaPngWav" xml:space="preserve"><value>Salida PNG+WAV secuencial</value></data>
+<data name="MetaPluginLoader" xml:space="preserve"><value>Info de plugins</value></data>
+<data name="MetaOpenAIToken" xml:space="preserve"><value>Generación de texto IA (Token)</value></data>
+<data name="MetaChatGPT" xml:space="preserve"><value>Generación de texto IA (ChatGPT)</value></data>
+<data name="MetaAIVoice" xml:space="preserve"><value>Voz sintetizada (AIVOICE)</value></data>
+<data name="MetaAquesTalk" xml:space="preserve"><value>Voz sintetizada (AquesTalk)</value></data>
+<data name="MetaCeVIO" xml:space="preserve"><value>Voz sintetizada (CeVIO)</value></data>
+<data name="MetaCharaListWidth" xml:space="preserve"><value>Ancho lista personajes</value></data>
+<data name="MetaCharacter" xml:space="preserve"><value>Configuración de personajes</value></data>
+<data name="MetaCoeFont" xml:space="preserve"><value>Voz sintetizada (CoeFont)</value></data>
+<data name="MetaCoeiroink2" xml:space="preserve"><value>Voz sintetizada (COEIROINK2)</value></data>
+<data name="MetaColor" xml:space="preserve"><value>Paleta de colores</value></data>
+<data name="MetaShortcut" xml:space="preserve"><value>Teclas de acceso rápido</value></data>
+<data name="MetaDevMode" xml:space="preserve"><value>Modo desarrollador</value></data>
+<data name="MetaEffectView" xml:space="preserve"><value>Vista de efectos</value></data>
+<data name="MetaEffectDefault" xml:space="preserve"><value>Elementos por defecto</value></data>
+<data name="MetaFile" xml:space="preserve"><value>Configuración de archivo</value></data>
+<data name="MetaFont" xml:space="preserve"><value>Configuración de fuentes</value></data>
+<data name="MetaSearch" xml:space="preserve"><value>Configuración de búsqueda</value></data>
+<data name="MetaTimeline" xml:space="preserve"><value>Configuración de línea de tiempo</value></data>
+<data name="MetaVoicepeak" xml:space="preserve"><value>Voz sintetizada (VOICEPEAK)</value></data>
+<data name="MetaVoicevox" xml:space="preserve"><value>Voz sintetizada (VOICEVOX)</value></data>
+<data name="MetaYMMSettings" xml:space="preserve"><value>Configuración UI y diseño</value></data>
+<data name="IconScale" xml:space="preserve"><value>Escala</value></data>
+<data name="IconOffsetX" xml:space="preserve"><value>Desplaz. X</value></data>
+<data name="IconOffsetY" xml:space="preserve"><value>Desplaz. Y</value></data>
+<data name="IconBgType" xml:space="preserve"><value>Fondo</value></data>
+<data name="IconBgNone" xml:space="preserve"><value>Ninguno</value></data>
+<data name="IconBgSolid" xml:space="preserve"><value>Color sólido</value></data>
+<data name="IconBgGradient" xml:space="preserve"><value>Degradado</value></data>
+<data name="IconBgColor1" xml:space="preserve"><value>Color 1</value></data>
+<data name="IconBgColor2" xml:space="preserve"><value>Color 2</value></data>
+<data name="ColorPickerTitle" xml:space="preserve"><value>Seleccionar color</value></data>
+<data name="SelectSourceInstance" xml:space="preserve"><value>Seleccionar instancia fuente</value></data>
+<data name="SelectSourceInstanceDesc" xml:space="preserve"><value>Seleccione la instancia de la que heredar la configuración</value></data>
+<data name="NoOtherInstance" xml:space="preserve"><value>No hay otra instancia disponible para heredar</value></data>
+<data name="OpenSite" xml:space="preserve"><value>Ver en sitio</value></data>
+<data name="IconDragHint" xml:space="preserve"><value>Arrastra la imagen para ajustar posición</value></data>
+<data name="IconEditorTitle" xml:space="preserve"><value>Configuración de ícono</value></data>
+<data name="OpenIconEditor" xml:space="preserve"><value>Configurar ícono...</value></data>
+<data name="ResetToExeIconShort" xml:space="preserve"><value>Restablecer ícono</value></data>
+<data name="IconBgImage" xml:space="preserve"><value>Imagen</value></data>
+<data name="SelectBgImage" xml:space="preserve"><value>Seleccionar imagen de fondo</value></data>
+<data name="GradientAngle" xml:space="preserve"><value>Ángulo</value></data>
+<data name="IconWheelHint" xml:space="preserve"><value>(rueda para zoom)</value></data>
+<data name="AutoOpenSiteOnBulkDownload" xml:space="preserve"><value>Abrir sitio automáticamente en descarga masiva</value></data>
 </root>
