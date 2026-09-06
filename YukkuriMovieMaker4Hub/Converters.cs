@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Globalization;
 using System.Windows;
 using System.Windows.Data;
@@ -92,6 +92,49 @@ namespace YukkuriMovieMaker4Hub
             if (value is string s && !string.IsNullOrEmpty(s) && s != "-")
                 return string.Format(Translate.InstalledVersion, s);
             return string.Empty;
+        }
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) => throw new NotImplementedException();
+    }
+
+    /// <summary>色文字列(#RRGGBB等)をBrushに変換するコンバーター</summary>
+    public class StringToBrushConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (value is string s && !string.IsNullOrEmpty(s))
+            {
+                try
+                {
+                    var color = (Color)ColorConverter.ConvertFromString(s);
+                    return new SolidColorBrush(color);
+                }
+                catch { }
+            }
+            return Brushes.Transparent;
+        }
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) => throw new NotImplementedException();
+    }
+
+    /// <summary>boolを反転するコンバーター</summary>
+    public class InverseBoolConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+            => value is bool b ? !b : (object)false;
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+            => value is bool b ? !b : (object)false;
+    }
+
+    /// <summary>パスの末尾ディレクトリ名のみを表示するコンバーター（プライバシー配慮）</summary>
+    public class MaskedPathConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (value is string s && !string.IsNullOrEmpty(s))
+            {
+                try { return System.IO.Path.GetFileName(s.TrimEnd('\\', '/')); }
+                catch { }
+            }
+            return value ?? string.Empty;
         }
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) => throw new NotImplementedException();
     }
