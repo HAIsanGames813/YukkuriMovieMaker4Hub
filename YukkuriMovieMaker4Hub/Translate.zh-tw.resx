@@ -275,6 +275,39 @@
 <data name="CheckingLatestVersion" xml:space="preserve"><value>檢查最新版本中...</value></data>
 <data name="Extracting" xml:space="preserve"><value>解壓中...</value></data>
 <data name="Cleanup" xml:space="preserve"><value>清理中...</value></data>
+<data name="AutoOpenSiteOnBulkDownload" xml:space="preserve"><value>批次下載時自動開啟網站確認</value></data>
+<data name="InstanceTileView" xml:space="preserve"><value>以磚塊方式顯示實例</value></data>
+<data name="IconShapeLabel" xml:space="preserve"><value>形狀</value></data>
+<data name="IconShapeRound" xml:space="preserve"><value>圓形</value></data>
+<data name="IconShapeSquare" xml:space="preserve"><value>方形</value></data>
+<data name="AddExcludeFolder" xml:space="preserve"><value>新增排除資料夾</value></data>
+<data name="ExcludeFolderLabel" xml:space="preserve"><value>（從監視中排除的資料夾）</value></data>
+<data name="WatchFolderLabel" xml:space="preserve"><value>（監視專案檔案的資料夾）</value></data>
+<data name="ToggleView" xml:space="preserve"><value>切換檢視</value></data>
+<data name="Close" xml:space="preserve"><value>關閉</value></data>
+<data name="TabLaunch" xml:space="preserve"><value>啟動</value></data>
+<data name="TabPluginList" xml:space="preserve"><value>外掛程式清單</value></data>
+<data name="TabPluginPortal" xml:space="preserve"><value>外掛程式入口</value></data>
+<data name="TabSettings" xml:space="preserve"><value>設定</value></data>
+<data name="PluginDetailTitle" xml:space="preserve"><value>外掛程式詳細資訊</value></data>
+<data name="OverviewAndLinks" xml:space="preserve"><value>概述 / 相關連結</value></data>
+<data name="VersionPrefix" xml:space="preserve"><value>版本: </value></data>
+<data name="DescriptionOverview" xml:space="preserve"><value>概述 / 說明</value></data>
+<data name="RelatedLinks" xml:space="preserve"><value>相關連結</value></data>
+<data name="Loading" xml:space="preserve"><value>載入中...</value></data>
+<data name="BoothDescription" xml:space="preserve"><value>BOOTH 商品說明</value></data>
+<data name="SelectVersionToDownload" xml:space="preserve"><value>選擇版本並下載</value></data>
+<data name="PluginsToInstall" xml:space="preserve"><value>要安裝的外掛程式:</value></data>
+<data name="TargetInstances" xml:space="preserve"><value>安裝目標實例:</value></data>
+<data name="ViewAllReleasesOnGitHub" xml:space="preserve"><value>在 GitHub 上查看所有發布 ↗</value></data>
+<data name="DirectDownloadNote" xml:space="preserve"><value>※直接下載所選版本</value></data>
+<data name="ReleaseList" xml:space="preserve"><value>發布清單</value></data>
+<data name="DownloadFilesList" xml:space="preserve"><value>下載檔案清單</value></data>
+<data name="LatestReleaseNotFound" xml:space="preserve"><value>未能獲取最新發布。</value></data>
+<data name="NoReleaseAssetFound" xml:space="preserve"><value>未找到可用的發布資源。</value></data>
+<data name="DownloadTargetPluginNotSelected" xml:space="preserve"><value>未選擇要下載的外掛程式。</value></data>
+<data name="SelectTargetInstance" xml:space="preserve"><value>請選擇目標實例。</value></data>
+<data name="ErrorTitle" xml:space="preserve"><value>錯誤</value></data>
 <data name="SelectExeTitle" xml:space="preserve"><value>選擇YukkuriMovieMaker.exe</value></data>
 <data name="SelectIconTitle" xml:space="preserve"><value>選擇圖示圖片</value></data>
 <data name="Complete" xml:space="preserve"><value>完成</value></data>
@@ -362,5 +395,4 @@
 <data name="SelectBgImage" xml:space="preserve"><value>選擇背景圖片</value></data>
 <data name="GradientAngle" xml:space="preserve"><value>角度</value></data>
 <data name="IconWheelHint" xml:space="preserve"><value>（滾輪縮放）</value></data>
-<data name="AutoOpenSiteOnBulkDownload" xml:space="preserve"><value>批次下載時自動開啟網站確認</value></data>
 </root>

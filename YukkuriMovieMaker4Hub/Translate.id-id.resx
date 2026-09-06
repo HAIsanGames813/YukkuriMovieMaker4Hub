@@ -275,6 +275,39 @@
 <data name="CheckingLatestVersion" xml:space="preserve"><value>Memeriksa versi terbaru...</value></data>
 <data name="Extracting" xml:space="preserve"><value>Mengekstrak...</value></data>
 <data name="Cleanup" xml:space="preserve"><value>Membersihkan...</value></data>
+<data name="AutoOpenSiteOnBulkDownload" xml:space="preserve"><value>Buka situs otomatis saat unduhan massal</value></data>
+<data name="InstanceTileView" xml:space="preserve"><value>Tampilkan instans sebagai ubin</value></data>
+<data name="IconShapeLabel" xml:space="preserve"><value>Bentuk</value></data>
+<data name="IconShapeRound" xml:space="preserve"><value>Bulat</value></data>
+<data name="IconShapeSquare" xml:space="preserve"><value>Persegi</value></data>
+<data name="AddExcludeFolder" xml:space="preserve"><value>Tambah Folder Dikecualikan</value></data>
+<data name="ExcludeFolderLabel" xml:space="preserve"><value>(Folder dikecualikan dari pemantauan)</value></data>
+<data name="WatchFolderLabel" xml:space="preserve"><value>(Folder untuk memantau file proyek)</value></data>
+<data name="ToggleView" xml:space="preserve"><value>Ganti Tampilan</value></data>
+<data name="Close" xml:space="preserve"><value>Tutup</value></data>
+<data name="TabLaunch" xml:space="preserve"><value>Mulai</value></data>
+<data name="TabPluginList" xml:space="preserve"><value>Daftar Plugin</value></data>
+<data name="TabPluginPortal" xml:space="preserve"><value>Portal Plugin</value></data>
+<data name="TabSettings" xml:space="preserve"><value>Pengaturan</value></data>
+<data name="PluginDetailTitle" xml:space="preserve"><value>Detail Plugin</value></data>
+<data name="OverviewAndLinks" xml:space="preserve"><value>Ringkasan / Tautan</value></data>
+<data name="VersionPrefix" xml:space="preserve"><value>Versi: </value></data>
+<data name="DescriptionOverview" xml:space="preserve"><value>Ringkasan / Deskripsi</value></data>
+<data name="RelatedLinks" xml:space="preserve"><value>Tautan Terkait</value></data>
+<data name="Loading" xml:space="preserve"><value>Memuat...</value></data>
+<data name="BoothDescription" xml:space="preserve"><value>Deskripsi BOOTH</value></data>
+<data name="SelectVersionToDownload" xml:space="preserve"><value>Pilih Versi &amp;&amp; Unduh</value></data>
+<data name="PluginsToInstall" xml:space="preserve"><value>Plugin yang akan dipasang:</value></data>
+<data name="TargetInstances" xml:space="preserve"><value>Instans target:</value></data>
+<data name="ViewAllReleasesOnGitHub" xml:space="preserve"><value>Lihat semua rilis di GitHub ↗</value></data>
+<data name="DirectDownloadNote" xml:space="preserve"><value>*Mengunduh versi yang dipilih secara langsung</value></data>
+<data name="ReleaseList" xml:space="preserve"><value>Daftar Rilis</value></data>
+<data name="DownloadFilesList" xml:space="preserve"><value>Daftar File Unduhan</value></data>
+<data name="LatestReleaseNotFound" xml:space="preserve"><value>Gagal mendapatkan rilis terbaru.</value></data>
+<data name="NoReleaseAssetFound" xml:space="preserve"><value>Aset rilis yang tersedia tidak ditemukan.</value></data>
+<data name="DownloadTargetPluginNotSelected" xml:space="preserve"><value>Tidak ada plugin yang dipilih untuk diunduh.</value></data>
+<data name="SelectTargetInstance" xml:space="preserve"><value>Silakan pilih instans target.</value></data>
+<data name="ErrorTitle" xml:space="preserve"><value>Kesalahan</value></data>
 <data name="SelectExeTitle" xml:space="preserve"><value>Pilih YukkuriMovieMaker.exe</value></data>
 <data name="SelectIconTitle" xml:space="preserve"><value>Pilih gambar ikon</value></data>
 <data name="Complete" xml:space="preserve"><value>Selesai</value></data>
@@ -362,5 +395,4 @@
 <data name="SelectBgImage" xml:space="preserve"><value>Pilih Gambar Latar</value></data>
 <data name="GradientAngle" xml:space="preserve"><value>Sudut</value></data>
 <data name="IconWheelHint" xml:space="preserve"><value>(gulir untuk zoom)</value></data>
-<data name="AutoOpenSiteOnBulkDownload" xml:space="preserve"><value>Buka situs otomatis saat unduhan massal</value></data>
 </root>

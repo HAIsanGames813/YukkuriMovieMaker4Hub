@@ -6,10 +6,6 @@ using System.Windows.Media;
 
 namespace YukkuriMovieMaker4Hub
 {
-    /// <summary>
-    /// InstanceInfo の背景ブラシを返す IValueConverter。
-    /// Binding の Value に InstanceInfo.IconBgBrush (= this) を渡すと背景ブラシを返す。
-    /// </summary>
     public class InstanceInfoBgConverter : IValueConverter
     {
         public static readonly InstanceInfoBgConverter Instance = new();
@@ -42,11 +38,6 @@ namespace YukkuriMovieMaker4Hub
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
             => throw new NotImplementedException();
 
-        /// <summary>
-        /// 中心対称の LinearGradientBrush を生成する。
-        /// StartPoint/EndPoint を中心(0.5,0.5)から角度方向に対称に配置することで、
-        /// どの角度でも1色目→2色目が正しくグラデーションされる。
-        /// </summary>
         private static LinearGradientBrush MakeCenteredGradient(Color c1, Color c2, double angleDeg)
         {
             double rad = angleDeg * Math.PI / 180.0;
@@ -65,7 +56,6 @@ namespace YukkuriMovieMaker4Hub
         }
     }
 
-    /// <summary>bool → Visibility 変換（SettingsInheritDialog の IsRecommended 用）</summary>
     public class BooleanToVisibilityStaticConverter : IValueConverter
     {
         public static readonly BooleanToVisibilityStaticConverter Instance = new();
@@ -75,5 +65,34 @@ namespace YukkuriMovieMaker4Hub
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
             => throw new NotImplementedException();
+    }
+
+    public class BooleanToStatusConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture) => (value is bool b && b) ? Translate.Enable : Translate.Disable;
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) => throw new NotImplementedException();
+    }
+
+    public class BooleanToColorConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture) => (value is bool b && b) ? Brushes.LightGreen : Brushes.Gray;
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) => throw new NotImplementedException();
+    }
+
+    public class IsNotNullConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture) => value != null;
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) => throw new NotImplementedException();
+    }
+
+    public class InstalledVersionConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (value is string s && !string.IsNullOrEmpty(s) && s != "-")
+                return string.Format(Translate.InstalledVersion, s);
+            return string.Empty;
+        }
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) => throw new NotImplementedException();
     }
 }

@@ -275,6 +275,39 @@
 <data name="CheckingLatestVersion" xml:space="preserve"><value>最新バージョンを確認中...</value></data>
 <data name="Extracting" xml:space="preserve"><value>解凍中...</value></data>
 <data name="Cleanup" xml:space="preserve"><value>クリーンアップ中...</value></data>
+<data name="AutoOpenSiteOnBulkDownload" xml:space="preserve"><value>一括DL時にサイトで確認を自動で開く</value></data>
+<data name="InstanceTileView" xml:space="preserve"><value>インスタンスをタイル表示にする</value></data>
+<data name="IconShapeLabel" xml:space="preserve"><value>形状</value></data>
+<data name="IconShapeRound" xml:space="preserve"><value>丸</value></data>
+<data name="IconShapeSquare" xml:space="preserve"><value>四角</value></data>
+<data name="AddExcludeFolder" xml:space="preserve"><value>除外フォルダを追加</value></data>
+<data name="ExcludeFolderLabel" xml:space="preserve"><value>(監視から除外するフォルダ)</value></data>
+<data name="WatchFolderLabel" xml:space="preserve"><value>(プロジェクトファイルを監視するフォルダ)</value></data>
+<data name="ToggleView" xml:space="preserve"><value>表示切り替え</value></data>
+<data name="Close" xml:space="preserve"><value>閉じる</value></data>
+<data name="TabLaunch" xml:space="preserve"><value>起動</value></data>
+<data name="TabPluginList" xml:space="preserve"><value>プラグインリスト</value></data>
+<data name="TabPluginPortal" xml:space="preserve"><value>プラグインポータル</value></data>
+<data name="TabSettings" xml:space="preserve"><value>設定</value></data>
+<data name="PluginDetailTitle" xml:space="preserve"><value>プラグイン詳細情報</value></data>
+<data name="OverviewAndLinks" xml:space="preserve"><value>概要・関連リンク</value></data>
+<data name="VersionPrefix" xml:space="preserve"><value>バージョン: </value></data>
+<data name="DescriptionOverview" xml:space="preserve"><value>概要 / 説明</value></data>
+<data name="RelatedLinks" xml:space="preserve"><value>関連リンク</value></data>
+<data name="Loading" xml:space="preserve"><value>読み込み中...</value></data>
+<data name="BoothDescription" xml:space="preserve"><value>BOOTH 商品説明</value></data>
+<data name="SelectVersionToDownload" xml:space="preserve"><value>バージョンを選択してDL</value></data>
+<data name="PluginsToInstall" xml:space="preserve"><value>インストールするプラグイン:</value></data>
+<data name="TargetInstances" xml:space="preserve"><value>インストール先のインスタンス:</value></data>
+<data name="ViewAllReleasesOnGitHub" xml:space="preserve"><value>GitHubで全リリースを見る ↗</value></data>
+<data name="DirectDownloadNote" xml:space="preserve"><value>※選択したバージョンを直接ダウンロードします</value></data>
+<data name="ReleaseList" xml:space="preserve"><value>リリース一覧</value></data>
+<data name="DownloadFilesList" xml:space="preserve"><value>ダウンロードファイル一覧</value></data>
+<data name="LatestReleaseNotFound" xml:space="preserve"><value>最新リリースが取得できませんでした。</value></data>
+<data name="NoReleaseAssetFound" xml:space="preserve"><value>利用可能なリリースアセットが見つかりませんでした。</value></data>
+<data name="DownloadTargetPluginNotSelected" xml:space="preserve"><value>ダウンロード対象のプラグインが選択されていません。</value></data>
+<data name="SelectTargetInstance" xml:space="preserve"><value>インストール対象のインスタンスを選択してください。</value></data>
+<data name="ErrorTitle" xml:space="preserve"><value>エラー</value></data>
 <data name="SelectExeTitle" xml:space="preserve"><value>YukkuriMovieMaker.exe を選択</value></data>
 <data name="SelectIconTitle" xml:space="preserve"><value>アイコン画像を選択</value></data>
 <data name="Complete" xml:space="preserve"><value>完了</value></data>
@@ -362,5 +395,4 @@
 <data name="SelectBgImage" xml:space="preserve"><value>背景画像を選択</value></data>
 <data name="GradientAngle" xml:space="preserve"><value>角度</value></data>
 <data name="IconWheelHint" xml:space="preserve"><value>(ホイールで拡大縮小)</value></data>
-<data name="AutoOpenSiteOnBulkDownload" xml:space="preserve"><value>一括DL時にサイトで確認を自動で開く</value></data>
 </root>

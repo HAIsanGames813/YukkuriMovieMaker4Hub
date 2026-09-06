@@ -275,6 +275,39 @@
 <data name="CheckingLatestVersion" xml:space="preserve"><value>جاري التحقق من أحدث إصدار...</value></data>
 <data name="Extracting" xml:space="preserve"><value>جاري الاستخراج...</value></data>
 <data name="Cleanup" xml:space="preserve"><value>جاري التنظيف...</value></data>
+<data name="AutoOpenSiteOnBulkDownload" xml:space="preserve"><value>فتح الموقع تلقائيًا عند التنزيل الجماعي</value></data>
+<data name="InstanceTileView" xml:space="preserve"><value>عرض النسخ كبلاطات</value></data>
+<data name="IconShapeLabel" xml:space="preserve"><value>الشكل</value></data>
+<data name="IconShapeRound" xml:space="preserve"><value>دائري</value></data>
+<data name="IconShapeSquare" xml:space="preserve"><value>مربع</value></data>
+<data name="AddExcludeFolder" xml:space="preserve"><value>إضافة مجلد مستثنى</value></data>
+<data name="ExcludeFolderLabel" xml:space="preserve"><value>(مجلدات مستثناة من المراقبة)</value></data>
+<data name="WatchFolderLabel" xml:space="preserve"><value>(مجلدات لمراقبة ملفات المشروع)</value></data>
+<data name="ToggleView" xml:space="preserve"><value>تبديل العرض</value></data>
+<data name="Close" xml:space="preserve"><value>إغلاق</value></data>
+<data name="TabLaunch" xml:space="preserve"><value>تشغيل</value></data>
+<data name="TabPluginList" xml:space="preserve"><value>قائمة الإضافات</value></data>
+<data name="TabPluginPortal" xml:space="preserve"><value>بوابة الإضافات</value></data>
+<data name="TabSettings" xml:space="preserve"><value>الإعدادات</value></data>
+<data name="PluginDetailTitle" xml:space="preserve"><value>تفاصيل الملحق</value></data>
+<data name="OverviewAndLinks" xml:space="preserve"><value>نظرة عامة / روابط</value></data>
+<data name="VersionPrefix" xml:space="preserve"><value>الإصدار: </value></data>
+<data name="DescriptionOverview" xml:space="preserve"><value>نظرة عامة / الوصف</value></data>
+<data name="RelatedLinks" xml:space="preserve"><value>روابط ذات صلة</value></data>
+<data name="Loading" xml:space="preserve"><value>جاري التحميل...</value></data>
+<data name="BoothDescription" xml:space="preserve"><value>وصف منتج BOOTH</value></data>
+<data name="SelectVersionToDownload" xml:space="preserve"><value>تحديد الإصدار والتنزيل</value></data>
+<data name="PluginsToInstall" xml:space="preserve"><value>الملحقات المراد تثبيتها:</value></data>
+<data name="TargetInstances" xml:space="preserve"><value>المثيلات المستهدفة:</value></data>
+<data name="ViewAllReleasesOnGitHub" xml:space="preserve"><value>عرض جميع الإصدارات على GitHub ↗</value></data>
+<data name="DirectDownloadNote" xml:space="preserve"><value>*يقوم بتنزيل الإصدار المحدد مباشرة</value></data>
+<data name="ReleaseList" xml:space="preserve"><value>قائمة الإصدارات</value></data>
+<data name="DownloadFilesList" xml:space="preserve"><value>ملفات التنزيل</value></data>
+<data name="LatestReleaseNotFound" xml:space="preserve"><value>فشل في الحصول على أحدث إصدار.</value></data>
+<data name="NoReleaseAssetFound" xml:space="preserve"><value>لم يتم العثور على أصول إصدار متاحة.</value></data>
+<data name="DownloadTargetPluginNotSelected" xml:space="preserve"><value>لم يتم تحديد أي ملحق للتنزيل.</value></data>
+<data name="SelectTargetInstance" xml:space="preserve"><value>يرجى تحديد المثيل المستهدف.</value></data>
+<data name="ErrorTitle" xml:space="preserve"><value>خطأ</value></data>
 <data name="SelectExeTitle" xml:space="preserve"><value>اختر YukkuriMovieMaker.exe</value></data>
 <data name="SelectIconTitle" xml:space="preserve"><value>اختر صورة الأيقونة</value></data>
 <data name="Complete" xml:space="preserve"><value>مكتمل</value></data>
@@ -362,5 +395,4 @@
 <data name="SelectBgImage" xml:space="preserve"><value>اختر صورة الخلفية</value></data>
 <data name="GradientAngle" xml:space="preserve"><value>زاوية</value></data>
 <data name="IconWheelHint" xml:space="preserve"><value>(عجلة للتكبير)</value></data>
-<data name="AutoOpenSiteOnBulkDownload" xml:space="preserve"><value>فتح الموقع تلقائيًا عند التنزيل الجماعي</value></data>
 </root>

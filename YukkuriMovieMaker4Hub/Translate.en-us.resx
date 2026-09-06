@@ -275,6 +275,39 @@
 <data name="CheckingLatestVersion" xml:space="preserve"><value>Checking latest version...</value></data>
 <data name="Extracting" xml:space="preserve"><value>Extracting...</value></data>
 <data name="Cleanup" xml:space="preserve"><value>Cleaning up...</value></data>
+<data name="AutoOpenSiteOnBulkDownload" xml:space="preserve"><value>Auto-open site check during bulk download</value></data>
+<data name="InstanceTileView" xml:space="preserve"><value>Show instances as tiles</value></data>
+<data name="IconShapeLabel" xml:space="preserve"><value>Shape</value></data>
+<data name="IconShapeRound" xml:space="preserve"><value>Round</value></data>
+<data name="IconShapeSquare" xml:space="preserve"><value>Square</value></data>
+<data name="AddExcludeFolder" xml:space="preserve"><value>Add Exclude Folder</value></data>
+<data name="ExcludeFolderLabel" xml:space="preserve"><value>(Folders to exclude from monitoring)</value></data>
+<data name="WatchFolderLabel" xml:space="preserve"><value>(Folders to monitor for project files)</value></data>
+<data name="ToggleView" xml:space="preserve"><value>Toggle View</value></data>
+<data name="Close" xml:space="preserve"><value>Close</value></data>
+<data name="TabLaunch" xml:space="preserve"><value>Launch</value></data>
+<data name="TabPluginList" xml:space="preserve"><value>Plugin List</value></data>
+<data name="TabPluginPortal" xml:space="preserve"><value>Plugin Portal</value></data>
+<data name="TabSettings" xml:space="preserve"><value>Settings</value></data>
+<data name="PluginDetailTitle" xml:space="preserve"><value>Plugin Details</value></data>
+<data name="OverviewAndLinks" xml:space="preserve"><value>Overview / Links</value></data>
+<data name="VersionPrefix" xml:space="preserve"><value>Version: </value></data>
+<data name="DescriptionOverview" xml:space="preserve"><value>Overview / Description</value></data>
+<data name="RelatedLinks" xml:space="preserve"><value>Related Links</value></data>
+<data name="Loading" xml:space="preserve"><value>Loading...</value></data>
+<data name="BoothDescription" xml:space="preserve"><value>BOOTH Description</value></data>
+<data name="SelectVersionToDownload" xml:space="preserve"><value>Select Version &amp;&amp; DL</value></data>
+<data name="PluginsToInstall" xml:space="preserve"><value>Plugins to install:</value></data>
+<data name="TargetInstances" xml:space="preserve"><value>Target instances:</value></data>
+<data name="ViewAllReleasesOnGitHub" xml:space="preserve"><value>View all releases on GitHub ↗</value></data>
+<data name="DirectDownloadNote" xml:space="preserve"><value>*Directly downloads the selected version</value></data>
+<data name="ReleaseList" xml:space="preserve"><value>Releases</value></data>
+<data name="DownloadFilesList" xml:space="preserve"><value>Download Files</value></data>
+<data name="LatestReleaseNotFound" xml:space="preserve"><value>Failed to retrieve the latest release.</value></data>
+<data name="NoReleaseAssetFound" xml:space="preserve"><value>No available release assets found.</value></data>
+<data name="DownloadTargetPluginNotSelected" xml:space="preserve"><value>No plugin selected for download.</value></data>
+<data name="SelectTargetInstance" xml:space="preserve"><value>Please select the target instance.</value></data>
+<data name="ErrorTitle" xml:space="preserve"><value>Error</value></data>
 <data name="SelectExeTitle" xml:space="preserve"><value>Select YukkuriMovieMaker.exe</value></data>
 <data name="SelectIconTitle" xml:space="preserve"><value>Select icon image</value></data>
 <data name="Complete" xml:space="preserve"><value>Complete</value></data>
@@ -362,5 +395,4 @@
 <data name="SelectBgImage" xml:space="preserve"><value>Select Background Image</value></data>
 <data name="GradientAngle" xml:space="preserve"><value>Angle</value></data>
 <data name="IconWheelHint" xml:space="preserve"><value>(scroll to zoom)</value></data>
-<data name="AutoOpenSiteOnBulkDownload" xml:space="preserve"><value>Auto-open site check during bulk download</value></data>
 </root>

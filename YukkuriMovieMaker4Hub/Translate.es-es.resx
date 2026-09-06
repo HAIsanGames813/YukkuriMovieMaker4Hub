@@ -275,6 +275,39 @@
 <data name="CheckingLatestVersion" xml:space="preserve"><value>Verificando última versión...</value></data>
 <data name="Extracting" xml:space="preserve"><value>Extrayendo...</value></data>
 <data name="Cleanup" xml:space="preserve"><value>Limpiando...</value></data>
+<data name="AutoOpenSiteOnBulkDownload" xml:space="preserve"><value>Abrir sitio automáticamente en descarga masiva</value></data>
+<data name="InstanceTileView" xml:space="preserve"><value>Mostrar instancias como mosaicos</value></data>
+<data name="IconShapeLabel" xml:space="preserve"><value>Forma</value></data>
+<data name="IconShapeRound" xml:space="preserve"><value>Circular</value></data>
+<data name="IconShapeSquare" xml:space="preserve"><value>Cuadrado</value></data>
+<data name="AddExcludeFolder" xml:space="preserve"><value>Agregar carpeta excluida</value></data>
+<data name="ExcludeFolderLabel" xml:space="preserve"><value>(Carpetas excluidas del monitoreo)</value></data>
+<data name="WatchFolderLabel" xml:space="preserve"><value>(Carpetas para monitorear archivos de proyecto)</value></data>
+<data name="ToggleView" xml:space="preserve"><value>Cambiar vista</value></data>
+<data name="Close" xml:space="preserve"><value>Cerrar</value></data>
+<data name="TabLaunch" xml:space="preserve"><value>Inicio</value></data>
+<data name="TabPluginList" xml:space="preserve"><value>Lista de plugins</value></data>
+<data name="TabPluginPortal" xml:space="preserve"><value>Portal de plugins</value></data>
+<data name="TabSettings" xml:space="preserve"><value>Configuración</value></data>
+<data name="PluginDetailTitle" xml:space="preserve"><value>Detalles del plugin</value></data>
+<data name="OverviewAndLinks" xml:space="preserve"><value>Resumen / Enlaces</value></data>
+<data name="VersionPrefix" xml:space="preserve"><value>Versión: </value></data>
+<data name="DescriptionOverview" xml:space="preserve"><value>Resumen / Descripción</value></data>
+<data name="RelatedLinks" xml:space="preserve"><value>Enlaces relacionados</value></data>
+<data name="Loading" xml:space="preserve"><value>Cargando...</value></data>
+<data name="BoothDescription" xml:space="preserve"><value>Descripción de BOOTH</value></data>
+<data name="SelectVersionToDownload" xml:space="preserve"><value>Seleccionar versión y descargar</value></data>
+<data name="PluginsToInstall" xml:space="preserve"><value>Plugins a instalar:</value></data>
+<data name="TargetInstances" xml:space="preserve"><value>Instancias de destino:</value></data>
+<data name="ViewAllReleasesOnGitHub" xml:space="preserve"><value>Ver todos los lanzamientos en GitHub ↗</value></data>
+<data name="DirectDownloadNote" xml:space="preserve"><value>*Descarga directamente la versión seleccionada</value></data>
+<data name="ReleaseList" xml:space="preserve"><value>Lista de versiones</value></data>
+<data name="DownloadFilesList" xml:space="preserve"><value>Archivos descargables</value></data>
+<data name="LatestReleaseNotFound" xml:space="preserve"><value>No se pudo obtener la última versión.</value></data>
+<data name="NoReleaseAssetFound" xml:space="preserve"><value>No se encontraron recursos de lanzamiento disponibles.</value></data>
+<data name="DownloadTargetPluginNotSelected" xml:space="preserve"><value>No se ha seleccionado ningún plugin para descargar.</value></data>
+<data name="SelectTargetInstance" xml:space="preserve"><value>Por favor seleccione la instancia de destino.</value></data>
+<data name="ErrorTitle" xml:space="preserve"><value>Error</value></data>
 <data name="SelectExeTitle" xml:space="preserve"><value>Seleccionar YukkuriMovieMaker.exe</value></data>
 <data name="SelectIconTitle" xml:space="preserve"><value>Seleccionar imagen de ícono</value></data>
 <data name="Complete" xml:space="preserve"><value>Completo</value></data>
@@ -362,5 +395,4 @@
 <data name="SelectBgImage" xml:space="preserve"><value>Seleccionar imagen de fondo</value></data>
 <data name="GradientAngle" xml:space="preserve"><value>Ángulo</value></data>
 <data name="IconWheelHint" xml:space="preserve"><value>(rueda para zoom)</value></data>
-<data name="AutoOpenSiteOnBulkDownload" xml:space="preserve"><value>Abrir sitio automáticamente en descarga masiva</value></data>
 </root>
