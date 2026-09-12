@@ -5,7 +5,8 @@
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         x:Name="RootWindow"
         Title="{Binding HubTitle}" Height="640" Width="960" MinHeight="520" MinWidth="760"
-        WindowStartupLocation="CenterScreen">
+        WindowStartupLocation="CenterScreen"
+        Loaded="MainWindow_Loaded">
     <Window.Resources>
         <local:BooleanToStatusConverter x:Key="BooleanToStatusConverter"/>
         <local:BooleanToColorConverter x:Key="BooleanToColorConverter"/>
@@ -42,18 +43,18 @@
             </Setter>
         </Style>
 
-        <!-- プラグインカードスタイル: テーマ色のみ -->
+        <!-- プラグインカードスタイル: カスタムテーマ色 -->
         <Style x:Key="PortalCardStyle" TargetType="Border">
-            <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.ControlBrushKey}}"/>
-            <Setter Property="BorderBrush" Value="{DynamicResource {x:Static SystemColors.ControlDarkBrushKey}}"/>
+            <Setter Property="Background" Value="{DynamicResource ItemBrush}"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource BorderBrush}"/>
             <Setter Property="BorderThickness" Value="1"/>
             <Setter Property="Margin" Value="4"/>
         </Style>
 
         <!-- タグBorderスタイル -->
         <Style x:Key="TagBorderStyle" TargetType="Border">
-            <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.ControlBrushKey}}"/>
-            <Setter Property="BorderBrush" Value="{DynamicResource {x:Static SystemColors.ControlDarkBrushKey}}"/>
+            <Setter Property="Background" Value="{DynamicResource PanelBrush}"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource BorderBrush}"/>
             <Setter Property="BorderThickness" Value="1"/>
             <Setter Property="Padding" Value="5,1"/>
             <Setter Property="Margin" Value="0,0,4,0"/>
@@ -61,18 +62,28 @@
 
         <!-- サイドバーグループ -->
         <Style x:Key="SideGroupStyle" TargetType="Border">
-            <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.ControlBrushKey}}"/>
-            <Setter Property="BorderBrush" Value="{DynamicResource {x:Static SystemColors.ControlDarkBrushKey}}"/>
+            <Setter Property="Background" Value="{DynamicResource PanelBrush}"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource BorderBrush}"/>
             <Setter Property="BorderThickness" Value="1"/>
             <Setter Property="Padding" Value="8"/>
             <Setter Property="Margin" Value="0,0,0,8"/>
         </Style>
 
-        <!-- アイコンPath用スタイル: テキスト色に自動追従 -->
+        <!-- アイコンPath用スタイル: テーマテキスト色に追従 -->
         <Style x:Key="MdiIconStyle" TargetType="Path">
-            <Setter Property="Fill" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+            <Setter Property="Fill" Value="{DynamicResource TextBrush}"/>
             <Setter Property="Stretch" Value="Uniform"/>
         </Style>
+
+        <!-- テーマカラーブラシ (ApplyTheme() から動的に更新される) -->
+        <SolidColorBrush x:Key="ThemeBrush" Color="#252525"/>
+        <SolidColorBrush x:Key="PanelBrush" Color="#333333"/>
+        <SolidColorBrush x:Key="ItemBrush" Color="#444444"/>
+        <SolidColorBrush x:Key="TextBrush" Color="#FFFFFF"/>
+        <SolidColorBrush x:Key="SubTextBrush" Color="#AAAAAA"/>
+        <SolidColorBrush x:Key="AccentBrush" Color="#4CAF50"/>
+        <SolidColorBrush x:Key="BorderBrush" Color="#555555"/>
+        <FontFamily x:Key="AppFont">Yu Gothic UI, Segoe UI, sans-serif</FontFamily>
     </Window.Resources>
 
     <Grid>
@@ -788,8 +799,10 @@
                                                             </Grid>
                                                         </Border>
 
-                                                        <!-- 中央エリア -->
-                                                        <StackPanel Grid.Row="1" Margin="8,6,8,6">
+                                                        <!-- 本文エリア: クリックで詳細ダイアログを表示 -->
+                                                        <StackPanel Grid.Row="1" Margin="8,6,8,6" Cursor="Hand"
+                                                                    Background="Transparent"
+                                                                    MouseLeftButtonUp="PortalCardHeader_Click">
                                                             <!-- プラグイン名 -->
                                                             <TextBlock Text="{Binding Name}"
                                                                        FontWeight="Bold" FontSize="13"

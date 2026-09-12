@@ -125,7 +125,7 @@ namespace YukkuriMovieMaker4Hub
     }
 
     /// <summary>パスの末尾ディレクトリ名のみを表示するコンバーター（プライバシー配慮）</summary>
-    public class MaskedPathConverter : IValueConverter
+    public class MaskedPathConverter : IValueConverter, IMultiValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
@@ -137,5 +137,22 @@ namespace YukkuriMovieMaker4Hub
             return value ?? string.Empty;
         }
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) => throw new NotImplementedException();
+
+        public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (values == null || values.Length == 0) return string.Empty;
+            string? path = values[0] as string;
+            bool hide = values.Length > 1 && values[1] is bool b && b;
+            if (string.IsNullOrEmpty(path)) return string.Empty;
+            if (hide)
+            {
+                try { return System.IO.Path.GetFileName(path.TrimEnd('\\', '/')); }
+                catch { return path; }
+            }
+            return path;
+        }
+
+        public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
+            => throw new NotImplementedException();
     }
 }

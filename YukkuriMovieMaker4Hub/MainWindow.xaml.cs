@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -503,6 +503,26 @@ namespace YukkuriMovieMaker4Hub
                         SetThemeColors("#000000", "#121212", "#1F1F1F", "#FFFFFF", "#888888", "#4CAF50", "#333333");
                         break;
                 }
+
+                // DynamicAero2 テーマカラー連動
+                var aeroTheme = Application.Current?.Resources?.MergedDictionaries?.OfType<DynamicAero2.Theme>()?.FirstOrDefault();
+                if (aeroTheme != null)
+                {
+                    switch (mode)
+                    {
+                        case AppTheme.Light:
+                            aeroTheme.Color = DynamicAero2.ThemeColor.NormalColor;
+                            break;
+                        case AppTheme.Dark:
+                            aeroTheme.Color = DynamicAero2.ThemeColor.Dark;
+                            break;
+                        case AppTheme.Black:
+                            aeroTheme.Color = DynamicAero2.ThemeColor.Black;
+                            break;
+                    }
+                }
+
+                ThemeHelper.ApplyTitleBarTheme(this, ThemeHelper.IsCurrentDarkTheme);
             }
             catch { }
         }
@@ -651,35 +671,73 @@ namespace YukkuriMovieMaker4Hub
 
         private async void AddInstance_Click(object sender, RoutedEventArgs e)
         {
-            var fileDialog = new OpenFileDialog
+            // ① 追加方法選択（新規DL / 既存追加）
+            var choiceDialog = new AddInstanceChoiceDialog { Owner = this };
+            if (choiceDialog.ShowDialog() != true || choiceDialog.Mode == AddInstanceMode.Cancelled)
+                return;
+
+            if (choiceDialog.Mode == AddInstanceMode.NewDownload)
             {
-                Filter = "YukkuriMovieMaker.exe|YukkuriMovieMaker.exe",
-                Title = Translate.SelectExeTitle
-            };
-            if (fileDialog.ShowDialog() != true) return;
+                // ② 新規ダウンロード
+                var setupDialog = new InstanceSetupDialog(isNewDownload: true) { Owner = this };
+                if (setupDialog.ShowDialog() != true || string.IsNullOrEmpty(setupDialog.ResultExePath))
+                    return;
 
-            string exePath = fileDialog.FileName;
-            string defaultName = Path.GetFileName(Path.GetDirectoryName(exePath)) ?? "YukkuriMovieMaker4";
-
-            var setupDialog = new InstanceSetupDialog(exePath, defaultName) { Owner = this };
-            if (setupDialog.ShowDialog() != true) return;
-
-            try
-            {
-                var newInstance = new InstanceInfo
+                try
                 {
-                    Name = setupDialog.InstanceName ?? defaultName,
-                    ExePath = exePath,
-                };
-                setupDialog.CopyIconSettingsTo(newInstance);
-                newInstance.PropertyChanged += (s, ev) => SaveAll();
-                Instances.Add(newInstance);
-                SelectedInstance = newInstance;
-                SaveAll();
+                    var newInstance = new InstanceInfo
+                    {
+                        Name = setupDialog.InstanceName ?? "YukkuriMovieMaker4",
+                        ExePath = setupDialog.ResultExePath,
+                    };
+                    setupDialog.CopyIconSettingsTo(newInstance);
+                    newInstance.PropertyChanged += (s, ev) => SaveAll();
+                    Instances.Add(newInstance);
+                    SelectedInstance = newInstance;
+                    SaveAll();
+
+                    // 設定ファイルのコピー
+                    if (setupDialog.InheritedSettingFiles.Count > 0)
+                        CopyInheritedSettings(setupDialog.InheritedSettingFiles, newInstance);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(string.Format(Translate.AddInstanceFailed, ex.Message));
+                }
             }
-            catch (Exception ex)
+            else
             {
-                MessageBox.Show(string.Format(Translate.AddInstanceFailed, ex.Message));
+                // ③ 既存追加：exe選択 → 名前・アイコン設定
+                var fileDialog = new OpenFileDialog
+                {
+                    Filter = "YukkuriMovieMaker.exe|YukkuriMovieMaker.exe",
+                    Title = Translate.SelectExeTitle
+                };
+                if (fileDialog.ShowDialog() != true) return;
+
+                string exePath = fileDialog.FileName;
+                string defaultName = Path.GetFileName(Path.GetDirectoryName(exePath)) ?? "YukkuriMovieMaker4";
+
+                var setupDialog = new InstanceSetupDialog(exePath, defaultName) { Owner = this };
+                if (setupDialog.ShowDialog() != true) return;
+
+                try
+                {
+                    var newInstance = new InstanceInfo
+                    {
+                        Name = setupDialog.InstanceName ?? defaultName,
+                        ExePath = exePath,
+                    };
+                    setupDialog.CopyIconSettingsTo(newInstance);
+                    newInstance.PropertyChanged += (s, ev) => SaveAll();
+                    Instances.Add(newInstance);
+                    SelectedInstance = newInstance;
+                    SaveAll();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(string.Format(Translate.AddInstanceFailed, ex.Message));
+                }
             }
         }
 
@@ -2877,17 +2935,22 @@ namespace YukkuriMovieMaker4Hub
 
         private void PortalCardCheck_Click(object sender, RoutedEventArgs e) => UpdatePortalSelectionBar();
 
-        private async void PortalCardPrimaryAction_Click(object sender, RoutedEventArgs e)
+        private void PortalCardPrimaryAction_Click(object sender, RoutedEventArgs e)
         {
-            if (sender is FrameworkElement fe && fe.DataContext is PluginCatalogItem plugin)
+            if (sender is FrameworkElement fe && fe.DataContext is PluginCatalogItem item)
             {
-                if (plugin.IsDirectDownloadSupported)
+                if (item.IsGitHub)
                 {
-                    await ExecuteDirectDownloadAsync(plugin);
+                    var dlg = new VersionSelectDialog(item, this) { Owner = this };
+                    dlg.ShowDialog();
                 }
-                else if (!string.IsNullOrEmpty(plugin.Url))
+                else if (!string.IsNullOrEmpty(item.BestSiteUrl))
                 {
-                    Process.Start(new ProcessStartInfo(plugin.Url) { UseShellExecute = true });
+                    try { Process.Start(new ProcessStartInfo(item.BestSiteUrl) { UseShellExecute = true }); } catch { }
+                }
+                else if (!string.IsNullOrEmpty(item.Url))
+                {
+                    try { Process.Start(new ProcessStartInfo(item.Url) { UseShellExecute = true }); } catch { }
                 }
             }
         }
@@ -2963,6 +3026,21 @@ namespace YukkuriMovieMaker4Hub
             if (SelectedInstance == null || string.IsNullOrEmpty(SelectedInstance.RootDirectory))
             {
                 MessageBox.Show(Translate.InstanceNotSelected, Translate.Confirm, MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            if (plugin.SelectedVersion == null)
+            {
+                if (plugin.Releases.Count == 0)
+                {
+                    await LoadReleaseDetails(plugin);
+                }
+                plugin.SelectedVersion = plugin.Releases.FirstOrDefault();
+            }
+
+            if (plugin.SelectedVersion == null)
+            {
+                MessageBox.Show(Translate.ErrorNoDownloadVersion, Translate.Confirm, MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
 
@@ -3058,6 +3136,13 @@ namespace YukkuriMovieMaker4Hub
 
             RefreshLocalPlugins();
             progressWin.ShowFinalClose();
+        }
+
+        private void MainWindow_Loaded(object sender, RoutedEventArgs e)
+        {
+            // ウィンドウ表示後にテーマを再適用してWindow.Resourcesを確実に更新する
+            ApplyTheme();
+            ThemeHelper.ApplyTitleBarTheme(this, ThemeHelper.IsCurrentDarkTheme);
         }
 
     }
