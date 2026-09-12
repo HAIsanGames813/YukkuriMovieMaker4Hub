@@ -484,15 +484,12 @@ namespace YukkuriMovieMaker4Hub
             try
             {
                 var mode = SelectedTheme;
-                if (mode == AppTheme.Windows)
-                {
-                    using var key = Microsoft.Win32.Registry.CurrentUser.OpenSubKey(@"Software\Microsoft\Windows\CurrentVersion\Themes\Personalize");
-                    var value = key?.GetValue("AppsUseLightTheme");
-                    mode = (value is int i && i == 1) ? AppTheme.Light : AppTheme.Dark;
-                }
 
                 switch (mode)
                 {
+                    case AppTheme.Windows:
+                        SetThemeColors("#F0F0F0", "#FFFFFF", "#E5E5E5", "#000000", "#555555", "#0078D4", "#CCCCCC");
+                        break;
                     case AppTheme.Light:
                         SetThemeColors("#FFFFFF", "#F0F0F0", "#E0E0E0", "#000000", "#555555", "#2255BB", "#DDDDDD");
                         break;
@@ -510,6 +507,7 @@ namespace YukkuriMovieMaker4Hub
                 {
                     switch (mode)
                     {
+                        case AppTheme.Windows:
                         case AppTheme.Light:
                             aeroTheme.Color = DynamicAero2.ThemeColor.NormalColor;
                             break;
@@ -669,75 +667,32 @@ namespace YukkuriMovieMaker4Hub
         }
 
 
-        private async void AddInstance_Click(object sender, RoutedEventArgs e)
+        private void AddInstance_Click(object sender, RoutedEventArgs e)
         {
-            // ① 追加方法選択（新規DL / 既存追加）
-            var choiceDialog = new AddInstanceChoiceDialog { Owner = this };
-            if (choiceDialog.ShowDialog() != true || choiceDialog.Mode == AddInstanceMode.Cancelled)
+            var setupDialog = new InstanceSetupDialog { Owner = this };
+            if (setupDialog.ShowDialog() != true || string.IsNullOrEmpty(setupDialog.ResultExePath))
                 return;
 
-            if (choiceDialog.Mode == AddInstanceMode.NewDownload)
+            try
             {
-                // ② 新規ダウンロード
-                var setupDialog = new InstanceSetupDialog(isNewDownload: true) { Owner = this };
-                if (setupDialog.ShowDialog() != true || string.IsNullOrEmpty(setupDialog.ResultExePath))
-                    return;
-
-                try
+                var newInstance = new InstanceInfo
                 {
-                    var newInstance = new InstanceInfo
-                    {
-                        Name = setupDialog.InstanceName ?? "YukkuriMovieMaker4",
-                        ExePath = setupDialog.ResultExePath,
-                    };
-                    setupDialog.CopyIconSettingsTo(newInstance);
-                    newInstance.PropertyChanged += (s, ev) => SaveAll();
-                    Instances.Add(newInstance);
-                    SelectedInstance = newInstance;
-                    SaveAll();
-
-                    // 設定ファイルのコピー
-                    if (setupDialog.InheritedSettingFiles.Count > 0)
-                        CopyInheritedSettings(setupDialog.InheritedSettingFiles, newInstance);
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(string.Format(Translate.AddInstanceFailed, ex.Message));
-                }
-            }
-            else
-            {
-                // ③ 既存追加：exe選択 → 名前・アイコン設定
-                var fileDialog = new OpenFileDialog
-                {
-                    Filter = "YukkuriMovieMaker.exe|YukkuriMovieMaker.exe",
-                    Title = Translate.SelectExeTitle
+                    Name = setupDialog.InstanceName,
+                    ExePath = setupDialog.ResultExePath,
                 };
-                if (fileDialog.ShowDialog() != true) return;
+                setupDialog.CopyIconSettingsTo(newInstance);
+                newInstance.PropertyChanged += (s, ev) => SaveAll();
+                Instances.Add(newInstance);
+                SelectedInstance = newInstance;
+                SaveAll();
 
-                string exePath = fileDialog.FileName;
-                string defaultName = Path.GetFileName(Path.GetDirectoryName(exePath)) ?? "YukkuriMovieMaker4";
-
-                var setupDialog = new InstanceSetupDialog(exePath, defaultName) { Owner = this };
-                if (setupDialog.ShowDialog() != true) return;
-
-                try
-                {
-                    var newInstance = new InstanceInfo
-                    {
-                        Name = setupDialog.InstanceName ?? defaultName,
-                        ExePath = exePath,
-                    };
-                    setupDialog.CopyIconSettingsTo(newInstance);
-                    newInstance.PropertyChanged += (s, ev) => SaveAll();
-                    Instances.Add(newInstance);
-                    SelectedInstance = newInstance;
-                    SaveAll();
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(string.Format(Translate.AddInstanceFailed, ex.Message));
-                }
+                // 設定ファイルのコピー
+                if (setupDialog.InheritedSettingFiles.Count > 0)
+                    CopyInheritedSettings(setupDialog.InheritedSettingFiles, newInstance);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(string.Format(Translate.AddInstanceFailed, ex.Message));
             }
         }
 
@@ -774,7 +729,10 @@ namespace YukkuriMovieMaker4Hub
                 var yml = await _http.GetStringAsync("https://manjubox.net/ymm4plugins.yml");
                 var catalog = ParseYmm4PluginsYaml(yml);
 
-                // GitHub連携・未掲載プラグイン一覧API取得
+                // 全YAMLプラグインのGitHub Owner/Repoを抽出
+                foreach (var p in catalog) p.EnsureGitHubOwnerRepo();
+
+                // GitHub連携・未掲載プラグイン一覧API取得 (manjubox.net/api/ymm4plugins/github/list)
                 try
                 {
                     var ghListJson = await _http.GetStringAsync("https://manjubox.net/api/ymm4plugins/github/list");
@@ -783,37 +741,76 @@ namespace YukkuriMovieMaker4Hub
                     {
                         foreach (var item in doc.RootElement.EnumerateArray())
                         {
-                            string owner = item.TryGetProperty("owner", out var o) ? o.GetString() ?? "" : "";
+                            // "user" または "owner"
+                            string owner = "";
+                            if (item.TryGetProperty("user", out var u) && !string.IsNullOrEmpty(u.GetString()))
+                                owner = u.GetString()!;
+                            else if (item.TryGetProperty("owner", out var o) && !string.IsNullOrEmpty(o.GetString()))
+                                owner = o.GetString()!;
+
                             string repo = item.TryGetProperty("repo", out var r) ? r.GetString() ?? "" : "";
-                            string name = item.TryGetProperty("name", out var n) ? n.GetString() ?? "" : "";
-                            string desc = item.TryGetProperty("description", out var d) ? d.GetString() ?? "" : "";
-                            string author = item.TryGetProperty("author", out var a) ? a.GetString() ?? "" : owner;
-                            string type = item.TryGetProperty("type", out var t) ? t.GetString() ?? "" : "その他";
+                            if (string.IsNullOrEmpty(owner) || string.IsNullOrEmpty(repo)) continue;
 
-                            if (string.IsNullOrEmpty(name)) name = repo;
-                            if (string.IsNullOrEmpty(name)) continue;
+                            string tagName = item.TryGetProperty("tag_name", out var tn) ? tn.GetString() ?? "" : "";
+                            string relName = item.TryGetProperty("name", out var n) ? n.GetString() ?? "" : tagName;
+                            string fileName = item.TryGetProperty("file_name", out var fn) ? fn.GetString() ?? "" : "";
+                            string downloadUrl = item.TryGetProperty("browser_download_url", out var dl) ? dl.GetString() ?? "" : "";
+                            DateTime pubDate = DateTime.MinValue;
+                            if (item.TryGetProperty("published_at", out var pa) && DateTime.TryParse(pa.GetString(), out var pd))
+                                pubDate = pd;
+                            bool isPre = item.TryGetProperty("prerelease", out var pre) && pre.GetBoolean();
 
+                            var releaseDetail = new GitHubReleaseDetail
+                            {
+                                TagName = !string.IsNullOrEmpty(tagName) ? tagName : relName,
+                                FileName = fileName,
+                                BrowserDownloadUrl = downloadUrl,
+                                PublishedAt = pubDate,
+                                Prerelease = isPre
+                            };
+
+                            // catalog 内で同一リポジトリのプラグインを検索（バージョン違いは同一プラグインに集約）
                             var existing = catalog.FirstOrDefault(p =>
                                 (!string.IsNullOrEmpty(p.Owner) && !string.IsNullOrEmpty(p.Repo) &&
                                  p.Owner.Equals(owner, StringComparison.OrdinalIgnoreCase) &&
                                  p.Repo.Equals(repo, StringComparison.OrdinalIgnoreCase)) ||
                                 (!string.IsNullOrEmpty(p.Url) && p.Url.Contains($"github.com/{owner}/{repo}", StringComparison.OrdinalIgnoreCase)));
 
-                            if (existing == null)
+                            if (existing != null)
                             {
-                                catalog.Add(new PluginCatalogItem
+                                existing.EnsureGitHubOwnerRepo();
+                                if (existing.Releases.All(rel => rel.TagName != releaseDetail.TagName))
                                 {
-                                    Name = name,
-                                    Author = author,
-                                    Description = desc,
-                                    Type = type,
+                                    existing.Releases.Add(releaseDetail);
+                                }
+                                existing.ReleaseLoaded = true;
+                                existing.HasNoRelease = false;
+                                if (existing.SelectedVersion == null || releaseDetail.PublishedAt >= (existing.SelectedVersion?.PublishedAt ?? DateTime.MinValue))
+                                {
+                                    existing.SelectedVersion = releaseDetail;
+                                }
+                            }
+                            else
+                            {
+                                // YAML に未掲載のリポジトリの場合、リポジトリ単位で1件のみ追加
+                                var newPlugin = new PluginCatalogItem
+                                {
+                                    Name = repo,
+                                    Author = owner,
+                                    Description = "",
+                                    Type = "その他",
                                     Owner = owner,
                                     Repo = repo,
                                     Url = $"https://github.com/{owner}/{repo}",
                                     IsEnabled = true,
                                     IsYmlItem = false,
-                                    IsExternalGh = true
-                                });
+                                    IsExternalGh = true,
+                                    ReleaseLoaded = true,
+                                    HasNoRelease = false
+                                };
+                                newPlugin.Releases.Add(releaseDetail);
+                                newPlugin.SelectedVersion = releaseDetail;
+                                catalog.Add(newPlugin);
                             }
                         }
                     }
@@ -2557,6 +2554,27 @@ namespace YukkuriMovieMaker4Hub
                     string.Equals(p.DisplayType, filter.DisplayName, StringComparison.OrdinalIgnoreCase) ||
                     string.Equals(p.Type, filter.InternalName, StringComparison.OrdinalIgnoreCase));
             }
+
+            // 配布サイト動的フィルターの集計・更新
+            var siteGroups = _allOnlinePlugins
+                .GroupBy(p => string.IsNullOrWhiteSpace(p.SiteTag) ? "その他" : p.SiteTag)
+                .OrderByDescending(g => g.Count())
+                .ToList();
+
+            var currentStates = PluginSiteFilters.ToDictionary(f => f.SiteName, f => f.IsSelected, StringComparer.OrdinalIgnoreCase);
+
+            PluginSiteFilters.Clear();
+            foreach (var g in siteGroups)
+            {
+                bool isSelected = currentStates.TryGetValue(g.Key, out bool sel) ? sel : true;
+                PluginSiteFilters.Add(new PluginSiteFilterItem
+                {
+                    SiteName = g.Key,
+                    Count = g.Count(),
+                    IsSelected = isSelected
+                });
+            }
+
             OnPropertyChanged(nameof(PortalSiteGitHubText));
             OnPropertyChanged(nameof(PortalSiteBoothText));
             OnPropertyChanged(nameof(PortalSiteInfoText));
@@ -2572,6 +2590,10 @@ namespace YukkuriMovieMaker4Hub
                 .Where(f => f.IsSelected)
                 .Select(f => f.InternalName)
                 .ToList();
+
+            var selectedSites = PluginSiteFilters.Count > 0
+                ? PluginSiteFilters.Where(f => f.IsSelected).Select(f => f.SiteName).ToHashSet(StringComparer.OrdinalIgnoreCase)
+                : null;
 
             var query = OnlinePluginSearchText?.Trim().ToLower() ?? "";
 
@@ -2595,18 +2617,21 @@ namespace YukkuriMovieMaker4Hub
                 string typeName = string.IsNullOrEmpty(p.Type) ? "その他" : p.Type;
                 if (selectedTypes.Count > 0 && !selectedTypes.Contains(typeName)) return false;
 
+                // 状況フィルター (0:すべて, 1:インストール済み, 2:未インストール, 3:更新あり)
+                if (PortalInstallFilterIndex == 1 && !p.IsInstalled) return false;
+                if (PortalInstallFilterIndex == 2 && p.IsInstalled) return false;
+                if (PortalInstallFilterIndex == 3 && !p.HasUpdate) return false;
+
                 // 配布ステータス (0:すべて, 1:配布中, 2:配布終了)
                 if (PortalStatusIndex == 1 && !p.IsEnabled) return false;
                 if (PortalStatusIndex == 2 && p.IsEnabled) return false;
 
-                // 配布サイト
-                bool isInfoSite = p.SiteTag == "情報サイト";
-                bool isOtherSite = !p.IsGitHub && !p.IsBooth && !isInfoSite;
-                bool siteMatch = (PortalSiteGitHub && p.IsGitHub) ||
-                                 (PortalSiteBooth && p.IsBooth) ||
-                                 (PortalSiteInfo && isInfoSite) ||
-                                 (PortalSiteOther && isOtherSite);
-                if (!siteMatch) return false;
+                // 配布サイト動的フィルター
+                if (selectedSites != null)
+                {
+                    string tag = string.IsNullOrWhiteSpace(p.SiteTag) ? "その他" : p.SiteTag;
+                    if (!selectedSites.Contains(tag)) return false;
+                }
 
                 // GitHub/Booth未掲載切替 (IsYmlItem)
                 if (p.IsGitHub)
@@ -2703,20 +2728,20 @@ namespace YukkuriMovieMaker4Hub
         }
 
         private int _portalGitHubExtraIndex = 0; // 0:非表示, 1:表示, 2:のみ表示
-        public int PortalGitHubExtraIndex { get => _portalGitHubExtraIndex; set { _portalGitHubExtraIndex = value; OnPropertyChanged(nameof(PortalGitHubExtraIndex)); } }
+        public int PortalGitHubExtraIndex { get => _portalGitHubExtraIndex; set { _portalGitHubExtraIndex = value; OnPropertyChanged(nameof(PortalGitHubExtraIndex)); ApplyOnlinePluginFilter(); } }
         private int _portalBoothExtraIndex = 0;
-        public int PortalBoothExtraIndex { get => _portalBoothExtraIndex; set { _portalBoothExtraIndex = value; OnPropertyChanged(nameof(PortalBoothExtraIndex)); } }
+        public int PortalBoothExtraIndex { get => _portalBoothExtraIndex; set { _portalBoothExtraIndex = value; OnPropertyChanged(nameof(PortalBoothExtraIndex)); ApplyOnlinePluginFilter(); } }
 
         private int _portalSortFieldIndex = 0; // 0:公開日, 1:更新日, 2:名前, 3:作者, 4:カテゴリ, 5:価格, 6:配布元
-        public int PortalSortFieldIndex { get => _portalSortFieldIndex; set { _portalSortFieldIndex = value; OnPropertyChanged(nameof(PortalSortFieldIndex)); } }
+        public int PortalSortFieldIndex { get => _portalSortFieldIndex; set { _portalSortFieldIndex = value; OnPropertyChanged(nameof(PortalSortFieldIndex)); ApplyOnlinePluginFilter(); } }
         private bool _portalSortAscending = true;
-        public bool PortalSortAscending { get => _portalSortAscending; set { _portalSortAscending = value; OnPropertyChanged(nameof(PortalSortAscending)); } }
+        public bool PortalSortAscending { get => _portalSortAscending; set { _portalSortAscending = value; OnPropertyChanged(nameof(PortalSortAscending)); ApplyOnlinePluginFilter(); } }
 
         private int _portalPageSizeIndex = 2; // 0:5, 1:10, 2:20, 3:50, 4:100, 5:全表示
-        public int PortalPageSizeIndex { get => _portalPageSizeIndex; set { _portalPageSizeIndex = value; OnPropertyChanged(nameof(PortalPageSizeIndex)); } }
+        public int PortalPageSizeIndex { get => _portalPageSizeIndex; set { _portalPageSizeIndex = value; OnPropertyChanged(nameof(PortalPageSizeIndex)); PortalCurrentPage = 1; ApplyOnlinePluginFilter(); } }
 
         private int _portalCurrentPage = 1;
-        public int PortalCurrentPage { get => _portalCurrentPage; set { _portalCurrentPage = value; OnPropertyChanged(nameof(PortalCurrentPage)); } }
+        public int PortalCurrentPage { get => _portalCurrentPage; set { _portalCurrentPage = value; OnPropertyChanged(nameof(PortalCurrentPage)); ApplyOnlinePluginFilter(); } }
         private int _portalTotalPages = 1;
         public int PortalTotalPages { get => _portalTotalPages; set { _portalTotalPages = value; OnPropertyChanged(nameof(PortalTotalPages)); } }
         private int _portalTotalCount = 0;
@@ -2725,6 +2750,9 @@ namespace YukkuriMovieMaker4Hub
         public int PortalDisplayStart { get => _portalDisplayStart; set { _portalDisplayStart = value; OnPropertyChanged(nameof(PortalDisplayStart)); } }
         private int _portalDisplayEnd = 0;
         public int PortalDisplayEnd { get => _portalDisplayEnd; set { _portalDisplayEnd = value; OnPropertyChanged(nameof(PortalDisplayEnd)); } }
+
+        private int _portalInstallFilterIndex = 0; // 0:すべて, 1:インストール済み, 2:未インストール, 3:更新あり
+        public int PortalInstallFilterIndex { get => _portalInstallFilterIndex; set { _portalInstallFilterIndex = value; OnPropertyChanged(nameof(PortalInstallFilterIndex)); ApplyOnlinePluginFilter(); } }
 
         private double _portalCardWidth = 260;
         public double PortalCardWidth { get => _portalCardWidth; set { _portalCardWidth = value; OnPropertyChanged(nameof(PortalCardWidth)); } }
@@ -2818,6 +2846,7 @@ namespace YukkuriMovieMaker4Hub
 
         private void SelectAllSiteFilters_Click(object sender, RoutedEventArgs e)
         {
+            foreach (var s in PluginSiteFilters) s.IsSelected = true;
             PortalSiteGitHub = true;
             PortalSiteBooth = true;
             PortalSiteInfo = true;
@@ -2827,6 +2856,7 @@ namespace YukkuriMovieMaker4Hub
 
         private void ClearAllSiteFilters_Click(object sender, RoutedEventArgs e)
         {
+            foreach (var s in PluginSiteFilters) s.IsSelected = false;
             PortalSiteGitHub = false;
             PortalSiteBooth = false;
             PortalSiteInfo = false;
@@ -2849,11 +2879,13 @@ namespace YukkuriMovieMaker4Hub
         {
             OnlinePluginSearchText = string.Empty;
             foreach (var t in PluginTypeFilters) t.IsSelected = true;
+            foreach (var s in PluginSiteFilters) s.IsSelected = true;
             PortalSiteGitHub = true;
             PortalSiteBooth = true;
             PortalSiteInfo = true;
             PortalSiteOther = true;
             PortalStatusIndex = 0;
+            PortalInstallFilterIndex = 0;
             PortalGitHubExtraIndex = 0;
             PortalBoothExtraIndex = 0;
             PortalSortFieldIndex = 0;

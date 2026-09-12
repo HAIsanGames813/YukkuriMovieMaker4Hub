@@ -1,8 +1,6 @@
-﻿using Microsoft.Win32;
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Drawing;
 using System.IO;
 using System.IO.Compression;
 using System.Net.Http;
@@ -10,8 +8,7 @@ using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Interop;
-using System.Windows.Media.Imaging;
+using System.Windows.Media;
 
 namespace YukkuriMovieMaker4Hub
 {
@@ -20,224 +17,190 @@ namespace YukkuriMovieMaker4Hub
         private static readonly HttpClient _http = new HttpClient();
         private const string YMM4_RELEASES_API = "https://api.github.com/repos/manju-summoner/YukkuriMovieMaker4/releases";
 
-        public bool IsNewDownload { get; }
-        public string? InstanceName => NameTextBox.Text.Trim();
-        public string? IconPath => _iconInfo.IconPath;
+        public bool IsNewDownload => ModeComboBox.SelectedIndex == 0;
+        public string InstanceName => string.IsNullOrWhiteSpace(NameTextBox.Text) || NameTextBox.Text == "名前"
+            ? "YukkuriMovieMaker4"
+            : NameTextBox.Text.Trim();
+
         public string? ResultExePath { get; private set; }
-        // 引き継ぎ対象ファイルリスト（ファイル名のみ）
         public List<string> InheritedSettingFiles { get; private set; } = new List<string>();
 
-        /// <summary>アイコン設定を一時保持するダミーInstanceInfo</summary>
-        private readonly InstanceInfo _iconInfo = new InstanceInfo();
+        private string _selectedColor = "#D48800";
         private CancellationTokenSource? _cts;
-        // 新規DL時の初期インストール先：Hub exeと同階層の instance フォルダ
+
         private static string DefaultInstallBase =>
             Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "instance");
 
-        // ────────────────────────────────────────
-        // コンストラクタ
-        // ────────────────────────────────────────
-
-        public InstanceSetupDialog(bool isNewDownload, string? defaultName = null)
+        public InstanceSetupDialog(string? defaultName = null)
         {
             InitializeComponent();
             ThemeHelper.Sync(this);
-            IsNewDownload = isNewDownload;
-            _http.DefaultRequestHeaders.UserAgent.ParseAdd("YukkuriMovieMaker4Hub");
 
-            if (isNewDownload)
+            if (_http.DefaultRequestHeaders.UserAgent.Count == 0)
             {
-                TitleText.Text = Translate.NewInstanceSetupTitle;
-                OkButton.Content = Translate.DownloadAndCreate;
-                EditionPanel.Visibility = Visibility.Visible;
-                InstallFolderPanel.Visibility = Visibility.Visible;
-                // DL前でもアイコン設定可能（exeなし状態でも開く）
-                if (IconEditorButton != null) IconEditorButton.IsEnabled = true;
-            }
-            else
-            {
-                TitleText.Text = Translate.InstanceSetupTitle;
-                OkButton.Content = Translate.Add;
-                if (IconEditorButton != null) IconEditorButton.IsEnabled = true;
+                _http.DefaultRequestHeaders.UserAgent.ParseAdd("YukkuriMovieMaker4Hub");
             }
 
             if (!string.IsNullOrEmpty(defaultName))
+            {
                 NameTextBox.Text = defaultName;
+            }
 
-            // 新規DL時：インストール先の初期値を instance フォルダに設定
-            if (isNewDownload)
+            // 初期ディレクトリ作成確認
+            try
             {
-                string defaultBase = DefaultInstallBase;
-                if (!Directory.Exists(defaultBase))
-                    try { Directory.CreateDirectory(defaultBase); } catch { }
-                InstallFolderTextBox.Text = defaultBase;
+                if (!Directory.Exists(DefaultInstallBase))
+                    Directory.CreateDirectory(DefaultInstallBase);
+            }
+            catch { }
+        }
+
+        public InstanceSetupDialog(string exePath, string defaultName) : this(defaultName)
+        {
+            ModeComboBox.SelectedIndex = 1; // 既存追加
+            ExePathTextBox.Text = exePath;
+        }
+
+        private void ModeComboBox_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        {
+            if (EditionLabel == null || ExePathLabel == null) return;
+
+            bool isNew = ModeComboBox.SelectedIndex == 0;
+            EditionLabel.Visibility = isNew ? Visibility.Visible : Visibility.Collapsed;
+            EditionComboBox.Visibility = isNew ? Visibility.Visible : Visibility.Collapsed;
+            ExePathLabel.Visibility = isNew ? Visibility.Collapsed : Visibility.Visible;
+            ExePathPanel.Visibility = isNew ? Visibility.Collapsed : Visibility.Visible;
+
+            DownloadButton.Visibility = isNew ? Visibility.Visible : Visibility.Collapsed;
+            AddButton.Visibility = isNew ? Visibility.Collapsed : Visibility.Visible;
+        }
+
+        private void IconTypeComboBox_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        {
+            if (IconImagePanel == null || IconColorPanel == null) return;
+
+            switch (IconTypeComboBox.SelectedIndex)
+            {
+                case 0: // 画像
+                    IconImagePanel.Visibility = Visibility.Visible;
+                    IconColorPanel.Visibility = Visibility.Collapsed;
+                    break;
+                case 1: // 単色
+                    IconImagePanel.Visibility = Visibility.Collapsed;
+                    IconColorPanel.Visibility = Visibility.Visible;
+                    break;
+                case 2: // デフォルト
+                default:
+                    IconImagePanel.Visibility = Visibility.Collapsed;
+                    IconColorPanel.Visibility = Visibility.Collapsed;
+                    break;
             }
         }
 
-        /// <summary>既存exe追加用：exeパスを渡してアイコンを自動設定</summary>
-        public InstanceSetupDialog(string exePath, string defaultName) : this(false, defaultName)
+        private void BrowseExe_Click(object sender, RoutedEventArgs e)
         {
-            _iconInfo.ExePath = exePath;
-            if (IconEditorButton != null) IconEditorButton.IsEnabled = true;
-            RefreshIconPreview();
-        }
-
-        // ────────────────────────────────────────
-        // アイコン設定
-        // ────────────────────────────────────────
-
-        private void OpenIconEditor_Click(object sender, RoutedEventArgs e)
-        {
-            var dlg = new IconEditorDialog(_iconInfo) { Owner = this };
-            if (dlg.ShowDialog() != true) return;
-            _iconInfo.IconPath = dlg.ResultIconPath;
-            _iconInfo.IconScale = dlg.ResultScale;
-            _iconInfo.IconOffsetX = dlg.ResultOffsetX;
-            _iconInfo.IconOffsetY = dlg.ResultOffsetY;
-            _iconInfo.IconBgType = dlg.ResultBgType;
-            _iconInfo.IconBgColor1 = dlg.ResultBgColor1;
-            _iconInfo.IconBgColor2 = dlg.ResultBgColor2;
-            _iconInfo.IconBgGradientAngle = dlg.ResultBgGradientAngle;
-            _iconInfo.IconBgImagePath = dlg.ResultBgImagePath;
-            RefreshIconPreview();
-        }
-
-        /// <summary>アイコン設定を対象 InstanceInfo にコピーする</summary>
-        public void CopyIconSettingsTo(InstanceInfo target)
-        {
-            target.IconPath = _iconInfo.IconPath;
-            target.IconScale = _iconInfo.IconScale;
-            target.IconOffsetX = _iconInfo.IconOffsetX;
-            target.IconOffsetY = _iconInfo.IconOffsetY;
-            target.IconBgType = _iconInfo.IconBgType;
-            target.IconBgColor1 = _iconInfo.IconBgColor1;
-            target.IconBgColor2 = _iconInfo.IconBgColor2;
-            target.IconBgGradientAngle = _iconInfo.IconBgGradientAngle;
-            target.IconBgImagePath = _iconInfo.IconBgImagePath;
-        }
-
-        /// <summary>小プレビューを更新する</summary>
-        private void RefreshIconPreview()
-        {
-            // 背景
-            if (IconPreviewBg != null)
+            var dialog = new OpenFileDialog
             {
-                switch (_iconInfo.IconBgType)
-                {
-                    case "Solid":
-                        try
-                        {
-                            IconPreviewBg.Fill = new System.Windows.Media.SolidColorBrush(
-                            (System.Windows.Media.Color)System.Windows.Media.ColorConverter.ConvertFromString(_iconInfo.IconBgColor1));
-                        }
-                        catch { }
-                        break;
-                    case "Gradient":
-                        try
-                        {
-                            var c1 = (System.Windows.Media.Color)System.Windows.Media.ColorConverter.ConvertFromString(_iconInfo.IconBgColor1);
-                            var c2 = (System.Windows.Media.Color)System.Windows.Media.ColorConverter.ConvertFromString(_iconInfo.IconBgColor2);
-                            IconPreviewBg.Fill = new System.Windows.Media.LinearGradientBrush(c1, c2, _iconInfo.IconBgGradientAngle);
-                        }
-                        catch { }
-                        break;
-                    default:
-                        IconPreviewBg.Fill = System.Windows.Media.Brushes.Transparent;
-                        break;
-                }
-            }
-            // 画像
-            if (IconPreview == null) return;
-            IconPreview.Source = _iconInfo.IconImage;
-        }
-
-        // ────────────────────────────────────────
-        // インストール先選択
-        // ────────────────────────────────────────
-
-        private void BrowseFolder_Click(object sender, RoutedEventArgs e)
-        {
-            var dialog = new Microsoft.Win32.OpenFolderDialog
-            {
-                Title = Translate.InstallFolder
+                Filter = "YukkuriMovieMaker.exe|YukkuriMovieMaker.exe|すべての実行ファイル (*.exe)|*.exe",
+                Title = "YukkuriMovieMaker.exe を選択"
             };
             if (dialog.ShowDialog() == true)
-                InstallFolderTextBox.Text = dialog.FolderName;
+            {
+                ExePathTextBox.Text = dialog.FileName;
+                if (NameTextBox.Text == "名前" || string.IsNullOrWhiteSpace(NameTextBox.Text))
+                {
+                    string dirName = Path.GetFileName(Path.GetDirectoryName(dialog.FileName) ?? "") ?? "";
+                    if (!string.IsNullOrEmpty(dirName))
+                        NameTextBox.Text = dirName;
+                }
+            }
         }
 
-        // ────────────────────────────────────────
-        // OK / Cancel
-        // ────────────────────────────────────────
-
-        private async void Ok_Click(object sender, RoutedEventArgs e)
+        private void BrowseIcon_Click(object sender, RoutedEventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(NameTextBox.Text))
+            var dialog = new OpenFileDialog
             {
-                System.Windows.MessageBox.Show(Translate.InstanceNameLabel,
-                    "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                Filter = "画像ファイル (*.png;*.jpg;*.jpeg;*.ico)|*.png;*.jpg;*.jpeg;*.ico|すべてのファイル (*.*)|*.*",
+                Title = "アイコン画像を選択"
+            };
+            if (dialog.ShowDialog() == true)
+            {
+                IconPathTextBox.Text = dialog.FileName;
+            }
+        }
+
+        private void SelectColor_Click(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            Color initialColor;
+            try
+            {
+                initialColor = (Color)ColorConverter.ConvertFromString(_selectedColor);
+            }
+            catch
+            {
+                initialColor = Color.FromRgb(0xD4, 0x88, 0x00);
+            }
+
+            var dlg = new WpfColorPickerDialog(initialColor) { Owner = this };
+            if (dlg.ShowDialog() == true)
+            {
+                var c = dlg.SelectedColor;
+                _selectedColor = $"#{c.R:X2}{c.G:X2}{c.B:X2}";
+                try
+                {
+                    IconColorPanel.Background = new SolidColorBrush(c);
+                }
+                catch { }
+            }
+        }
+
+        private void Add_Click(object sender, RoutedEventArgs e)
+        {
+            string exePath = ExePathTextBox.Text.Trim();
+            if (string.IsNullOrEmpty(exePath) || !File.Exists(exePath))
+            {
+                MessageBox.Show("有効な YukkuriMovieMaker.exe のパスを指定してください。", "エラー", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
-            if (IsNewDownload)
-            {
-                if (string.IsNullOrWhiteSpace(InstallFolderTextBox.Text))
-                {
-                    System.Windows.MessageBox.Show(Translate.InstallFolder,
-                        "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
-                    return;
-                }
-                await DownloadAndInstallAsync();
-            }
-            else
-            {
-                DialogResult = true;
-            }
+
+            ResultExePath = exePath;
+            DialogResult = true;
         }
 
-        private void Cancel_Click(object sender, RoutedEventArgs e)
+        private async void Download_Click(object sender, RoutedEventArgs e)
         {
-            _cts?.Cancel();
-            DialogResult = false;
+            await DownloadAndInstallAsync();
         }
-
-        // ────────────────────────────────────────
-        // ダウンロード & インストール
-        // ────────────────────────────────────────
 
         private async Task DownloadAndInstallAsync()
         {
-            OkButton.IsEnabled = false;
-            CancelButton.IsEnabled = false;
-            DownloadProgressPanel.Visibility = Visibility.Visible;
+            DownloadButton.IsEnabled = false;
+            DownloadProgressBar.Visibility = Visibility.Visible;
+            DownloadStatusText.Visibility = Visibility.Visible;
             _cts = new CancellationTokenSource();
 
             try
             {
-                bool isLite = LiteEdition.IsChecked == true;
+                bool isLite = EditionComboBox.SelectedIndex == 1;
 
-                // ① GitHub API から最新リリースのDL URLを取得
-                SetStatus(Translate.CheckingLatestVersion, 5);
+                SetStatus("最新バージョンの情報を確認中...", 5);
                 string downloadUrl = await GetLatestDownloadUrlAsync(isLite, _cts.Token);
 
                 if (string.IsNullOrEmpty(downloadUrl))
                 {
-                    System.Windows.MessageBox.Show(
-                        Translate.DownloadUrlFailed,
-                        "エラー", MessageBoxButton.OK, MessageBoxImage.Error);
+                    MessageBox.Show("ダウンロードURLの取得に失敗しました。", "エラー", MessageBoxButton.OK, MessageBoxImage.Error);
                     ResetUi();
                     return;
                 }
 
-                string fileName = Uri.UnescapeDataString(
-                    System.IO.Path.GetFileName(new Uri(downloadUrl).AbsolutePath));
-                string installBase = InstallFolderTextBox.Text;
-                string tempZipPath = System.IO.Path.Combine(installBase, fileName);
+                string fileName = Uri.UnescapeDataString(Path.GetFileName(new Uri(downloadUrl).AbsolutePath));
+                string installBase = DefaultInstallBase;
+                string tempZipPath = Path.Combine(installBase, fileName);
 
-                // ② zipをダウンロード
-                SetStatus($"{Translate.Acquiring}: {fileName}", 10);
+                SetStatus($"ダウンロード中: {fileName}", 10);
 
                 using (var req = new HttpRequestMessage(HttpMethod.Get, downloadUrl))
-                using (var res = await _http.SendAsync(req,
-                    HttpCompletionOption.ResponseHeadersRead, _cts.Token))
+                using (var res = await _http.SendAsync(req, HttpCompletionOption.ResponseHeadersRead, _cts.Token))
                 {
                     res.EnsureSuccessStatusCode();
                     long total = res.Content.Headers.ContentLength ?? 0;
@@ -255,22 +218,18 @@ namespace YukkuriMovieMaker4Hub
                         if (total > 0)
                         {
                             DownloadProgressBar.Value = 10 + (double)read / total * 60;
-                            DownloadSizeText.Text =
-                                $"{read / 1024.0 / 1024:F1} MB / {total / 1024.0 / 1024:F1} MB";
+                            DownloadStatusText.Text = $"{read / 1024.0 / 1024:F1} MB / {total / 1024.0 / 1024:F1} MB";
                         }
                     }
                 }
 
-                // ③ インスタンス名のフォルダを作成してその中に解凍する
-                SetStatus(Translate.Extracting, 75);
-                string instanceFolderName = NameTextBox.Text.Trim();
-                string finalDir = System.IO.Path.Combine(installBase, instanceFolderName);
+                SetStatus("ファイルを展開中...", 75);
+                string instanceFolderName = InstanceName;
+                string finalDir = Path.Combine(installBase, instanceFolderName);
 
                 if (Directory.Exists(finalDir))
                 {
-                    var r = System.Windows.MessageBox.Show(
-                        Translate.FolderAlreadyExists,
-                        "Confirm", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                    var r = MessageBox.Show($"フォルダ「{instanceFolderName}」は既に存在します。上書きしますか？", "確認", MessageBoxButton.YesNo, MessageBoxImage.Question);
                     if (r != MessageBoxResult.Yes)
                     {
                         File.Delete(tempZipPath);
@@ -280,49 +239,36 @@ namespace YukkuriMovieMaker4Hub
                     Directory.Delete(finalDir, true);
                 }
 
-                // zip内にルートフォルダが1つある場合は中身だけ展開してfinalDirに配置
-                string tempExtractDir = System.IO.Path.Combine(installBase, "__ymm4_tmp_" + Guid.NewGuid().ToString("N"));
+                string tempExtractDir = Path.Combine(installBase, "__ymm4_tmp_" + Guid.NewGuid().ToString("N"));
                 ZipFile.ExtractToDirectory(tempZipPath, tempExtractDir);
 
-                // zipのトップ直下にフォルダが1つだけある場合はその中身をfinalDirとして使う
                 var topDirs = Directory.GetDirectories(tempExtractDir);
                 var topFiles = Directory.GetFiles(tempExtractDir);
-                string sourceDir = (topDirs.Length == 1 && topFiles.Length == 0)
-                    ? topDirs[0]
-                    : tempExtractDir;
+                string sourceDir = (topDirs.Length == 1 && topFiles.Length == 0) ? topDirs[0] : tempExtractDir;
 
                 Directory.Move(sourceDir, finalDir);
                 if (Directory.Exists(tempExtractDir))
                     Directory.Delete(tempExtractDir, true);
 
-                // ④ zip削除
-                SetStatus(Translate.Cleanup, 92);
+                SetStatus("クリーンアップ中...", 92);
                 File.Delete(tempZipPath);
 
-                // ⑤ YukkuriMovieMaker.exe を探す
-                SetStatus(Translate.Complete, 100);
+                SetStatus("完了", 100);
                 string exePath = FindExe(finalDir);
                 if (string.IsNullOrEmpty(exePath))
                     exePath = FindExeInDirectory(installBase);
 
                 if (string.IsNullOrEmpty(exePath))
                 {
-                    System.Windows.MessageBox.Show(
-                        Translate.ExeNotFound,
-                        "警告", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    MessageBox.Show("YukkuriMovieMaker.exe が見つかりませんでした。", "警告", MessageBoxButton.OK, MessageBoxImage.Warning);
                     ResetUi();
                     return;
                 }
 
                 ResultExePath = exePath;
 
-                // ⑥ アイコン設定ボタンを有効化
-                _iconInfo.ExePath = exePath;
-                if (IconEditorButton != null) IconEditorButton.IsEnabled = true;
-                RefreshIconPreview();
-
-                // ⑦ 設定引き継ぎ：一度起動してsettingsフォルダを生成してからダイアログを出す
-                SetStatus(Translate.InheritSettingsLaunching, 100);
+                // 初回起動＆引き継ぎダイアログ
+                SetStatus("初期設定中...", 100);
                 await LaunchOnceAndWaitAsync(exePath);
                 ShowInheritDialog(exePath);
 
@@ -330,21 +276,15 @@ namespace YukkuriMovieMaker4Hub
             }
             catch (OperationCanceledException)
             {
-                SetStatus(Translate.Cancelled, 0);
+                SetStatus("キャンセルされました", 0);
                 ResetUi();
             }
             catch (Exception ex)
             {
-                System.Windows.MessageBox.Show(
-                    $"{Translate.InstallFailed}:\n{ex.Message}",
-                    "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show($"インストールに失敗しました:\n{ex.Message}", "エラー", MessageBoxButton.OK, MessageBoxImage.Error);
                 ResetUi();
             }
         }
-
-        // ────────────────────────────────────────
-        // GitHub API からDL URL取得
-        // ────────────────────────────────────────
 
         private async Task<string> GetLatestDownloadUrlAsync(bool isLite, CancellationToken token)
         {
@@ -357,7 +297,6 @@ namespace YukkuriMovieMaker4Hub
 
             if (releases.GetArrayLength() == 0) return string.Empty;
 
-            // releases[0] = 最新リリース
             var latest = releases[0];
             if (!latest.TryGetProperty("assets", out var assets)) return string.Empty;
 
@@ -377,13 +316,34 @@ namespace YukkuriMovieMaker4Hub
             return string.Empty;
         }
 
-        // ────────────────────────────────────────
-        // ヘルパー
-        // ────────────────────────────────────────
+        public void CopyIconSettingsTo(InstanceInfo target)
+        {
+            switch (IconTypeComboBox.SelectedIndex)
+            {
+                case 0: // 画像
+                    string iconPath = IconPathTextBox.Text.Trim();
+                    if (!string.IsNullOrEmpty(iconPath) && File.Exists(iconPath))
+                    {
+                        target.IconPath = iconPath;
+                        target.IconBgType = "None";
+                    }
+                    break;
+                case 1: // 単色
+                    target.IconBgType = "Solid";
+                    target.IconBgColor1 = _selectedColor;
+                    target.IconPath = null;
+                    break;
+                case 2: // デフォルト
+                default:
+                    target.IconPath = null;
+                    target.IconBgType = "None";
+                    break;
+            }
+        }
 
         private static string FindExe(string dir)
         {
-            string direct = System.IO.Path.Combine(dir, "YukkuriMovieMaker.exe");
+            string direct = Path.Combine(dir, "YukkuriMovieMaker.exe");
             if (File.Exists(direct)) return direct;
             return FindExeInDirectory(dir);
         }
@@ -392,8 +352,7 @@ namespace YukkuriMovieMaker4Hub
         {
             try
             {
-                var files = Directory.GetFiles(dir, "YukkuriMovieMaker.exe",
-                    SearchOption.AllDirectories);
+                var files = Directory.GetFiles(dir, "YukkuriMovieMaker.exe", SearchOption.AllDirectories);
                 return files.Length > 0 ? files[0] : string.Empty;
             }
             catch { return string.Empty; }
@@ -407,15 +366,11 @@ namespace YukkuriMovieMaker4Hub
 
         private void ResetUi()
         {
-            OkButton.IsEnabled = true;
-            CancelButton.IsEnabled = true;
+            DownloadButton.IsEnabled = true;
+            DownloadProgressBar.Visibility = Visibility.Collapsed;
+            DownloadStatusText.Visibility = Visibility.Collapsed;
         }
 
-        // ────────────────────────────────────────
-        // 設定引き継ぎ
-        // ────────────────────────────────────────
-
-        /// <summary>初回起動してsettingsフォルダを生成させ、終了を待つ</summary>
         private async Task LaunchOnceAndWaitAsync(string exePath)
         {
             try
@@ -423,14 +378,12 @@ namespace YukkuriMovieMaker4Hub
                 var psi = new System.Diagnostics.ProcessStartInfo(exePath) { UseShellExecute = true };
                 var proc = System.Diagnostics.Process.Start(psi);
                 if (proc == null) return;
-                // 最大15秒待ってsettingsフォルダが生成されるのを確認
                 string settingsDir = Path.Combine(Path.GetDirectoryName(exePath) ?? "", "user", "setting");
                 for (int i = 0; i < 30; i++)
                 {
                     await Task.Delay(500);
                     if (Directory.Exists(settingsDir) && Directory.GetDirectories(settingsDir).Length > 0) break;
                 }
-                // YMM4を閉じる
                 try { proc.CloseMainWindow(); proc.WaitForExit(3000); } catch { }
                 try { if (!proc.HasExited) proc.Kill(); } catch { }
             }

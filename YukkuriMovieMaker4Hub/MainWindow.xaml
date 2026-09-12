@@ -559,48 +559,54 @@
 
                                     <!-- 3. カテゴリ / タイプフィルター -->
                                     <Border Style="{StaticResource SideGroupStyle}">
-                                        <StackPanel>
-                                            <DockPanel Margin="0,0,0,6">
-                                                <TextBlock Text="カテゴリ" FontWeight="Bold" DockPanel.Dock="Left" VerticalAlignment="Center"/>
-                                                <StackPanel Orientation="Horizontal" DockPanel.Dock="Right" HorizontalAlignment="Right">
-                                                    <Button Click="SelectAllTypeFilters_Click" Padding="4,1" Margin="0,0,2,0" Content="全選択" FontSize="10"/>
-                                                    <Button Click="ClearAllTypeFilters_Click" Padding="4,1" Content="全解除" FontSize="10"/>
-                                                </StackPanel>
-                                            </DockPanel>
-                                            <ItemsControl ItemsSource="{Binding PluginTypeFilters}">
-                                                <ItemsControl.ItemTemplate>
-                                                    <DataTemplate>
-                                                        <CheckBox Content="{Binding DisplayTextWithCount}"
-                                                                  IsChecked="{Binding IsSelected, Mode=TwoWay}"
-                                                                  Click="PluginTypeFilter_Click"
-                                                                  Margin="0,2"/>
-                                                    </DataTemplate>
-                                                </ItemsControl.ItemTemplate>
-                                            </ItemsControl>
-                                        </StackPanel>
+                                        <Expander Header="カテゴリ" IsExpanded="True" FontWeight="Bold" Foreground="{DynamicResource TextBrush}">
+                                            <StackPanel Margin="0,4,0,0">
+                                                <DockPanel Margin="0,2,0,6">
+                                                    <TextBlock Text="一括設定" FontSize="11" Foreground="{DynamicResource SubTextBrush}" VerticalAlignment="Center"/>
+                                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                                                        <Button Click="SelectAllTypeFilters_Click" Padding="4,1" Margin="0,0,2,0" Content="全選択" FontSize="10" FontWeight="Normal"/>
+                                                        <Button Click="ClearAllTypeFilters_Click" Padding="4,1" Content="全解除" FontSize="10" FontWeight="Normal"/>
+                                                    </StackPanel>
+                                                </DockPanel>
+                                                <ItemsControl ItemsSource="{Binding PluginTypeFilters}">
+                                                    <ItemsControl.ItemTemplate>
+                                                        <DataTemplate>
+                                                            <CheckBox Content="{Binding DisplayTextWithCount}"
+                                                                      IsChecked="{Binding IsSelected, Mode=TwoWay}"
+                                                                      Click="PluginTypeFilter_Click"
+                                                                      FontWeight="Normal"
+                                                                      Margin="0,2"/>
+                                                        </DataTemplate>
+                                                    </ItemsControl.ItemTemplate>
+                                                </ItemsControl>
+                                            </StackPanel>
+                                        </Expander>
                                     </Border>
 
                                     <!-- 4. 配布サイト種別 (動的一覧・全サイト名分類) -->
                                     <Border Style="{StaticResource SideGroupStyle}">
-                                        <StackPanel>
-                                            <DockPanel Margin="0,0,0,6">
-                                                <TextBlock Text="配布サイト" FontWeight="Bold" DockPanel.Dock="Left" VerticalAlignment="Center"/>
-                                                <StackPanel Orientation="Horizontal" DockPanel.Dock="Right" HorizontalAlignment="Right">
-                                                    <Button Click="SelectAllSiteFilters_Click" Padding="4,1" Margin="0,0,2,0" Content="全選択" FontSize="10"/>
-                                                    <Button Click="ClearAllSiteFilters_Click" Padding="4,1" Content="全解除" FontSize="10"/>
-                                                </StackPanel>
-                                            </DockPanel>
-                                            <ItemsControl ItemsSource="{Binding PluginSiteFilters}">
-                                                <ItemsControl.ItemTemplate>
-                                                    <DataTemplate>
-                                                        <CheckBox Content="{Binding DisplayTextWithCount}"
-                                                                  IsChecked="{Binding IsSelected, Mode=TwoWay}"
-                                                                  Click="PluginSiteFilter_Click"
-                                                                  Margin="0,2"/>
-                                                    </DataTemplate>
-                                                </ItemsControl.ItemTemplate>
-                                            </ItemsControl>
-                                        </StackPanel>
+                                        <Expander Header="配布サイト" IsExpanded="True" FontWeight="Bold" Foreground="{DynamicResource TextBrush}">
+                                            <StackPanel Margin="0,4,0,0">
+                                                <DockPanel Margin="0,2,0,6">
+                                                    <TextBlock Text="一括設定" FontSize="11" Foreground="{DynamicResource SubTextBrush}" VerticalAlignment="Center"/>
+                                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                                                        <Button Click="SelectAllSiteFilters_Click" Padding="4,1" Margin="0,0,2,0" Content="全選択" FontSize="10" FontWeight="Normal"/>
+                                                        <Button Click="ClearAllSiteFilters_Click" Padding="4,1" Content="全解除" FontSize="10" FontWeight="Normal"/>
+                                                    </StackPanel>
+                                                </DockPanel>
+                                                <ItemsControl ItemsSource="{Binding PluginSiteFilters}">
+                                                    <ItemsControl.ItemTemplate>
+                                                        <DataTemplate>
+                                                            <CheckBox Content="{Binding DisplayTextWithCount}"
+                                                                      IsChecked="{Binding IsSelected, Mode=TwoWay}"
+                                                                      Click="PluginSiteFilter_Click"
+                                                                      FontWeight="Normal"
+                                                                      Margin="0,2"/>
+                                                        </DataTemplate>
+                                                    </ItemsControl.ItemTemplate>
+                                                </ItemsControl>
+                                            </StackPanel>
+                                        </Expander>
                                     </Border>
 
                                     <!-- 5. 状況 (インストール状況コンボボックス) -->
