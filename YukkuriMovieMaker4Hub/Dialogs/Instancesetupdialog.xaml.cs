@@ -1,4 +1,4 @@
-﻿using Microsoft.Win32;
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -348,10 +348,17 @@ namespace YukkuriMovieMaker4Hub
         {
             try
             {
-                string settingsDir = Path.Combine(Path.GetDirectoryName(exePath) ?? "", "user", "setting");
-                var dlg = new SettingsInheritDialog(settingsDir) { Owner = this };
-                if (dlg.ShowDialog() == true)
-                    InheritedSettingFiles = dlg.SelectedFiles;
+                var mainWindow = Application.Current.MainWindow as MainWindow;
+                var instances = mainWindow?.Instances
+                    .Where(i => i.IsRealInstance && i.ExePath != exePath)
+                    .ToList();
+
+                if (instances != null && instances.Count > 0)
+                {
+                    var dlg = new SettingsInheritDialog(instances) { Owner = this };
+                    if (dlg.ShowDialog() == true)
+                        InheritedSettingFiles = dlg.SelectedFiles;
+                }
             }
             catch { }
         }

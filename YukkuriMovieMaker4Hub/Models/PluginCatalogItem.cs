@@ -93,7 +93,24 @@ namespace YukkuriMovieMaker4Hub
             }
         }
         public DateTime FirstPublishedAt => PublishedAt != default ? PublishedAt : (Releases != null && Releases.Count > 0 ? Releases.Min(r => r.PublishedAt) : DateTime.MinValue);
-        public DateTime LatestPublishedAt => UpdatedAt != default ? UpdatedAt : (Releases != null && Releases.Count > 0 ? Releases.Max(r => r.PublishedAt) : (FirstPublishedAt != DateTime.MinValue ? FirstPublishedAt : DateTime.MinValue));
+        public DateTime LatestPublishedAt
+        {
+            get
+            {
+                DateTime relMax = (Releases != null && Releases.Count > 0)
+                    ? Releases.Max(r => r.PublishedAt)
+                    : DateTime.MinValue;
+
+                DateTime pubDate = PublishedAt != default ? PublishedAt : DateTime.MinValue;
+                DateTime updDate = UpdatedAt != default ? UpdatedAt : DateTime.MinValue;
+
+                DateTime max = relMax;
+                if (updDate > max) max = updDate;
+                if (pubDate > max) max = pubDate;
+
+                return max != DateTime.MinValue ? max : (FirstPublishedAt != DateTime.MinValue ? FirstPublishedAt : DateTime.MinValue);
+            }
+        }
         public string LatestVersionName
         {
             get

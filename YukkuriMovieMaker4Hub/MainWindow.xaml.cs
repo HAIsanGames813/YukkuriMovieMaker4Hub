@@ -494,10 +494,10 @@ namespace YukkuriMovieMaker4Hub
                         SetThemeColors("#FFFFFF", "#F0F0F0", "#E0E0E0", "#000000", "#555555", "#2255BB", "#DDDDDD");
                         break;
                     case AppTheme.Dark:
-                        SetThemeColors("#252525", "#333333", "#444444", "#FFFFFF", "#AAAAAA", "#4CAF50", "#555555");
+                        SetThemeColors("#252525", "#333333", "#444444", "#FFFFFF", "#BBBBBB", "#4CAF50", "#555555");
                         break;
                     case AppTheme.Black:
-                        SetThemeColors("#000000", "#121212", "#1F1F1F", "#FFFFFF", "#888888", "#4CAF50", "#333333");
+                        SetThemeColors("#000000", "#121212", "#1F1F1F", "#FFFFFF", "#CCCCCC", "#4CAF50", "#333333");
                         break;
                 }
 
