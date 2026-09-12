@@ -341,9 +341,24 @@ namespace YukkuriMovieMaker4Hub
             runningTimer.Tick += (s, e) => RefreshRunningStatus();
             runningTimer.Start();
         }
+        public string HubVersionText => $"現在のバージョン: v{HubVersion}";
+
         private static readonly string HubVersion =
             System.Reflection.Assembly.GetExecutingAssembly().GetName().Version?.ToString(3) ?? "0.0.0";
-        private async Task CheckForHubUpdateAsync()
+
+        private static bool IsNewerVersion(string latestTag, string currentVersion)
+        {
+            if (string.IsNullOrEmpty(latestTag)) return false;
+            string v1Str = latestTag.TrimStart('v', 'V');
+            string v2Str = currentVersion.TrimStart('v', 'V');
+            if (Version.TryParse(v1Str, out var v1) && Version.TryParse(v2Str, out var v2))
+            {
+                return v1 > v2;
+            }
+            return !string.Equals(latestTag, currentVersion, StringComparison.OrdinalIgnoreCase);
+        }
+
+        private async Task CheckForHubUpdateAsync(bool isManual = false)
         {
             try
             {
@@ -357,36 +372,102 @@ namespace YukkuriMovieMaker4Hub
                     using var doc = JsonDocument.Parse(json);
                     var latestTag = doc.RootElement.GetProperty("tag_name").GetString() ?? string.Empty;
 
-                    if (!string.IsNullOrEmpty(latestTag) && latestTag != HubVersion)
+                    bool hasUpdate = IsNewerVersion(latestTag, HubVersion);
+
+                    if (hasUpdate)
                     {
-                        var assets = doc.RootElement.GetProperty("assets");
-                        if (assets.GetArrayLength() > 0)
+                        if (!isManual && !string.IsNullOrEmpty(_currentSettings.IgnoreHubUpdateTag) &&
+                            string.Equals(_currentSettings.IgnoreHubUpdateTag, latestTag, StringComparison.OrdinalIgnoreCase))
+                        {
+                            return;
+                        }
+
+                        string? downloadUrl = null;
+                        string? fileName = null;
+                        if (doc.RootElement.TryGetProperty("assets", out var assets) && assets.GetArrayLength() > 0)
                         {
                             var asset = assets[0];
-                            var downloadUrl = asset.GetProperty("browser_download_url").GetString();
-                            var fileName = asset.GetProperty("name").GetString();
+                            downloadUrl = asset.GetProperty("browser_download_url").GetString();
+                            fileName = asset.GetProperty("name").GetString();
+                        }
 
-                            if (!string.IsNullOrEmpty(downloadUrl) && !string.IsNullOrEmpty(fileName))
+                        var dlg = new HubUpdateDialog(HubVersion, latestTag, downloadUrl, fileName) { Owner = this };
+                        dlg.ShowDialog();
+
+                        if (dlg.DoNotShowAgain)
+                        {
+                            _currentSettings.IgnoreHubUpdateTag = latestTag;
+                            SaveAll();
+                        }
+
+                        if (dlg.ExecuteUpdate && !string.IsNullOrEmpty(downloadUrl) && !string.IsNullOrEmpty(fileName))
+                        {
+                            await DownloadAndExecuteUpdateAsync(downloadUrl, fileName);
+                        }
+                    }
+                    else if (isManual)
+                    {
+                        MessageBox.Show($"現在のバージョン（v{HubVersion}）は最新です。", "アップデート確認", MessageBoxButton.OK, MessageBoxImage.Information);
+                    }
+                }
+                else if (isManual)
+                {
+                    MessageBox.Show("最新情報の取得に失敗しました。ネットワーク接続を確認してください。", "エラー", MessageBoxButton.OK, MessageBoxImage.Warning);
+                }
+            }
+            catch (Exception ex)
+            {
+                if (isManual)
+                {
+                    MessageBox.Show($"アップデートの確認中にエラーが発生しました:\n{ex.Message}", "エラー", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
+        }
+
+        private async void CheckHubUpdate_Click(object sender, RoutedEventArgs e)
+        {
+            await CheckForHubUpdateAsync(isManual: true);
+        }
+
+        private async void ExecuteHubUpdate_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                using var request = new HttpRequestMessage(HttpMethod.Get, "https://api.github.com/repos/HAIsanGames813/YukkuriMovieMaker4Hub/releases/latest");
+                request.Headers.UserAgent.ParseAdd("YukkuriMovieMaker4Hub");
+
+                var response = await _http.SendAsync(request);
+                if (response.IsSuccessStatusCode)
+                {
+                    var json = await response.Content.ReadAsStringAsync();
+                    using var doc = JsonDocument.Parse(json);
+                    var latestTag = doc.RootElement.GetProperty("tag_name").GetString() ?? string.Empty;
+
+                    if (doc.RootElement.TryGetProperty("assets", out var assets) && assets.GetArrayLength() > 0)
+                    {
+                        var asset = assets[0];
+                        var downloadUrl = asset.GetProperty("browser_download_url").GetString();
+                        var fileName = asset.GetProperty("name").GetString();
+
+                        if (!string.IsNullOrEmpty(downloadUrl) && !string.IsNullOrEmpty(fileName))
+                        {
+                            var r = MessageBox.Show($"最新バージョン {latestTag} をダウンロードしてアップデートを実行しますか？", "アップデートの実行", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                            if (r == MessageBoxResult.Yes)
                             {
-                                var result = MessageBox.Show(
-                                    $"{Translate.UpdateAvailable}\nLocal: {HubVersion}\nLatest: {latestTag}\n\n{Translate.ConfirmUpdate}",
-                                    "Update Check",
-                                    MessageBoxButton.YesNo,
-                                    MessageBoxImage.Information);
-
-                                if (result == MessageBoxResult.Yes)
-                                {
-                                    await DownloadAndExecuteUpdateAsync(downloadUrl, fileName);
-                                }
+                                await DownloadAndExecuteUpdateAsync(downloadUrl, fileName);
                             }
+                            return;
                         }
                     }
                 }
+                MessageBox.Show("ダウンロード可能なアセットが見つかりませんでした。", "エラー", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
-            catch
+            catch (Exception ex)
             {
+                MessageBox.Show($"アップデート実行中にエラーが発生しました:\n{ex.Message}", "エラー", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
+
         private async Task DownloadAndExecuteUpdateAsync(string url, string fileName)
         {
             try
@@ -411,19 +492,12 @@ namespace YukkuriMovieMaker4Hub
                     FileName = savePath,
                     UseShellExecute = true
                 };
-                var process = Process.Start(psi);
-                if (process != null)
-                {
-                    await process.WaitForExitAsync();
-                    if (File.Exists(savePath))
-                    {
-                        File.Delete(savePath);
-                    }
-                }
+                Process.Start(psi);
+                Application.Current.Shutdown();
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"{Translate.DownloadError} {ex.Message}");
+                MessageBox.Show($"{Translate.DownloadError}\n{ex.Message}", "エラー", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
@@ -491,7 +565,7 @@ namespace YukkuriMovieMaker4Hub
                         SetThemeColors("#F0F0F0", "#FFFFFF", "#E5E5E5", "#000000", "#555555", "#0078D4", "#CCCCCC");
                         break;
                     case AppTheme.Light:
-                        SetThemeColors("#FFFFFF", "#F0F0F0", "#E0E0E0", "#000000", "#555555", "#2255BB", "#DDDDDD");
+                        SetThemeColors("#FFFFFF", "#FAFAFA", "#FFFFFF", "#000000", "#555555", "#0078D4", "#E0E0E0");
                         break;
                     case AppTheme.Dark:
                         SetThemeColors("#252525", "#333333", "#444444", "#FFFFFF", "#BBBBBB", "#4CAF50", "#555555");
@@ -508,8 +582,10 @@ namespace YukkuriMovieMaker4Hub
                     switch (mode)
                     {
                         case AppTheme.Windows:
-                        case AppTheme.Light:
                             aeroTheme.Color = DynamicAero2.ThemeColor.NormalColor;
+                            break;
+                        case AppTheme.Light:
+                            aeroTheme.Color = DynamicAero2.ThemeColor.Light;
                             break;
                         case AppTheme.Dark:
                             aeroTheme.Color = DynamicAero2.ThemeColor.Dark;

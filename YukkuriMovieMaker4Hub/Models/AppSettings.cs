@@ -28,5 +28,7 @@ namespace YukkuriMovieMaker4Hub
         public bool AutoOpenSiteOnBulkDownload { get; set; } = true;
         public bool IsViewTile { get; set; } = true;
         public List<string> ExcludeDirectories { get; set; } = new List<string>();
+        [JsonPropertyName("ignoreHubUpdateTag")]
+        public string? IgnoreHubUpdateTag { get; set; }
     }
 }

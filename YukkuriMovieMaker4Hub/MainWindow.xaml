@@ -1,4 +1,4 @@
-﻿<Window x:Class="YukkuriMovieMaker4Hub.MainWindow"
+<Window x:Class="YukkuriMovieMaker4Hub.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:local="clr-namespace:YukkuriMovieMaker4Hub"
@@ -1180,6 +1180,32 @@
                                     </DataTemplate>
                                 </ListBox.ItemTemplate>
                             </ListBox>
+
+                            <!-- アップデート -->
+                            <DockPanel Margin="0,16,0,6" LastChildFill="False">
+                                <TextBlock Text="アップデート" FontWeight="Bold"
+                                           VerticalAlignment="Center" DockPanel.Dock="Left"/>
+                            </DockPanel>
+                            <Border Style="{StaticResource SideGroupStyle}" Padding="12" Margin="0,0,0,16">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    <StackPanel VerticalAlignment="Center">
+                                        <TextBlock Text="{Binding HubVersionText}" FontWeight="Bold" FontSize="13"/>
+                                        <TextBlock Text="YukkuriMovieMaker4Hub の更新を確認・実行します"
+                                                   Foreground="{DynamicResource SubTextBrush}" FontSize="11" Margin="0,3,0,0"/>
+                                    </StackPanel>
+                                    <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+                                        <Button Click="CheckHubUpdate_Click" Content="アップデートを確認"
+                                                Height="28" Padding="12,0" Margin="0,0,8,0"/>
+                                        <Button Click="ExecuteHubUpdate_Click" Content="アップデートを実行"
+                                                Height="28" Padding="14,0"
+                                                Background="{DynamicResource AccentBrush}" Foreground="White" FontWeight="Bold"/>
+                                    </StackPanel>
+                                </Grid>
+                            </Border>
                         </StackPanel>
                     </ScrollViewer>
                 </TabItem>
