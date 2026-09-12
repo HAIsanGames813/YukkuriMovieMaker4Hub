@@ -3,9 +3,6 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Windows;
-using System.Windows.Interop;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
 
 namespace YukkuriMovieMaker4Hub
 {
@@ -21,131 +18,36 @@ namespace YukkuriMovieMaker4Hub
 
             NameTextBox.Text = instance.Name;
             ExePathTextBox.Text = instance.ExePath;
-
-            UpdateIconPreview();
+            IconPathTextBox.Text = instance.IconPath ?? string.Empty;
         }
-
-        // ────────────────────────────────────────
-        // アイコンプレビュー（小）
-        // ────────────────────────────────────────
-
-        private void UpdateIconPreview()
-        {
-            // 背景
-            if (IconPreviewBg != null)
-            {
-                var info = _instance;
-                switch (info.IconBgType)
-                {
-                    case "Solid":
-                        try { IconPreviewBg.Fill = new SolidColorBrush((Color)ColorConverter.ConvertFromString(info.IconBgColor1)); } catch { }
-                        break;
-                    case "Gradient":
-                        try
-                        {
-                            var c1 = (Color)ColorConverter.ConvertFromString(info.IconBgColor1);
-                            var c2 = (Color)ColorConverter.ConvertFromString(info.IconBgColor2);
-                            IconPreviewBg.Fill = new LinearGradientBrush(c1, c2, 45);
-                        }
-                        catch { }
-                        break;
-                    default:
-                        IconPreviewBg.Fill = Brushes.Transparent;
-                        break;
-                }
-            }
-
-            // スケール・オフセット反映
-            if (PreviewScaleXform != null)
-            {
-                PreviewScaleXform.ScaleX = _instance.IconScale;
-                PreviewScaleXform.ScaleY = _instance.IconScale;
-            }
-            if (PreviewTranslateXform != null)
-            {
-                PreviewTranslateXform.X = _instance.IconOffsetX;
-                PreviewTranslateXform.Y = _instance.IconOffsetY;
-            }
-            // 画像
-            if (IconPreviewSmall == null) return;
-            if (!string.IsNullOrEmpty(_instance.IconPath) && File.Exists(_instance.IconPath))
-            {
-                try
-                {
-                    var bmp = new BitmapImage();
-                    bmp.BeginInit();
-                    bmp.UriSource = new Uri(_instance.IconPath);
-                    bmp.CacheOption = BitmapCacheOption.OnLoad;
-                    bmp.EndInit();
-                    bmp.Freeze();
-                    IconPreviewSmall.Source = bmp;
-                    return;
-                }
-                catch { }
-            }
-            if (!string.IsNullOrEmpty(_instance.ExePath) && File.Exists(_instance.ExePath))
-            {
-                try
-                {
-                    var icon = System.Drawing.Icon.ExtractAssociatedIcon(_instance.ExePath);
-                    if (icon != null)
-                    {
-                        var bs = Imaging.CreateBitmapSourceFromHIcon(
-                            icon.Handle, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
-                        bs.Freeze();
-                        IconPreviewSmall.Source = bs;
-                    }
-                }
-                catch { }
-            }
-        }
-
-        // ────────────────────────────────────────
-        // アイコン設定ダイアログを開く
-        // ────────────────────────────────────────
-
-        private void OpenIconEditor_Click(object sender, RoutedEventArgs e)
-        {
-            var dlg = new IconEditorDialog(_instance) { Owner = this };
-            if (dlg.ShowDialog() != true) return;
-
-            // 結果を InstanceInfo に反映
-            _instance.IconPath = dlg.ResultIconPath;
-            _instance.IconScale = dlg.ResultScale;
-            _instance.IconOffsetX = dlg.ResultOffsetX;
-            _instance.IconOffsetY = dlg.ResultOffsetY;
-            _instance.IconBgType = dlg.ResultBgType;
-            _instance.IconBgColor1 = dlg.ResultBgColor1;
-            _instance.IconBgColor2 = dlg.ResultBgColor2;
-            _instance.IconBgGradientAngle = dlg.ResultBgGradientAngle;
-            _instance.IconBgImagePath = dlg.ResultBgImagePath;
-
-            UpdateIconPreview();
-        }
-
-        // ────────────────────────────────────────
-        // 参照パス変更
-        // ────────────────────────────────────────
 
         private void BrowseExe_Click(object sender, RoutedEventArgs e)
         {
             var dialog = new OpenFileDialog
             {
-                Filter = "YukkuriMovieMaker.exe|YukkuriMovieMaker.exe",
-                Title = Translate.SelectExeTitle
+                Filter = "YukkuriMovieMaker.exe|YukkuriMovieMaker.exe|すべての実行ファイル (*.exe)|*.exe",
+                Title = "YukkuriMovieMaker.exe を選択"
             };
             if (dialog.ShowDialog() == true)
             {
                 ExePathTextBox.Text = dialog.FileName;
-                UpdateIconPreview();
             }
         }
 
-        // ────────────────────────────────────────
-        // 設定の再引き継ぎ
-        // ────────────────────────────────────────
+        private void BrowseIcon_Click(object sender, RoutedEventArgs e)
+        {
+            var dialog = new OpenFileDialog
+            {
+                Filter = "画像ファイル (*.png;*.jpg;*.jpeg;*.ico)|*.png;*.jpg;*.jpeg;*.ico|すべてのファイル (*.*)|*.*",
+                Title = "アイコン画像を選択"
+            };
+            if (dialog.ShowDialog() == true)
+            {
+                IconPathTextBox.Text = dialog.FileName;
+            }
+        }
 
-        private void ReInherit_Click(object sender, RoutedEventArgs e)
+        private void InheritSettings_Click(object sender, RoutedEventArgs e)
         {
             var mainWindow = Application.Current.MainWindow as MainWindow;
             if (mainWindow == null) return;
@@ -156,7 +58,7 @@ namespace YukkuriMovieMaker4Hub
 
             if (instances.Count == 0)
             {
-                MessageBox.Show(Translate.NoOtherInstance, "Info", MessageBoxButton.OK, MessageBoxImage.Information);
+                MessageBox.Show("他に引き継ぎ可能なインスタンスが見つかりません。", "情報", MessageBoxButton.OK, MessageBoxImage.Information);
                 return;
             }
 
@@ -164,8 +66,7 @@ namespace YukkuriMovieMaker4Hub
             if (dlg.ShowDialog() == true && dlg.SelectedFiles.Count > 0)
             {
                 CopySettingsFiles(dlg.SelectedFiles, dlg.SourceExePath, ExePathTextBox.Text);
-                MessageBox.Show(string.Format(Translate.InheritComplete, dlg.SelectedFiles.Count),
-                    Translate.Complete, MessageBoxButton.OK, MessageBoxImage.Information);
+                MessageBox.Show($"{dlg.SelectedFiles.Count} 件の設定ファイルを引き継ぎました。", "完了", MessageBoxButton.OK, MessageBoxImage.Information);
             }
         }
 
@@ -185,7 +86,7 @@ namespace YukkuriMovieMaker4Hub
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"{Translate.InheritFailed}\n{ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show($"設定の引き継ぎに失敗しました:\n{ex.Message}", "エラー", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
@@ -196,17 +97,30 @@ namespace YukkuriMovieMaker4Hub
             return dirs.Length > 0 ? dirs[0].FullName : settingsDir;
         }
 
-        // ────────────────────────────────────────
-        // 適用 / キャンセル
-        // ────────────────────────────────────────
-
-        private void Apply_Click(object sender, RoutedEventArgs e)
+        private void Save_Click(object sender, RoutedEventArgs e)
         {
-            if (!string.IsNullOrWhiteSpace(NameTextBox.Text)) _instance.Name = NameTextBox.Text.Trim();
-            if (!string.IsNullOrWhiteSpace(ExePathTextBox.Text)) _instance.ExePath = ExePathTextBox.Text;
+            if (!string.IsNullOrWhiteSpace(NameTextBox.Text))
+            {
+                _instance.Name = NameTextBox.Text.Trim();
+            }
+
+            if (!string.IsNullOrWhiteSpace(ExePathTextBox.Text))
+            {
+                _instance.ExePath = ExePathTextBox.Text.Trim();
+            }
+
+            string iconPath = IconPathTextBox.Text.Trim();
+            if (!string.IsNullOrEmpty(iconPath) && File.Exists(iconPath))
+            {
+                _instance.IconPath = iconPath;
+            }
+            else
+            {
+                _instance.IconPath = null;
+            }
+            _instance.IconBgType = "None";
+
             DialogResult = true;
         }
-
-        private void Cancel_Click(object sender, RoutedEventArgs e) => DialogResult = false;
     }
 }

@@ -1,4 +1,4 @@
-using Microsoft.Win32;
+﻿using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -8,7 +8,6 @@ using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Media;
 
 namespace YukkuriMovieMaker4Hub
 {
@@ -25,7 +24,6 @@ namespace YukkuriMovieMaker4Hub
         public string? ResultExePath { get; private set; }
         public List<string> InheritedSettingFiles { get; private set; } = new List<string>();
 
-        private string _selectedColor = "#D48800";
         private CancellationTokenSource? _cts;
 
         private static string DefaultInstallBase =>
@@ -46,7 +44,6 @@ namespace YukkuriMovieMaker4Hub
                 NameTextBox.Text = defaultName;
             }
 
-            // 初期ディレクトリ作成確認
             try
             {
                 if (!Directory.Exists(DefaultInstallBase))
@@ -77,24 +74,10 @@ namespace YukkuriMovieMaker4Hub
 
         private void IconTypeComboBox_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
-            if (IconImagePanel == null || IconColorPanel == null) return;
+            if (IconImagePanel == null) return;
 
-            switch (IconTypeComboBox.SelectedIndex)
-            {
-                case 0: // 画像
-                    IconImagePanel.Visibility = Visibility.Visible;
-                    IconColorPanel.Visibility = Visibility.Collapsed;
-                    break;
-                case 1: // 単色
-                    IconImagePanel.Visibility = Visibility.Collapsed;
-                    IconColorPanel.Visibility = Visibility.Visible;
-                    break;
-                case 2: // デフォルト
-                default:
-                    IconImagePanel.Visibility = Visibility.Collapsed;
-                    IconColorPanel.Visibility = Visibility.Collapsed;
-                    break;
-            }
+            bool isImage = IconTypeComboBox.SelectedIndex == 0;
+            IconImagePanel.Visibility = isImage ? Visibility.Visible : Visibility.Collapsed;
         }
 
         private void BrowseExe_Click(object sender, RoutedEventArgs e)
@@ -126,31 +109,6 @@ namespace YukkuriMovieMaker4Hub
             if (dialog.ShowDialog() == true)
             {
                 IconPathTextBox.Text = dialog.FileName;
-            }
-        }
-
-        private void SelectColor_Click(object sender, System.Windows.Input.MouseButtonEventArgs e)
-        {
-            Color initialColor;
-            try
-            {
-                initialColor = (Color)ColorConverter.ConvertFromString(_selectedColor);
-            }
-            catch
-            {
-                initialColor = Color.FromRgb(0xD4, 0x88, 0x00);
-            }
-
-            var dlg = new WpfColorPickerDialog(initialColor) { Owner = this };
-            if (dlg.ShowDialog() == true)
-            {
-                var c = dlg.SelectedColor;
-                _selectedColor = $"#{c.R:X2}{c.G:X2}{c.B:X2}";
-                try
-                {
-                    IconColorPanel.Background = new SolidColorBrush(c);
-                }
-                catch { }
             }
         }
 
@@ -318,27 +276,23 @@ namespace YukkuriMovieMaker4Hub
 
         public void CopyIconSettingsTo(InstanceInfo target)
         {
-            switch (IconTypeComboBox.SelectedIndex)
+            if (IconTypeComboBox.SelectedIndex == 0) // 画像
             {
-                case 0: // 画像
-                    string iconPath = IconPathTextBox.Text.Trim();
-                    if (!string.IsNullOrEmpty(iconPath) && File.Exists(iconPath))
-                    {
-                        target.IconPath = iconPath;
-                        target.IconBgType = "None";
-                    }
-                    break;
-                case 1: // 単色
-                    target.IconBgType = "Solid";
-                    target.IconBgColor1 = _selectedColor;
+                string iconPath = IconPathTextBox.Text.Trim();
+                if (!string.IsNullOrEmpty(iconPath) && File.Exists(iconPath))
+                {
+                    target.IconPath = iconPath;
+                }
+                else
+                {
                     target.IconPath = null;
-                    break;
-                case 2: // デフォルト
-                default:
-                    target.IconPath = null;
-                    target.IconBgType = "None";
-                    break;
+                }
             }
+            else // デフォルト
+            {
+                target.IconPath = null;
+            }
+            target.IconBgType = "None";
         }
 
         private static string FindExe(string dir)

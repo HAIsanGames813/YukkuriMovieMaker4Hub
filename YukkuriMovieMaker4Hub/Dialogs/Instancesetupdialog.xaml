@@ -88,11 +88,10 @@
                 <TextBlock Grid.Row="2" Grid.Column="0" Text="アイコン" VerticalAlignment="Center" Margin="0,0,8,8"/>
                 <ComboBox x:Name="IconTypeComboBox" Grid.Row="2" Grid.Column="1" SelectedIndex="0" Height="26" Margin="0,0,0,8" SelectionChanged="IconTypeComboBox_SelectionChanged">
                     <ComboBoxItem Content="画像"/>
-                    <ComboBoxItem Content="単色"/>
                     <ComboBoxItem Content="デフォルト"/>
                 </ComboBox>
 
-                <!-- アイコン詳細：画像パス -->
+                <!-- アイコン詳細：画像パスのみ -->
                 <Grid x:Name="IconImagePanel" Grid.Row="3" Grid.Column="1" Margin="0,0,0,8">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
@@ -104,11 +103,6 @@
                               Data="M19,20H4C2.89,20 2,19.1 2,18V6C2,4.89 2.89,4 4,4H10L12,6H19A2,2 0 0,1 21,8H21L4,8V18L6.14,10H23.21L20.93,18.5C20.7,19.37 19.92,20 19,20Z"/>
                     </Button>
                 </Grid>
-
-                <!-- アイコン詳細：単色 -->
-                <Border x:Name="IconColorPanel" Grid.Row="3" Grid.Column="1" Height="26" Margin="0,0,0,8" Visibility="Collapsed"
-                        Background="#D48800" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="2"
-                        Cursor="Hand" MouseLeftButtonDown="SelectColor_Click" ToolTip="クリックして色を選択"/>
             </Grid>
         </ScrollViewer>
 
