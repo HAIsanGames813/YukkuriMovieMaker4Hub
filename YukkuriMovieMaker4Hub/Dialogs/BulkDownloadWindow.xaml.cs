@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 
@@ -11,18 +11,23 @@ namespace YukkuriMovieMaker4Hub
         public List<InstanceInfo> SelectedInstances => Instances.Where(i => i.IsSelected).ToList();
         public List<PluginCatalogItem> SelectedPlugins => TargetPlugins.Where(p => p.IsSelected).ToList();
 
-        public BulkDownloadWindow(List<PluginCatalogItem> targetPlugins, List<InstanceInfo> instances)
+        public BulkDownloadWindow(List<PluginCatalogItem> targetPlugins, List<InstanceInfo> instances, string? selectedInstanceId = null)
         {
             InitializeComponent();
             ThemeHelper.Sync(this);
 
             TargetPlugins = targetPlugins;
+            foreach (var p in TargetPlugins)
+            {
+                p.IsSelected = true;
+            }
+
             Instances = instances.Select(i => new InstanceInfo
             {
                 Id = i.Id,
                 Name = i.Name,
                 ExePath = i.ExePath,
-                IsSelected = false
+                IsSelected = string.IsNullOrEmpty(selectedInstanceId) || i.Id == selectedInstanceId
             }).ToList();
 
             this.DataContext = this;

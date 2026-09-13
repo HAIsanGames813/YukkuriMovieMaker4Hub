@@ -63,6 +63,21 @@ namespace YukkuriMovieMaker4Hub
             || (!string.IsNullOrEmpty(Owner) && !string.IsNullOrEmpty(Repo));
         public bool IsInstalled => LocalStatus != PluginLocalStatus.NotInstalled;
 
+        public string DisplayVersion
+        {
+            get
+            {
+                string tag = SelectedVersion?.TagName
+                             ?? (Releases != null && Releases.Count > 0 ? Releases[0].TagName : "")
+                             ?? LocalVersion;
+                if (string.IsNullOrEmpty(tag)) return "";
+                return tag.StartsWith("v", StringComparison.OrdinalIgnoreCase) ? tag : "v" + tag;
+            }
+        }
+
+        public string AuthorAndVersion => string.IsNullOrEmpty(DisplayVersion) ? Author : $"{Author} {DisplayVersion}";
+
+
         private bool _hasNoRelease;
         public bool HasNoRelease
         {
@@ -129,7 +144,7 @@ namespace YukkuriMovieMaker4Hub
                 return best?.TagName ?? Releases[0].TagName;
             }
         }
-        public string DisplayVersion => string.IsNullOrEmpty(LatestVersionName) ? "v1.0.0" : LatestVersionName;
+
 
         public List<PluginLink> AllLinks
         {

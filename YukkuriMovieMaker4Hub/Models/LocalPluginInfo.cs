@@ -26,13 +26,15 @@ namespace YukkuriMovieMaker4Hub
                     if (Directory.Exists(FullPath))
                     {
                         var enabledDlls = Directory.GetFiles(FullPath, "*.dll", SearchOption.AllDirectories);
-                        return enabledDlls.Length > 0;
+                        if (enabledDlls.Length > 0) return true;
+                        var disabledDlls = Directory.GetFiles(FullPath, "*.disabled", SearchOption.AllDirectories);
+                        if (disabledDlls.Length > 0) return false;
                     }
                     return true;
                 }
                 else
                 {
-                    return !FullPath.EndsWith(".disabled");
+                    return !FullPath.EndsWith(".disabled", StringComparison.OrdinalIgnoreCase);
                 }
             }
             set

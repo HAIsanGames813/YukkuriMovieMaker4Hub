@@ -268,29 +268,23 @@ namespace YukkuriMovieMaker4Hub
             if (SelectedInstance == null) return;
 
             Version.TryParse(SelectedInstance.GetLocalVersion(), out var localV);
+            var latestVersion = _ymmUpdates.Count > 0 ? _ymmUpdates[0].Version : null;
             var filteredUpdates = _ymmUpdates
                 .Where(u => u.Version > localV)
-                .Take(5)
+                .Take(10)
                 .ToList();
 
             if (filteredUpdates.Count == 0) return;
 
-            var sb = new StringBuilder();
-            sb.AppendLine($"{Translate.LatestVersion}: v{SelectedInstance.GetLocalVersion()}");
-            sb.AppendLine("------------------------------------");
-
-            foreach (var update in filteredUpdates)
+            var dlg = new YmmUpdateDialog(
+                instanceName: SelectedInstance.Name,
+                localVersion: SelectedInstance.GetLocalVersion() ?? "?",
+                latestVersion: latestVersion,
+                updates: filteredUpdates)
             {
-                sb.AppendLine($"■ {update.Title}");
-
-                string cleanDesc = Regex.Replace(update.Description, "<.*?>", string.Empty);
-                cleanDesc = cleanDesc.Replace(" ", "\n");
-
-                sb.AppendLine(cleanDesc);
-                sb.AppendLine();
-            }
-
-            MessageBox.Show(sb.ToString(), Translate.UpdateDetails, MessageBoxButton.OK, MessageBoxImage.Information);
+                Owner = this
+            };
+            dlg.ShowDialog();
         }
 
 
@@ -344,18 +338,31 @@ namespace YukkuriMovieMaker4Hub
         public string HubVersionText => $"現在のバージョン: v{HubVersion}";
 
         private static readonly string HubVersion =
-            System.Reflection.Assembly.GetExecutingAssembly().GetName().Version?.ToString(3) ?? "0.0.0";
+            System.Reflection.Assembly.GetExecutingAssembly().GetName().Version?.ToString(3) ?? "4.2.0";
 
         private static bool IsNewerVersion(string latestTag, string currentVersion)
         {
             if (string.IsNullOrEmpty(latestTag)) return false;
-            string v1Str = latestTag.TrimStart('v', 'V');
-            string v2Str = currentVersion.TrimStart('v', 'V');
-            if (Version.TryParse(v1Str, out var v1) && Version.TryParse(v2Str, out var v2))
+            string v1Str = latestTag.TrimStart('v', 'V').Trim();
+            string v2Str = currentVersion.TrimStart('v', 'V').Trim();
+
+            // "4.2" のような2要素の場合に備えて補正
+            static Version? ParseVer(string s)
             {
-                return v1 > v2;
+                if (Version.TryParse(s, out var v)) return v;
+                var parts = s.Split('.');
+                if (parts.Length == 1 && int.TryParse(parts[0], out int p0)) return new Version(p0, 0);
+                if (parts.Length == 2 && int.TryParse(parts[0], out int m0) && int.TryParse(parts[1], out int m1)) return new Version(m0, m1);
+                return null;
             }
-            return !string.Equals(latestTag, currentVersion, StringComparison.OrdinalIgnoreCase);
+
+            var ver1 = ParseVer(v1Str);
+            var ver2 = ParseVer(v2Str);
+            if (ver1 != null && ver2 != null)
+            {
+                return ver1 > ver2;
+            }
+            return false;
         }
 
         private async Task CheckForHubUpdateAsync(bool isManual = false)
@@ -1238,61 +1245,9 @@ namespace YukkuriMovieMaker4Hub
 
             RefreshLocalPlugins();
         }
-        private async void BulkDownload_Click(object sender, RoutedEventArgs e)
+        private void BulkDownload_Click(object sender, RoutedEventArgs e)
         {
-            var targets = OnlinePlugins.Where(p => p.IsSelected).ToList();
-            if (targets.Count == 0) return;
-
-            var dialog = new BulkDownloadWindow(targets, _currentSettings.Instances);
-            dialog.Owner = this;
-
-            if (dialog.ShowDialog() == true)
-            {
-                var selectedPlugins = dialog.SelectedPlugins;
-                var selectedInstances = dialog.SelectedInstances;
-
-                if (selectedPlugins.Count == 0 || selectedInstances.Count == 0) return;
-
-                var progressWin = new DownloadProgressWindow();
-                progressWin.Owner = this;
-                progressWin.Show();
-
-                int totalTasks = selectedPlugins.Count * selectedInstances.Count;
-                int currentTask = 0;
-
-                foreach (var plugin in selectedPlugins)
-                {
-                    if (plugin.Releases == null || plugin.Releases.Count == 0)
-                    {
-                        await LoadReleaseDetails(plugin);
-                    }
-
-                    var release = SelectedOnlinePlugin?.SelectedVersion;
-                    if (release == null) return;
-
-                    foreach (var instance in selectedInstances)
-                    {
-                        currentTask++;
-                        string statusMsg = $"[{currentTask}/{totalTasks}] {plugin.Name}";
-                        progressWin.UpdateStatus(statusMsg, ((double)(currentTask - 1) / totalTasks) * 100, $"{currentTask} / {totalTasks}");
-
-                        try
-                        {
-                            await ExecuteDownload(plugin, instance, progressWin, true);
-                        }
-                        catch (Exception ex)
-                        {
-                            progressWin.AddReadme(plugin.Name, $"Error: {instance.Name}\n{ex.Message}");
-                        }
-
-                        progressWin.UpdateStatus(statusMsg, ((double)currentTask / totalTasks) * 100, $"{currentTask} / {totalTasks}");
-                    }
-                }
-
-                foreach (var p in OnlinePlugins) p.IsSelected = false;
-                RefreshLocalPlugins();
-                progressWin.ShowFinalClose();
-            }
+            BulkDownloadSelected_Click(sender, e);
         }
 
         private async Task ExecuteDownload(PluginCatalogItem plugin, InstanceInfo instance, DownloadProgressWindow? progressWin = null, bool isBulk = false)
@@ -1978,24 +1933,55 @@ namespace YukkuriMovieMaker4Hub
             {
                 if (isDirectory)
                 {
-                    // ディレクトリの場合：フォルダ名先頭の _ を付け外しで有効/無効切替
                     string parentDir = Path.GetDirectoryName(currentPath) ?? string.Empty;
                     string dirName = Path.GetFileName(currentPath);
 
                     if (plugin.IsEnabled)
                     {
-                        // 有効 -> 無効：フォルダ名先頭に _ を追加
-                        string newPath = Path.Combine(parentDir, "_" + dirName);
-                        Directory.Move(currentPath, newPath);
-                        plugin.FullPath = newPath;
+                        // 有効 -> 無効：
+                        // 1. フォルダ先頭に _ を付加
+                        string newPath = currentPath;
+                        if (!dirName.StartsWith("_"))
+                        {
+                            newPath = Path.Combine(parentDir, "_" + dirName);
+                            Directory.Move(currentPath, newPath);
+                            currentPath = newPath;
+                        }
+                        // 2. 内部の *.dll を *.dll.disabled にリネーム
+                        if (Directory.Exists(currentPath))
+                        {
+                            foreach (var dll in Directory.GetFiles(currentPath, "*.dll", SearchOption.AllDirectories))
+                            {
+                                try { File.Move(dll, dll + ".disabled"); } catch { }
+                            }
+                        }
+                        plugin.FullPath = currentPath;
                     }
                     else
                     {
-                        // 無効 -> 有効：フォルダ名先頭の _ を除去
-                        string baseName = dirName.StartsWith("_") ? dirName.Substring(1) : dirName;
-                        string newPath = Path.Combine(parentDir, baseName);
-                        Directory.Move(currentPath, newPath);
-                        plugin.FullPath = newPath;
+                        // 無効 -> 有効：
+                        // 1. フォルダ先頭の _ を除去
+                        string newPath = currentPath;
+                        if (dirName.StartsWith("_"))
+                        {
+                            string baseName = dirName.TrimStart('_');
+                            newPath = Path.Combine(parentDir, baseName);
+                            Directory.Move(currentPath, newPath);
+                            currentPath = newPath;
+                        }
+                        // 2. 内部の *.dll.disabled を *.dll にリネーム
+                        if (Directory.Exists(currentPath))
+                        {
+                            foreach (var dis in Directory.GetFiles(currentPath, "*.disabled", SearchOption.AllDirectories))
+                            {
+                                if (dis.EndsWith(".dll.disabled", StringComparison.OrdinalIgnoreCase))
+                                {
+                                    string orig = dis.Substring(0, dis.Length - ".disabled".Length);
+                                    try { File.Move(dis, orig); } catch { }
+                                }
+                            }
+                        }
+                        plugin.FullPath = currentPath;
                     }
                 }
                 else
@@ -2004,18 +1990,21 @@ namespace YukkuriMovieMaker4Hub
                     if (plugin.IsEnabled)
                     {
                         // 有効 -> 無効
-                        if (!currentPath.EndsWith(".disabled"))
+                        if (!currentPath.EndsWith(".disabled", StringComparison.OrdinalIgnoreCase))
                         {
-                            File.Move(currentPath, currentPath + ".disabled");
+                            string newPath = currentPath + ".disabled";
+                            File.Move(currentPath, newPath);
+                            plugin.FullPath = newPath;
                         }
                     }
                     else
                     {
                         // 無効 -> 有効
-                        if (currentPath.EndsWith(".disabled"))
+                        if (currentPath.EndsWith(".disabled", StringComparison.OrdinalIgnoreCase))
                         {
                             string newPath = currentPath.Substring(0, currentPath.Length - 9);
                             File.Move(currentPath, newPath);
+                            plugin.FullPath = newPath;
                         }
                     }
                 }
@@ -2091,24 +2080,21 @@ namespace YukkuriMovieMaker4Hub
 
         private void TogglePlugin_Click(object sender, RoutedEventArgs e)
         {
-            if (!EnsureYmmClosed()) return;
-
-            // LocalPluginList でハイライト選択されている全アイテムを取得
-            List<LocalPluginInfo> targets = new List<LocalPluginInfo>();
-            if (LocalPluginList != null && LocalPluginList.SelectedItems.Count > 0)
+            if (!EnsureYmmClosed())
             {
-                targets = LocalPluginList.SelectedItems.Cast<LocalPluginInfo>().ToList();
-            }
-            else if (sender is Button btn && btn.DataContext is LocalPluginInfo single)
-            {
-                targets.Add(single);
+                RefreshLocalPlugins();
+                return;
             }
 
-            if (targets.Count == 0) return;
+            LocalPluginInfo? target = null;
+            if (sender is FrameworkElement fe && fe.DataContext is LocalPluginInfo single)
+            {
+                target = single;
+            }
 
-            foreach (var plugin in targets)
-                ToggleOne(plugin);
+            if (target == null) return;
 
+            ToggleOne(target);
             RefreshLocalPlugins();
         }
 
@@ -2116,11 +2102,11 @@ namespace YukkuriMovieMaker4Hub
         {
             // LocalPluginList でハイライト選択されている全アイテムを取得
             List<LocalPluginInfo> targets = new List<LocalPluginInfo>();
-            if (LocalPluginList != null && LocalPluginList.SelectedItems.Count > 0)
+            if (LocalPluginList != null && LocalPluginList.SelectedItems.Count > 1)
             {
                 targets = LocalPluginList.SelectedItems.Cast<LocalPluginInfo>().Where(p => p.IsSelectionValid).ToList();
             }
-            else if (sender is Button btn && btn.DataContext is LocalPluginInfo single)
+            else if (sender is FrameworkElement fe && fe.DataContext is LocalPluginInfo single)
             {
                 targets.Add(single);
             }
@@ -3069,7 +3055,21 @@ namespace YukkuriMovieMaker4Hub
             {
                 if (plugin.IsDirectDownloadSupported)
                 {
+                    // 更新時は、必ず最新リリースを取得して先頭バージョンを選択する
+                    if (plugin.Releases.Count == 0)
+                    {
+                        await LoadReleaseDetails(plugin);
+                    }
+                    plugin.SelectedVersion = plugin.Releases.FirstOrDefault();
                     await ExecuteDirectDownloadAsync(plugin);
+                }
+                else if (!string.IsNullOrEmpty(plugin.BestSiteUrl))
+                {
+                    try
+                    {
+                        Process.Start(new ProcessStartInfo(plugin.BestSiteUrl) { UseShellExecute = true });
+                    }
+                    catch { }
                 }
             }
         }
@@ -3137,12 +3137,14 @@ namespace YukkuriMovieMaker4Hub
                 return;
             }
 
+            if (!EnsureYmmClosed()) return;
+
+            if (plugin.Releases.Count == 0)
+            {
+                await LoadReleaseDetails(plugin);
+            }
             if (plugin.SelectedVersion == null)
             {
-                if (plugin.Releases.Count == 0)
-                {
-                    await LoadReleaseDetails(plugin);
-                }
                 plugin.SelectedVersion = plugin.Releases.FirstOrDefault();
             }
 
@@ -3163,11 +3165,8 @@ namespace YukkuriMovieMaker4Hub
             }
             catch (Exception ex)
             {
-                MessageBox.Show(string.Format(Translate.DownloadError, ex.Message), Translate.Confirm, MessageBoxButton.OK, MessageBoxImage.Error);
-            }
-            finally
-            {
                 progressWindow.Close();
+                MessageBox.Show(string.Format(Translate.DownloadError, ex.Message), Translate.Confirm, MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
@@ -3181,7 +3180,7 @@ namespace YukkuriMovieMaker4Hub
                 return;
             }
 
-            var bulkWindow = new BulkDownloadWindow(selected, Instances.ToList());
+            var bulkWindow = new BulkDownloadWindow(selected, Instances.ToList(), SelectedInstance?.Id);
             if (bulkWindow.ShowDialog() == true)
             {
                 var selectedInstances = bulkWindow.SelectedInstances;

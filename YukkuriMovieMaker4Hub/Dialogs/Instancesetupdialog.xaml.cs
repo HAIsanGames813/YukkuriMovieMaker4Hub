@@ -72,13 +72,6 @@ namespace YukkuriMovieMaker4Hub
             AddButton.Visibility = isNew ? Visibility.Collapsed : Visibility.Visible;
         }
 
-        private void IconTypeComboBox_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
-        {
-            if (IconImagePanel == null) return;
-
-            bool isImage = IconTypeComboBox.SelectedIndex == 0;
-            IconImagePanel.Visibility = isImage ? Visibility.Visible : Visibility.Collapsed;
-        }
 
         private void BrowseExe_Click(object sender, RoutedEventArgs e)
         {
@@ -276,19 +269,12 @@ namespace YukkuriMovieMaker4Hub
 
         public void CopyIconSettingsTo(InstanceInfo target)
         {
-            if (IconTypeComboBox.SelectedIndex == 0) // 画像
+            string iconPath = IconPathTextBox.Text.Trim();
+            if (!string.IsNullOrEmpty(iconPath) && File.Exists(iconPath))
             {
-                string iconPath = IconPathTextBox.Text.Trim();
-                if (!string.IsNullOrEmpty(iconPath) && File.Exists(iconPath))
-                {
-                    target.IconPath = iconPath;
-                }
-                else
-                {
-                    target.IconPath = null;
-                }
+                target.IconPath = iconPath;
             }
-            else // デフォルト
+            else
             {
                 target.IconPath = null;
             }
