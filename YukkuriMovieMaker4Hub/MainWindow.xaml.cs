@@ -338,7 +338,7 @@ namespace YukkuriMovieMaker4Hub
         public string HubVersionText => $"現在のバージョン: v{HubVersion}";
 
         private static readonly string HubVersion =
-            System.Reflection.Assembly.GetExecutingAssembly().GetName().Version?.ToString(3) ?? "4.2.0";
+            System.Reflection.Assembly.GetExecutingAssembly().GetName().Version?.ToString(3) ?? "5.0.0";
 
         private static bool IsNewerVersion(string latestTag, string currentVersion)
         {
@@ -2453,6 +2453,31 @@ namespace YukkuriMovieMaker4Hub
             foreach (var p in sorted) LocalPlugins.Add(p);
         }
 
+        private void InstanceLaunchOrKill_Click(object sender, RoutedEventArgs e)
+        {
+            var instance = (sender as FrameworkElement)?.DataContext as InstanceInfo;
+            if (instance == null) return;
+            if (instance.IsRunning)
+            {
+                // 起動中 → 強制終了
+                if (string.IsNullOrEmpty(instance.ExePath)) return;
+                string procName = Path.GetFileNameWithoutExtension(instance.ExePath);
+                var procs = Process.GetProcessesByName(procName)
+                    .Where(p =>
+                    {
+                        try { return string.Equals(p.MainModule?.FileName, instance.ExePath, StringComparison.OrdinalIgnoreCase); }
+                        catch { return false; }
+                    }).ToList();
+                foreach (var proc in procs) { try { proc.Kill(); } catch { } }
+                instance.IsRunning = false;
+            }
+            else
+            {
+                // 停止中 → 起動
+                LaunchYmm(instance);
+            }
+        }
+
         private void InstanceLaunch_Click(object sender, RoutedEventArgs e)
         {
             var instance = (sender as FrameworkElement)?.DataContext as InstanceInfo;
@@ -2695,18 +2720,6 @@ namespace YukkuriMovieMaker4Hub
                     if (!selectedSites.Contains(tag)) return false;
                 }
 
-                // GitHub/Booth未掲載切替 (IsYmlItem)
-                if (p.IsGitHub)
-                {
-                    if (PortalGitHubExtraIndex == 0 && !p.IsYmlItem) return false; // 非表示
-                    if (PortalGitHubExtraIndex == 2 && p.IsYmlItem) return false;  // のみ表示
-                }
-                if (p.IsBooth)
-                {
-                    if (PortalBoothExtraIndex == 0 && !p.IsYmlItem) return false;
-                    if (PortalBoothExtraIndex == 2 && p.IsYmlItem) return false;
-                }
-
                 return true;
             });
 
@@ -2789,14 +2802,10 @@ namespace YukkuriMovieMaker4Hub
             set { _portalFilteredVsTotalText = value; OnPropertyChanged(nameof(PortalFilteredVsTotalText)); }
         }
 
-        private int _portalGitHubExtraIndex = 0; // 0:非表示, 1:表示, 2:のみ表示
-        public int PortalGitHubExtraIndex { get => _portalGitHubExtraIndex; set { _portalGitHubExtraIndex = value; OnPropertyChanged(nameof(PortalGitHubExtraIndex)); ApplyOnlinePluginFilter(); } }
-        private int _portalBoothExtraIndex = 0;
-        public int PortalBoothExtraIndex { get => _portalBoothExtraIndex; set { _portalBoothExtraIndex = value; OnPropertyChanged(nameof(PortalBoothExtraIndex)); ApplyOnlinePluginFilter(); } }
 
         private int _portalSortFieldIndex = 0; // 0:公開日, 1:更新日, 2:名前, 3:作者, 4:カテゴリ, 5:価格, 6:配布元
         public int PortalSortFieldIndex { get => _portalSortFieldIndex; set { _portalSortFieldIndex = value; OnPropertyChanged(nameof(PortalSortFieldIndex)); ApplyOnlinePluginFilter(); } }
-        private bool _portalSortAscending = true;
+        private bool _portalSortAscending = false; // デフォルトは降順（最新→最古）
         public bool PortalSortAscending { get => _portalSortAscending; set { _portalSortAscending = value; OnPropertyChanged(nameof(PortalSortAscending)); ApplyOnlinePluginFilter(); } }
 
         private int _portalPageSizeIndex = 2; // 0:5, 1:10, 2:20, 3:50, 4:100, 5:全表示
@@ -2948,10 +2957,8 @@ namespace YukkuriMovieMaker4Hub
             PortalSiteOther = true;
             PortalStatusIndex = 0;
             PortalInstallFilterIndex = 0;
-            PortalGitHubExtraIndex = 0;
-            PortalBoothExtraIndex = 0;
             PortalSortFieldIndex = 0;
-            PortalSortAscending = true;
+            PortalSortAscending = false; // デフォルトは降順
             PortalPageSizeIndex = 2; // 20
             PortalCurrentPage = 1;
             ApplyOnlinePluginFilter();
@@ -2998,9 +3005,78 @@ namespace YukkuriMovieMaker4Hub
 
         private void PluginSiteFilter_Click(object sender, RoutedEventArgs e) => ApplyOnlinePluginFilter();
         private void PortalInstallFilter_Changed(object sender, SelectionChangedEventArgs e) => ApplyOnlinePluginFilter();
-        private void PortalExtraFilter_Changed(object sender, SelectionChangedEventArgs e) => ApplyOnlinePluginFilter();
         private void PortalSort_Changed(object sender, SelectionChangedEventArgs e) => ApplyOnlinePluginFilter();
         private void PortalSortOrder_Click(object sender, RoutedEventArgs e) => PortalSortAscending = !PortalSortAscending;
+
+        /// <summary>起動中インスタンスを強制終了する</summary>
+        private void InstanceKill_Click(object sender, RoutedEventArgs e)
+        {
+            var instance = (sender as FrameworkElement)?.DataContext as InstanceInfo;
+            if (instance == null || string.IsNullOrEmpty(instance.ExePath)) return;
+            string procName = Path.GetFileNameWithoutExtension(instance.ExePath);
+            var procs = Process.GetProcessesByName(procName)
+                .Where(p =>
+                {
+                    try { return string.Equals(p.MainModule?.FileName, instance.ExePath, StringComparison.OrdinalIgnoreCase); }
+                    catch { return false; }
+                })
+                .ToList();
+            foreach (var proc in procs)
+            {
+                try { proc.Kill(); } catch { }
+            }
+            instance.IsRunning = false;
+        }
+
+        /// <summary>編集データフォルダ一覧から選択項目をエクスプローラーで開く</summary>
+        private void OpenProjectDirFolder_Click(object sender, RoutedEventArgs e)
+        {
+            if (ProjectDirListBox.SelectedItem is string path && Directory.Exists(path))
+            {
+                try { Process.Start(new ProcessStartInfo("explorer.exe", path) { UseShellExecute = true }); } catch { }
+            }
+        }
+
+        /// <summary>除外フォルダ一覧から選択項目をエクスプローラーで開く</summary>
+        private void OpenExcludeDirFolder_Click(object sender, RoutedEventArgs e)
+        {
+            if (ExcludeDirListBox.SelectedItem is string path && Directory.Exists(path))
+            {
+                try { Process.Start(new ProcessStartInfo("explorer.exe", path) { UseShellExecute = true }); } catch { }
+            }
+        }
+
+        /// <summary>饅頭遣いのおもちゃ箱のプラグインリストを開く</summary>
+        private void OpenManjuboxPluginList_Click(object sender, RoutedEventArgs e)
+        {
+            try { Process.Start(new ProcessStartInfo("https://manjubox.net/ymm4/faq/plugin/list/") { UseShellExecute = true }); } catch { }
+        }
+
+        /// <summary>YMM4アップデート確認（インスタンスリスト内の再読み込みボタン）</summary>
+        private async void CheckInstanceYmmUpdate_Click(object sender, RoutedEventArgs e)
+        {
+            var instance = (sender as FrameworkElement)?.DataContext as InstanceInfo;
+            if (instance == null) return;
+            await CheckYmmUpdates();
+            if (instance.HasUpdate)
+                ShowUpdateInfoForInstance(instance);
+        }
+
+        /// <summary>指定インスタンスのYMM4アップデート情報を表示する</summary>
+        private void ShowUpdateInfoForInstance(InstanceInfo instance)
+        {
+            Version.TryParse(instance.GetLocalVersion(), out var localV);
+            var latestVersion = _ymmUpdates.Count > 0 ? _ymmUpdates[0].Version : null;
+            var filteredUpdates = _ymmUpdates.Where(u => u.Version > localV).Take(10).ToList();
+            if (filteredUpdates.Count == 0) return;
+            var dlg = new YmmUpdateDialog(
+                instanceName: instance.Name,
+                localVersion: instance.GetLocalVersion() ?? "?",
+                latestVersion: latestVersion,
+                updates: filteredUpdates)
+            { Owner = this };
+            dlg.ShowDialog();
+        }
 
         private void PortalPageSize_Changed(object sender, SelectionChangedEventArgs e)
         {

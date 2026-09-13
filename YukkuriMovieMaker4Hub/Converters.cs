@@ -124,16 +124,14 @@ namespace YukkuriMovieMaker4Hub
             => value is bool b ? !b : (object)false;
     }
 
-    /// <summary>パスの末尾ディレクトリ名のみを表示するコンバーター（プライバシー配慮）</summary>
+    /// <summary>パスを非表示にするコンバーター（非表示時は全体を●に置き換え）</summary>
     public class MaskedPathConverter : IValueConverter, IMultiValueConverter
     {
+        private const string MaskChar = "●●●●●●●●";
+
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value is string s && !string.IsNullOrEmpty(s))
-            {
-                try { return System.IO.Path.GetFileName(s.TrimEnd('\\', '/')); }
-                catch { }
-            }
+            // 単一値バインディング: そのまま表示
             return value ?? string.Empty;
         }
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) => throw new NotImplementedException();
@@ -144,12 +142,7 @@ namespace YukkuriMovieMaker4Hub
             string? path = values[0] as string;
             bool hide = values.Length > 1 && values[1] is bool b && b;
             if (string.IsNullOrEmpty(path)) return string.Empty;
-            if (hide)
-            {
-                try { return System.IO.Path.GetFileName(path.TrimEnd('\\', '/')); }
-                catch { return path; }
-            }
-            return path;
+            return hide ? MaskChar : path;
         }
 
         public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
