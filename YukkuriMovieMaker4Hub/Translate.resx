@@ -395,4 +395,29 @@
 <data name="SelectBgImage" xml:space="preserve"><value>背景画像を選択</value></data>
 <data name="GradientAngle" xml:space="preserve"><value>角度</value></data>
 <data name="IconWheelHint" xml:space="preserve"><value>(ホイールで拡大縮小)</value></data>
+<data name="OpenSiteNamed" xml:space="preserve"><value>{0} で開く</value></data>
+<data name="InformationSite" xml:space="preserve"><value>情報サイト</value></data>
+<data name="RepositoryNotFound" xml:space="preserve"><value>リポジトリ情報が見つかりません。</value></data>
+<data name="ReadmeLoading" xml:space="preserve"><value>{0}/{1} の README.md を取得中...</value></data>
+<data name="ReadmeNotFound" xml:space="preserve"><value>README.md を取得できませんでした。</value></data>
+<data name="BoothUrlNotFound" xml:space="preserve"><value>BOOTH の URL が見つかりません。</value></data>
+<data name="BoothDescriptionLoading" xml:space="preserve"><value>{0} の商品説明を取得中...</value></data>
+<data name="BoothDescriptionLoadFailed" xml:space="preserve"><value>BOOTH 商品説明の取得に失敗しました: {0}</value></data>
+<data name="BoothDescriptionUnavailable" xml:space="preserve"><value>商品説明を取得できませんでした。直接 BOOTH ページをご確認ください。</value></data>
+<data name="VersionReleaseSelectTitle" xml:space="preserve"><value>バージョン・リリース選択 ({0}/{1})</value></data>
+<data name="DistributionAssets" xml:space="preserve"><value>配布アセット・プラグインファイル:</value></data>
+<data name="Latest" xml:space="preserve"><value>最新版</value></data>
+<data name="DevelopmentBuildIsNewer" xml:space="preserve"><value>開発中のHubはGitHub公開版より新しいです</value></data>
+<data name="HubReadmeFetchFailed" xml:space="preserve"><value>README の取得に失敗しました。詳細は GitHub リポジトリをご確認ください。</value></data>
+<data name="HubCurrentVersion" xml:space="preserve"><value>現在のバージョン: v{0}</value></data>
+<data name="HubAlreadyLatest" xml:space="preserve"><value>現在のバージョン（v{0}）は最新です。</value></data>
+<data name="UpdateCheckTitle" xml:space="preserve"><value>アップデート確認</value></data>
+<data name="LatestInfoFetchFailed" xml:space="preserve"><value>最新情報の取得に失敗しました。ネットワーク接続を確認してください。</value></data>
+<data name="HubUpdateCheckFailed" xml:space="preserve"><value>アップデートの確認中にエラーが発生しました:\n{0}</value></data>
+<data name="HubUpdateExecuteConfirm" xml:space="preserve"><value>最新バージョン {0} をダウンロードしてアップデートを実行しますか？</value></data>
+<data name="HubUpdateExecuteTitle" xml:space="preserve"><value>アップデートの実行</value></data>
+<data name="NoDownloadAsset" xml:space="preserve"><value>ダウンロード可能なアセットが見つかりませんでした。</value></data>
+<data name="HubUpdateExecutionFailed" xml:space="preserve"><value>アップデート実行中にエラーが発生しました:\n{0}</value></data>
+<data name="DeleteInstanceConfirm" xml:space="preserve"><value>インスタンス「{0}」を一覧から削除しますか？\nYMM4本体や設定ファイルは削除されません。</value></data>
+<data name="DeleteInstanceTitle" xml:space="preserve"><value>インスタンスの削除</value></data>
 </root>

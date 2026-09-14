@@ -395,4 +395,29 @@
 <data name="SelectBgImage" xml:space="preserve"><value>Pilih Gambar Latar</value></data>
 <data name="GradientAngle" xml:space="preserve"><value>Sudut</value></data>
 <data name="IconWheelHint" xml:space="preserve"><value>(gulir untuk zoom)</value></data>
+<data name="OpenSiteNamed" xml:space="preserve"><value>Buka di {0}</value></data>
+<data name="InformationSite" xml:space="preserve"><value>Situs informasi</value></data>
+<data name="RepositoryNotFound" xml:space="preserve"><value>Informasi repositori tidak ditemukan.</value></data>
+<data name="ReadmeLoading" xml:space="preserve"><value>Mengambil README.md untuk {0}/{1}...</value></data>
+<data name="ReadmeNotFound" xml:space="preserve"><value>Tidak dapat mengambil README.md.</value></data>
+<data name="BoothUrlNotFound" xml:space="preserve"><value>URL BOOTH tidak ditemukan.</value></data>
+<data name="BoothDescriptionLoading" xml:space="preserve"><value>Mengambil deskripsi produk dari {0}...</value></data>
+<data name="BoothDescriptionLoadFailed" xml:space="preserve"><value>Gagal mengambil deskripsi produk BOOTH: {0}</value></data>
+<data name="BoothDescriptionUnavailable" xml:space="preserve"><value>Tidak dapat mengambil deskripsi produk. Silakan periksa halaman BOOTH secara langsung.</value></data>
+<data name="VersionReleaseSelectTitle" xml:space="preserve"><value>Pilihan Versi / Rilis ({0}/{1})</value></data>
+<data name="DistributionAssets" xml:space="preserve"><value>Aset distribusi / file plugin:</value></data>
+<data name="Latest" xml:space="preserve"><value>Terbaru</value></data>
+<data name="DevelopmentBuildIsNewer" xml:space="preserve"><value>Hub pengembangan lebih baru daripada rilis GitHub.</value></data>
+<data name="HubReadmeFetchFailed" xml:space="preserve"><value>Tidak dapat mengambil README. Periksa repositori GitHub untuk detail.</value></data>
+<data name="HubCurrentVersion" xml:space="preserve"><value>Versi saat ini: v{0}</value></data>
+<data name="HubAlreadyLatest" xml:space="preserve"><value>Versi saat ini (v{0}) sudah terbaru.</value></data>
+<data name="UpdateCheckTitle" xml:space="preserve"><value>Periksa Pembaruan</value></data>
+<data name="LatestInfoFetchFailed" xml:space="preserve"><value>Gagal mengambil informasi terbaru. Periksa koneksi jaringan Anda.</value></data>
+<data name="HubUpdateCheckFailed" xml:space="preserve"><value>Terjadi kesalahan saat memeriksa pembaruan:\n{0}</value></data>
+<data name="HubUpdateExecuteConfirm" xml:space="preserve"><value>Unduh versi terbaru {0} dan jalankan pembaruan?</value></data>
+<data name="HubUpdateExecuteTitle" xml:space="preserve"><value>Jalankan Pembaruan</value></data>
+<data name="NoDownloadAsset" xml:space="preserve"><value>Tidak ditemukan aset yang dapat diunduh.</value></data>
+<data name="HubUpdateExecutionFailed" xml:space="preserve"><value>Terjadi kesalahan saat menjalankan pembaruan:\n{0}</value></data>
+<data name="DeleteInstanceConfirm" xml:space="preserve"><value>Hapus instans “{0}” dari daftar?\nYMM4 dan file pengaturannya tidak akan dihapus.</value></data>
+<data name="DeleteInstanceTitle" xml:space="preserve"><value>Hapus Instans</value></data>
 </root>

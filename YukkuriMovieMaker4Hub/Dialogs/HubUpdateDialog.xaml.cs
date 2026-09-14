@@ -22,7 +22,7 @@ namespace YukkuriMovieMaker4Hub
         public bool DoNotShowAgain => DoNotShowAgainCheckBox.IsChecked == true;
         public bool ExecuteUpdate { get; private set; } = false;
 
-        public HubUpdateDialog(string currentVersion, string latestTag, string? downloadUrl, string? fileName)
+        public HubUpdateDialog(string currentVersion, string latestTag, string? downloadUrl, string? fileName, bool canExecuteUpdate = true)
         {
             InitializeComponent();
             ThemeHelper.Sync(this);
@@ -34,6 +34,12 @@ namespace YukkuriMovieMaker4Hub
 
             CurrentVersionText.Text = $"v{currentVersion}";
             LatestVersionText.Text = latestTag.StartsWith("v", StringComparison.OrdinalIgnoreCase) ? latestTag : $"v{latestTag}";
+
+            if (!canExecuteUpdate)
+            {
+                DialogTitleText.Text = Translate.DevelopmentBuildIsNewer;
+                UpdateButton.Visibility = Visibility.Collapsed;
+            }
 
             if (_http.DefaultRequestHeaders.UserAgent.Count == 0)
             {
@@ -73,7 +79,7 @@ namespace YukkuriMovieMaker4Hub
 
             if (string.IsNullOrWhiteSpace(markdown))
             {
-                markdown = "# YukkuriMovieMaker4Hub\n\nREADME の取得に失敗しました。詳細は GitHub リポジトリをご確認ください。";
+                markdown = $"# YukkuriMovieMaker4Hub\n\n{Translate.HubReadmeFetchFailed}";
             }
 
             string rawBase = $"https://raw.githubusercontent.com/{REPO_OWNER}/{REPO_NAME}/{baseBranch}/";
@@ -94,6 +100,8 @@ namespace YukkuriMovieMaker4Hub
             string codeBorder = isDark ? "#3E3E42" : "#D0D7DE";
             string blockquoteColor = isDark ? "#8B949E" : "#57606A";
             string blockquoteBorder = isDark ? "#3E3E42" : "#D0D7DE";
+            string scrollTrack = isDark ? "#1E1E1E" : "#F0F0F0";
+            string scrollThumb = isDark ? "#555555" : "#B0B0B0";
 
             var sb = new StringBuilder();
             sb.AppendLine("<!DOCTYPE html><html><head><meta charset='utf-8'>");
@@ -101,6 +109,8 @@ namespace YukkuriMovieMaker4Hub
             sb.AppendLine($"<title>{System.Web.HttpUtility.HtmlEncode(title)}</title>");
             sb.AppendLine("<style>");
             sb.AppendLine($"html {{ color-scheme: {(isDark ? "dark" : "light")}; }}");
+            // WPF WebBrowser (MSHTML) のスクロールバーは旧来のCSSプロパティでテーマ色を指定する。
+            sb.AppendLine($"html {{ scrollbar-face-color: {scrollThumb}; scrollbar-track-color: {scrollTrack}; scrollbar-arrow-color: {textColor}; scrollbar-highlight-color: {scrollThumb}; scrollbar-shadow-color: {scrollTrack}; }}");
             sb.AppendLine($"body {{ font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif; font-size: 14px; line-height: 1.6; background-color: {bgColor}; color: {textColor}; margin: 0; padding: 16px; word-wrap: break-word; }}");
             sb.AppendLine($"h1, h2 {{ border-bottom: 1px solid {headingBorder}; padding-bottom: .3em; margin-top: 24px; margin-bottom: 16px; font-weight: 600; line-height: 1.25; }}");
             sb.AppendLine("h1 { font-size: 2em; }");
@@ -115,7 +125,8 @@ namespace YukkuriMovieMaker4Hub
             sb.AppendLine("ul, ol { padding-left: 2em; margin-bottom: 14px; }");
             sb.AppendLine("li { margin-top: .25em; }");
             sb.AppendLine("hr { height: .25em; padding: 0; margin: 24px 0; background-color: #D0D7DE; border: 0; }");
-            sb.AppendLine("img { max-width: 100%; box-sizing: content-box; background-color: transparent; }");
+            // 固定高さは上書きし、width="75%" のようなGitHub READMEの指定はそのまま尊重する。
+            sb.AppendLine("img { max-width: 100%; height: auto !important; box-sizing: content-box; background-color: transparent; }");
             sb.AppendLine("</style></head><body>");
 
             // コードブロック ``` 処理
@@ -133,6 +144,11 @@ namespace YukkuriMovieMaker4Hub
             markdown = Regex.Replace(markdown, @"^### (.+)$", "<h3>$1</h3>", RegexOptions.Multiline);
             markdown = Regex.Replace(markdown, @"^## (.+)$", "<h2>$1</h2>", RegexOptions.Multiline);
             markdown = Regex.Replace(markdown, @"^# (.+)$", "<h1>$1</h1>", RegexOptions.Multiline);
+
+            // 旧GitHub記法: <img src="[URL](URL)" width="75%"> を通常のimg要素へ正規化する。
+            markdown = Regex.Replace(markdown, "(<img\\b[^>]*?\\bsrc\\s*=\\s*\"\\[)[^\\]]+(\\]\\(([^)]+)\\)\")", m =>
+                m.Groups[1].Value.Substring(0, m.Groups[1].Value.LastIndexOf('"') + 1) + m.Groups[3].Value + "\"",
+                RegexOptions.IgnoreCase);
 
             // 画像: ![alt](url) -> 相対パス補正
             markdown = Regex.Replace(markdown, @"!\[([^\]]*)\]\(([^)]+)\)", m =>

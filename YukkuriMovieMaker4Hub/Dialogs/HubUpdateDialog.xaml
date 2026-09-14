@@ -29,7 +29,7 @@
         </Grid.RowDefinitions>
 
         <!-- 見出し -->
-        <TextBlock Grid.Row="0" Text="Hub のアップデートがあります" FontSize="16" FontWeight="Bold" Margin="0,0,0,10" Foreground="{DynamicResource TextBrush}"/>
+        <TextBlock x:Name="DialogTitleText" Grid.Row="0" Text="Hub のアップデートがあります" FontSize="16" FontWeight="Bold" Margin="0,0,0,10" Foreground="{DynamicResource TextBrush}"/>
 
         <!-- バージョン情報バナー -->
         <Border Grid.Row="1" Background="{DynamicResource PanelBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1"
@@ -67,7 +67,7 @@
             <!-- アクションボタン -->
             <StackPanel Grid.Column="2" Orientation="Horizontal">
                 <Button Click="Close_Click" Content="閉じる" Height="28" Padding="16,0" Margin="0,0,8,0"/>
-                <Button Click="Update_Click" Content="更新する" Height="28" Padding="20,0"
+                <Button x:Name="UpdateButton" Click="Update_Click" Content="更新する" Height="28" Padding="20,0"
                         Background="{DynamicResource AccentBrush}" Foreground="White" FontWeight="Bold"/>
             </StackPanel>
         </Grid>

@@ -4,9 +4,10 @@
         xmlns:local="clr-namespace:YukkuriMovieMaker4Hub"
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         x:Name="RootWindow"
-        Title="{Binding HubTitle}" Height="640" Width="960" MinHeight="520" MinWidth="760"
+        Title="{Binding HubTitle}" Height="640" Width="960" MinHeight="420" MinWidth="600"
         WindowStartupLocation="CenterScreen"
-        Loaded="MainWindow_Loaded">
+        Loaded="MainWindow_Loaded"
+        SizeChanged="MainWindow_SizeChanged">
     <Window.Resources>
         <local:BooleanToStatusConverter x:Key="BooleanToStatusConverter"/>
         <local:BooleanToColorConverter x:Key="BooleanToColorConverter"/>
@@ -77,6 +78,34 @@
             <Setter Property="Stretch" Value="Uniform"/>
         </Style>
 
+        <!-- 狭いウィンドウでは起動タブの主要操作をアイコンボタンに圧縮する -->
+        <Style x:Key="LaunchActionButtonStyle" TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+            <Setter Property="Height" Value="42"/>
+            <Setter Property="Padding" Value="14,0"/>
+            <Setter Property="Margin" Value="0,0,8,8"/>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding IsCompactLayout}" Value="True">
+                    <Setter Property="Width" Value="42"/>
+                    <Setter Property="Padding" Value="0"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+        <Style x:Key="LaunchActionTextStyle" TargetType="TextBlock">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding IsCompactLayout}" Value="True">
+                    <Setter Property="Visibility" Value="Collapsed"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+        <Style x:Key="LaunchActionIconStyle" TargetType="Path">
+            <Setter Property="Margin" Value="0,0,8,0"/>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding IsCompactLayout}" Value="True">
+                    <Setter Property="Margin" Value="0"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+
         <!-- テーマカラーブラシ (ApplyTheme() から動的に更新される) -->
         <SolidColorBrush x:Key="ThemeBrush" Color="#252525"/>
         <SolidColorBrush x:Key="PanelBrush" Color="#333333"/>
@@ -96,7 +125,7 @@
         </Grid.ColumnDefinitions>
 
         <!-- 左側：インスタンス管理パネル -->
-        <Grid Grid.Column="0" MinHeight="300">
+        <Grid x:Name="InstancePanel" Grid.Column="0" MinHeight="300">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
@@ -126,7 +155,6 @@
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="Auto"/>
                                 <ColumnDefinition Width="Auto"/>
-                                <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
 
                             <Border Grid.Column="0" Width="26" Height="26" Margin="0,0,8,0" VerticalAlignment="Center">
@@ -137,7 +165,7 @@
                                        TextTrimming="CharacterEllipsis" VerticalAlignment="Center"/>
 
                             <!-- YMM4本体更新バッジ -->
-                            <Border Grid.Column="2" Background="#E65100" CornerRadius="3" Padding="4,1" Margin="4,0,0,0"
+                            <Border Grid.Column="2" Background="{DynamicResource AccentBrush}" CornerRadius="3" Padding="4,1" Margin="4,0,0,0"
                                     VerticalAlignment="Center" ToolTip="YMM4本体のアップデートがあります">
                                 <Border.Style>
                                     <Style TargetType="Border">
@@ -152,53 +180,8 @@
                                 <TextBlock Text="UP" FontSize="9" FontWeight="Bold" Foreground="White"/>
                             </Border>
 
-                            <!-- アップデート確認/再読み込みボタン（設定ボタン左）-->
-                            <!-- HasUpdate=True のとき: アップデート情報ボタン（オレンジ）-->
-                            <Button Grid.Column="3" Width="26" Height="26" Margin="2,0,0,0" Padding="0"
-                                    Click="CheckInstanceYmmUpdate_Click"
-                                    ToolTip="YMM4アップデート確認">
-                                <Button.Style>
-                                    <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
-                                        <Style.Triggers>
-                                            <DataTrigger Binding="{Binding HasUpdate}" Value="True">
-                                                <Setter Property="Background" Value="#E65100"/>
-                                            </DataTrigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </Button.Style>
-                                <!-- HasUpdate=True: ベルアイコン, False: 再読み込みアイコン -->
-                                <Grid>
-                                    <Path Width="11" Height="11" Stretch="Uniform" Fill="{DynamicResource TextBrush}"
-                                          Data="M17.65,6.35C16.2,4.9 14.21,4 12,4A8,8 0 0,0 4,12A8,8 0 0,0 12,20C15.73,20 18.84,17.45 19.73,14H17.65C16.83,16.33 14.61,18 12,18A6,6 0 0,1 6,12A6,6 0 0,1 12,6C13.66,6 15.14,6.69 16.22,7.78L13,11H20V4L17.65,6.35Z">
-                                        <Path.Style>
-                                            <Style TargetType="Path">
-                                                <Setter Property="Visibility" Value="Visible"/>
-                                                <Style.Triggers>
-                                                    <DataTrigger Binding="{Binding HasUpdate}" Value="True">
-                                                        <Setter Property="Visibility" Value="Collapsed"/>
-                                                    </DataTrigger>
-                                                </Style.Triggers>
-                                            </Style>
-                                        </Path.Style>
-                                    </Path>
-                                    <Path Width="11" Height="11" Stretch="Uniform" Fill="White"
-                                          Data="M21,6.5A4.5,4.5 0 0,1 16.5,11A4.5,4.5 0 0,1 12,6.5A4.5,4.5 0 0,1 16.5,2A4.5,4.5 0 0,1 21,6.5M11.92,19.92L4.08,12.08C3.69,11.69 3.69,11.06 4.08,10.67L10.67,4.08C10.93,3.82 11.31,3.74 11.65,3.87C10.61,4.63 10,5.88 10,7.27C10,9.44 11.79,11.23 13.96,11.23H14V11.77C13.97,11.85 13.95,11.92 13.95,12C13.95,14.05 15.6,15.73 17.65,15.73C18.23,15.73 18.77,15.59 19.25,15.34L20.33,16.42C20.55,16.64 20.6,16.97 20.44,17.24L17.21,22.43C17.04,22.7 16.73,22.85 16.4,22.85H7C6.45,22.85 6,22.4 6,21.85V14.57L11.92,19.92Z">
-                                        <Path.Style>
-                                            <Style TargetType="Path">
-                                                <Setter Property="Visibility" Value="Collapsed"/>
-                                                <Style.Triggers>
-                                                    <DataTrigger Binding="{Binding HasUpdate}" Value="True">
-                                                        <Setter Property="Visibility" Value="Visible"/>
-                                                    </DataTrigger>
-                                                </Style.Triggers>
-                                            </Style>
-                                        </Path.Style>
-                                    </Path>
-                                </Grid>
-                            </Button>
-
                             <!-- 起動/停止ボタン -->
-                            <Button Grid.Column="4" Width="28" Height="28" Padding="0"
+                            <Button Grid.Column="3" Width="28" Height="28" Padding="0"
                                     Click="InstanceLaunchOrKill_Click"
                                     ToolTip="{DynamicResource TextBrush}">
                                 <Button.Style>
@@ -265,23 +248,39 @@
                           Data="M19,13H5V11H19V13Z"
                           Fill="{DynamicResource TextBrush}"/>
                 </Button>
+                <Button Click="MoveInstanceUp_Click" Width="28" Height="28" Margin="4,0,0,0"
+                        ToolTip="選択中のインスタンスを上へ移動">
+                    <Path Stretch="Uniform" Width="12" Height="12"
+                          Data="M12,6L5,16H19L12,6Z"
+                          Fill="{DynamicResource TextBrush}"/>
+                </Button>
+                <Button Click="MoveInstanceDown_Click" Width="28" Height="28" Margin="4,0,0,0"
+                        ToolTip="選択中のインスタンスを下へ移動">
+                    <Path Stretch="Uniform" Width="12" Height="12"
+                          Data="M5,8H19L12,18L5,8Z"
+                          Fill="{DynamicResource TextBrush}"/>
+                </Button>
             </StackPanel>
         </Grid>
 
         <!-- グリッパー -->
-        <GridSplitter Grid.Column="1" Width="4" HorizontalAlignment="Stretch"
+        <GridSplitter x:Name="InstancePanelSplitter" Grid.Column="1" Width="4" HorizontalAlignment="Stretch"
                       VerticalAlignment="Stretch" Cursor="SizeWE"
                       DragCompleted="InstancePanelSplitter_DragCompleted"/>
 
         <!-- 右側：メインコンテンツ -->
-        <Grid Grid.Column="2" Margin="4">
+        <Grid x:Name="MainContentGrid" Grid.Column="2" Margin="4">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition x:Name="MainToggleColumn" Width="36"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"/>
                 <!-- ポータル選択バー（選択時のみ表示） -->
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
-            <TabControl Grid.Row="0" SelectionChanged="TabControl_SelectionChanged">
+            <TabControl x:Name="MainTabControl" Grid.Row="0" Grid.Column="1" SelectionChanged="TabControl_SelectionChanged">
 
                 <!-- 1. 起動タブ -->
                 <TabItem Header="起動">
@@ -333,36 +332,82 @@
                                       Stretch="Uniform" Width="18" Height="18"
                                       Fill="{DynamicResource TextBrush}"/>
                             </Button>
-                            <!-- 左側ボタン群 -->
-                            <Button Click="LaunchInstance_Click"
+                            <!-- 選択中インスタンスのYMM4更新確認。更新ありなら更新履歴を表示する。 -->
+                            <Button DockPanel.Dock="Right" Click="CheckSelectedInstanceYmmUpdate_Click"
                                     IsEnabled="{Binding SelectedInstance.IsRealInstance}"
-                                    Height="42" Padding="14,0" Margin="0,0,8,8">
+                                    Width="42" Height="42" Margin="0,0,8,8"
+                                    ToolTip="YMM4アップデートを確認">
+                                <Button.Style>
+                                    <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding SelectedInstance.HasUpdate}" Value="True">
+                                                <Setter Property="Background" Value="{DynamicResource AccentBrush}"/>
+                                                <Setter Property="ToolTip" Value="YMM4アップデート情報を表示"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Button.Style>
+                                <Grid>
+                                    <!-- 更新なし: 再読み込み -->
+                                    <Path Width="18" Height="18" Stretch="Uniform" Fill="{DynamicResource TextBrush}"
+                                          Data="M17.65,6.35C16.2,4.9 14.21,4 12,4A8,8 0 0,0 4,12A8,8 0 0,0 12,20C15.73,20 18.84,17.45 19.73,14H17.65C16.83,16.33 14.61,18 12,18A6,6 0 0,1 6,12A6,6 0 0,1 12,6C13.66,6 15.14,6.69 16.22,7.78L13,11H20V4L17.65,6.35Z">
+                                        <Path.Style>
+                                            <Style TargetType="Path">
+                                                <Setter Property="Visibility" Value="Visible"/>
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding SelectedInstance.HasUpdate}" Value="True">
+                                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Path.Style>
+                                    </Path>
+                                    <!-- 更新あり: ダウンロード矢印 -->
+                                    <Path Width="18" Height="18" Stretch="Uniform" Fill="White"
+                                          Data="M5,20H19V18H5M19,9H15V3H9V9H5L12,16L19,9Z">
+                                        <Path.Style>
+                                            <Style TargetType="Path">
+                                                <Setter Property="Visibility" Value="Collapsed"/>
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding SelectedInstance.HasUpdate}" Value="True">
+                                                        <Setter Property="Visibility" Value="Visible"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Path.Style>
+                                    </Path>
+                                </Grid>
+                            </Button>
+                            <!-- 左側ボタン群 -->
+                            <Button Click="LaunchInstance_Click" Style="{StaticResource LaunchActionButtonStyle}"
+                                    IsEnabled="{Binding SelectedInstance.IsRealInstance}"
+                                    ToolTip="起動">
                                 <StackPanel Orientation="Horizontal">
-                                    <Path Width="16" Height="16" Stretch="Uniform" Margin="0,0,8,0"
+                                    <Path Width="16" Height="16" Stretch="Uniform" Style="{StaticResource LaunchActionIconStyle}"
                                           Data="M8,5.14V19.14L19,12.14L8,5.14Z"
                                           Fill="{DynamicResource TextBrush}"/>
-                                    <TextBlock Text="{x:Static local:Translate.Launch}" FontSize="14"
+                                    <TextBlock Text="{x:Static local:Translate.Launch}" Style="{StaticResource LaunchActionTextStyle}" FontSize="14"
                                                FontWeight="Bold" VerticalAlignment="Center"/>
                                 </StackPanel>
                             </Button>
-                            <Button Click="LaunchLastProject_Click"
+                            <Button Click="LaunchLastProject_Click" Style="{StaticResource LaunchActionButtonStyle}"
                                     IsEnabled="{Binding SelectedInstance.IsRealInstance}"
-                                    Height="42" Padding="14,0" Margin="0,0,8,8">
+                                    ToolTip="前回のプロジェクトを開く">
                                 <StackPanel Orientation="Horizontal">
-                                    <Path Width="16" Height="16" Stretch="Uniform" Margin="0,0,8,0"
+                                    <Path Width="16" Height="16" Stretch="Uniform" Style="{StaticResource LaunchActionIconStyle}"
                                           Data="M13.5,8H12V13L16.28,15.54L17,14.33L13.5,12.25V8M13,3A9,9 0 0,0 4,12H1L4.96,16.03L9,12H6A7,7 0 0,1 13,5A7,7 0 0,1 20,12A7,7 0 0,1 13,19C11.07,19 9.32,18.21 8.06,16.94L6.64,18.36C8.27,20 10.5,21 13,21A9,9 0 0,0 22,12A9,9 0 0,0 13,3Z"
                                           Fill="{DynamicResource TextBrush}"/>
-                                    <TextBlock Text="{x:Static local:Translate.OpenLastProject}" VerticalAlignment="Center"/>
+                                    <TextBlock Text="{x:Static local:Translate.OpenLastProject}" Style="{StaticResource LaunchActionTextStyle}" VerticalAlignment="Center"/>
                                 </StackPanel>
                             </Button>
-                            <Button Click="CreateNewProject_Click"
+                            <Button Click="CreateNewProject_Click" Style="{StaticResource LaunchActionButtonStyle}"
                                     IsEnabled="{Binding SelectedInstance.IsRealInstance}"
-                                    Height="42" Padding="14,0" Margin="0,0,8,8">
+                                    ToolTip="新規プロジェクト">
                                 <StackPanel Orientation="Horizontal">
-                                    <Path Width="16" Height="16" Stretch="Uniform" Margin="0,0,8,0"
+                                    <Path Width="16" Height="16" Stretch="Uniform" Style="{StaticResource LaunchActionIconStyle}"
                                           Data="M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z"
                                           Fill="{DynamicResource TextBrush}"/>
-                                    <TextBlock Text="{x:Static local:Translate.CreateNew}" VerticalAlignment="Center"/>
+                                    <TextBlock Text="{x:Static local:Translate.CreateNew}" Style="{StaticResource LaunchActionTextStyle}" VerticalAlignment="Center"/>
                                 </StackPanel>
                             </Button>
                         </DockPanel>
@@ -419,6 +464,7 @@
                         <DataGrid x:Name="ProjectGrid" Grid.Row="3"
                                   ItemsSource="{Binding FilteredProjects}"
                                   MouseDoubleClick="OpenProject_Click"
+                                  PreviewMouseWheel="ListContent_PreviewMouseWheel"
                                   AutoGenerateColumns="False" IsReadOnly="True"
                                   CanUserResizeRows="False">
                             <DataGrid.Columns>
@@ -497,7 +543,8 @@
 
                         <!-- 表形式プラグイン一覧 -->
                         <ListView x:Name="LocalPluginList" Grid.Row="1" ItemsSource="{Binding LocalPlugins}"
-                                  GridViewColumnHeader.Click="LocalPluginHeader_Click">
+                                  GridViewColumnHeader.Click="LocalPluginHeader_Click"
+                                  PreviewMouseWheel="ListContent_PreviewMouseWheel">
                             <ListView.View>
                                 <GridView>
                                     <GridViewColumn Width="180" Header="{x:Static local:Translate.PluginName}">
@@ -596,13 +643,15 @@
                         </Grid.RowDefinitions>
                         <Grid>
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="230" MinWidth="190" MaxWidth="320"/>
-                                <ColumnDefinition Width="4"/>
+                                <ColumnDefinition x:Name="PortalToggleColumn" Width="36"/>
+                                <ColumnDefinition x:Name="PortalMenuColumn" Width="0"/>
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
 
                             <!-- 左サイドバー -->
-                            <ScrollViewer Grid.Column="0" VerticalScrollBarVisibility="Auto">
+                            <ScrollViewer x:Name="PortalMenuPanel" Grid.Column="0" Grid.ColumnSpan="3" Width="230"
+                                          Margin="36,0,0,0" HorizontalAlignment="Left" VerticalScrollBarVisibility="Auto"
+                                          Background="{DynamicResource PanelBrush}" Panel.ZIndex="5">
                                 <StackPanel Margin="4">
 
                                     <!-- 1. キーワード検索 -->
@@ -815,8 +864,43 @@
                                 </StackPanel>
                             </ScrollViewer>
 
-                            <GridSplitter Grid.Column="1" Width="4"
-                                          HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Cursor="SizeWE"/>
+                            <!-- メニューを固定しない場合だけ、ポータル内の操作レーンから切り替える。 -->
+                            <Button Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Top"
+                                    Width="30" Height="30" Margin="0,6,0,0" Padding="0" Panel.ZIndex="3"
+                                    Click="TogglePortalMenu_Click" ToolTip="プラグインポータルのメニューを表示/非表示">
+                                <Button.Style>
+                                    <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                        <Style.Triggers>
+                                            <!-- インスタンス一覧が固定かつポータルメニューが非固定の場合だけ、ここに表示する。 -->
+                                            <MultiDataTrigger>
+                                                <MultiDataTrigger.Conditions>
+                                                    <Condition Binding="{Binding KeepInstancePanelVisible}" Value="True"/>
+                                                    <Condition Binding="{Binding KeepPortalMenuVisible}" Value="False"/>
+                                                </MultiDataTrigger.Conditions>
+                                                <Setter Property="Visibility" Value="Visible"/>
+                                            </MultiDataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Button.Style>
+                                <Grid>
+                                    <Path Width="16" Height="16" Stretch="Uniform" Fill="{DynamicResource TextBrush}"
+                                          Data="M14,7L9,12L14,17V7Z" Visibility="{Binding IsPortalMenuVisible, Converter={StaticResource BoolToVis}}"/>
+                                    <Path Width="16" Height="16" Stretch="Uniform" Fill="{DynamicResource TextBrush}"
+                                          Data="M10,7L15,12L10,17V7Z">
+                                        <Path.Style>
+                                            <Style TargetType="Path">
+                                                <Setter Property="Visibility" Value="Collapsed"/>
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding IsPortalMenuVisible}" Value="False">
+                                                        <Setter Property="Visibility" Value="Visible"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Path.Style>
+                                    </Path>
+                                </Grid>
+                            </Button>
 
                             <!-- 右メイン領域 -->
                             <Grid Grid.Column="2">
@@ -862,7 +946,7 @@
                                                                 BorderThickness="0,0,0,1"
                                                                 Padding="8,6"
                                                                 Cursor="Hand"
-                                                                MouseLeftButtonUp="PortalCardHeader_Click">
+                                                                MouseLeftButtonUp="PortalCardSelection_Click">
                                                             <Grid>
                                                                 <Grid.ColumnDefinitions>
                                                                     <ColumnDefinition Width="Auto"/>
@@ -1144,6 +1228,8 @@
                                     <RowDefinition Height="38"/>
                                     <RowDefinition Height="38"/>
                                     <RowDefinition Height="38"/>
+                                    <RowDefinition Height="38"/>
+                                    <RowDefinition Height="38"/>
                                 </Grid.RowDefinitions>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="*"/>
@@ -1199,6 +1285,20 @@
                                 <CheckBox Grid.Row="4" Grid.Column="1"
                                           Style="{StaticResource ToggleSwitchStyle}"
                                           IsChecked="{Binding HideExePath}"
+                                          VerticalAlignment="Center" HorizontalAlignment="Right"/>
+
+                                <TextBlock Grid.Row="5" Grid.Column="0"
+                                           Text="インスタンス一覧を常時表示" VerticalAlignment="Center" HorizontalAlignment="Left"/>
+                                <CheckBox Grid.Row="5" Grid.Column="1"
+                                          Style="{StaticResource ToggleSwitchStyle}"
+                                          IsChecked="{Binding KeepInstancePanelVisible}"
+                                          VerticalAlignment="Center" HorizontalAlignment="Right"/>
+
+                                <TextBlock Grid.Row="6" Grid.Column="0"
+                                           Text="ポータルメニューを常時表示" VerticalAlignment="Center" HorizontalAlignment="Left"/>
+                                <CheckBox Grid.Row="6" Grid.Column="1"
+                                          Style="{StaticResource ToggleSwitchStyle}"
+                                          IsChecked="{Binding KeepPortalMenuVisible}"
                                           VerticalAlignment="Center" HorizontalAlignment="Right"/>
                             </Grid>
 
@@ -1315,7 +1415,7 @@
             </TabControl>
 
             <!-- ポータル選択バー（ポータルタブで選択数>0のとき表示） -->
-            <Border Grid.Row="1"
+            <Border Grid.Row="1" Grid.Column="1"
                     Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}"
                     BorderBrush="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}"
                     BorderThickness="0,1,0,0"
@@ -1372,6 +1472,75 @@
                     </StackPanel>
                 </Grid>
             </Border>
+
+            <!-- メイン領域左の操作レーン。コンテンツを覆わずにサイド領域を切り替える。 -->
+            <Button Grid.Row="0" Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Top"
+                    Width="30" Height="30" Margin="0,6,0,0" Padding="0" Panel.ZIndex="3"
+                    Click="ToggleInstancePanel_Click" ToolTip="インスタンス一覧を表示/非表示">
+                <Button.Style>
+                    <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding KeepInstancePanelVisible}" Value="True">
+                                <Setter Property="Visibility" Value="Collapsed"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
+                <Grid>
+                    <Path Width="16" Height="16" Stretch="Uniform" Fill="{DynamicResource TextBrush}"
+                          Data="M14,7L9,12L14,17V7Z" Visibility="{Binding IsInstancePanelVisible, Converter={StaticResource BoolToVis}}"/>
+                    <Path Width="16" Height="16" Stretch="Uniform" Fill="{DynamicResource TextBrush}"
+                          Data="M10,7L15,12L10,17V7Z">
+                        <Path.Style>
+                            <Style TargetType="Path">
+                                <Setter Property="Visibility" Value="Collapsed"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding IsInstancePanelVisible}" Value="False">
+                                        <Setter Property="Visibility" Value="Visible"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Path.Style>
+                    </Path>
+                </Grid>
+            </Button>
+            <!-- 両方が非固定の場合のみ、ポータルメニューの操作をインスタンス一覧レーンへ並べる。 -->
+            <Button Grid.Row="0" Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Top"
+                    Width="30" Height="30" Margin="0,42,0,0" Padding="0" Panel.ZIndex="3"
+                    Click="TogglePortalMenu_Click" ToolTip="プラグインポータルのメニューを表示/非表示">
+                <Button.Style>
+                        <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+                            <Setter Property="Visibility" Value="Collapsed"/>
+                            <Style.Triggers>
+                                <MultiDataTrigger>
+                                    <MultiDataTrigger.Conditions>
+                                        <Condition Binding="{Binding KeepInstancePanelVisible}" Value="False"/>
+                                        <Condition Binding="{Binding KeepPortalMenuVisible}" Value="False"/>
+                                        <Condition Binding="{Binding IsPortalTabSelected}" Value="True"/>
+                                    </MultiDataTrigger.Conditions>
+                                <Setter Property="Visibility" Value="Visible"/>
+                            </MultiDataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
+                <Grid>
+                    <Path Width="16" Height="16" Stretch="Uniform" Fill="{DynamicResource TextBrush}"
+                          Data="M14,7L9,12L14,17V7Z" Visibility="{Binding IsPortalMenuVisible, Converter={StaticResource BoolToVis}}"/>
+                    <Path Width="16" Height="16" Stretch="Uniform" Fill="{DynamicResource TextBrush}"
+                          Data="M10,7L15,12L10,17V7Z">
+                        <Path.Style>
+                            <Style TargetType="Path">
+                                <Setter Property="Visibility" Value="Collapsed"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding IsPortalMenuVisible}" Value="False">
+                                        <Setter Property="Visibility" Value="Visible"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Path.Style>
+                    </Path>
+                </Grid>
+            </Button>
         </Grid>
     </Grid>
 </Window>

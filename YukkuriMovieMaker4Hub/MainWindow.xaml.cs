@@ -220,6 +220,84 @@ namespace YukkuriMovieMaker4Hub
             get => _currentSettings.AutoOpenSiteOnBulkDownload;
             set { _currentSettings.AutoOpenSiteOnBulkDownload = value; SaveAll(); OnPropertyChanged(nameof(AutoOpenSiteOnBulkDownload)); }
         }
+        public bool KeepInstancePanelVisible
+        {
+            get => _currentSettings.KeepInstancePanelVisible;
+            set
+            {
+                _currentSettings.KeepInstancePanelVisible = value;
+                if (value) { ShowInstancePanel(); _instancePanelAutoHidden = false; }
+                else UpdateResponsiveLayout(ActualWidth);
+                UpdateToggleLanes();
+                SaveAll();
+                OnPropertyChanged(nameof(KeepInstancePanelVisible));
+            }
+        }
+        public bool KeepPortalMenuVisible
+        {
+            get => _currentSettings.KeepPortalMenuVisible;
+            set
+            {
+                _currentSettings.KeepPortalMenuVisible = value;
+                if (value) { ShowPortalMenu(); _portalMenuAutoHidden = false; }
+                else UpdateResponsiveLayout(ActualWidth);
+                UpdatePortalMenuLayout();
+                UpdateToggleLanes();
+                SaveAll();
+                OnPropertyChanged(nameof(KeepPortalMenuVisible));
+            }
+        }
+
+        private bool _isCompactLayout;
+        public bool IsCompactLayout
+        {
+            get => _isCompactLayout;
+            private set
+            {
+                if (_isCompactLayout == value) return;
+                _isCompactLayout = value;
+                OnPropertyChanged(nameof(IsCompactLayout));
+            }
+        }
+
+        private bool _isInstancePanelVisible = true;
+        private bool _instancePanelAutoHidden;
+        public bool IsInstancePanelVisible
+        {
+            get => _isInstancePanelVisible;
+            private set
+            {
+                if (_isInstancePanelVisible == value) return;
+                _isInstancePanelVisible = value;
+                OnPropertyChanged(nameof(IsInstancePanelVisible));
+            }
+        }
+
+        private bool _isPortalMenuVisible = true;
+        private bool _portalMenuAutoHidden;
+        public bool IsPortalMenuVisible
+        {
+            get => _isPortalMenuVisible;
+            private set
+            {
+                if (_isPortalMenuVisible == value) return;
+                _isPortalMenuVisible = value;
+                OnPropertyChanged(nameof(IsPortalMenuVisible));
+            }
+        }
+
+        private bool _isPortalTabSelected;
+        public bool IsPortalTabSelected
+        {
+            get => _isPortalTabSelected;
+            private set
+            {
+                if (_isPortalTabSelected == value) return;
+                _isPortalTabSelected = value;
+                OnPropertyChanged(nameof(IsPortalTabSelected));
+            }
+        }
+
         private string _lastSortField = "DisplayName";
         private ListSortDirection _lastSortDir = ListSortDirection.Ascending;
         private List<YmmUpdateItem> _ymmUpdates = new List<YmmUpdateItem>();
@@ -228,27 +306,23 @@ namespace YukkuriMovieMaker4Hub
         {
             try
             {
-                var xml = await _http.GetStringAsync("https://manjubox.net/rss.xml");
-                var doc = new System.Xml.XmlDocument();
-                doc.LoadXml(xml);
-                var nodes = doc.SelectNodes("//item");
-                _ymmUpdates.Clear();
+                // RSSを優先し、取得範囲外の版だけmanjubox.postsのMarkdownで補完する。
+                var updates = await LoadYmmUpdatesFromRssAsync();
+                Version? oldestLocalVersion = Instances
+                    .Select(instance => Version.TryParse(instance.GetLocalVersion(), out var version) ? version : null)
+                    .Where(version => version != null)
+                    .Cast<Version>()
+                    .OrderBy(version => version)
+                    .FirstOrDefault();
 
-                if (nodes != null)
-                {
-                    foreach (System.Xml.XmlNode node in nodes)
-                    {
-                        string title = node.SelectSingleNode("title")?.InnerText ?? "";
-                        string desc = node.SelectSingleNode("description")?.InnerText ?? "";
-                        var match = Regex.Match(title, @"v(\d+\.\d+\.\d+\.\d+)");
+                if (oldestLocalVersion != null)
+                    updates.AddRange(await LoadMissingYmmReleaseNotesAsync(oldestLocalVersion, updates));
 
-                        if (match.Success && Version.TryParse(match.Groups[1].Value, out var v))
-                        {
-                            _ymmUpdates.Add(new YmmUpdateItem { Title = title, Description = desc, Version = v });
-                        }
-                    }
-                }
-
+                _ymmUpdates = updates
+                    .GroupBy(update => update.Version)
+                    .Select(group => group.First())
+                    .OrderByDescending(update => update.Version)
+                    .ToList();
                 if (_ymmUpdates.Count == 0) return;
                 var latest = _ymmUpdates[0].Version;
 
@@ -263,6 +337,87 @@ namespace YukkuriMovieMaker4Hub
             catch { }
         }
 
+        private async Task<List<YmmUpdateItem>> LoadYmmUpdatesFromRssAsync()
+        {
+            var updates = new List<YmmUpdateItem>();
+            var xml = await _http.GetStringAsync("https://manjubox.net/rss.xml");
+            var document = new System.Xml.XmlDocument();
+            document.LoadXml(xml);
+            var nodes = document.SelectNodes("//item");
+            if (nodes == null) return updates;
+
+            foreach (System.Xml.XmlNode node in nodes)
+            {
+                string title = node.SelectSingleNode("title")?.InnerText ?? string.Empty;
+                string description = node.SelectSingleNode("description")?.InnerText ?? string.Empty;
+                string fullContent = node.ChildNodes.Cast<System.Xml.XmlNode>()
+                    .FirstOrDefault(child => child.LocalName == "encoded")?.InnerText ?? string.Empty;
+                if (fullContent.Length > description.Length) description = fullContent;
+
+                var match = Regex.Match(title, @"v(\d+\.\d+\.\d+\.\d+)");
+                if (!match.Success || !Version.TryParse(match.Groups[1].Value, out var version)) continue;
+
+                updates.Add(new YmmUpdateItem
+                {
+                    Title = title,
+                    Description = description,
+                    ArticleUrl = node.SelectSingleNode("link")?.InnerText ?? string.Empty,
+                    Version = version,
+                });
+            }
+            return updates;
+        }
+
+        private async Task<List<YmmUpdateItem>> LoadMissingYmmReleaseNotesAsync(
+            Version oldestLocalVersion,
+            IReadOnlyCollection<YmmUpdateItem> rssUpdates)
+        {
+            const string repository = "manju-summoner/manjubox.posts";
+            const string prefix = "ymm4/release/";
+            using var request = new HttpRequestMessage(HttpMethod.Get,
+                $"https://api.github.com/repos/{repository}/git/trees/master?recursive=1");
+            request.Headers.UserAgent.ParseAdd("YukkuriMovieMaker4Hub");
+            using var response = await _http.SendAsync(request);
+            response.EnsureSuccessStatusCode();
+
+            using var document = JsonDocument.Parse(await response.Content.ReadAsStringAsync());
+            var existingVersions = rssUpdates.Where(update => update.Version != null)
+                .Select(update => update.Version!)
+                .ToHashSet();
+            var paths = document.RootElement.GetProperty("tree").EnumerateArray()
+                .Select(entry => entry.GetProperty("path").GetString() ?? string.Empty)
+                .Where(path => path.StartsWith(prefix, StringComparison.OrdinalIgnoreCase)
+                    && path.EndsWith(".md", StringComparison.OrdinalIgnoreCase))
+                .Select(path => new { Path = path, FileName = Path.GetFileNameWithoutExtension(path) })
+                .Where(item => Version.TryParse(item.FileName.TrimStart('v', 'V'), out _))
+                .Select(item => new { item.Path, Version = Version.Parse(item.FileName.TrimStart('v', 'V')) })
+                .Where(item => item.Version > oldestLocalVersion && !existingVersions.Contains(item.Version))
+                .ToList();
+
+            using var semaphore = new SemaphoreSlim(8, 8);
+            var tasks = paths.Select(async item =>
+            {
+                await semaphore.WaitAsync();
+                try
+                {
+                    string rawUrl = $"https://raw.githubusercontent.com/{repository}/master/{item.Path}";
+                    string markdown = await _http.GetStringAsync(rawUrl);
+                    string title = Regex.Match(markdown, @"^\s*#\s+(.+)$", RegexOptions.Multiline).Groups[1].Value.Trim();
+                    return new YmmUpdateItem
+                    {
+                        Title = string.IsNullOrEmpty(title) ? $"ゆっくりMovieMaker v{item.Version}" : title,
+                        Description = markdown,
+                        ArticleUrl = $"https://github.com/{repository}/blob/master/{item.Path}",
+                        Version = item.Version,
+                    };
+                }
+                catch { return null; }
+                finally { semaphore.Release(); }
+            });
+
+            return (await Task.WhenAll(tasks)).Where(item => item != null).Cast<YmmUpdateItem>().ToList();
+        }
+
         private void ShowUpdateInfo_Click(object sender, RoutedEventArgs e)
         {
             if (SelectedInstance == null) return;
@@ -270,8 +425,7 @@ namespace YukkuriMovieMaker4Hub
             Version.TryParse(SelectedInstance.GetLocalVersion(), out var localV);
             var latestVersion = _ymmUpdates.Count > 0 ? _ymmUpdates[0].Version : null;
             var filteredUpdates = _ymmUpdates
-                .Where(u => u.Version > localV)
-                .Take(10)
+                .Where(u => u.Version > localV && (latestVersion == null || u.Version <= latestVersion))
                 .ToList();
 
             if (filteredUpdates.Count == 0) return;
@@ -335,14 +489,22 @@ namespace YukkuriMovieMaker4Hub
             runningTimer.Tick += (s, e) => RefreshRunningStatus();
             runningTimer.Start();
         }
-        public string HubVersionText => $"現在のバージョン: v{HubVersion}";
+        public string HubVersionText => string.Format(Translate.HubCurrentVersion, HubVersion);
 
         private static readonly string HubVersion =
             System.Reflection.Assembly.GetExecutingAssembly().GetName().Version?.ToString(3) ?? "5.0.0";
 
-        private static bool IsNewerVersion(string latestTag, string currentVersion)
+        private enum HubVersionComparison
         {
-            if (string.IsNullOrEmpty(latestTag)) return false;
+            Unknown,
+            Same,
+            ReleaseIsNewer,
+            CurrentBuildIsNewer,
+        }
+
+        private static HubVersionComparison CompareHubVersions(string latestTag, string currentVersion)
+        {
+            if (string.IsNullOrEmpty(latestTag)) return HubVersionComparison.Unknown;
             string v1Str = latestTag.TrimStart('v', 'V').Trim();
             string v2Str = currentVersion.TrimStart('v', 'V').Trim();
 
@@ -360,9 +522,12 @@ namespace YukkuriMovieMaker4Hub
             var ver2 = ParseVer(v2Str);
             if (ver1 != null && ver2 != null)
             {
-                return ver1 > ver2;
+                if (ver1 == ver2) return HubVersionComparison.Same;
+                return ver1 > ver2
+                    ? HubVersionComparison.ReleaseIsNewer
+                    : HubVersionComparison.CurrentBuildIsNewer;
             }
-            return false;
+            return HubVersionComparison.Unknown;
         }
 
         private async Task CheckForHubUpdateAsync(bool isManual = false)
@@ -379,9 +544,11 @@ namespace YukkuriMovieMaker4Hub
                     using var doc = JsonDocument.Parse(json);
                     var latestTag = doc.RootElement.GetProperty("tag_name").GetString() ?? string.Empty;
 
-                    bool hasUpdate = IsNewerVersion(latestTag, HubVersion);
+                    var versionComparison = CompareHubVersions(latestTag, HubVersion);
+                    bool hasVersionDifference = versionComparison is HubVersionComparison.ReleaseIsNewer
+                        or HubVersionComparison.CurrentBuildIsNewer;
 
-                    if (hasUpdate)
+                    if (hasVersionDifference)
                     {
                         if (!isManual && !string.IsNullOrEmpty(_currentSettings.IgnoreHubUpdateTag) &&
                             string.Equals(_currentSettings.IgnoreHubUpdateTag, latestTag, StringComparison.OrdinalIgnoreCase))
@@ -389,16 +556,17 @@ namespace YukkuriMovieMaker4Hub
                             return;
                         }
 
+                        bool canExecuteUpdate = versionComparison == HubVersionComparison.ReleaseIsNewer;
                         string? downloadUrl = null;
                         string? fileName = null;
-                        if (doc.RootElement.TryGetProperty("assets", out var assets) && assets.GetArrayLength() > 0)
+                        if (canExecuteUpdate && doc.RootElement.TryGetProperty("assets", out var assets) && assets.GetArrayLength() > 0)
                         {
                             var asset = assets[0];
                             downloadUrl = asset.GetProperty("browser_download_url").GetString();
                             fileName = asset.GetProperty("name").GetString();
                         }
 
-                        var dlg = new HubUpdateDialog(HubVersion, latestTag, downloadUrl, fileName) { Owner = this };
+                        var dlg = new HubUpdateDialog(HubVersion, latestTag, downloadUrl, fileName, canExecuteUpdate) { Owner = this };
                         dlg.ShowDialog();
 
                         if (dlg.DoNotShowAgain)
@@ -414,19 +582,19 @@ namespace YukkuriMovieMaker4Hub
                     }
                     else if (isManual)
                     {
-                        MessageBox.Show($"現在のバージョン（v{HubVersion}）は最新です。", "アップデート確認", MessageBoxButton.OK, MessageBoxImage.Information);
+                        MessageBox.Show(string.Format(Translate.HubAlreadyLatest, HubVersion), Translate.UpdateCheckTitle, MessageBoxButton.OK, MessageBoxImage.Information);
                     }
                 }
                 else if (isManual)
                 {
-                    MessageBox.Show("最新情報の取得に失敗しました。ネットワーク接続を確認してください。", "エラー", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    MessageBox.Show(Translate.LatestInfoFetchFailed, Translate.ErrorTitle, MessageBoxButton.OK, MessageBoxImage.Warning);
                 }
             }
             catch (Exception ex)
             {
                 if (isManual)
                 {
-                    MessageBox.Show($"アップデートの確認中にエラーが発生しました:\n{ex.Message}", "エラー", MessageBoxButton.OK, MessageBoxImage.Error);
+                    MessageBox.Show(string.Format(Translate.HubUpdateCheckFailed, ex.Message), Translate.ErrorTitle, MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
         }
@@ -458,7 +626,7 @@ namespace YukkuriMovieMaker4Hub
 
                         if (!string.IsNullOrEmpty(downloadUrl) && !string.IsNullOrEmpty(fileName))
                         {
-                            var r = MessageBox.Show($"最新バージョン {latestTag} をダウンロードしてアップデートを実行しますか？", "アップデートの実行", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                            var r = MessageBox.Show(string.Format(Translate.HubUpdateExecuteConfirm, latestTag), Translate.HubUpdateExecuteTitle, MessageBoxButton.YesNo, MessageBoxImage.Question);
                             if (r == MessageBoxResult.Yes)
                             {
                                 await DownloadAndExecuteUpdateAsync(downloadUrl, fileName);
@@ -467,11 +635,11 @@ namespace YukkuriMovieMaker4Hub
                         }
                     }
                 }
-                MessageBox.Show("ダウンロード可能なアセットが見つかりませんでした。", "エラー", MessageBoxButton.OK, MessageBoxImage.Warning);
+                MessageBox.Show(Translate.NoDownloadAsset, Translate.ErrorTitle, MessageBoxButton.OK, MessageBoxImage.Warning);
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"アップデート実行中にエラーが発生しました:\n{ex.Message}", "エラー", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(string.Format(Translate.HubUpdateExecutionFailed, ex.Message), Translate.ErrorTitle, MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
@@ -666,6 +834,145 @@ namespace YukkuriMovieMaker4Hub
             }
         }
 
+        private void ToggleInstancePanel_Click(object sender, RoutedEventArgs e)
+        {
+            if (IsInstancePanelVisible)
+            {
+                HideInstancePanel();
+                _instancePanelAutoHidden = false;
+                SaveAll();
+                return;
+            }
+
+            ShowInstancePanel();
+            _instancePanelAutoHidden = false;
+        }
+
+        private void TogglePortalMenu_Click(object sender, RoutedEventArgs e)
+        {
+            if (IsPortalMenuVisible)
+            {
+                HidePortalMenu();
+                _portalMenuAutoHidden = false;
+                return;
+            }
+
+            ShowPortalMenu();
+            _portalMenuAutoHidden = false;
+        }
+
+        private void MainWindow_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            IsCompactLayout = e.NewSize.Width < 900;
+            UpdateResponsiveLayout(e.NewSize.Width);
+        }
+
+        private void UpdateResponsiveLayout(double windowWidth)
+        {
+            const double compactWidth = 900;
+
+            if (windowWidth < compactWidth)
+            {
+                if (!KeepInstancePanelVisible && IsInstancePanelVisible)
+                {
+                    HideInstancePanel();
+                    _instancePanelAutoHidden = true;
+                }
+                if (!KeepPortalMenuVisible && IsPortalMenuVisible)
+                {
+                    HidePortalMenu();
+                    _portalMenuAutoHidden = true;
+                }
+                return;
+            }
+
+            if (_instancePanelAutoHidden)
+            {
+                ShowInstancePanel();
+                _instancePanelAutoHidden = false;
+            }
+            if (_portalMenuAutoHidden)
+            {
+                ShowPortalMenu();
+                _portalMenuAutoHidden = false;
+            }
+
+            // メインタブ領域をおよそ760px確保し、余った幅だけインスタンス一覧を広げる。
+            if (IsInstancePanelVisible)
+            {
+                double desiredWidth = Math.Clamp(windowWidth - 760, _currentSettings.InstancePanelWidth, 400);
+                InstancePanelColumn.Width = new GridLength(desiredWidth);
+            }
+        }
+
+        private void HideInstancePanel()
+        {
+            _currentSettings.InstancePanelWidth = Math.Clamp(InstancePanelColumn.ActualWidth, 150, 400);
+            InstancePanel.Visibility = Visibility.Collapsed;
+            InstancePanelColumn.MinWidth = 0;
+            InstancePanelColumn.Width = new GridLength(0);
+            InstancePanelSplitter.Width = 0;
+            IsInstancePanelVisible = false;
+        }
+
+        private void ShowInstancePanel()
+        {
+            InstancePanelColumn.MinWidth = 150;
+            InstancePanelColumn.Width = new GridLength(Math.Clamp(_currentSettings.InstancePanelWidth, 150, 400));
+            InstancePanelSplitter.Width = 4;
+            InstancePanel.Visibility = Visibility.Visible;
+            IsInstancePanelVisible = true;
+        }
+
+        private void HidePortalMenu()
+        {
+            PortalMenuPanel.Visibility = Visibility.Collapsed;
+            UpdatePortalMenuLayout();
+            IsPortalMenuVisible = false;
+        }
+
+        private void ShowPortalMenu()
+        {
+            PortalMenuPanel.Visibility = Visibility.Visible;
+            UpdatePortalMenuLayout();
+            IsPortalMenuVisible = true;
+        }
+
+        private void UpdatePortalMenuLayout()
+        {
+            if (KeepPortalMenuVisible)
+            {
+                // 固定時は通常のサイドバーとして一覧領域を確保する。
+                PortalToggleColumn.Width = new GridLength(0);
+                PortalMenuColumn.Width = new GridLength(230);
+                Grid.SetColumn(PortalMenuPanel, 1);
+                Grid.SetColumnSpan(PortalMenuPanel, 1);
+                PortalMenuPanel.Width = double.NaN;
+                PortalMenuPanel.HorizontalAlignment = HorizontalAlignment.Stretch;
+                PortalMenuPanel.Margin = new Thickness(0);
+            }
+            else
+            {
+                // 非固定時は操作レーンだけを確保し、メニューは一覧の上に重ねる。
+                PortalToggleColumn.Width = new GridLength(36);
+                PortalMenuColumn.Width = new GridLength(0);
+                Grid.SetColumn(PortalMenuPanel, 0);
+                Grid.SetColumnSpan(PortalMenuPanel, 3);
+                PortalMenuPanel.Width = 230;
+                PortalMenuPanel.HorizontalAlignment = HorizontalAlignment.Left;
+                PortalMenuPanel.Margin = new Thickness(36, 0, 0, 0);
+            }
+        }
+
+        private void UpdateToggleLanes()
+        {
+            // インスタンス一覧を固定する場合、メイン側の操作は不要。
+            // ポータルが非固定なら、そのタブ内の専用レーンを使う。
+            MainToggleColumn.Width = KeepInstancePanelVisible
+                ? new GridLength(0)
+                : new GridLength(36);
+        }
+
         private void SaveAll()
         {
             try
@@ -783,6 +1090,13 @@ namespace YukkuriMovieMaker4Hub
         {
             if (SelectedInstance != null && !string.IsNullOrEmpty(SelectedInstance.ExePath))
             {
+                var result = MessageBox.Show(
+                    string.Format(Translate.DeleteInstanceConfirm, SelectedInstance.Name),
+                    Translate.DeleteInstanceTitle,
+                    MessageBoxButton.YesNo,
+                    MessageBoxImage.Warning);
+                if (result != MessageBoxResult.Yes) return;
+
                 _currentSettings.Instances.Remove(SelectedInstance);
                 Instances.Remove(SelectedInstance);
                 _settingsManager.Save(_currentSettings);
@@ -790,12 +1104,28 @@ namespace YukkuriMovieMaker4Hub
             }
         }
 
+        private void MoveInstanceUp_Click(object sender, RoutedEventArgs e) => MoveSelectedInstance(-1);
+        private void MoveInstanceDown_Click(object sender, RoutedEventArgs e) => MoveSelectedInstance(1);
+
+        private void MoveSelectedInstance(int offset)
+        {
+            if (SelectedInstance == null || string.IsNullOrEmpty(SelectedInstance.ExePath)) return;
+            int currentIndex = Instances.IndexOf(SelectedInstance);
+            int targetIndex = currentIndex + offset;
+            if (currentIndex < 0 || targetIndex < 0 || targetIndex >= Instances.Count) return;
+
+            Instances.Move(currentIndex, targetIndex);
+            InstanceListBox.SelectedItem = SelectedInstance;
+            SaveAll();
+        }
+
         private async void TabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (e.Source is TabControl tc && tc.SelectedItem is TabItem ti && ti.Header != null)
             {
                 string header = ti.Header.ToString() ?? "";
-                if (header == Translate.PluginPortal) await LoadOnlinePlugins();
+                IsPortalTabSelected = header == Translate.PluginPortal || header == "プラグインポータル";
+                if (IsPortalTabSelected) await LoadOnlinePlugins();
                 if (header == Translate.Overview)
                 {
                     RefreshRecentProjects();
@@ -1216,6 +1546,30 @@ namespace YukkuriMovieMaker4Hub
         private void ListView_PreviewMouseWheel(object sender, System.Windows.Input.MouseWheelEventArgs e)
         {
             // ItemSizeSlider removed in new UI
+        }
+
+        private void ListContent_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
+        {
+            if (Keyboard.Modifiers != ModifierKeys.Shift) return;
+
+            if (sender is not DependencyObject source) return;
+            var scrollViewer = FindVisualChild<ScrollViewer>(source);
+            if (scrollViewer == null) return;
+
+            scrollViewer.ScrollToHorizontalOffset(scrollViewer.HorizontalOffset - e.Delta);
+            e.Handled = true;
+        }
+
+        private static T? FindVisualChild<T>(DependencyObject parent) where T : DependencyObject
+        {
+            for (int i = 0; i < VisualTreeHelper.GetChildrenCount(parent); i++)
+            {
+                var child = VisualTreeHelper.GetChild(parent, i);
+                if (child is T typed) return typed;
+                var result = FindVisualChild<T>(child);
+                if (result != null) return result;
+            }
+            return null;
         }
 
         private async void DirectDownload_Click(object sender, RoutedEventArgs e)
@@ -2591,7 +2945,7 @@ namespace YukkuriMovieMaker4Hub
         }
         private void RemoveProjectDir_Click(object sender, RoutedEventArgs e)
         {
-            if (sender is Button btn && btn.DataContext is string dir)
+            if (ProjectDirListBox.SelectedItem is string dir)
             {
                 ProjectDirectories.Remove(dir);
                 SaveAll();
@@ -2891,16 +3245,23 @@ namespace YukkuriMovieMaker4Hub
                 string? headerText = header.Column.Header?.ToString();
                 if (headerText != null)
                 {
-                    if (headerText == Translate.PluginName || headerText == "プラグイン名") LocalPluginSortIndex = 0;
-                    else if (headerText == Translate.StatusColumn || headerText == "状態") LocalPluginSortIndex = 1;
-                    else if (headerText == Translate.AuthorColumn || headerText == "作者") LocalPluginSortIndex = 2;
-                    else if (headerText == Translate.TypeColumn || headerText == "タイプ") LocalPluginSortIndex = 3;
-                    else if (headerText == Translate.VersionColumn || headerText == "バージョン") LocalPluginSortIndex = 4;
-                    else if (headerText == Translate.PublishedAt || headerText == "公開日時") LocalPluginSortIndex = 5;
-                    else if (headerText == Translate.DownloadedAt || headerText == "DL日時") LocalPluginSortIndex = 6;
-                    else LocalPluginSortAscending = !LocalPluginSortAscending;
+                    if (headerText == Translate.PluginName || headerText == "プラグイン名") SetLocalPluginSort(0);
+                    else if (headerText == Translate.StatusColumn || headerText == "状態") SetLocalPluginSort(1);
+                    else if (headerText == Translate.AuthorColumn || headerText == "作者") SetLocalPluginSort(2);
+                    else if (headerText == Translate.TypeColumn || headerText == "タイプ") SetLocalPluginSort(3);
+                    else if (headerText == Translate.VersionColumn || headerText == "バージョン") SetLocalPluginSort(4);
+                    else if (headerText == Translate.PublishedAt || headerText == "公開日時") SetLocalPluginSort(5);
+                    else if (headerText == Translate.DownloadedAt || headerText == "DL日時") SetLocalPluginSort(6);
                 }
             }
+        }
+
+        private void SetLocalPluginSort(int sortIndex)
+        {
+            if (LocalPluginSortIndex == sortIndex)
+                LocalPluginSortAscending = !LocalPluginSortAscending;
+            else
+                LocalPluginSortIndex = sortIndex;
         }
 
         private void SelectAllTypeFilters_Click(object sender, RoutedEventArgs e)
@@ -3052,11 +3413,12 @@ namespace YukkuriMovieMaker4Hub
             try { Process.Start(new ProcessStartInfo("https://manjubox.net/ymm4/faq/plugin/list/") { UseShellExecute = true }); } catch { }
         }
 
-        /// <summary>YMM4アップデート確認（インスタンスリスト内の再読み込みボタン）</summary>
-        private async void CheckInstanceYmmUpdate_Click(object sender, RoutedEventArgs e)
+        /// <summary>選択中インスタンスのYMM4アップデートを確認する。</summary>
+        private async void CheckSelectedInstanceYmmUpdate_Click(object sender, RoutedEventArgs e)
         {
-            var instance = (sender as FrameworkElement)?.DataContext as InstanceInfo;
-            if (instance == null) return;
+            var instance = SelectedInstance;
+            if (instance == null || !instance.IsRealInstance) return;
+
             await CheckYmmUpdates();
             if (instance.HasUpdate)
                 ShowUpdateInfoForInstance(instance);
@@ -3067,7 +3429,9 @@ namespace YukkuriMovieMaker4Hub
         {
             Version.TryParse(instance.GetLocalVersion(), out var localV);
             var latestVersion = _ymmUpdates.Count > 0 ? _ymmUpdates[0].Version : null;
-            var filteredUpdates = _ymmUpdates.Where(u => u.Version > localV).Take(10).ToList();
+            var filteredUpdates = _ymmUpdates
+                .Where(u => u.Version > localV && (latestVersion == null || u.Version <= latestVersion))
+                .ToList();
             if (filteredUpdates.Count == 0) return;
             var dlg = new YmmUpdateDialog(
                 instanceName: instance.Name,
@@ -3326,6 +3690,27 @@ namespace YukkuriMovieMaker4Hub
             // ウィンドウ表示後にテーマを再適用してWindow.Resourcesを確実に更新する
             ApplyTheme();
             ThemeHelper.ApplyTitleBarTheme(this, ThemeHelper.IsCurrentDarkTheme);
+            IsCompactLayout = ActualWidth < 900;
+            UpdateResponsiveLayout(ActualWidth);
+            UpdatePortalMenuLayout();
+            UpdateToggleLanes();
+        }
+
+        private void PortalCardSelection_Click(object sender, MouseButtonEventArgs e)
+        {
+            // チェックボックス自身のクリックはバインディングに任せ、上帯のタグ部分だけで予約を切り替える。
+            for (DependencyObject? element = e.OriginalSource as DependencyObject;
+                 element != null;
+                 element = VisualTreeHelper.GetParent(element))
+            {
+                if (element is CheckBox) return;
+            }
+
+            if (sender is FrameworkElement fe && fe.DataContext is PluginCatalogItem plugin)
+            {
+                plugin.IsSelected = !plugin.IsSelected;
+                UpdatePortalSelectionBar();
+            }
         }
 
     }

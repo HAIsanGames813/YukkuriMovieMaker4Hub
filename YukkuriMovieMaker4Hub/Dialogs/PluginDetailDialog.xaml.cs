@@ -124,7 +124,7 @@ namespace YukkuriMovieMaker4Hub
                             Margin = new Thickness(0, 0, 6, 0),
                             Fill = System.Windows.SystemColors.ControlTextBrush
                         });
-                        sp.Children.Add(new TextBlock { Text = $"{siteName} で開く", VerticalAlignment = VerticalAlignment.Center });
+                        sp.Children.Add(new TextBlock { Text = string.Format(Translate.OpenSiteNamed, siteName), VerticalAlignment = VerticalAlignment.Center });
                         btn.Content = sp;
                         btn.Click += (s, ev) =>
                         {
@@ -147,7 +147,7 @@ namespace YukkuriMovieMaker4Hub
             if (host.Contains("twitter.com") || host.Contains("x.com")) return "X (Twitter)";
             if (host.Contains("youtube.com") || host.Contains("youtu.be")) return "YouTube";
             if (host.Contains("nicovideo.jp")) return Translate.Niconico;
-            if (host.Contains("ymm4-info.net")) return "情報サイト";
+            if (host.Contains("ymm4-info.net")) return Translate.InformationSite;
             if (host.Contains("bowlroll.net")) return "BowlRoll";
             if (host.Contains("drive.google.com")) return "Google Drive";
             if (host.Contains("dropbox.com")) return "Dropbox";
@@ -171,14 +171,14 @@ namespace YukkuriMovieMaker4Hub
             {
                 Dispatcher.Invoke(() =>
                 {
-                    if (GitHubStatusText != null) GitHubStatusText.Text = "リポジトリ情報が見つかりません。";
+                    if (GitHubStatusText != null) GitHubStatusText.Text = Translate.RepositoryNotFound;
                 });
                 return;
             }
 
             Dispatcher.Invoke(() =>
             {
-                if (GitHubStatusText != null) GitHubStatusText.Text = $"{owner}/{repo} の README.md を取得中...";
+                if (GitHubStatusText != null) GitHubStatusText.Text = string.Format(Translate.ReadmeLoading, owner, repo);
             });
 
             string? markdown = null;
@@ -235,7 +235,7 @@ namespace YukkuriMovieMaker4Hub
             {
                 Dispatcher.Invoke(() =>
                 {
-                    if (GitHubStatusText != null) GitHubStatusText.Text = "README.md を取得できませんでした。";
+                    if (GitHubStatusText != null) GitHubStatusText.Text = Translate.ReadmeNotFound;
                 });
                 return;
             }
@@ -262,14 +262,14 @@ namespace YukkuriMovieMaker4Hub
             {
                 Dispatcher.Invoke(() =>
                 {
-                    if (BoothStatusText != null) BoothStatusText.Text = "BOOTH の URL が見つかりません。";
+                    if (BoothStatusText != null) BoothStatusText.Text = Translate.BoothUrlNotFound;
                 });
                 return;
             }
 
             Dispatcher.Invoke(() =>
             {
-                if (BoothStatusText != null) BoothStatusText.Text = $"{boothUrl} の商品説明を取得中...";
+                if (BoothStatusText != null) BoothStatusText.Text = string.Format(Translate.BoothDescriptionLoading, boothUrl);
             });
 
             try
@@ -287,22 +287,23 @@ namespace YukkuriMovieMaker4Hub
             {
                 Dispatcher.Invoke(() =>
                 {
-                    if (BoothStatusText != null) BoothStatusText.Text = $"BOOTH 商品説明の取得に失敗しました: {ex.Message}";
+                    if (BoothStatusText != null) BoothStatusText.Text = string.Format(Translate.BoothDescriptionLoadFailed, ex.Message);
                 });
             }
         }
 
         private static string ExtractBoothDescription(string pageHtml, string boothUrl)
         {
-            string bodyContent = "";
+            // typography は出品者プロフィールにも使われるため、商品説明専用の要素だけを対象にする。
+            // また説明本文には入れ子の div が含まれるので、最初の </div> で切らず対応する閉じタグまで取得する。
+            string? bodyContent = ExtractBoothElementByClass(
+                pageHtml,
+                "js-item-description",
+                "item-description__content",
+                "js-item-description-content",
+                "item-description");
 
-            // <div class="js-item-description ..."> または <div class="typography ..."> を正規表現で抽出
-            var match = Regex.Match(pageHtml, @"<div[^>]*class=""[^""]*(?:js-item-description|item-description|typography)[^""]*""[^>]*>(.*?)</div>\s*(?:<div|<section|<footer)", RegexOptions.Singleline | RegexOptions.IgnoreCase);
-            if (match.Success)
-            {
-                bodyContent = match.Groups[1].Value;
-            }
-            else
+            if (string.IsNullOrWhiteSpace(bodyContent))
             {
                 // og:description からフォールバック
                 var ogMatch = Regex.Match(pageHtml, @"<meta[^>]*property=""og:description""[^>]*content=""([^""]*)""", RegexOptions.IgnoreCase);
@@ -312,7 +313,7 @@ namespace YukkuriMovieMaker4Hub
                 }
                 else
                 {
-                    bodyContent = "<p>商品説明を取得できませんでした。直接 BOOTH ページをご確認ください。</p>";
+                    bodyContent = $"<p>{System.Web.HttpUtility.HtmlEncode(Translate.BoothDescriptionUnavailable)}</p>";
                 }
             }
 
@@ -320,7 +321,40 @@ namespace YukkuriMovieMaker4Hub
             bodyContent = Regex.Replace(bodyContent, @"src=""(//[^""]+)""", "src=\"https:$1\"", RegexOptions.IgnoreCase);
             bodyContent = Regex.Replace(bodyContent, @"src=""(/[^""]+)""", "src=\"https://booth.pm$1\"", RegexOptions.IgnoreCase);
 
-            return BuildStandardHtml(bodyContent, "BOOTH 商品説明");
+            return BuildStandardHtml(bodyContent, Translate.BoothDescription, preserveLineBreaks: true);
+        }
+
+        private static string? ExtractBoothElementByClass(string pageHtml, params string[] classNames)
+        {
+            foreach (var className in classNames)
+            {
+                var start = Regex.Match(
+                    pageHtml,
+                    $@"<div\b[^>]*\bclass\s*=\s*([""'])[^>]*\b{Regex.Escape(className)}\b[^>]*\1[^>]*>",
+                    RegexOptions.IgnoreCase);
+                if (!start.Success) continue;
+
+                var tags = Regex.Matches(pageHtml.Substring(start.Index), @"</?div\b[^>]*>", RegexOptions.IgnoreCase);
+                int depth = 0;
+                foreach (Match tag in tags)
+                {
+                    if (tag.Value.StartsWith("</", StringComparison.Ordinal))
+                    {
+                        if (--depth == 0)
+                        {
+                            int contentStart = start.Index + start.Length;
+                            int closingTagIndex = start.Index + tag.Index;
+                            return pageHtml.Substring(contentStart, closingTagIndex - contentStart);
+                        }
+                    }
+                    else
+                    {
+                        depth++;
+                    }
+                }
+            }
+
+            return null;
         }
 
         // =========================================================
@@ -517,7 +551,7 @@ namespace YukkuriMovieMaker4Hub
             return text;
         }
 
-        private static string BuildStandardHtml(string bodyContent, string title)
+        private static string BuildStandardHtml(string bodyContent, string title, bool preserveLineBreaks = false)
         {
             bool isDark = ThemeHelper.IsCurrentDarkTheme;
             string bgColor = isDark ? "#1E1E1E" : "#FFFFFF";
@@ -579,6 +613,8 @@ namespace YukkuriMovieMaker4Hub
             sb.AppendLine($"h1, h2, h3, h4, h5, h6 {{ margin-top: 24px; margin-bottom: 12px; font-weight: bold; line-height: 1.25; border-bottom: 1px solid {headingBorder}; padding-bottom: 6px; color: {textColor}; }}");
             sb.AppendLine("h1 { font-size: 20px; } h2 { font-size: 17px; } h3 { font-size: 15px; }");
             sb.AppendLine("p { margin-top: 0; margin-bottom: 12px; }");
+            if (preserveLineBreaks)
+                sb.AppendLine(".booth-description { white-space: pre-line; }");
             sb.AppendLine($"a {{ color: {linkColor}; text-decoration: none; }}");
             sb.AppendLine("a:hover { text-decoration: underline; }");
             sb.AppendLine("img { max-width: 100% !important; height: auto; display: inline-block; margin: 6px 0; }");
@@ -592,7 +628,7 @@ namespace YukkuriMovieMaker4Hub
             sb.AppendLine($"hr {{ height: 1px; background-color: {headingBorder}; border: none; margin: 20px 0; }}");
             sb.AppendLine("li { margin-bottom: 4px; }");
             sb.AppendLine("</style></head><body>");
-            sb.AppendLine(bodyContent);
+            sb.AppendLine(preserveLineBreaks ? $"<div class='booth-description'>{bodyContent}</div>" : bodyContent);
             sb.AppendLine("</body></html>");
             return sb.ToString();
         }

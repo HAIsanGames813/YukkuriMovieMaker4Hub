@@ -25,6 +25,10 @@ namespace YukkuriMovieMaker4Hub
         public double InstancePanelWidth { get; set; } = 200;
         [JsonPropertyName("hideExePath")]
         public bool HideExePath { get; set; } = false;
+        [JsonPropertyName("keepInstancePanelVisible")]
+        public bool KeepInstancePanelVisible { get; set; } = false;
+        [JsonPropertyName("keepPortalMenuVisible")]
+        public bool KeepPortalMenuVisible { get; set; } = false;
         public bool AutoOpenSiteOnBulkDownload { get; set; } = true;
         public bool IsViewTile { get; set; } = true;
         public List<string> ExcludeDirectories { get; set; } = new List<string>();

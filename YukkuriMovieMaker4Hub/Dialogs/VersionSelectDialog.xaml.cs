@@ -22,7 +22,7 @@ namespace YukkuriMovieMaker4Hub
             LoadReleases();
         }
 
-        public string DialogTitle => $"バージョン・リリース選択 ({_plugin.Owner?.ToUpper()}/{_plugin.Repo?.ToUpper()})";
+        public string DialogTitle => string.Format(Translate.VersionReleaseSelectTitle, _plugin.Owner?.ToUpper(), _plugin.Repo?.ToUpper());
         public PluginCatalogItem Plugin => _plugin;
 
         private void LoadReleases()
@@ -106,12 +106,20 @@ namespace YukkuriMovieMaker4Hub
 
         private static string ConvertMarkdownToHtml(string markdown)
         {
+            // GitHub の旧来の添付画像形式では、src が Markdown リンクになっていることがある。
+            // そのままではブラウザが画像 URL として解釈できないため、実 URL に正規化する。
+            markdown = System.Text.RegularExpressions.Regex.Replace(
+                markdown,
+                @"(?<prefix><img\b[^>]*?\bsrc\s*=\s*(?<quote>[""']))\[(?:[^\]]*)\]\((?<url>https?://[^)\s]+)\)(?<suffix>\k<quote>)",
+                match => $"{match.Groups["prefix"].Value}{match.Groups["url"].Value}{match.Groups["suffix"].Value}",
+                System.Text.RegularExpressions.RegexOptions.IgnoreCase);
+
             var sb = new System.Text.StringBuilder();
             sb.AppendLine("<!DOCTYPE html><html><head><meta charset='utf-8'><style>");
             sb.AppendLine("body{font-family:Segoe UI,sans-serif;font-size:13px;margin:8px;}");
             sb.AppendLine("pre{background:#f4f4f4;padding:8px;border-radius:4px;overflow-x:auto;}");
             sb.AppendLine("code{background:#f4f4f4;padding:1px 4px;border-radius:2px;}");
-            sb.AppendLine("img{max-width:100%;}");
+            sb.AppendLine("img{max-width:100%;height:auto !important;}");
             sb.AppendLine("</style></head><body>");
             var lines = markdown.Replace("\r\n", "\n").Split('\n');
             foreach (var line in lines)
@@ -120,6 +128,11 @@ namespace YukkuriMovieMaker4Hub
                 if (l.StartsWith("### ")) sb.AppendLine($"<h3>{System.Web.HttpUtility.HtmlEncode(l.Substring(4))}</h3>");
                 else if (l.StartsWith("## ")) sb.AppendLine($"<h2>{System.Web.HttpUtility.HtmlEncode(l.Substring(3))}</h2>");
                 else if (l.StartsWith("# ")) sb.AppendLine($"<h1>{System.Web.HttpUtility.HtmlEncode(l.Substring(2))}</h1>");
+                // GitHub がサニタイズ済みで返す、配置用 p 要素と画像だけは HTML として通す。
+                // これ以外の HTML は従来どおり文字列として表示し、意図しないスクリプト実行を防ぐ。
+                else if (System.Text.RegularExpressions.Regex.IsMatch(l, @"^\s*</?p(?:\s+align\s*=\s*[""'][^""']*[""'])?\s*>\s*$", System.Text.RegularExpressions.RegexOptions.IgnoreCase)
+                    || System.Text.RegularExpressions.Regex.IsMatch(l, "^\\s*<img\\b[^>]*>\\s*$", System.Text.RegularExpressions.RegexOptions.IgnoreCase))
+                    sb.AppendLine(l);
                 else sb.AppendLine($"<p>{System.Web.HttpUtility.HtmlEncode(l)}</p>");
             }
             sb.AppendLine("</body></html>");
@@ -128,7 +141,7 @@ namespace YukkuriMovieMaker4Hub
 
         private void LoadAssets(GitHubReleaseDetail release)
         {
-            AssetsCountText.Text = $"配布アセット・プラグインファイル:";
+            AssetsCountText.Text = Translate.DistributionAssets;
             // Wrap in a list of 1 to fit the ItemTemplate binding expected (just showing BrowserDownloadUrl/FileName if available directly on GitHubReleaseDetail, otherwise just the detail itself as asset)
             AssetList.ItemsSource = new[] { release };
         }

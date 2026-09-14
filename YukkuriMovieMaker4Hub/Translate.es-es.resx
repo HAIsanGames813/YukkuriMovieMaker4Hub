@@ -395,4 +395,29 @@
 <data name="SelectBgImage" xml:space="preserve"><value>Seleccionar imagen de fondo</value></data>
 <data name="GradientAngle" xml:space="preserve"><value>Ángulo</value></data>
 <data name="IconWheelHint" xml:space="preserve"><value>(rueda para zoom)</value></data>
+<data name="OpenSiteNamed" xml:space="preserve"><value>Abrir en {0}</value></data>
+<data name="InformationSite" xml:space="preserve"><value>Sitio de información</value></data>
+<data name="RepositoryNotFound" xml:space="preserve"><value>No se encontró información del repositorio.</value></data>
+<data name="ReadmeLoading" xml:space="preserve"><value>Obteniendo README.md de {0}/{1}...</value></data>
+<data name="ReadmeNotFound" xml:space="preserve"><value>No se pudo obtener README.md.</value></data>
+<data name="BoothUrlNotFound" xml:space="preserve"><value>No se encontró la URL de BOOTH.</value></data>
+<data name="BoothDescriptionLoading" xml:space="preserve"><value>Obteniendo la descripción del producto de {0}...</value></data>
+<data name="BoothDescriptionLoadFailed" xml:space="preserve"><value>No se pudo obtener la descripción del producto de BOOTH: {0}</value></data>
+<data name="BoothDescriptionUnavailable" xml:space="preserve"><value>No se pudo obtener la descripción del producto. Consulte directamente la página de BOOTH.</value></data>
+<data name="VersionReleaseSelectTitle" xml:space="preserve"><value>Selección de versión/lanzamiento ({0}/{1})</value></data>
+<data name="DistributionAssets" xml:space="preserve"><value>Recursos de distribución / archivos de plugin:</value></data>
+<data name="Latest" xml:space="preserve"><value>Última</value></data>
+<data name="DevelopmentBuildIsNewer" xml:space="preserve"><value>El Hub en desarrollo es más reciente que la versión publicada en GitHub.</value></data>
+<data name="HubReadmeFetchFailed" xml:space="preserve"><value>No se pudo obtener el README. Consulte el repositorio de GitHub para más detalles.</value></data>
+<data name="HubCurrentVersion" xml:space="preserve"><value>Versión actual: v{0}</value></data>
+<data name="HubAlreadyLatest" xml:space="preserve"><value>La versión actual (v{0}) está actualizada.</value></data>
+<data name="UpdateCheckTitle" xml:space="preserve"><value>Buscar actualizaciones</value></data>
+<data name="LatestInfoFetchFailed" xml:space="preserve"><value>No se pudo obtener la información más reciente. Compruebe la conexión de red.</value></data>
+<data name="HubUpdateCheckFailed" xml:space="preserve"><value>Se produjo un error al buscar actualizaciones:\n{0}</value></data>
+<data name="HubUpdateExecuteConfirm" xml:space="preserve"><value>¿Descargar la última versión {0} y ejecutar la actualización?</value></data>
+<data name="HubUpdateExecuteTitle" xml:space="preserve"><value>Ejecutar actualización</value></data>
+<data name="NoDownloadAsset" xml:space="preserve"><value>No se encontró ningún recurso descargable.</value></data>
+<data name="HubUpdateExecutionFailed" xml:space="preserve"><value>Se produjo un error al ejecutar la actualización:\n{0}</value></data>
+<data name="DeleteInstanceConfirm" xml:space="preserve"><value>¿Quitar la instancia “{0}” de la lista?\nNo se eliminarán YMM4 ni sus archivos de configuración.</value></data>
+<data name="DeleteInstanceTitle" xml:space="preserve"><value>Eliminar instancia</value></data>
 </root>

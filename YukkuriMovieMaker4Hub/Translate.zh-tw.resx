@@ -395,4 +395,29 @@
 <data name="SelectBgImage" xml:space="preserve"><value>選擇背景圖片</value></data>
 <data name="GradientAngle" xml:space="preserve"><value>角度</value></data>
 <data name="IconWheelHint" xml:space="preserve"><value>（滾輪縮放）</value></data>
+<data name="OpenSiteNamed" xml:space="preserve"><value>在 {0} 開啟</value></data>
+<data name="InformationSite" xml:space="preserve"><value>資訊網站</value></data>
+<data name="RepositoryNotFound" xml:space="preserve"><value>找不到儲存庫資訊。</value></data>
+<data name="ReadmeLoading" xml:space="preserve"><value>正在取得 {0}/{1} 的 README.md...</value></data>
+<data name="ReadmeNotFound" xml:space="preserve"><value>無法取得 README.md。</value></data>
+<data name="BoothUrlNotFound" xml:space="preserve"><value>找不到 BOOTH URL。</value></data>
+<data name="BoothDescriptionLoading" xml:space="preserve"><value>正在從 {0} 取得商品說明...</value></data>
+<data name="BoothDescriptionLoadFailed" xml:space="preserve"><value>取得 BOOTH 商品說明失敗：{0}</value></data>
+<data name="BoothDescriptionUnavailable" xml:space="preserve"><value>無法取得商品說明。請直接查看 BOOTH 頁面。</value></data>
+<data name="VersionReleaseSelectTitle" xml:space="preserve"><value>版本／發行版本選擇 ({0}/{1})</value></data>
+<data name="DistributionAssets" xml:space="preserve"><value>發佈資源／外掛程式檔案：</value></data>
+<data name="Latest" xml:space="preserve"><value>最新版本</value></data>
+<data name="DevelopmentBuildIsNewer" xml:space="preserve"><value>開發中的 Hub 比 GitHub 發行版更新。</value></data>
+<data name="HubReadmeFetchFailed" xml:space="preserve"><value>無法取得 README。請查看 GitHub 儲存庫以了解詳情。</value></data>
+<data name="HubCurrentVersion" xml:space="preserve"><value>目前版本：v{0}</value></data>
+<data name="HubAlreadyLatest" xml:space="preserve"><value>目前版本（v{0}）已是最新版本。</value></data>
+<data name="UpdateCheckTitle" xml:space="preserve"><value>檢查更新</value></data>
+<data name="LatestInfoFetchFailed" xml:space="preserve"><value>取得最新資訊失敗。請檢查網路連線。</value></data>
+<data name="HubUpdateCheckFailed" xml:space="preserve"><value>檢查更新時發生錯誤：\n{0}</value></data>
+<data name="HubUpdateExecuteConfirm" xml:space="preserve"><value>要下載最新版本 {0} 並執行更新嗎？</value></data>
+<data name="HubUpdateExecuteTitle" xml:space="preserve"><value>執行更新</value></data>
+<data name="NoDownloadAsset" xml:space="preserve"><value>找不到可下載的資源。</value></data>
+<data name="HubUpdateExecutionFailed" xml:space="preserve"><value>執行更新時發生錯誤：\n{0}</value></data>
+<data name="DeleteInstanceConfirm" xml:space="preserve"><value>要從清單中移除執行個體「{0}」嗎？\n不會刪除 YMM4 本體或設定檔。</value></data>
+<data name="DeleteInstanceTitle" xml:space="preserve"><value>刪除執行個體</value></data>
 </root>

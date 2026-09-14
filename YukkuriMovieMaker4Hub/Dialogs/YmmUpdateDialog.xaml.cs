@@ -12,6 +12,7 @@ namespace YukkuriMovieMaker4Hub
         public string Description { get; set; } = string.Empty;
         public string ArticleUrl { get; set; } = string.Empty;
         public Version? Version { get; set; }
+        public bool IsExpanded { get; set; }
 
         public string CleanDescription
         {
@@ -34,11 +35,12 @@ namespace YukkuriMovieMaker4Hub
 
             InstanceNameText.Text = instanceName;
             CurrentVersionText.Text = $"v{localVersion}";
-            LatestVersionText.Text = latestVersion != null ? $"v{latestVersion}" : "最新版";
+            LatestVersionText.Text = latestVersion != null ? $"v{latestVersion}" : Translate.Latest;
 
             var displayList = new List<YmmUpdateDisplayItem>();
-            foreach (var u in updates)
+            for (int i = 0; i < updates.Count; i++)
             {
+                var u = updates[i];
                 string url = u.ArticleUrl;
                 if (string.IsNullOrEmpty(url) && u.Version != null)
                 {
@@ -50,7 +52,8 @@ namespace YukkuriMovieMaker4Hub
                     Title = u.Title,
                     Description = u.Description,
                     ArticleUrl = url,
-                    Version = u.Version
+                    Version = u.Version,
+                    IsExpanded = false
                 });
             }
 

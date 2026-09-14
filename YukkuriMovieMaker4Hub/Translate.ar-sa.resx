@@ -395,4 +395,29 @@
 <data name="SelectBgImage" xml:space="preserve"><value>اختر صورة الخلفية</value></data>
 <data name="GradientAngle" xml:space="preserve"><value>زاوية</value></data>
 <data name="IconWheelHint" xml:space="preserve"><value>(عجلة للتكبير)</value></data>
+<data name="OpenSiteNamed" xml:space="preserve"><value>فتح في {0}</value></data>
+<data name="InformationSite" xml:space="preserve"><value>موقع المعلومات</value></data>
+<data name="RepositoryNotFound" xml:space="preserve"><value>لم يتم العثور على معلومات المستودع.</value></data>
+<data name="ReadmeLoading" xml:space="preserve"><value>جارٍ استرداد README.md لـ {0}/{1}...</value></data>
+<data name="ReadmeNotFound" xml:space="preserve"><value>تعذر استرداد README.md.</value></data>
+<data name="BoothUrlNotFound" xml:space="preserve"><value>لم يتم العثور على عنوان BOOTH.</value></data>
+<data name="BoothDescriptionLoading" xml:space="preserve"><value>جارٍ استرداد وصف المنتج من {0}...</value></data>
+<data name="BoothDescriptionLoadFailed" xml:space="preserve"><value>فشل استرداد وصف منتج BOOTH: {0}</value></data>
+<data name="BoothDescriptionUnavailable" xml:space="preserve"><value>تعذر استرداد وصف المنتج. يرجى التحقق من صفحة BOOTH مباشرة.</value></data>
+<data name="VersionReleaseSelectTitle" xml:space="preserve"><value>اختيار الإصدار / النشر ({0}/{1})</value></data>
+<data name="DistributionAssets" xml:space="preserve"><value>أصول التوزيع / ملفات الملحقات:</value></data>
+<data name="Latest" xml:space="preserve"><value>الأحدث</value></data>
+<data name="DevelopmentBuildIsNewer" xml:space="preserve"><value>Hub قيد التطوير أحدث من الإصدار المنشور على GitHub.</value></data>
+<data name="HubReadmeFetchFailed" xml:space="preserve"><value>تعذر استرداد README. يرجى مراجعة مستودع GitHub للتفاصيل.</value></data>
+<data name="HubCurrentVersion" xml:space="preserve"><value>الإصدار الحالي: v{0}</value></data>
+<data name="HubAlreadyLatest" xml:space="preserve"><value>الإصدار الحالي (v{0}) هو الأحدث.</value></data>
+<data name="UpdateCheckTitle" xml:space="preserve"><value>التحقق من التحديثات</value></data>
+<data name="LatestInfoFetchFailed" xml:space="preserve"><value>فشل استرداد أحدث المعلومات. تحقق من اتصال الشبكة.</value></data>
+<data name="HubUpdateCheckFailed" xml:space="preserve"><value>حدث خطأ أثناء التحقق من التحديثات:\n{0}</value></data>
+<data name="HubUpdateExecuteConfirm" xml:space="preserve"><value>هل تريد تنزيل أحدث إصدار {0} وتنفيذ التحديث؟</value></data>
+<data name="HubUpdateExecuteTitle" xml:space="preserve"><value>تنفيذ التحديث</value></data>
+<data name="NoDownloadAsset" xml:space="preserve"><value>لم يتم العثور على أصل قابل للتنزيل.</value></data>
+<data name="HubUpdateExecutionFailed" xml:space="preserve"><value>حدث خطأ أثناء تنفيذ التحديث:\n{0}</value></data>
+<data name="DeleteInstanceConfirm" xml:space="preserve"><value>هل تريد إزالة المثيل «{0}» من القائمة؟\nلن يتم حذف YMM4 نفسه أو ملفات إعداداته.</value></data>
+<data name="DeleteInstanceTitle" xml:space="preserve"><value>حذف المثيل</value></data>
 </root>

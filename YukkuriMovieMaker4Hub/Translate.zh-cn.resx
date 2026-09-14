@@ -395,4 +395,29 @@
 <data name="SelectBgImage" xml:space="preserve"><value>选择背景图片</value></data>
 <data name="GradientAngle" xml:space="preserve"><value>角度</value></data>
 <data name="IconWheelHint" xml:space="preserve"><value>（滚轮缩放）</value></data>
+<data name="OpenSiteNamed" xml:space="preserve"><value>在 {0} 打开</value></data>
+<data name="InformationSite" xml:space="preserve"><value>信息网站</value></data>
+<data name="RepositoryNotFound" xml:space="preserve"><value>找不到仓库信息。</value></data>
+<data name="ReadmeLoading" xml:space="preserve"><value>正在获取 {0}/{1} 的 README.md...</value></data>
+<data name="ReadmeNotFound" xml:space="preserve"><value>无法获取 README.md。</value></data>
+<data name="BoothUrlNotFound" xml:space="preserve"><value>找不到 BOOTH URL。</value></data>
+<data name="BoothDescriptionLoading" xml:space="preserve"><value>正在从 {0} 获取商品说明...</value></data>
+<data name="BoothDescriptionLoadFailed" xml:space="preserve"><value>获取 BOOTH 商品说明失败：{0}</value></data>
+<data name="BoothDescriptionUnavailable" xml:space="preserve"><value>无法获取商品说明。请直接查看 BOOTH 页面。</value></data>
+<data name="VersionReleaseSelectTitle" xml:space="preserve"><value>版本／发布选择 ({0}/{1})</value></data>
+<data name="DistributionAssets" xml:space="preserve"><value>分发资源／插件文件：</value></data>
+<data name="Latest" xml:space="preserve"><value>最新版本</value></data>
+<data name="DevelopmentBuildIsNewer" xml:space="preserve"><value>正在开发的 Hub 比 GitHub 发布版更新。</value></data>
+<data name="HubReadmeFetchFailed" xml:space="preserve"><value>无法获取 README。请查看 GitHub 仓库了解详情。</value></data>
+<data name="HubCurrentVersion" xml:space="preserve"><value>当前版本：v{0}</value></data>
+<data name="HubAlreadyLatest" xml:space="preserve"><value>当前版本（v{0}）已是最新版本。</value></data>
+<data name="UpdateCheckTitle" xml:space="preserve"><value>检查更新</value></data>
+<data name="LatestInfoFetchFailed" xml:space="preserve"><value>获取最新信息失败。请检查网络连接。</value></data>
+<data name="HubUpdateCheckFailed" xml:space="preserve"><value>检查更新时发生错误：\n{0}</value></data>
+<data name="HubUpdateExecuteConfirm" xml:space="preserve"><value>要下载最新版本 {0} 并执行更新吗？</value></data>
+<data name="HubUpdateExecuteTitle" xml:space="preserve"><value>执行更新</value></data>
+<data name="NoDownloadAsset" xml:space="preserve"><value>未找到可下载的资源。</value></data>
+<data name="HubUpdateExecutionFailed" xml:space="preserve"><value>执行更新时发生错误：\n{0}</value></data>
+<data name="DeleteInstanceConfirm" xml:space="preserve"><value>要从列表中删除实例“{0}”吗？\n不会删除 YMM4 本体或设置文件。</value></data>
+<data name="DeleteInstanceTitle" xml:space="preserve"><value>删除实例</value></data>
 </root>
