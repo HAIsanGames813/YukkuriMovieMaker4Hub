@@ -1,5 +1,4 @@
-<img width="1920" height="1080" alt="YukkuriMovieMaker4Hub" src="https://github.com/user-attachments/assets/80de7b4d-799e-4b45-b814-94fadf644908" />
-
+<img width="1920" height="1080" alt="YukkuriMovieMaker4Hub" src="https://github.com/user-attachments/assets/0ebe8550-dcd5-446c-a677-c0898a07d449" />
 
 # YukkuriMovieMaker4Hub
 ゆっくりムービーメーカー4のハブソフトです
@@ -39,7 +38,7 @@ YMM4を前回のプロジェクト、新規プロジェクト、ymmpから開く
 既存のプラグインを一度ダウンロードし直すことでプラグインフォルダ内にinfo.jsonを生成できます  
 注意:Githubで公開されていないプラグインは情報の取得ができないため表示できません  
 
-## 実際の画面
+## 実際の画面(4.2.0時点)
 <img width="480" height="270" alt="image" src="https://github.com/user-attachments/assets/07f285d5-ea5d-488c-8658-3daed51c3a24" /><img width="480" height="270" alt="image" src="https://github.com/user-attachments/assets/d94987b6-55f0-4f02-a61f-707696998aa0" />
 <img width="480" height="270" alt="image" src="https://github.com/user-attachments/assets/fa8f249b-cbda-4242-a48b-3b9bcf7b97f5" /><img width="480" height="270" alt="image" src="https://github.com/user-attachments/assets/b5e549f9-186b-41f8-981b-a91b67a0dc5e" />
 
@@ -123,6 +122,8 @@ YMM4を前回のプロジェクト、新規プロジェクト、ymmpから開く
 　設定から切り替え可能  
 **ーー修正ーー**  
 サイトで確認ボタンの動作等を修正  
+## 5.0.0
+※今後記載します
 
 ## 利用規約
 自作発言禁止、以上！
