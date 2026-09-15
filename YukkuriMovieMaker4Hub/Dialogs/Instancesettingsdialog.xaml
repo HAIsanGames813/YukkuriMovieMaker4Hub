@@ -37,7 +37,7 @@
         </Grid.RowDefinitions>
 
         <!-- 見出し -->
-        <TextBlock Grid.Row="0" Text="インスタンス設定" FontSize="14" Margin="0,0,0,12" Foreground="{DynamicResource TextBrush}"/>
+        <TextBlock Grid.Row="0" Text="{x:Static local:Translate.InstanceSettingsDialogTitle}" FontSize="14" Margin="0,0,0,12" Foreground="{DynamicResource TextBrush}"/>
 
         <!-- フォーム項目 -->
         <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
@@ -54,32 +54,32 @@
                     </Grid.RowDefinitions>
 
                     <!-- インスタンス名 -->
-                    <TextBlock Grid.Row="0" Grid.Column="0" Text="インスタンス名" VerticalAlignment="Center" Margin="0,0,8,8"/>
+                    <TextBlock Grid.Row="0" Grid.Column="0" Text="{x:Static local:Translate.InstanceName}" VerticalAlignment="Center" Margin="0,0,8,8"/>
                     <TextBox x:Name="NameTextBox" Grid.Row="0" Grid.Column="1" Height="26" Margin="0,0,0,8" VerticalContentAlignment="Center"/>
 
                     <!-- YMM4パス -->
-                    <TextBlock Grid.Row="1" Grid.Column="0" Text="YMM4パス" VerticalAlignment="Center" Margin="0,0,8,8"/>
+                    <TextBlock Grid.Row="1" Grid.Column="0" Text="{x:Static local:Translate.ExePathLabel}" VerticalAlignment="Center" Margin="0,0,8,8"/>
                     <Grid Grid.Row="1" Grid.Column="1" Margin="0,0,0,8">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="28"/>
                         </Grid.ColumnDefinitions>
                         <TextBox x:Name="ExePathTextBox" Height="26" VerticalContentAlignment="Center"/>
-                        <Button Grid.Column="1" Click="BrowseExe_Click" Height="26" Margin="2,0,0,0" ToolTip="参照">
+                        <Button Grid.Column="1" Click="BrowseExe_Click" Height="26" Margin="2,0,0,0" ToolTip="{x:Static local:Translate.Browse}">
                             <Path Width="12" Height="12" Stretch="Uniform" Fill="{DynamicResource TextBrush}"
                                   Data="M19,20H4C2.89,20 2,19.1 2,18V6C2,4.89 2.89,4 4,4H10L12,6H19A2,2 0 0,1 21,8H21L4,8V18L6.14,10H23.21L20.93,18.5C20.7,19.37 19.92,20 19,20Z"/>
                         </Button>
                     </Grid>
 
                     <!-- アイコン -->
-                    <TextBlock Grid.Row="2" Grid.Column="0" Text="アイコン" VerticalAlignment="Center" Margin="0,0,8,8"/>
+                    <TextBlock Grid.Row="2" Grid.Column="0" Text="{x:Static local:Translate.IconLabel}" VerticalAlignment="Center" Margin="0,0,8,8"/>
                     <Grid Grid.Row="2" Grid.Column="1" Margin="0,0,0,8">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="28"/>
                         </Grid.ColumnDefinitions>
                         <TextBox x:Name="IconPathTextBox" Height="26" VerticalContentAlignment="Center"/>
-                        <Button Grid.Column="1" Click="BrowseIcon_Click" Height="26" Margin="2,0,0,0" ToolTip="画像ファイルを選択">
+                        <Button Grid.Column="1" Click="BrowseIcon_Click" Height="26" Margin="2,0,0,0" ToolTip="{x:Static local:Translate.SelectIconTitle}">
                             <Path Width="12" Height="12" Stretch="Uniform" Fill="{DynamicResource TextBrush}"
                                   Data="M19,20H4C2.89,20 2,19.1 2,18V6C2,4.89 2.89,4 4,4H10L12,6H19A2,2 0 0,1 21,8H21L4,8V18L6.14,10H23.21L20.93,18.5C20.7,19.37 19.92,20 19,20Z"/>
                         </Button>
@@ -87,13 +87,13 @@
                 </Grid>
 
                 <!-- データを引き継ぐボタン -->
-                <Button Click="InheritSettings_Click" Content="データを引き継ぐ" HorizontalAlignment="Right" Padding="12,4" Height="26" Margin="0,0,0,12"/>
+                <Button Click="InheritSettings_Click" Content="{x:Static local:Translate.ReInheritSettings}" HorizontalAlignment="Right" Padding="12,4" Height="26" Margin="0,0,0,12"/>
             </StackPanel>
         </ScrollViewer>
 
         <!-- 最下部：保存ボタン -->
         <Grid Grid.Row="2" Margin="0,8,0,0">
-            <Button Click="Save_Click" Content="保存" HorizontalAlignment="Right" Padding="20,4" Height="26"/>
+            <Button Click="Save_Click" Content="{x:Static local:Translate.Save}" HorizontalAlignment="Right" Padding="20,4" Height="26"/>
         </Grid>
     </Grid>
 </Window>

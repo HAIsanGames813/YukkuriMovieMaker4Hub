@@ -35,7 +35,7 @@ namespace YukkuriMovieMaker4Hub
                 var item = _readmes[_currentIndex];
                 ReadmeBox.Text = $"【 {item.Name} 】\n\n{item.Content}";
             }
-            ReadmePageText.Text = $"{_readmes.Count} 件中 {_currentIndex + 1} 件目";
+            ReadmePageText.Text = string.Format(Translate.ReadmePageProgress, _readmes.Count, _currentIndex + 1);
         }
 
         private void PrevReadme_Click(object sender, RoutedEventArgs e)

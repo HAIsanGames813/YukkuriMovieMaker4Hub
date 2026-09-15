@@ -295,7 +295,7 @@ namespace YukkuriMovieMaker4Hub
                 if (IsBooth) return "BOOTH";
                 
                 string targetUrl = Url ?? AllLinks.FirstOrDefault()?.Url ?? string.Empty;
-                if (string.IsNullOrWhiteSpace(targetUrl)) return "未設定";
+                if (string.IsNullOrWhiteSpace(targetUrl)) return Translate.NotSet;
 
                 try
                 {
@@ -304,13 +304,13 @@ namespace YukkuriMovieMaker4Hub
 
                     if (host.Contains("github.com")) return "GitHub";
                     if (host.Contains("booth.pm")) return "BOOTH";
-                    if (host.Contains("ymm4-info.net")) return "情報サイト";
+                    if (host.Contains("ymm4-info.net")) return Translate.InformationSite;
                     if (host.Contains("drive.google.com")) return "Google Drive";
                     if (host.Contains("dropbox.com")) return "Dropbox";
                     if (host.Contains("bowlroll.net")) return "BowlRoll";
-                    if (host.Contains("getuploader.com")) return "アップローダー";
+                    if (host.Contains("getuploader.com")) return Translate.Uploader;
                     if (host.Contains("youtube.com") || host.Contains("youtu.be")) return "YouTube";
-                    if (host.Contains("nicovideo.jp")) return "ニコニコ動画";
+                    if (host.Contains("nicovideo.jp")) return Translate.Niconico;
                     if (host.Contains("ci-en.")) return "CI-en";
                     if (host.Contains("dlsite.com")) return "DLsite";
                     if (host.Contains("fanbox.cc")) return "FANBOX";
@@ -325,7 +325,7 @@ namespace YukkuriMovieMaker4Hub
                 }
                 catch
                 {
-                    return "外部サイト";
+                    return Translate.ExternalSite;
                 }
             }
         }
@@ -343,21 +343,21 @@ namespace YukkuriMovieMaker4Hub
         {
             get
             {
-                if (IsGitHub) return "バージョン選択";
-                if (IsBooth) return "Boothを開く";
+                if (IsGitHub) return Translate.SelectVersion;
+                if (IsBooth) return Translate.OpenBooth;
                 if (AllLinks.Count > 0)
                 {
                     try
                     {
                         var host = new Uri(AllLinks[0].Url).Host;
-                        return $"{host}を開く";
+                        return string.Format(Translate.OpenHost, host);
                     }
                     catch { }
                 }
-                return "サイトを開く";
+                return Translate.OpenSite;
             }
         }
-        public string DisplayType => string.IsNullOrEmpty(Type) ? "その他" : Type;
+        public string DisplayType => string.IsNullOrEmpty(Type) ? Translate.Others : Type;
         public string DisplayPublishedAt => LatestPublishedAt != DateTime.MinValue ? LatestPublishedAt.ToString("yyyy/MM/dd") : (FirstPublishedAt != DateTime.MinValue ? FirstPublishedAt.ToString("yyyy/MM/dd") : "2026/08/11");
         public bool IsYmlItem { get; set; } = true;
     }

@@ -420,4 +420,78 @@
 <data name="HubUpdateExecutionFailed" xml:space="preserve"><value>업데이트 실행 중 오류가 발생했습니다:\n{0}</value></data>
 <data name="DeleteInstanceConfirm" xml:space="preserve"><value>인스턴스 “{0}”을(를) 목록에서 제거하시겠습니까?\nYMM4 본체와 설정 파일은 삭제되지 않습니다.</value></data>
 <data name="DeleteInstanceTitle" xml:space="preserve"><value>인스턴스 삭제</value></data>
+<data name="HubUpdateAvailable" xml:space="preserve"><value>Hub 업데이트가 있습니다</value></data>
+<data name="CurrentVersionLabel" xml:space="preserve"><value>현재 버전:</value></data>
+<data name="LatestVersionLabel" xml:space="preserve"><value>최신 버전:</value></data>
+<data name="DoNotShowAgain" xml:space="preserve"><value>다시 표시하지 않음</value></data>
+<data name="UpdateNow" xml:space="preserve"><value>업데이트</value></data>
+<data name="Ymm4UpdateAvailable" xml:space="preserve"><value>YukkuriMovieMaker4 업데이트가 있습니다</value></data>
+<data name="CurrentLabel" xml:space="preserve"><value>현재: </value></data>
+<data name="LatestLabel" xml:space="preserve"><value>최신: </value></data>
+<data name="OpenWebPage" xml:space="preserve"><value>웹 페이지 열기</value></data>
+<data name="OpenYmm4OfficialPage" xml:space="preserve"><value>YMM4 공식 배포 페이지 열기</value></data>
+<data name="NamePlaceholder" xml:space="preserve"><value>이름</value></data>
+<data name="ExecutableFileFilter" xml:space="preserve"><value>YukkuriMovieMaker.exe|YukkuriMovieMaker.exe|모든 실행 파일 (*.exe)|*.exe</value></data>
+<data name="ImageFileFilter" xml:space="preserve"><value>이미지 파일 (*.png;*.jpg;*.jpeg;*.ico)|*.png;*.jpg;*.jpeg;*.ico|모든 파일 (*.*)|*.*</value></data>
+<data name="ValidExePathRequired" xml:space="preserve"><value>유효한 YukkuriMovieMaker.exe 경로를 지정해 주세요.</value></data>
+<data name="InformationTitle" xml:space="preserve"><value>정보</value></data>
+<data name="WarningTitle" xml:space="preserve"><value>경고</value></data>
+<data name="DownloadingFile" xml:space="preserve"><value>다운로드 중: {0}</value></data>
+<data name="Initializing" xml:space="preserve"><value>초기 설정 중...</value></data>
+<data name="InstallFailedWithError" xml:space="preserve"><value>설치에 실패했습니다:\n{0}</value></data>
+<data name="Save" xml:space="preserve"><value>저장</value></data>
+<data name="Execute" xml:space="preserve"><value>실행</value></data>
+<data name="SelectedPlugins" xml:space="preserve"><value>선택한 플러그인</value></data>
+<data name="DataList" xml:space="preserve"><value>데이터 목록</value></data>
+<data name="MoveInstanceUp" xml:space="preserve"><value>선택한 인스턴스를 위로 이동</value></data>
+<data name="MoveInstanceDown" xml:space="preserve"><value>선택한 인스턴스를 아래로 이동</value></data>
+<data name="CheckYmm4Update" xml:space="preserve"><value>YMM4 업데이트 확인</value></data>
+<data name="NewProject" xml:space="preserve"><value>새 프로젝트</value></data>
+<data name="Category" xml:space="preserve"><value>카테고리</value></data>
+<data name="Price" xml:space="preserve"><value>가격</value></data>
+<data name="ItemsPerPage" xml:space="preserve"><value>페이지당 항목 수</value></data>
+<data name="BulkSettings" xml:space="preserve"><value>일괄 설정</value></data>
+<data name="DistributionStatus" xml:space="preserve"><value>배포 상태</value></data>
+<data name="BulkSelection" xml:space="preserve"><value>일괄 선택</value></data>
+<data name="SelectAllVisible" xml:space="preserve"><value>표시된 항목 모두 선택</value></data>
+<data name="ClearVisible" xml:space="preserve"><value>표시된 선택 해제</value></data>
+<data name="TogglePortalMenu" xml:space="preserve"><value>플러그인 포털 메뉴 표시/숨기기</value></data>
+<data name="ToggleInstanceList" xml:space="preserve"><value>인스턴스 목록 표시/숨기기</value></data>
+<data name="ItemsOf" xml:space="preserve"><value>개 중</value></data>
+<data name="ItemsShown" xml:space="preserve"><value>개 표시</value></data>
+<data name="FirstPage" xml:space="preserve"><value>첫 페이지</value></data>
+<data name="PreviousPage" xml:space="preserve"><value>이전 페이지</value></data>
+<data name="Page" xml:space="preserve"><value>페이지</value></data>
+<data name="NextPage" xml:space="preserve"><value>다음 페이지</value></data>
+<data name="LastPage" xml:space="preserve"><value>마지막 페이지</value></data>
+<data name="SelectAllCurrentPage" xml:space="preserve"><value>현재 페이지 모두 선택</value></data>
+<data name="EditDataFolder" xml:space="preserve"><value>편집 데이터 폴더</value></data>
+<data name="HubUpdateDescription" xml:space="preserve"><value>YukkuriMovieMaker4Hub 업데이트를 확인하고 실행합니다</value></data>
+<data name="SelectedItemCount" xml:space="preserve"><value>개 선택됨</value></data>
+<data name="ExternalLabel" xml:space="preserve"><value>외부:</value></data>
+<data name="AlwaysShowInstanceList" xml:space="preserve"><value>인스턴스 목록 항상 표시</value></data>
+<data name="AlwaysShowPortalMenu" xml:space="preserve"><value>포털 메뉴 항상 표시</value></data>
+<data name="Installed" xml:space="preserve"><value>설치됨</value></data>
+<data name="Select" xml:space="preserve"><value>선택</value></data>
+<data name="ShowYmm4UpdateInfo" xml:space="preserve"><value>YMM4 업데이트 정보 표시</value></data>
+<data name="Manjubox" xml:space="preserve"><value>만주 소환사의 장난감 상자</value></data>
+<data name="ReadmePageProgress" xml:space="preserve"><value>{0}개 중 {1}번째</value></data>
+<data name="Ymm4VersionTitle" xml:space="preserve"><value>YukkuriMovieMaker v{0}</value></data>
+<data name="Ymm4LatestVersion" xml:space="preserve"><value>YMM4 최신: {0}</value></data>
+<data name="Ymm4LatestVersionLoading" xml:space="preserve"><value>YMM4 최신: 가져오는 중...</value></data>
+<data name="FilteredItemCount" xml:space="preserve"><value>{0} / {1}개</value></data>
+<data name="NotSet" xml:space="preserve"><value>설정되지 않음</value></data>
+<data name="ExternalSite" xml:space="preserve"><value>외부 사이트</value></data>
+<data name="OpenBooth" xml:space="preserve"><value>BOOTH 열기</value></data>
+<data name="OpenHost" xml:space="preserve"><value>{0} 열기</value></data>
+<data name="LanguageJapanese" xml:space="preserve"><value>日本語</value></data>
+<data name="LanguageEnglish" xml:space="preserve"><value>English</value></data>
+<data name="LanguageSimplifiedChinese" xml:space="preserve"><value>中文 (简体)</value></data>
+<data name="LanguageTraditionalChinese" xml:space="preserve"><value>中文 (繁體)</value></data>
+<data name="LanguageKorean" xml:space="preserve"><value>한국어</value></data>
+<data name="LanguageSpanish" xml:space="preserve"><value>Español</value></data>
+<data name="LanguageArabic" xml:space="preserve"><value>العربية</value></data>
+<data name="LanguageIndonesian" xml:space="preserve"><value>Bahasa Indonesia</value></data>
+<data name="SiteItemCount" xml:space="preserve"><value>{0} ({1})</value></data>
+<data name="Uploader" xml:space="preserve"><value>업로더</value></data>
 </root>

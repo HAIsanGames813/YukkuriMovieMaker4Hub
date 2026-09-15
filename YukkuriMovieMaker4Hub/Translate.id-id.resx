@@ -420,4 +420,78 @@
 <data name="HubUpdateExecutionFailed" xml:space="preserve"><value>Terjadi kesalahan saat menjalankan pembaruan:\n{0}</value></data>
 <data name="DeleteInstanceConfirm" xml:space="preserve"><value>Hapus instans “{0}” dari daftar?\nYMM4 dan file pengaturannya tidak akan dihapus.</value></data>
 <data name="DeleteInstanceTitle" xml:space="preserve"><value>Hapus Instans</value></data>
+<data name="HubUpdateAvailable" xml:space="preserve"><value>Pembaruan Hub tersedia</value></data>
+<data name="CurrentVersionLabel" xml:space="preserve"><value>Versi saat ini:</value></data>
+<data name="LatestVersionLabel" xml:space="preserve"><value>Versi terbaru:</value></data>
+<data name="DoNotShowAgain" xml:space="preserve"><value>Jangan tampilkan lagi</value></data>
+<data name="UpdateNow" xml:space="preserve"><value>Perbarui</value></data>
+<data name="Ymm4UpdateAvailable" xml:space="preserve"><value>Pembaruan YukkuriMovieMaker4 tersedia</value></data>
+<data name="CurrentLabel" xml:space="preserve"><value>Saat ini: </value></data>
+<data name="LatestLabel" xml:space="preserve"><value>Terbaru: </value></data>
+<data name="OpenWebPage" xml:space="preserve"><value>Buka halaman web</value></data>
+<data name="OpenYmm4OfficialPage" xml:space="preserve"><value>Buka halaman distribusi resmi YMM4</value></data>
+<data name="NamePlaceholder" xml:space="preserve"><value>Nama</value></data>
+<data name="ExecutableFileFilter" xml:space="preserve"><value>YukkuriMovieMaker.exe|YukkuriMovieMaker.exe|Semua file executable (*.exe)|*.exe</value></data>
+<data name="ImageFileFilter" xml:space="preserve"><value>File gambar (*.png;*.jpg;*.jpeg;*.ico)|*.png;*.jpg;*.jpeg;*.ico|Semua file (*.*)|*.*</value></data>
+<data name="ValidExePathRequired" xml:space="preserve"><value>Tentukan jalur YukkuriMovieMaker.exe yang valid.</value></data>
+<data name="InformationTitle" xml:space="preserve"><value>Informasi</value></data>
+<data name="WarningTitle" xml:space="preserve"><value>Peringatan</value></data>
+<data name="DownloadingFile" xml:space="preserve"><value>Mengunduh: {0}</value></data>
+<data name="Initializing" xml:space="preserve"><value>Menginisialisasi...</value></data>
+<data name="InstallFailedWithError" xml:space="preserve"><value>Instalasi gagal:\n{0}</value></data>
+<data name="Save" xml:space="preserve"><value>Simpan</value></data>
+<data name="Execute" xml:space="preserve"><value>Jalankan</value></data>
+<data name="SelectedPlugins" xml:space="preserve"><value>Plugin terpilih</value></data>
+<data name="DataList" xml:space="preserve"><value>Daftar data</value></data>
+<data name="MoveInstanceUp" xml:space="preserve"><value>Pindahkan instans terpilih ke atas</value></data>
+<data name="MoveInstanceDown" xml:space="preserve"><value>Pindahkan instans terpilih ke bawah</value></data>
+<data name="CheckYmm4Update" xml:space="preserve"><value>Periksa pembaruan YMM4</value></data>
+<data name="NewProject" xml:space="preserve"><value>Proyek baru</value></data>
+<data name="Category" xml:space="preserve"><value>Kategori</value></data>
+<data name="Price" xml:space="preserve"><value>Harga</value></data>
+<data name="ItemsPerPage" xml:space="preserve"><value>Item per halaman</value></data>
+<data name="BulkSettings" xml:space="preserve"><value>Pengaturan massal</value></data>
+<data name="DistributionStatus" xml:space="preserve"><value>Status distribusi</value></data>
+<data name="BulkSelection" xml:space="preserve"><value>Pemilihan massal</value></data>
+<data name="SelectAllVisible" xml:space="preserve"><value>Pilih semua yang terlihat</value></data>
+<data name="ClearVisible" xml:space="preserve"><value>Hapus pilihan yang terlihat</value></data>
+<data name="TogglePortalMenu" xml:space="preserve"><value>Tampilkan/sembunyikan menu Portal Plugin</value></data>
+<data name="ToggleInstanceList" xml:space="preserve"><value>Tampilkan/sembunyikan daftar instans</value></data>
+<data name="ItemsOf" xml:space="preserve"><value>dari</value></data>
+<data name="ItemsShown" xml:space="preserve"><value>ditampilkan</value></data>
+<data name="FirstPage" xml:space="preserve"><value>Halaman pertama</value></data>
+<data name="PreviousPage" xml:space="preserve"><value>Halaman sebelumnya</value></data>
+<data name="Page" xml:space="preserve"><value>Halaman</value></data>
+<data name="NextPage" xml:space="preserve"><value>Halaman berikutnya</value></data>
+<data name="LastPage" xml:space="preserve"><value>Halaman terakhir</value></data>
+<data name="SelectAllCurrentPage" xml:space="preserve"><value>Pilih semua di halaman ini</value></data>
+<data name="EditDataFolder" xml:space="preserve"><value>Folder data pengeditan</value></data>
+<data name="HubUpdateDescription" xml:space="preserve"><value>Periksa dan jalankan pembaruan YukkuriMovieMaker4Hub</value></data>
+<data name="SelectedItemCount" xml:space="preserve"><value>dipilih</value></data>
+<data name="ExternalLabel" xml:space="preserve"><value>Eksternal:</value></data>
+<data name="AlwaysShowInstanceList" xml:space="preserve"><value>Selalu tampilkan daftar instans</value></data>
+<data name="AlwaysShowPortalMenu" xml:space="preserve"><value>Selalu tampilkan menu portal</value></data>
+<data name="Installed" xml:space="preserve"><value>Terpasang</value></data>
+<data name="Select" xml:space="preserve"><value>Pilih</value></data>
+<data name="ShowYmm4UpdateInfo" xml:space="preserve"><value>Tampilkan informasi pembaruan YMM4</value></data>
+<data name="Manjubox" xml:space="preserve"><value>Kotak Mainan Manju Summoner</value></data>
+<data name="ReadmePageProgress" xml:space="preserve"><value>{1} dari {0}</value></data>
+<data name="Ymm4VersionTitle" xml:space="preserve"><value>YukkuriMovieMaker v{0}</value></data>
+<data name="Ymm4LatestVersion" xml:space="preserve"><value>YMM4 terbaru: {0}</value></data>
+<data name="Ymm4LatestVersionLoading" xml:space="preserve"><value>YMM4 terbaru: mengambil...</value></data>
+<data name="FilteredItemCount" xml:space="preserve"><value>{0} / {1} item</value></data>
+<data name="NotSet" xml:space="preserve"><value>Belum diatur</value></data>
+<data name="ExternalSite" xml:space="preserve"><value>Situs eksternal</value></data>
+<data name="OpenBooth" xml:space="preserve"><value>Buka BOOTH</value></data>
+<data name="OpenHost" xml:space="preserve"><value>Buka {0}</value></data>
+<data name="LanguageJapanese" xml:space="preserve"><value>日本語</value></data>
+<data name="LanguageEnglish" xml:space="preserve"><value>English</value></data>
+<data name="LanguageSimplifiedChinese" xml:space="preserve"><value>中文 (简体)</value></data>
+<data name="LanguageTraditionalChinese" xml:space="preserve"><value>中文 (繁體)</value></data>
+<data name="LanguageKorean" xml:space="preserve"><value>한국어</value></data>
+<data name="LanguageSpanish" xml:space="preserve"><value>Español</value></data>
+<data name="LanguageArabic" xml:space="preserve"><value>العربية</value></data>
+<data name="LanguageIndonesian" xml:space="preserve"><value>Bahasa Indonesia</value></data>
+<data name="SiteItemCount" xml:space="preserve"><value>{0} ({1})</value></data>
+<data name="Uploader" xml:space="preserve"><value>Pengunggah</value></data>
 </root>

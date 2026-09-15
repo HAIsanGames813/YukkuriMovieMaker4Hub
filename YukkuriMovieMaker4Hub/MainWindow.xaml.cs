@@ -132,14 +132,14 @@ namespace YukkuriMovieMaker4Hub
         }
         public ObservableCollection<LanguageInfo> Languages { get; } = new ObservableCollection<LanguageInfo>
         {
-            new LanguageInfo { Name = "日本語", Code = "ja-JP" },
-            new LanguageInfo { Name = "English", Code = "en-US" },
-            new LanguageInfo { Name = "中文 (简体)", Code = "zh-CN" },
-            new LanguageInfo { Name = "中文 (繁體)", Code = "zh-TW" },
-            new LanguageInfo { Name = "한국어", Code = "ko-KR" },
-            new LanguageInfo { Name = "Español", Code = "es-ES" },
-            new LanguageInfo { Name = "العربية", Code = "ar-SA" },
-            new LanguageInfo { Name = "Bahasa Indonesia", Code = "id-ID" }
+            new LanguageInfo { Name = Translate.LanguageJapanese, Code = "ja-JP" },
+            new LanguageInfo { Name = Translate.LanguageEnglish, Code = "en-US" },
+            new LanguageInfo { Name = Translate.LanguageSimplifiedChinese, Code = "zh-CN" },
+            new LanguageInfo { Name = Translate.LanguageTraditionalChinese, Code = "zh-TW" },
+            new LanguageInfo { Name = Translate.LanguageKorean, Code = "ko-KR" },
+            new LanguageInfo { Name = Translate.LanguageSpanish, Code = "es-ES" },
+            new LanguageInfo { Name = Translate.LanguageArabic, Code = "ar-SA" },
+            new LanguageInfo { Name = Translate.LanguageIndonesian, Code = "id-ID" }
         };
 
         private LanguageInfo _selectedLanguage;
@@ -405,7 +405,7 @@ namespace YukkuriMovieMaker4Hub
                     string title = Regex.Match(markdown, @"^\s*#\s+(.+)$", RegexOptions.Multiline).Groups[1].Value.Trim();
                     return new YmmUpdateItem
                     {
-                        Title = string.IsNullOrEmpty(title) ? $"ゆっくりMovieMaker v{item.Version}" : title,
+                        Title = string.IsNullOrEmpty(title) ? string.Format(Translate.Ymm4VersionTitle, item.Version) : title,
                         Description = markdown,
                         ArticleUrl = $"https://github.com/{repository}/blob/master/{item.Path}",
                         Version = item.Version,
@@ -672,7 +672,7 @@ namespace YukkuriMovieMaker4Hub
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"{Translate.DownloadError}\n{ex.Message}", "エラー", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show($"{Translate.DownloadError}\n{ex.Message}", Translate.ErrorTitle, MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
@@ -1124,7 +1124,7 @@ namespace YukkuriMovieMaker4Hub
             if (e.Source is TabControl tc && tc.SelectedItem is TabItem ti && ti.Header != null)
             {
                 string header = ti.Header.ToString() ?? "";
-                IsPortalTabSelected = header == Translate.PluginPortal || header == "プラグインポータル";
+                IsPortalTabSelected = header == Translate.PluginPortal;
                 if (IsPortalTabSelected) await LoadOnlinePlugins();
                 if (header == Translate.Overview)
                 {
@@ -1241,7 +1241,7 @@ namespace YukkuriMovieMaker4Hub
                     var rss = await _http.GetStringAsync("https://manjubox.net/rss.xml");
                     var match = Regex.Match(rss, @"v(\d+\.\d+\.\d+\.\d+)");
                     if (match.Success)
-                        Ymm4LatestVersionText = $"YMM4最新: {match.Value}";
+                        Ymm4LatestVersionText = string.Format(Translate.Ymm4LatestVersion, match.Value);
                 }
                 catch { }
 
@@ -3020,7 +3020,7 @@ namespace YukkuriMovieMaker4Hub
             OnPropertyChanged(nameof(PortalSiteBoothText));
             OnPropertyChanged(nameof(PortalSiteInfoText));
             OnPropertyChanged(nameof(PortalSiteOtherText));
-            PortalFilteredVsTotalText = $"{OnlinePlugins.Count} / {_allOnlinePlugins.Count} 件";
+            PortalFilteredVsTotalText = string.Format(Translate.FilteredItemCount, OnlinePlugins.Count, _allOnlinePlugins.Count);
         }
 
         private void ApplyOnlinePluginFilter()
@@ -3092,7 +3092,7 @@ namespace YukkuriMovieMaker4Hub
 
             var list = sorted.ToList();
             PortalTotalCount = list.Count;
-            PortalFilteredVsTotalText = $"{PortalTotalCount} / {_allOnlinePlugins.Count} 件";
+            PortalFilteredVsTotalText = string.Format(Translate.FilteredItemCount, PortalTotalCount, _allOnlinePlugins.Count);
 
             // 1ページあたりの件数
             int pageSize = PortalPageSizeIndex switch
@@ -3139,17 +3139,17 @@ namespace YukkuriMovieMaker4Hub
 
         public string PortalSiteGitHubText => $"GitHub ({_allOnlinePlugins?.Count(p => p.IsGitHub) ?? 0})";
         public string PortalSiteBoothText => $"Booth ({_allOnlinePlugins?.Count(p => p.IsBooth) ?? 0})";
-        public string PortalSiteInfoText => $"情報サイト ({_allOnlinePlugins?.Count(p => p.SiteTag == "情報サイト") ?? 0})";
-        public string PortalSiteOtherText => $"その他 ({_allOnlinePlugins?.Count(p => !p.IsGitHub && !p.IsBooth && p.SiteTag != "情報サイト") ?? 0})";
+        public string PortalSiteInfoText => string.Format(Translate.SiteItemCount, Translate.InformationSite, _allOnlinePlugins?.Count(p => p.SiteTag == "情報サイト") ?? 0);
+        public string PortalSiteOtherText => string.Format(Translate.SiteItemCount, Translate.Others, _allOnlinePlugins?.Count(p => !p.IsGitHub && !p.IsBooth && p.SiteTag != "情報サイト") ?? 0);
 
-        private string _ymm4LatestVersionText = "YMM4最新: 取得中...";
+        private string _ymm4LatestVersionText = Translate.Ymm4LatestVersionLoading;
         public string Ymm4LatestVersionText
         {
             get => _ymm4LatestVersionText;
             set { _ymm4LatestVersionText = value; OnPropertyChanged(nameof(Ymm4LatestVersionText)); }
         }
 
-        private string _portalFilteredVsTotalText = "0 / 0 件";
+        private string _portalFilteredVsTotalText = string.Format(Translate.FilteredItemCount, 0, 0);
         public string PortalFilteredVsTotalText
         {
             get => _portalFilteredVsTotalText;

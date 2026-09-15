@@ -17,7 +17,7 @@ namespace YukkuriMovieMaker4Hub
         private const string YMM4_RELEASES_API = "https://api.github.com/repos/manju-summoner/YukkuriMovieMaker4/releases";
 
         public bool IsNewDownload => ModeComboBox.SelectedIndex == 0;
-        public string InstanceName => string.IsNullOrWhiteSpace(NameTextBox.Text) || NameTextBox.Text == "名前"
+        public string InstanceName => string.IsNullOrWhiteSpace(NameTextBox.Text) || NameTextBox.Text == Translate.NamePlaceholder
             ? "YukkuriMovieMaker4"
             : NameTextBox.Text.Trim();
 
@@ -77,13 +77,13 @@ namespace YukkuriMovieMaker4Hub
         {
             var dialog = new OpenFileDialog
             {
-                Filter = "YukkuriMovieMaker.exe|YukkuriMovieMaker.exe|すべての実行ファイル (*.exe)|*.exe",
-                Title = "YukkuriMovieMaker.exe を選択"
+                Filter = Translate.ExecutableFileFilter,
+                Title = Translate.SelectExeTitle
             };
             if (dialog.ShowDialog() == true)
             {
                 ExePathTextBox.Text = dialog.FileName;
-                if (NameTextBox.Text == "名前" || string.IsNullOrWhiteSpace(NameTextBox.Text))
+                if (NameTextBox.Text == Translate.NamePlaceholder || string.IsNullOrWhiteSpace(NameTextBox.Text))
                 {
                     string dirName = Path.GetFileName(Path.GetDirectoryName(dialog.FileName) ?? "") ?? "";
                     if (!string.IsNullOrEmpty(dirName))
@@ -96,8 +96,8 @@ namespace YukkuriMovieMaker4Hub
         {
             var dialog = new OpenFileDialog
             {
-                Filter = "画像ファイル (*.png;*.jpg;*.jpeg;*.ico)|*.png;*.jpg;*.jpeg;*.ico|すべてのファイル (*.*)|*.*",
-                Title = "アイコン画像を選択"
+                Filter = Translate.ImageFileFilter,
+                Title = Translate.SelectIconTitle
             };
             if (dialog.ShowDialog() == true)
             {
@@ -110,7 +110,7 @@ namespace YukkuriMovieMaker4Hub
             string exePath = ExePathTextBox.Text.Trim();
             if (string.IsNullOrEmpty(exePath) || !File.Exists(exePath))
             {
-                MessageBox.Show("有効な YukkuriMovieMaker.exe のパスを指定してください。", "エラー", MessageBoxButton.OK, MessageBoxImage.Warning);
+                MessageBox.Show(Translate.ValidExePathRequired, Translate.ErrorTitle, MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
 
@@ -134,12 +134,12 @@ namespace YukkuriMovieMaker4Hub
             {
                 bool isLite = EditionComboBox.SelectedIndex == 1;
 
-                SetStatus("最新バージョンの情報を確認中...", 5);
+                SetStatus(Translate.CheckingLatestVersion, 5);
                 string downloadUrl = await GetLatestDownloadUrlAsync(isLite, _cts.Token);
 
                 if (string.IsNullOrEmpty(downloadUrl))
                 {
-                    MessageBox.Show("ダウンロードURLの取得に失敗しました。", "エラー", MessageBoxButton.OK, MessageBoxImage.Error);
+                    MessageBox.Show(Translate.DownloadUrlFailed, Translate.ErrorTitle, MessageBoxButton.OK, MessageBoxImage.Error);
                     ResetUi();
                     return;
                 }
@@ -148,7 +148,7 @@ namespace YukkuriMovieMaker4Hub
                 string installBase = DefaultInstallBase;
                 string tempZipPath = Path.Combine(installBase, fileName);
 
-                SetStatus($"ダウンロード中: {fileName}", 10);
+                SetStatus(string.Format(Translate.DownloadingFile, fileName), 10);
 
                 using (var req = new HttpRequestMessage(HttpMethod.Get, downloadUrl))
                 using (var res = await _http.SendAsync(req, HttpCompletionOption.ResponseHeadersRead, _cts.Token))
@@ -174,13 +174,13 @@ namespace YukkuriMovieMaker4Hub
                     }
                 }
 
-                SetStatus("ファイルを展開中...", 75);
+                SetStatus(Translate.Extracting, 75);
                 string instanceFolderName = InstanceName;
                 string finalDir = Path.Combine(installBase, instanceFolderName);
 
                 if (Directory.Exists(finalDir))
                 {
-                    var r = MessageBox.Show($"フォルダ「{instanceFolderName}」は既に存在します。上書きしますか？", "確認", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                    var r = MessageBox.Show(string.Format(Translate.FolderAlreadyExists, instanceFolderName), Translate.Confirm, MessageBoxButton.YesNo, MessageBoxImage.Question);
                     if (r != MessageBoxResult.Yes)
                     {
                         File.Delete(tempZipPath);
@@ -201,17 +201,17 @@ namespace YukkuriMovieMaker4Hub
                 if (Directory.Exists(tempExtractDir))
                     Directory.Delete(tempExtractDir, true);
 
-                SetStatus("クリーンアップ中...", 92);
+                SetStatus(Translate.Cleanup, 92);
                 File.Delete(tempZipPath);
 
-                SetStatus("完了", 100);
+                SetStatus(Translate.Complete, 100);
                 string exePath = FindExe(finalDir);
                 if (string.IsNullOrEmpty(exePath))
                     exePath = FindExeInDirectory(installBase);
 
                 if (string.IsNullOrEmpty(exePath))
                 {
-                    MessageBox.Show("YukkuriMovieMaker.exe が見つかりませんでした。", "警告", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    MessageBox.Show(Translate.ExeNotFound, Translate.WarningTitle, MessageBoxButton.OK, MessageBoxImage.Warning);
                     ResetUi();
                     return;
                 }
@@ -219,7 +219,7 @@ namespace YukkuriMovieMaker4Hub
                 ResultExePath = exePath;
 
                 // 初回起動＆引き継ぎダイアログ
-                SetStatus("初期設定中...", 100);
+                SetStatus(Translate.Initializing, 100);
                 await LaunchOnceAndWaitAsync(exePath);
                 ShowInheritDialog(exePath);
 
@@ -227,12 +227,12 @@ namespace YukkuriMovieMaker4Hub
             }
             catch (OperationCanceledException)
             {
-                SetStatus("キャンセルされました", 0);
+                SetStatus(Translate.Cancelled, 0);
                 ResetUi();
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"インストールに失敗しました:\n{ex.Message}", "エラー", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(string.Format(Translate.InstallFailedWithError, ex.Message), Translate.ErrorTitle, MessageBoxButton.OK, MessageBoxImage.Error);
                 ResetUi();
             }
         }

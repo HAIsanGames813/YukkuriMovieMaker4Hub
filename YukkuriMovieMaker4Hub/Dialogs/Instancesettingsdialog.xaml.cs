@@ -25,8 +25,8 @@ namespace YukkuriMovieMaker4Hub
         {
             var dialog = new OpenFileDialog
             {
-                Filter = "YukkuriMovieMaker.exe|YukkuriMovieMaker.exe|すべての実行ファイル (*.exe)|*.exe",
-                Title = "YukkuriMovieMaker.exe を選択"
+                Filter = Translate.ExecutableFileFilter,
+                Title = Translate.SelectExeTitle
             };
             if (dialog.ShowDialog() == true)
             {
@@ -38,8 +38,8 @@ namespace YukkuriMovieMaker4Hub
         {
             var dialog = new OpenFileDialog
             {
-                Filter = "画像ファイル (*.png;*.jpg;*.jpeg;*.ico)|*.png;*.jpg;*.jpeg;*.ico|すべてのファイル (*.*)|*.*",
-                Title = "アイコン画像を選択"
+                Filter = Translate.ImageFileFilter,
+                Title = Translate.SelectIconTitle
             };
             if (dialog.ShowDialog() == true)
             {
@@ -58,7 +58,7 @@ namespace YukkuriMovieMaker4Hub
 
             if (instances.Count == 0)
             {
-                MessageBox.Show("他に引き継ぎ可能なインスタンスが見つかりません。", "情報", MessageBoxButton.OK, MessageBoxImage.Information);
+                MessageBox.Show(Translate.NoOtherInstance, Translate.InformationTitle, MessageBoxButton.OK, MessageBoxImage.Information);
                 return;
             }
 
@@ -66,7 +66,7 @@ namespace YukkuriMovieMaker4Hub
             if (dlg.ShowDialog() == true && dlg.SelectedFiles.Count > 0)
             {
                 CopySettingsFiles(dlg.SelectedFiles, dlg.SourceExePath, ExePathTextBox.Text);
-                MessageBox.Show($"{dlg.SelectedFiles.Count} 件の設定ファイルを引き継ぎました。", "完了", MessageBoxButton.OK, MessageBoxImage.Information);
+                MessageBox.Show(string.Format(Translate.InheritComplete, dlg.SelectedFiles.Count), Translate.Complete, MessageBoxButton.OK, MessageBoxImage.Information);
             }
         }
 
@@ -86,7 +86,7 @@ namespace YukkuriMovieMaker4Hub
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"設定の引き継ぎに失敗しました:\n{ex.Message}", "エラー", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(string.Format(Translate.InheritFailed, ex.Message), Translate.ErrorTitle, MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 

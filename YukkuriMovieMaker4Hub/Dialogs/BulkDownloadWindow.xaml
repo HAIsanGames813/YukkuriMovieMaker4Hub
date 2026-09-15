@@ -33,7 +33,7 @@
         </Grid.RowDefinitions>
 
         <!-- 上部：選択したプラグイン -->
-        <TextBlock Grid.Row="0" Text="選択したプラグイン" Margin="0,0,0,4" Foreground="{DynamicResource TextBrush}"/>
+        <TextBlock Grid.Row="0" Text="{x:Static local:Translate.SelectedPlugins}" Margin="0,0,0,4" Foreground="{DynamicResource TextBrush}"/>
 
         <Border Grid.Row="1" Background="{DynamicResource PanelBrush}"
                 BorderThickness="1" BorderBrush="{DynamicResource BorderBrush}">
@@ -70,7 +70,7 @@
         </Border>
 
         <!-- 下部：インストール先のインスタンス -->
-        <TextBlock Grid.Row="2" Text="インストール先のインスタンス" Margin="0,8,0,4" Foreground="{DynamicResource TextBrush}"/>
+        <TextBlock Grid.Row="2" Text="{x:Static local:Translate.TargetInstances}" Margin="0,8,0,4" Foreground="{DynamicResource TextBrush}"/>
 
         <Border Grid.Row="3" Background="{DynamicResource PanelBrush}"
                 BorderThickness="1" BorderBrush="{DynamicResource BorderBrush}">
@@ -103,7 +103,7 @@
                 <Path Data="M5,20H19V18H5M19,9H15V3H9V9H5L12,16L19,9Z"
                       Fill="{DynamicResource TextBrush}" Width="12" Height="12"
                       Stretch="Uniform" Margin="0,0,6,0" VerticalAlignment="Center"/>
-                <TextBlock Text="ダウンロード" VerticalAlignment="Center"/>
+                <TextBlock Text="{x:Static local:Translate.Download}" VerticalAlignment="Center"/>
             </StackPanel>
         </Button>
     </Grid>

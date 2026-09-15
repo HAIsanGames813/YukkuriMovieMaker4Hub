@@ -420,4 +420,78 @@
 <data name="HubUpdateExecutionFailed" xml:space="preserve"><value>執行更新時發生錯誤：\n{0}</value></data>
 <data name="DeleteInstanceConfirm" xml:space="preserve"><value>要從清單中移除執行個體「{0}」嗎？\n不會刪除 YMM4 本體或設定檔。</value></data>
 <data name="DeleteInstanceTitle" xml:space="preserve"><value>刪除執行個體</value></data>
+<data name="HubUpdateAvailable" xml:space="preserve"><value>有可用的 Hub 更新</value></data>
+<data name="CurrentVersionLabel" xml:space="preserve"><value>目前版本：</value></data>
+<data name="LatestVersionLabel" xml:space="preserve"><value>最新版本：</value></data>
+<data name="DoNotShowAgain" xml:space="preserve"><value>下次不再顯示</value></data>
+<data name="UpdateNow" xml:space="preserve"><value>更新</value></data>
+<data name="Ymm4UpdateAvailable" xml:space="preserve"><value>有可用的 YukkuriMovieMaker4 更新</value></data>
+<data name="CurrentLabel" xml:space="preserve"><value>目前：</value></data>
+<data name="LatestLabel" xml:space="preserve"><value>最新：</value></data>
+<data name="OpenWebPage" xml:space="preserve"><value>開啟網頁</value></data>
+<data name="OpenYmm4OfficialPage" xml:space="preserve"><value>開啟 YMM4 官方發佈頁面</value></data>
+<data name="NamePlaceholder" xml:space="preserve"><value>名稱</value></data>
+<data name="ExecutableFileFilter" xml:space="preserve"><value>YukkuriMovieMaker.exe|YukkuriMovieMaker.exe|所有可執行檔 (*.exe)|*.exe</value></data>
+<data name="ImageFileFilter" xml:space="preserve"><value>影像檔 (*.png;*.jpg;*.jpeg;*.ico)|*.png;*.jpg;*.jpeg;*.ico|所有檔案 (*.*)|*.*</value></data>
+<data name="ValidExePathRequired" xml:space="preserve"><value>請指定有效的 YukkuriMovieMaker.exe 路徑。</value></data>
+<data name="InformationTitle" xml:space="preserve"><value>資訊</value></data>
+<data name="WarningTitle" xml:space="preserve"><value>警告</value></data>
+<data name="DownloadingFile" xml:space="preserve"><value>正在下載：{0}</value></data>
+<data name="Initializing" xml:space="preserve"><value>正在初始化...</value></data>
+<data name="InstallFailedWithError" xml:space="preserve"><value>安裝失敗：\n{0}</value></data>
+<data name="Save" xml:space="preserve"><value>儲存</value></data>
+<data name="Execute" xml:space="preserve"><value>執行</value></data>
+<data name="SelectedPlugins" xml:space="preserve"><value>已選擇的外掛程式</value></data>
+<data name="DataList" xml:space="preserve"><value>資料清單</value></data>
+<data name="MoveInstanceUp" xml:space="preserve"><value>將選取的執行個體上移</value></data>
+<data name="MoveInstanceDown" xml:space="preserve"><value>將選取的執行個體下移</value></data>
+<data name="CheckYmm4Update" xml:space="preserve"><value>檢查 YMM4 更新</value></data>
+<data name="NewProject" xml:space="preserve"><value>新增專案</value></data>
+<data name="Category" xml:space="preserve"><value>類別</value></data>
+<data name="Price" xml:space="preserve"><value>價格</value></data>
+<data name="ItemsPerPage" xml:space="preserve"><value>每頁項目數</value></data>
+<data name="BulkSettings" xml:space="preserve"><value>批次設定</value></data>
+<data name="DistributionStatus" xml:space="preserve"><value>發佈狀態</value></data>
+<data name="BulkSelection" xml:space="preserve"><value>批次選取</value></data>
+<data name="SelectAllVisible" xml:space="preserve"><value>全選目前顯示項目</value></data>
+<data name="ClearVisible" xml:space="preserve"><value>取消目前顯示項目</value></data>
+<data name="TogglePortalMenu" xml:space="preserve"><value>顯示/隱藏外掛入口選單</value></data>
+<data name="ToggleInstanceList" xml:space="preserve"><value>顯示/隱藏執行個體清單</value></data>
+<data name="ItemsOf" xml:space="preserve"><value>項中</value></data>
+<data name="ItemsShown" xml:space="preserve"><value>項顯示</value></data>
+<data name="FirstPage" xml:space="preserve"><value>第一頁</value></data>
+<data name="PreviousPage" xml:space="preserve"><value>上一頁</value></data>
+<data name="Page" xml:space="preserve"><value>頁</value></data>
+<data name="NextPage" xml:space="preserve"><value>下一頁</value></data>
+<data name="LastPage" xml:space="preserve"><value>最後一頁</value></data>
+<data name="SelectAllCurrentPage" xml:space="preserve"><value>全選本頁</value></data>
+<data name="EditDataFolder" xml:space="preserve"><value>編輯資料資料夾</value></data>
+<data name="HubUpdateDescription" xml:space="preserve"><value>檢查並執行 YukkuriMovieMaker4Hub 更新</value></data>
+<data name="SelectedItemCount" xml:space="preserve"><value>項已選取</value></data>
+<data name="ExternalLabel" xml:space="preserve"><value>外部：</value></data>
+<data name="AlwaysShowInstanceList" xml:space="preserve"><value>一律顯示執行個體清單</value></data>
+<data name="AlwaysShowPortalMenu" xml:space="preserve"><value>一律顯示入口選單</value></data>
+<data name="Installed" xml:space="preserve"><value>已安裝</value></data>
+<data name="Select" xml:space="preserve"><value>選取</value></data>
+<data name="ShowYmm4UpdateInfo" xml:space="preserve"><value>顯示 YMM4 更新資訊</value></data>
+<data name="Manjubox" xml:space="preserve"><value>饅頭使者的玩具箱</value></data>
+<data name="ReadmePageProgress" xml:space="preserve"><value>第 {1} 項，共 {0} 項</value></data>
+<data name="Ymm4VersionTitle" xml:space="preserve"><value>YukkuriMovieMaker v{0}</value></data>
+<data name="Ymm4LatestVersion" xml:space="preserve"><value>YMM4 最新：{0}</value></data>
+<data name="Ymm4LatestVersionLoading" xml:space="preserve"><value>YMM4 最新：取得中...</value></data>
+<data name="FilteredItemCount" xml:space="preserve"><value>{0} / {1} 項</value></data>
+<data name="NotSet" xml:space="preserve"><value>未設定</value></data>
+<data name="ExternalSite" xml:space="preserve"><value>外部網站</value></data>
+<data name="OpenBooth" xml:space="preserve"><value>開啟 BOOTH</value></data>
+<data name="OpenHost" xml:space="preserve"><value>開啟 {0}</value></data>
+<data name="LanguageJapanese" xml:space="preserve"><value>日本語</value></data>
+<data name="LanguageEnglish" xml:space="preserve"><value>English</value></data>
+<data name="LanguageSimplifiedChinese" xml:space="preserve"><value>中文 (简体)</value></data>
+<data name="LanguageTraditionalChinese" xml:space="preserve"><value>中文 (繁體)</value></data>
+<data name="LanguageKorean" xml:space="preserve"><value>한국어</value></data>
+<data name="LanguageSpanish" xml:space="preserve"><value>Español</value></data>
+<data name="LanguageArabic" xml:space="preserve"><value>العربية</value></data>
+<data name="LanguageIndonesian" xml:space="preserve"><value>Bahasa Indonesia</value></data>
+<data name="SiteItemCount" xml:space="preserve"><value>{0} ({1})</value></data>
+<data name="Uploader" xml:space="preserve"><value>上傳站</value></data>
 </root>

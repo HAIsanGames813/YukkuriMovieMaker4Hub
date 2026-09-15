@@ -420,4 +420,78 @@
 <data name="HubUpdateExecutionFailed" xml:space="preserve"><value>An error occurred while running the update:\n{0}</value></data>
 <data name="DeleteInstanceConfirm" xml:space="preserve"><value>Remove instance “{0}” from the list?\nYMM4 itself and its settings files will not be deleted.</value></data>
 <data name="DeleteInstanceTitle" xml:space="preserve"><value>Delete Instance</value></data>
+<data name="HubUpdateAvailable" xml:space="preserve"><value>A Hub update is available</value></data>
+<data name="CurrentVersionLabel" xml:space="preserve"><value>Current version:</value></data>
+<data name="LatestVersionLabel" xml:space="preserve"><value>Latest version:</value></data>
+<data name="DoNotShowAgain" xml:space="preserve"><value>Don't show again</value></data>
+<data name="UpdateNow" xml:space="preserve"><value>Update</value></data>
+<data name="Ymm4UpdateAvailable" xml:space="preserve"><value>A YukkuriMovieMaker4 update is available</value></data>
+<data name="CurrentLabel" xml:space="preserve"><value>Current: </value></data>
+<data name="LatestLabel" xml:space="preserve"><value>Latest: </value></data>
+<data name="OpenWebPage" xml:space="preserve"><value>Open web page</value></data>
+<data name="OpenYmm4OfficialPage" xml:space="preserve"><value>Open the YMM4 official distribution page</value></data>
+<data name="NamePlaceholder" xml:space="preserve"><value>Name</value></data>
+<data name="ExecutableFileFilter" xml:space="preserve"><value>YukkuriMovieMaker.exe|YukkuriMovieMaker.exe|All executable files (*.exe)|*.exe</value></data>
+<data name="ImageFileFilter" xml:space="preserve"><value>Image files (*.png;*.jpg;*.jpeg;*.ico)|*.png;*.jpg;*.jpeg;*.ico|All files (*.*)|*.*</value></data>
+<data name="ValidExePathRequired" xml:space="preserve"><value>Specify a valid YukkuriMovieMaker.exe path.</value></data>
+<data name="InformationTitle" xml:space="preserve"><value>Information</value></data>
+<data name="WarningTitle" xml:space="preserve"><value>Warning</value></data>
+<data name="DownloadingFile" xml:space="preserve"><value>Downloading: {0}</value></data>
+<data name="Initializing" xml:space="preserve"><value>Initializing...</value></data>
+<data name="InstallFailedWithError" xml:space="preserve"><value>Installation failed:\n{0}</value></data>
+<data name="Save" xml:space="preserve"><value>Save</value></data>
+<data name="Execute" xml:space="preserve"><value>Run</value></data>
+<data name="SelectedPlugins" xml:space="preserve"><value>Selected plugins</value></data>
+<data name="DataList" xml:space="preserve"><value>Data list</value></data>
+<data name="MoveInstanceUp" xml:space="preserve"><value>Move the selected instance up</value></data>
+<data name="MoveInstanceDown" xml:space="preserve"><value>Move the selected instance down</value></data>
+<data name="CheckYmm4Update" xml:space="preserve"><value>Check for YMM4 updates</value></data>
+<data name="NewProject" xml:space="preserve"><value>New project</value></data>
+<data name="Category" xml:space="preserve"><value>Category</value></data>
+<data name="Price" xml:space="preserve"><value>Price</value></data>
+<data name="ItemsPerPage" xml:space="preserve"><value>Items per page</value></data>
+<data name="BulkSettings" xml:space="preserve"><value>Bulk settings</value></data>
+<data name="DistributionStatus" xml:space="preserve"><value>Distribution status</value></data>
+<data name="BulkSelection" xml:space="preserve"><value>Bulk selection</value></data>
+<data name="SelectAllVisible" xml:space="preserve"><value>Select all visible</value></data>
+<data name="ClearVisible" xml:space="preserve"><value>Clear visible selection</value></data>
+<data name="TogglePortalMenu" xml:space="preserve"><value>Show/hide the Plugin Portal menu</value></data>
+<data name="ToggleInstanceList" xml:space="preserve"><value>Show/hide the instance list</value></data>
+<data name="ItemsOf" xml:space="preserve"><value>of</value></data>
+<data name="ItemsShown" xml:space="preserve"><value>shown</value></data>
+<data name="FirstPage" xml:space="preserve"><value>First page</value></data>
+<data name="PreviousPage" xml:space="preserve"><value>Previous page</value></data>
+<data name="Page" xml:space="preserve"><value>Page</value></data>
+<data name="NextPage" xml:space="preserve"><value>Next page</value></data>
+<data name="LastPage" xml:space="preserve"><value>Last page</value></data>
+<data name="SelectAllCurrentPage" xml:space="preserve"><value>Select all on this page</value></data>
+<data name="EditDataFolder" xml:space="preserve"><value>Editing data folders</value></data>
+<data name="HubUpdateDescription" xml:space="preserve"><value>Check for and run YukkuriMovieMaker4Hub updates</value></data>
+<data name="SelectedItemCount" xml:space="preserve"><value>selected</value></data>
+<data name="ExternalLabel" xml:space="preserve"><value>External:</value></data>
+<data name="AlwaysShowInstanceList" xml:space="preserve"><value>Always show the instance list</value></data>
+<data name="AlwaysShowPortalMenu" xml:space="preserve"><value>Always show the portal menu</value></data>
+<data name="Installed" xml:space="preserve"><value>Installed</value></data>
+<data name="Select" xml:space="preserve"><value>Select</value></data>
+<data name="ShowYmm4UpdateInfo" xml:space="preserve"><value>Show YMM4 update information</value></data>
+<data name="Manjubox" xml:space="preserve"><value>Manju Summoner's Toy Box</value></data>
+<data name="ReadmePageProgress" xml:space="preserve"><value>{1} of {0}</value></data>
+<data name="Ymm4VersionTitle" xml:space="preserve"><value>YukkuriMovieMaker v{0}</value></data>
+<data name="Ymm4LatestVersion" xml:space="preserve"><value>Latest YMM4: {0}</value></data>
+<data name="Ymm4LatestVersionLoading" xml:space="preserve"><value>Latest YMM4: retrieving...</value></data>
+<data name="FilteredItemCount" xml:space="preserve"><value>{0} / {1} items</value></data>
+<data name="NotSet" xml:space="preserve"><value>Not set</value></data>
+<data name="ExternalSite" xml:space="preserve"><value>External site</value></data>
+<data name="OpenBooth" xml:space="preserve"><value>Open BOOTH</value></data>
+<data name="OpenHost" xml:space="preserve"><value>Open {0}</value></data>
+<data name="LanguageJapanese" xml:space="preserve"><value>日本語</value></data>
+<data name="LanguageEnglish" xml:space="preserve"><value>English</value></data>
+<data name="LanguageSimplifiedChinese" xml:space="preserve"><value>中文 (简体)</value></data>
+<data name="LanguageTraditionalChinese" xml:space="preserve"><value>中文 (繁體)</value></data>
+<data name="LanguageKorean" xml:space="preserve"><value>한국어</value></data>
+<data name="LanguageSpanish" xml:space="preserve"><value>Español</value></data>
+<data name="LanguageArabic" xml:space="preserve"><value>العربية</value></data>
+<data name="LanguageIndonesian" xml:space="preserve"><value>Bahasa Indonesia</value></data>
+<data name="SiteItemCount" xml:space="preserve"><value>{0} ({1})</value></data>
+<data name="Uploader" xml:space="preserve"><value>Uploader</value></data>
 </root>

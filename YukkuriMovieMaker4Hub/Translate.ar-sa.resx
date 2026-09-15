@@ -420,4 +420,78 @@
 <data name="HubUpdateExecutionFailed" xml:space="preserve"><value>حدث خطأ أثناء تنفيذ التحديث:\n{0}</value></data>
 <data name="DeleteInstanceConfirm" xml:space="preserve"><value>هل تريد إزالة المثيل «{0}» من القائمة؟\nلن يتم حذف YMM4 نفسه أو ملفات إعداداته.</value></data>
 <data name="DeleteInstanceTitle" xml:space="preserve"><value>حذف المثيل</value></data>
+<data name="HubUpdateAvailable" xml:space="preserve"><value>يتوفر تحديث لـ Hub</value></data>
+<data name="CurrentVersionLabel" xml:space="preserve"><value>الإصدار الحالي:</value></data>
+<data name="LatestVersionLabel" xml:space="preserve"><value>أحدث إصدار:</value></data>
+<data name="DoNotShowAgain" xml:space="preserve"><value>لا تعرض مرة أخرى</value></data>
+<data name="UpdateNow" xml:space="preserve"><value>تحديث</value></data>
+<data name="Ymm4UpdateAvailable" xml:space="preserve"><value>يتوفر تحديث لـ YukkuriMovieMaker4</value></data>
+<data name="CurrentLabel" xml:space="preserve"><value>الحالي: </value></data>
+<data name="LatestLabel" xml:space="preserve"><value>الأحدث: </value></data>
+<data name="OpenWebPage" xml:space="preserve"><value>فتح صفحة الويب</value></data>
+<data name="OpenYmm4OfficialPage" xml:space="preserve"><value>فتح صفحة التوزيع الرسمية لـ YMM4</value></data>
+<data name="NamePlaceholder" xml:space="preserve"><value>الاسم</value></data>
+<data name="ExecutableFileFilter" xml:space="preserve"><value>YukkuriMovieMaker.exe|YukkuriMovieMaker.exe|كل الملفات التنفيذية (*.exe)|*.exe</value></data>
+<data name="ImageFileFilter" xml:space="preserve"><value>ملفات الصور (*.png;*.jpg;*.jpeg;*.ico)|*.png;*.jpg;*.jpeg;*.ico|كل الملفات (*.*)|*.*</value></data>
+<data name="ValidExePathRequired" xml:space="preserve"><value>حدد مسارًا صالحًا لـ YukkuriMovieMaker.exe.</value></data>
+<data name="InformationTitle" xml:space="preserve"><value>معلومات</value></data>
+<data name="WarningTitle" xml:space="preserve"><value>تحذير</value></data>
+<data name="DownloadingFile" xml:space="preserve"><value>جارٍ التنزيل: {0}</value></data>
+<data name="Initializing" xml:space="preserve"><value>جارٍ التهيئة...</value></data>
+<data name="InstallFailedWithError" xml:space="preserve"><value>فشل التثبيت:\n{0}</value></data>
+<data name="Save" xml:space="preserve"><value>حفظ</value></data>
+<data name="Execute" xml:space="preserve"><value>تنفيذ</value></data>
+<data name="SelectedPlugins" xml:space="preserve"><value>الملحقات المحددة</value></data>
+<data name="DataList" xml:space="preserve"><value>قائمة البيانات</value></data>
+<data name="MoveInstanceUp" xml:space="preserve"><value>نقل المثيل المحدد لأعلى</value></data>
+<data name="MoveInstanceDown" xml:space="preserve"><value>نقل المثيل المحدد لأسفل</value></data>
+<data name="CheckYmm4Update" xml:space="preserve"><value>التحقق من تحديثات YMM4</value></data>
+<data name="NewProject" xml:space="preserve"><value>مشروع جديد</value></data>
+<data name="Category" xml:space="preserve"><value>الفئة</value></data>
+<data name="Price" xml:space="preserve"><value>السعر</value></data>
+<data name="ItemsPerPage" xml:space="preserve"><value>العناصر لكل صفحة</value></data>
+<data name="BulkSettings" xml:space="preserve"><value>إعدادات جماعية</value></data>
+<data name="DistributionStatus" xml:space="preserve"><value>حالة التوزيع</value></data>
+<data name="BulkSelection" xml:space="preserve"><value>تحديد جماعي</value></data>
+<data name="SelectAllVisible" xml:space="preserve"><value>تحديد كل الظاهر</value></data>
+<data name="ClearVisible" xml:space="preserve"><value>مسح التحديد الظاهر</value></data>
+<data name="TogglePortalMenu" xml:space="preserve"><value>إظهار/إخفاء قائمة بوابة الملحقات</value></data>
+<data name="ToggleInstanceList" xml:space="preserve"><value>إظهار/إخفاء قائمة المثيلات</value></data>
+<data name="ItemsOf" xml:space="preserve"><value>من</value></data>
+<data name="ItemsShown" xml:space="preserve"><value>معروضة</value></data>
+<data name="FirstPage" xml:space="preserve"><value>الصفحة الأولى</value></data>
+<data name="PreviousPage" xml:space="preserve"><value>الصفحة السابقة</value></data>
+<data name="Page" xml:space="preserve"><value>صفحة</value></data>
+<data name="NextPage" xml:space="preserve"><value>الصفحة التالية</value></data>
+<data name="LastPage" xml:space="preserve"><value>الصفحة الأخيرة</value></data>
+<data name="SelectAllCurrentPage" xml:space="preserve"><value>تحديد الكل في هذه الصفحة</value></data>
+<data name="EditDataFolder" xml:space="preserve"><value>مجلدات بيانات التحرير</value></data>
+<data name="HubUpdateDescription" xml:space="preserve"><value>التحقق من تحديثات YukkuriMovieMaker4Hub وتنفيذها</value></data>
+<data name="SelectedItemCount" xml:space="preserve"><value>محدد</value></data>
+<data name="ExternalLabel" xml:space="preserve"><value>خارجي:</value></data>
+<data name="AlwaysShowInstanceList" xml:space="preserve"><value>إظهار قائمة المثيلات دائمًا</value></data>
+<data name="AlwaysShowPortalMenu" xml:space="preserve"><value>إظهار قائمة البوابة دائمًا</value></data>
+<data name="Installed" xml:space="preserve"><value>مثبت</value></data>
+<data name="Select" xml:space="preserve"><value>تحديد</value></data>
+<data name="ShowYmm4UpdateInfo" xml:space="preserve"><value>عرض معلومات تحديث YMM4</value></data>
+<data name="Manjubox" xml:space="preserve"><value>صندوق ألعاب مستدعي المانجو</value></data>
+<data name="ReadmePageProgress" xml:space="preserve"><value>{1} من {0}</value></data>
+<data name="Ymm4VersionTitle" xml:space="preserve"><value>YukkuriMovieMaker v{0}</value></data>
+<data name="Ymm4LatestVersion" xml:space="preserve"><value>أحدث YMM4: {0}</value></data>
+<data name="Ymm4LatestVersionLoading" xml:space="preserve"><value>أحدث YMM4: جارٍ الجلب...</value></data>
+<data name="FilteredItemCount" xml:space="preserve"><value>{0} / {1} عنصر</value></data>
+<data name="NotSet" xml:space="preserve"><value>غير محدد</value></data>
+<data name="ExternalSite" xml:space="preserve"><value>موقع خارجي</value></data>
+<data name="OpenBooth" xml:space="preserve"><value>فتح BOOTH</value></data>
+<data name="OpenHost" xml:space="preserve"><value>فتح {0}</value></data>
+<data name="LanguageJapanese" xml:space="preserve"><value>日本語</value></data>
+<data name="LanguageEnglish" xml:space="preserve"><value>English</value></data>
+<data name="LanguageSimplifiedChinese" xml:space="preserve"><value>中文 (简体)</value></data>
+<data name="LanguageTraditionalChinese" xml:space="preserve"><value>中文 (繁體)</value></data>
+<data name="LanguageKorean" xml:space="preserve"><value>한국어</value></data>
+<data name="LanguageSpanish" xml:space="preserve"><value>Español</value></data>
+<data name="LanguageArabic" xml:space="preserve"><value>العربية</value></data>
+<data name="LanguageIndonesian" xml:space="preserve"><value>Bahasa Indonesia</value></data>
+<data name="SiteItemCount" xml:space="preserve"><value>{0} ({1})</value></data>
+<data name="Uploader" xml:space="preserve"><value>رافع الملفات</value></data>
 </root>

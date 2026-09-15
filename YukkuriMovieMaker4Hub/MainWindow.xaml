@@ -166,7 +166,7 @@
 
                             <!-- YMM4本体更新バッジ -->
                             <Border Grid.Column="2" Background="{DynamicResource AccentBrush}" CornerRadius="3" Padding="4,1" Margin="4,0,0,0"
-                                    VerticalAlignment="Center" ToolTip="YMM4本体のアップデートがあります">
+                                    VerticalAlignment="Center" ToolTip="{x:Static local:Translate.Ymm4UpdateAvailable}">
                                 <Border.Style>
                                     <Style TargetType="Border">
                                         <Setter Property="Visibility" Value="Collapsed"/>
@@ -188,7 +188,7 @@
                                     <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
                                         <Style.Triggers>
                                             <DataTrigger Binding="{Binding IsRunning}" Value="True">
-                                                <Setter Property="ToolTip" Value="強制終了"/>
+                                                <Setter Property="ToolTip" Value="{x:Static local:Translate.ForceKillInstance}"/>
                                             </DataTrigger>
                                             <DataTrigger Binding="{Binding IsRunning}" Value="False">
                                                 <Setter Property="ToolTip" Value="{x:Static local:Translate.Launch}"/>
@@ -249,13 +249,13 @@
                           Fill="{DynamicResource TextBrush}"/>
                 </Button>
                 <Button Click="MoveInstanceUp_Click" Width="28" Height="28" Margin="4,0,0,0"
-                        ToolTip="選択中のインスタンスを上へ移動">
+                        ToolTip="{x:Static local:Translate.MoveInstanceUp}">
                     <Path Stretch="Uniform" Width="12" Height="12"
                           Data="M12,6L5,16H19L12,6Z"
                           Fill="{DynamicResource TextBrush}"/>
                 </Button>
                 <Button Click="MoveInstanceDown_Click" Width="28" Height="28" Margin="4,0,0,0"
-                        ToolTip="選択中のインスタンスを下へ移動">
+                        ToolTip="{x:Static local:Translate.MoveInstanceDown}">
                     <Path Stretch="Uniform" Width="12" Height="12"
                           Data="M5,8H19L12,18L5,8Z"
                           Fill="{DynamicResource TextBrush}"/>
@@ -283,7 +283,7 @@
             <TabControl x:Name="MainTabControl" Grid.Row="0" Grid.Column="1" SelectionChanged="TabControl_SelectionChanged">
 
                 <!-- 1. 起動タブ -->
-                <TabItem Header="起動">
+                <TabItem Header="{x:Static local:Translate.TabLaunch}">
                     <Grid Margin="12">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto"/>
@@ -319,7 +319,7 @@
                             <Button DockPanel.Dock="Right" Click="OpenFolder_Click"
                                     IsEnabled="{Binding SelectedInstance.IsRealInstance}"
                                     Width="42" Height="42" Margin="0,0,0,8"
-                                    ToolTip="フォルダを開く">
+                                    ToolTip="{x:Static local:Translate.OpenFolderTooltip}">
                                 <Path Data="M10,4H4C2.89,4 2,4.89 2,6V18A2,2 0 0,0 4,20H20A2,2 0 0,0 22,18V8C22,6.89 21.1,6 20,6H12L10,4Z"
                                       Stretch="Uniform" Width="18" Height="18"
                                       Fill="{DynamicResource TextBrush}"/>
@@ -327,7 +327,7 @@
                             <Button DockPanel.Dock="Right" Click="InstanceSettings_Click"
                                     IsEnabled="{Binding SelectedInstance.IsRealInstance}"
                                     Width="42" Height="42" Margin="0,0,8,8"
-                                    ToolTip="設定">
+                                    ToolTip="{x:Static local:Translate.TabSettings}">
                                 <Path Data="M12,15.5A3.5,3.5 0 0,1 8.5,12A3.5,3.5 0 0,1 12,8.5A3.5,3.5 0 0,1 15.5,12A3.5,3.5 0 0,1 12,15.5M19.43,12.97C19.47,12.65 19.5,12.33 19.5,12C19.5,11.67 19.47,11.34 19.43,11L21.54,9.37C21.73,9.22 21.78,8.95 21.66,8.73L19.66,5.27C19.54,5.05 19.27,4.96 19.05,5.05L16.56,6.05C16.04,5.66 15.5,5.32 14.87,5.07L14.5,2.42C14.46,2.18 14.25,2 14,2H10C9.75,2 9.54,2.18 9.5,2.42L9.13,5.07C8.5,5.32 7.96,5.66 7.44,6.05L4.95,5.05C4.73,4.96 4.46,5.05 4.34,5.27L2.34,8.73C2.21,8.95 2.27,9.22 2.46,9.37L4.57,11C4.53,11.34 4.5,11.67 4.5,12C4.5,12.33 4.53,12.65 4.57,12.97L2.46,14.63C2.27,14.78 2.21,15.05 2.34,15.27L4.34,18.73C4.46,18.95 4.73,19.03 4.95,18.95L7.44,17.94C7.96,18.34 8.5,18.68 9.13,18.93L9.5,21.58C9.54,21.82 9.75,22 10,22H14C14.25,22 14.46,21.82 14.5,21.58L14.87,18.93C15.5,18.68 16.04,18.34 16.56,17.94L19.05,18.95C19.27,19.03 19.54,18.95 19.66,18.73L21.66,15.27C21.78,15.05 21.73,14.78 21.54,14.63L19.43,12.97Z"
                                       Stretch="Uniform" Width="18" Height="18"
                                       Fill="{DynamicResource TextBrush}"/>
@@ -336,13 +336,13 @@
                             <Button DockPanel.Dock="Right" Click="CheckSelectedInstanceYmmUpdate_Click"
                                     IsEnabled="{Binding SelectedInstance.IsRealInstance}"
                                     Width="42" Height="42" Margin="0,0,8,8"
-                                    ToolTip="YMM4アップデートを確認">
+                                    ToolTip="{x:Static local:Translate.CheckYmm4Update}">
                                 <Button.Style>
                                     <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
                                         <Style.Triggers>
                                             <DataTrigger Binding="{Binding SelectedInstance.HasUpdate}" Value="True">
                                                 <Setter Property="Background" Value="{DynamicResource AccentBrush}"/>
-                                                <Setter Property="ToolTip" Value="YMM4アップデート情報を表示"/>
+                                                <Setter Property="ToolTip" Value="{x:Static local:Translate.ShowYmm4UpdateInfo}"/>
                                             </DataTrigger>
                                         </Style.Triggers>
                                     </Style>
@@ -381,7 +381,7 @@
                             <!-- 左側ボタン群 -->
                             <Button Click="LaunchInstance_Click" Style="{StaticResource LaunchActionButtonStyle}"
                                     IsEnabled="{Binding SelectedInstance.IsRealInstance}"
-                                    ToolTip="起動">
+                                    ToolTip="{x:Static local:Translate.Launch}">
                                 <StackPanel Orientation="Horizontal">
                                     <Path Width="16" Height="16" Stretch="Uniform" Style="{StaticResource LaunchActionIconStyle}"
                                           Data="M8,5.14V19.14L19,12.14L8,5.14Z"
@@ -392,7 +392,7 @@
                             </Button>
                             <Button Click="LaunchLastProject_Click" Style="{StaticResource LaunchActionButtonStyle}"
                                     IsEnabled="{Binding SelectedInstance.IsRealInstance}"
-                                    ToolTip="前回のプロジェクトを開く">
+                                    ToolTip="{x:Static local:Translate.OpenLastProject}">
                                 <StackPanel Orientation="Horizontal">
                                     <Path Width="16" Height="16" Stretch="Uniform" Style="{StaticResource LaunchActionIconStyle}"
                                           Data="M13.5,8H12V13L16.28,15.54L17,14.33L13.5,12.25V8M13,3A9,9 0 0,0 4,12H1L4.96,16.03L9,12H6A7,7 0 0,1 13,5A7,7 0 0,1 20,12A7,7 0 0,1 13,19C11.07,19 9.32,18.21 8.06,16.94L6.64,18.36C8.27,20 10.5,21 13,21A9,9 0 0,0 22,12A9,9 0 0,0 13,3Z"
@@ -402,7 +402,7 @@
                             </Button>
                             <Button Click="CreateNewProject_Click" Style="{StaticResource LaunchActionButtonStyle}"
                                     IsEnabled="{Binding SelectedInstance.IsRealInstance}"
-                                    ToolTip="新規プロジェクト">
+                                    ToolTip="{x:Static local:Translate.NewProject}">
                                 <StackPanel Orientation="Horizontal">
                                     <Path Width="16" Height="16" Stretch="Uniform" Style="{StaticResource LaunchActionIconStyle}"
                                           Data="M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z"
@@ -483,7 +483,7 @@
                 </TabItem>
 
                 <!-- 2. プラグインリストタブ -->
-                <TabItem Header="プラグインリスト">
+                <TabItem Header="{x:Static local:Translate.TabPluginList}">
                     <Grid IsEnabled="{Binding SelectedInstance, Converter={StaticResource IsNotNullConverter}}"
                           Margin="8">
                         <Grid.RowDefinitions>
@@ -504,21 +504,21 @@
                                      VerticalContentAlignment="Center" Margin="0,0,8,0"/>
 
                             <!-- ローカルソート用ComboBox -->
-                            <TextBlock Text="ソート:" VerticalAlignment="Center" Margin="0,0,4,0"/>
+                            <TextBlock Text="{x:Static local:Translate.SortBy}" VerticalAlignment="Center" Margin="0,0,4,0"/>
                             <ComboBox SelectedIndex="{Binding LocalPluginSortIndex}"
                                       SelectionChanged="LocalPluginSort_Changed"
                                       Height="28" Width="100" Margin="0,0,4,0">
-                                <ComboBoxItem Content="名前"/>
-                                <ComboBoxItem Content="状態"/>
-                                <ComboBoxItem Content="作者"/>
-                                <ComboBoxItem Content="タイプ"/>
-                                <ComboBoxItem Content="バージョン"/>
-                                <ComboBoxItem Content="公開日"/>
-                                <ComboBoxItem Content="DL日時"/>
+                                <ComboBoxItem Content="{x:Static local:Translate.SortByName}"/>
+                                <ComboBoxItem Content="{x:Static local:Translate.SortByStatus}"/>
+                                <ComboBoxItem Content="{x:Static local:Translate.SortByAuthor}"/>
+                                <ComboBoxItem Content="{x:Static local:Translate.SortByType}"/>
+                                <ComboBoxItem Content="{x:Static local:Translate.VersionColumn}"/>
+                                <ComboBoxItem Content="{x:Static local:Translate.SortByPublishDate}"/>
+                                <ComboBoxItem Content="{x:Static local:Translate.DownloadedAt}"/>
                             </ComboBox>
                             <Button Width="28" Height="28" Margin="0,0,8,0"
                                     Click="LocalPluginSortOrder_Click"
-                                    ToolTip="昇順/降順">
+                                    ToolTip="{x:Static local:Translate.SortDirection}">
                                 <Path Width="12" Height="12" Stretch="Uniform"
                                       Data="M10,13V11H18V13H10M10,19V17H14V19H10M10,7V5H22V7H10M6,17H8.5L5,20.5L1.5,17H4V7H1.5L5,3.5L8.5,7H6V17Z"
                                       Fill="{DynamicResource TextBrush}"/>
@@ -617,7 +617,7 @@
                                             </DataTemplate>
                                         </GridViewColumn.CellTemplate>
                                     </GridViewColumn>
-                                    <GridViewColumn Width="50" Header="フォルダ">
+                                    <GridViewColumn Width="50" Header="{x:Static local:Translate.Folder}">
                                         <GridViewColumn.CellTemplate>
                                             <DataTemplate>
                                                 <Button Click="OpenLocalPluginFolder_Click" Width="26" Height="22"
@@ -636,7 +636,7 @@
                 </TabItem>
 
                 <!-- 3. プラグインポータルタブ (HAIsanGames813/YMM4PluginPortal 準拠) -->
-                <TabItem Header="プラグインポータル">
+                <TabItem Header="{x:Static local:Translate.TabPluginPortal}">
                     <Grid>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="*"/>
@@ -657,7 +657,7 @@
                                     <!-- 1. キーワード検索 -->
                                     <Border Style="{StaticResource SideGroupStyle}">
                                         <StackPanel>
-                                            <TextBlock Text="キーワード検索" FontWeight="Bold" Margin="0,0,0,6"/>
+                                            <TextBlock Text="{x:Static local:Translate.SearchLabel}" FontWeight="Bold" Margin="0,0,0,6"/>
                                             <Grid Margin="0,0,0,4">
                                                 <Grid.ColumnDefinitions>
                                                     <ColumnDefinition Width="*"/>
@@ -669,14 +669,14 @@
                                                          Height="28" VerticalContentAlignment="Center"/>
                                                 <Button Grid.Column="1" Click="PortalClearSearch_Click"
                                                         Width="24" Height="28" Margin="2,0,0,0"
-                                                        ToolTip="検索クリア">
+                                                        ToolTip="{x:Static local:Translate.ClearFilter}">
                                                     <Path Width="10" Height="10" Stretch="Uniform"
                                                           Data="M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z"
                                                           Fill="{DynamicResource TextBrush}"/>
                                                 </Button>
                                                 <Button Grid.Column="2" Click="PortalSearch_Click"
                                                         Width="28" Height="28" Margin="2,0,0,0"
-                                                        ToolTip="検索">
+                                                        ToolTip="{x:Static local:Translate.SearchPlugins}">
                                                     <Path Width="13" Height="13" Stretch="Uniform"
                                                           Data="M9.5,3A6.5,6.5 0 0,1 16,9.5C16,11.11 15.41,12.59 14.44,13.73L14.71,14H15.5L20.5,19L19,20.5L14,15.5V14.71L13.73,14.44C12.59,15.41 11.11,16 9.5,16A6.5,6.5 0 0,1 3,9.5A6.5,6.5 0 0,1 9.5,3M9.5,5C7,5 5,7 5,9.5C5,12 7,14 9.5,14C12,14 14,12 14,9.5C14,7 12,5 9.5,5Z"
                                                           Fill="{DynamicResource TextBrush}"/>
@@ -687,7 +687,7 @@
                                                     <Path Width="13" Height="13" Stretch="Uniform" Margin="0,0,6,0"
                                                           Data="M17.65,6.35C16.2,4.9 14.21,4 12,4A8,8 0 0,0 4,12A8,8 0 0,0 12,20C15.73,20 18.84,17.45 19.73,14H17.65C16.83,16.33 14.61,18 12,18A6,6 0 0,1 6,12A6,6 0 0,1 12,6C13.66,6 15.14,6.69 16.22,7.78L13,11H20V4L17.65,6.35Z"
                                                           Fill="{DynamicResource TextBrush}"/>
-                                                    <TextBlock Text="更新" VerticalAlignment="Center"/>
+                                                    <TextBlock Text="{x:Static local:Translate.RefreshList}" VerticalAlignment="Center"/>
                                                 </StackPanel>
                                             </Button>
                                         </StackPanel>
@@ -696,7 +696,7 @@
                                     <!-- 2. 並び替え & 1ページ件数 -->
                                     <Border Style="{StaticResource SideGroupStyle}">
                                         <StackPanel>
-                                            <TextBlock Text="並び替え" FontWeight="Bold" Margin="0,0,0,6"/>
+                                            <TextBlock Text="{x:Static local:Translate.SortBy}" FontWeight="Bold" Margin="0,0,0,6"/>
                                             <Grid Margin="0,0,0,6">
                                                 <Grid.ColumnDefinitions>
                                                     <ColumnDefinition Width="*"/>
@@ -705,24 +705,24 @@
                                                 <ComboBox x:Name="SortFieldCombo"
                                                           SelectedIndex="{Binding PortalSortFieldIndex}"
                                                           SelectionChanged="PortalSort_Changed" Height="26">
-                                                    <ComboBoxItem Content="公開日"/>
-                                                    <ComboBoxItem Content="更新日"/>
-                                                    <ComboBoxItem Content="名前"/>
-                                                    <ComboBoxItem Content="作者"/>
-                                                    <ComboBoxItem Content="カテゴリ"/>
-                                                    <ComboBoxItem Content="価格"/>
-                                                    <ComboBoxItem Content="配布元"/>
+                                                    <ComboBoxItem Content="{x:Static local:Translate.SortByPublishDate}"/>
+                                                    <ComboBoxItem Content="{x:Static local:Translate.SortByLatestDate}"/>
+                                                    <ComboBoxItem Content="{x:Static local:Translate.SortByName}"/>
+                                                    <ComboBoxItem Content="{x:Static local:Translate.SortByAuthor}"/>
+                                                    <ComboBoxItem Content="{x:Static local:Translate.Category}"/>
+                                                    <ComboBoxItem Content="{x:Static local:Translate.Price}"/>
+                                                    <ComboBoxItem Content="{x:Static local:Translate.DistributionSite}"/>
                                                 </ComboBox>
                                                 <Button x:Name="SortAscBtn"
                                                         Grid.Column="1" Width="28" Height="26" Margin="4,0,0,0"
                                                         Click="PortalSortOrder_Click"
-                                                        ToolTip="昇順/降順">
+                                                        ToolTip="{x:Static local:Translate.SortDirection}">
                                                     <Path Width="13" Height="13" Stretch="Uniform"
                                                           Data="M10,13V11H18V13H10M10,19V17H14V19H10M10,7V5H22V7H10M6,17H8.5L5,20.5L1.5,17H4V7H1.5L5,3.5L8.5,7H6V17Z"
                                                           Fill="{DynamicResource TextBrush}"/>
                                                 </Button>
                                             </Grid>
-                                            <TextBlock Text="1ページの件数" Margin="0,0,0,2"
+                                            <TextBlock Text="{x:Static local:Translate.ItemsPerPage}" Margin="0,0,0,2"
                                                        Foreground="{DynamicResource SubTextBrush}"/>
                                             <ComboBox x:Name="PageSizeCombo"
                                                       SelectedIndex="{Binding PortalPageSizeIndex}"
@@ -732,20 +732,20 @@
                                                 <ComboBoxItem Content="20"/>
                                                 <ComboBoxItem Content="50"/>
                                                 <ComboBoxItem Content="100"/>
-                                                <ComboBoxItem Content="全表示"/>
+                                                <ComboBoxItem Content="{x:Static local:Translate.All}"/>
                                             </ComboBox>
                                         </StackPanel>
                                     </Border>
 
                                     <!-- 3. カテゴリ / タイプフィルター -->
                                     <Border Style="{StaticResource SideGroupStyle}">
-                                        <Expander Header="カテゴリ" IsExpanded="True" FontWeight="Bold" Foreground="{DynamicResource TextBrush}">
+                                        <Expander Header="{x:Static local:Translate.Category}" IsExpanded="True" FontWeight="Bold" Foreground="{DynamicResource TextBrush}">
                                             <StackPanel Margin="0,4,0,0">
                                                 <DockPanel Margin="0,2,0,6">
-                                                    <TextBlock Text="一括設定" FontSize="11" Foreground="{DynamicResource SubTextBrush}" VerticalAlignment="Center"/>
+                                                    <TextBlock Text="{x:Static local:Translate.BulkSettings}" FontSize="11" Foreground="{DynamicResource SubTextBrush}" VerticalAlignment="Center"/>
                                                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                                                        <Button Click="SelectAllTypeFilters_Click" Padding="4,1" Margin="0,0,2,0" Content="全選択" FontSize="10" FontWeight="Normal"/>
-                                                        <Button Click="ClearAllTypeFilters_Click" Padding="4,1" Content="全解除" FontSize="10" FontWeight="Normal"/>
+                                                        <Button Click="SelectAllTypeFilters_Click" Padding="4,1" Margin="0,0,2,0" Content="{x:Static local:Translate.CheckAll}" FontSize="10" FontWeight="Normal"/>
+                                                        <Button Click="ClearAllTypeFilters_Click" Padding="4,1" Content="{x:Static local:Translate.UncheckAll}" FontSize="10" FontWeight="Normal"/>
                                                     </StackPanel>
                                                 </DockPanel>
                                                 <ItemsControl ItemsSource="{Binding PluginTypeFilters}">
@@ -766,13 +766,13 @@
                                     <!-- 4. 状況 (インストール状況コンボボックス) -->
                                     <Border Style="{StaticResource SideGroupStyle}">
                                         <StackPanel>
-                                            <TextBlock Text="状況" FontWeight="Bold" Margin="0,0,0,6"/>
+                                            <TextBlock Text="{x:Static local:Translate.Status}" FontWeight="Bold" Margin="0,0,0,6"/>
                                             <ComboBox SelectedIndex="{Binding PortalInstallFilterIndex}"
                                                       SelectionChanged="PortalInstallFilter_Changed" Height="26">
-                                                <ComboBoxItem Content="すべて"/>
-                                                <ComboBoxItem Content="インストール済み"/>
-                                                <ComboBoxItem Content="未インストール"/>
-                                                <ComboBoxItem Content="更新あり"/>
+                                                <ComboBoxItem Content="{x:Static local:Translate.All}"/>
+                                                <ComboBoxItem Content="{x:Static local:Translate.Installed}"/>
+                                                <ComboBoxItem Content="{x:Static local:Translate.NotDownloaded}"/>
+                                                <ComboBoxItem Content="{x:Static local:Translate.HasUpdate}"/>
                                             </ComboBox>
                                         </StackPanel>
                                     </Border>
@@ -780,25 +780,25 @@
                                     <!-- 5. 配布ステータス -->
                                     <Border Style="{StaticResource SideGroupStyle}">
                                         <StackPanel>
-                                            <TextBlock Text="配布ステータス" FontWeight="Bold" Margin="0,0,0,6"/>
+                                            <TextBlock Text="{x:Static local:Translate.DistributionStatus}" FontWeight="Bold" Margin="0,0,0,6"/>
                                             <ComboBox SelectedIndex="{Binding PortalStatusIndex}"
                                                       SelectionChanged="PortalStatusFilter_Changed" Height="26">
-                                                <ComboBoxItem Content="すべて"/>
-                                                <ComboBoxItem Content="配布中"/>
-                                                <ComboBoxItem Content="配布終了"/>
+                                                <ComboBoxItem Content="{x:Static local:Translate.All}"/>
+                                                <ComboBoxItem Content="{x:Static local:Translate.Enabled}"/>
+                                                <ComboBoxItem Content="{x:Static local:Translate.EndDistribution}"/>
                                             </ComboBox>
                                         </StackPanel>
                                     </Border>
 
                                     <!-- 6. 配布サイト種別 -->
                                     <Border Style="{StaticResource SideGroupStyle}">
-                                        <Expander Header="配布サイト" IsExpanded="True" FontWeight="Bold" Foreground="{DynamicResource TextBrush}">
+                                        <Expander Header="{x:Static local:Translate.DistributionSite}" IsExpanded="True" FontWeight="Bold" Foreground="{DynamicResource TextBrush}">
                                             <StackPanel Margin="0,4,0,0">
                                                 <DockPanel Margin="0,2,0,6">
-                                                    <TextBlock Text="一括設定" FontSize="11" Foreground="{DynamicResource SubTextBrush}" VerticalAlignment="Center"/>
+                                                    <TextBlock Text="{x:Static local:Translate.BulkSettings}" FontSize="11" Foreground="{DynamicResource SubTextBrush}" VerticalAlignment="Center"/>
                                                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                                                        <Button Click="SelectAllSiteFilters_Click" Padding="4,1" Margin="0,0,2,0" Content="全選択" FontSize="10" FontWeight="Normal"/>
-                                                        <Button Click="ClearAllSiteFilters_Click" Padding="4,1" Content="全解除" FontSize="10" FontWeight="Normal"/>
+                                                        <Button Click="SelectAllSiteFilters_Click" Padding="4,1" Margin="0,0,2,0" Content="{x:Static local:Translate.CheckAll}" FontSize="10" FontWeight="Normal"/>
+                                                        <Button Click="ClearAllSiteFilters_Click" Padding="4,1" Content="{x:Static local:Translate.UncheckAll}" FontSize="10" FontWeight="Normal"/>
                                                     </StackPanel>
                                                 </DockPanel>
                                                 <ItemsControl ItemsSource="{Binding PluginSiteFilters}">
@@ -819,16 +819,16 @@
                                     <!-- 7. 一括選択 -->
                                     <Border Style="{StaticResource SideGroupStyle}">
                                         <StackPanel>
-                                            <TextBlock Text="一括選択" FontWeight="Bold" Margin="0,0,0,6"/>
+                                            <TextBlock Text="{x:Static local:Translate.BulkSelection}" FontWeight="Bold" Margin="0,0,0,6"/>
                                             <Grid>
                                                 <Grid.ColumnDefinitions>
                                                     <ColumnDefinition Width="*"/>
                                                     <ColumnDefinition Width="*"/>
                                                 </Grid.ColumnDefinitions>
                                                 <Button Grid.Column="0" Click="SelectAllPortalCards_Click"
-                                                        Height="26" Margin="0,0,2,0" Content="表示中全選択"/>
+                                                        Height="26" Margin="0,0,2,0" Content="{x:Static local:Translate.SelectAllVisible}"/>
                                                 <Button Grid.Column="1" Click="PortalDeselectCurrentPage_Click"
-                                                        Height="26" Margin="2,0,0,0" Content="表示中解除"/>
+                                                        Height="26" Margin="2,0,0,0" Content="{x:Static local:Translate.ClearVisible}"/>
                                             </Grid>
                                         </StackPanel>
                                     </Border>
@@ -841,7 +841,7 @@
                                                     <Path Width="12" Height="12" Stretch="Uniform" Margin="0,0,6,0"
                                                           Data="M14,3V5H17.59L7.76,14.83L9.17,16.24L19,6.41V10H21V3M19,19H5V5H12V3H5C3.89,3 3,3.9 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V12H19V19Z"
                                                           Fill="{DynamicResource TextBrush}"/>
-                                                    <TextBlock Text="饅頭遣いのおもちゃ箱" VerticalAlignment="Center" FontSize="11"/>
+                                                    <TextBlock Text="{x:Static local:Translate.Manjubox}" VerticalAlignment="Center" FontSize="11"/>
                                                 </StackPanel>
                                             </Button>
                                         </StackPanel>
@@ -850,7 +850,7 @@
                                     <!-- フィルターリセット & フッター情報 -->
                                     <Border Style="{StaticResource SideGroupStyle}">
                                         <StackPanel>
-                                            <Button Click="ResetPortalFilters_Click" Content="フィルターをリセット"
+                                            <Button Click="ResetPortalFilters_Click" Content="{x:Static local:Translate.ClearFilter}"
                                                     Height="28" Margin="0,0,0,8"/>
                                             <TextBlock Text="{Binding PortalFilteredVsTotalText}"
                                                        FontSize="11" Foreground="{DynamicResource SubTextBrush}"
@@ -867,7 +867,7 @@
                             <!-- メニューを固定しない場合だけ、ポータル内の操作レーンから切り替える。 -->
                             <Button Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Top"
                                     Width="30" Height="30" Margin="0,6,0,0" Padding="0" Panel.ZIndex="3"
-                                    Click="TogglePortalMenu_Click" ToolTip="プラグインポータルのメニューを表示/非表示">
+                                    Click="TogglePortalMenu_Click" ToolTip="{x:Static local:Translate.TogglePortalMenu}">
                                 <Button.Style>
                                     <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
                                         <Setter Property="Visibility" Value="Collapsed"/>
@@ -959,7 +959,7 @@
                                                                           IsChecked="{Binding IsSelected}"
                                                                           VerticalAlignment="Center"
                                                                           Click="PortalCardCheck_Click"/>
-                                                                <TextBlock Grid.Column="1" Text="選択"
+                                                                <TextBlock Grid.Column="1" Text="{x:Static local:Translate.Select}"
                                                                            VerticalAlignment="Center"
                                                                            Margin="4,0,8,0"
                                                                            FontSize="11"
@@ -1103,19 +1103,19 @@
                                                                                 <Path Width="10" Height="10" Stretch="Uniform" Margin="0,0,2,0"
                                                                                       Data="M6,2A3,3 0 0,1 9,5C9,6.28 8.19,7.38 7.06,7.82C7.15,8.09 7.2,8.34 7.2,8.6C7.2,10 5.96,11.2 4.8,11.97V14.03C6.24,14.39 7.2,15.66 7.2,17.2C7.2,19 5.96,20 4.8,20C3.64,20 2,19 2,17.2C2,15.66 2.96,14.39 4.4,14.03V11.97C2.96,11.61 2,10.34 2,8.6C2,6.8 3.64,5.8 4.8,5.8C4.9,5.8 5,5.81 5.1,5.82C5.04,5.55 5,5.28 5,5A3,3 0 0,1 8,2M6,17.2C6,16.36 5.44,15.8 4.8,15.8C4.16,15.8 3.6,16.36 3.6,17.2C3.6,18 4.16,18.6 4.8,18.6C5.44,18.6 6,18 6,17.2M4.8,7.4C4.16,7.4 3.6,8 3.6,8.6C3.6,9.24 4.16,9.8 4.8,9.8C5.44,9.8 6,9.24 6,8.6C6,8 5.44,7.4 4.8,7.4M16.8,5.8C15.64,5.8 14.4,6.8 14.4,8.6C14.4,10.34 15.36,11.61 16.8,11.97V22H18.4V11.97C19.84,11.61 20.8,10.34 20.8,8.6C20.8,6.8 19.16,5.8 17.2,5.8H16.8M18.4,7.4C19.04,7.4 19.6,8 19.6,8.6C19.6,9.24 19.04,9.8 18.4,9.8C17.76,9.8 17.2,9.24 17.2,8.6C17.2,8 17.76,7.4 18.4,7.4Z"
                                                                                       Fill="{DynamicResource TextBrush}"/>
-                                                                                <TextBlock Text="バージョン" VerticalAlignment="Center" FontSize="11" TextTrimming="CharacterEllipsis"/>
+                                                                                <TextBlock Text="{x:Static local:Translate.VersionColumn}" VerticalAlignment="Center" FontSize="11" TextTrimming="CharacterEllipsis"/>
                                                                             </StackPanel>
                                                                         </Button>
                                                                         <!-- 右半分: 更新ボタン -->
                                                                         <Button Grid.Column="1"
                                                                                 Click="PortalCardUpdate_Click"
                                                                                 Height="26" Padding="2,0" Margin="2,0,0,0"
-                                                                                ToolTip="最新版に更新">
+                                                                                ToolTip="{x:Static local:Translate.VersionDownloadTooltip}">
                                                                             <StackPanel Orientation="Horizontal">
                                                                                 <Path Width="11" Height="11" Stretch="Uniform" Margin="0,0,2,0"
                                                                                       Data="M17.65,6.35C16.2,4.9 14.21,4 12,4A8,8 0 0,0 4,12A8,8 0 0,0 12,20C15.73,20 18.84,17.45 19.73,14H17.65C16.83,16.33 14.61,18 12,18A6,6 0 0,1 6,12A6,6 0 0,1 12,6C13.66,6 15.14,6.69 16.22,7.78L13,11H20V4L17.65,6.35Z"
                                                                                       Fill="{DynamicResource TextBrush}"/>
-                                                                                <TextBlock Text="更新" VerticalAlignment="Center" FontSize="11" FontWeight="Bold"/>
+                                                                                <TextBlock Text="{x:Static local:Translate.Update}" VerticalAlignment="Center" FontSize="11" FontWeight="Bold"/>
                                                                             </StackPanel>
                                                                         </Button>
                                                                     </Grid>
@@ -1124,7 +1124,7 @@
                                                                 <Button Grid.Column="1"
                                                                         Click="PortalCardInfo_Click"
                                                                         Width="28" Height="26" Margin="4,0,0,0"
-                                                                        ToolTip="詳細情報">
+                                                                        ToolTip="{x:Static local:Translate.PluginDetailTitle}">
                                                                     <Path Width="13" Height="13" Stretch="Uniform"
                                                                           Data="M11,9H13V7H11M12,20C7.59,20 4,16.41 4,12C4,7.59 7.59,4 12,4C16.41,4 20,7.59 20,12C20,16.41 16.41,20 12,20M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M11,17H13V11H11V17Z"
                                                                           Fill="{DynamicResource TextBrush}"/>
@@ -1155,29 +1155,29 @@
                                         <TextBlock Grid.Column="0" VerticalAlignment="Center"
                                                    Foreground="{DynamicResource SubTextBrush}">
                                             <Run Text="{Binding PortalTotalCount}"/>
-                                            <Run Text="件中"/>
+                                            <Run Text="{x:Static local:Translate.ItemsOf}"/>
                                             <Run Text="{Binding PortalDisplayStart}"/>
                                             <Run Text="-"/>
                                             <Run Text="{Binding PortalDisplayEnd}"/>
-                                            <Run Text="件表示"/>
+                                            <Run Text="{x:Static local:Translate.ItemsShown}"/>
                                         </TextBlock>
 
                                         <!-- 中: ページネーション -->
                                         <StackPanel Grid.Column="1" Orientation="Horizontal"
                                                     HorizontalAlignment="Center" VerticalAlignment="Center">
                                             <Button Click="PortalFirstPage_Click" Width="28" Height="26"
-                                                    ToolTip="最初のページ" Margin="2,0">
+                                                    ToolTip="{x:Static local:Translate.FirstPage}" Margin="2,0">
                                                 <Path Width="12" Height="12" Stretch="Uniform"
                                                       Data="M18.41,16.59L13.82,12L18.41,7.41L17,6L11,12L17,18L18.41,16.59M6,6H8V18H6V6Z"
                                                       Fill="{DynamicResource TextBrush}"/>
                                             </Button>
                                             <Button Click="PortalPrevPage_Click" Width="28" Height="26"
-                                                    ToolTip="前のページ" Margin="2,0">
+                                                    ToolTip="{x:Static local:Translate.PreviousPage}" Margin="2,0">
                                                 <Path Width="12" Height="12" Stretch="Uniform"
                                                       Data="M15.41,16.59L10.83,12L15.41,7.41L14,6L8,12L14,18L15.41,16.59Z"
                                                       Fill="{DynamicResource TextBrush}"/>
                                             </Button>
-                                            <TextBlock Text="ページ" VerticalAlignment="Center" Margin="4,0,2,0"/>
+                                            <TextBlock Text="{x:Static local:Translate.Page}" VerticalAlignment="Center" Margin="4,0,2,0"/>
                                             <TextBox x:Name="PageNumberBox" Width="40" Height="26"
                                                      Text="{Binding PortalCurrentPage}"
                                                      VerticalContentAlignment="Center"
@@ -1188,13 +1188,13 @@
                                                 <Run Text="{Binding PortalTotalPages}"/>
                                             </TextBlock>
                                             <Button Click="PortalNextPage_Click" Width="28" Height="26"
-                                                    ToolTip="次のページ" Margin="2,0">
+                                                    ToolTip="{x:Static local:Translate.NextPage}" Margin="2,0">
                                                 <Path Width="12" Height="12" Stretch="Uniform"
                                                       Data="M8.59,16.59L13.17,12L8.59,7.41L10,6L16,12L10,18L8.59,16.59Z"
                                                       Fill="{DynamicResource TextBrush}"/>
                                             </Button>
                                             <Button Click="PortalLastPage_Click" Width="28" Height="26"
-                                                    ToolTip="最後のページ" Margin="2,0">
+                                                    ToolTip="{x:Static local:Translate.LastPage}" Margin="2,0">
                                                 <Path Width="12" Height="12" Stretch="Uniform"
                                                       Data="M5.59,7.41L10.18,12L5.59,16.59L7,18L13,12L7,6L5.59,7.41M16,6H18V18H16V6Z"
                                                       Fill="{DynamicResource TextBrush}"/>
@@ -1204,7 +1204,7 @@
                                         <!-- 右: ページ内全選択 -->
                                         <Button Grid.Column="2" Click="SelectAllPortalCards_Click"
                                                 Height="26" Padding="8,0" VerticalAlignment="Center">
-                                            <TextBlock Text="現在ページを全選択" FontSize="11"/>
+                                            <TextBlock Text="{x:Static local:Translate.SelectAllCurrentPage}" FontSize="11"/>
                                         </Button>
                                     </Grid>
                                 </Border>
@@ -1214,11 +1214,11 @@
                 </TabItem>
 
                 <!-- 4. 設定タブ (フラット・枠囲み廃止・ComboBox統一) -->
-                <TabItem Header="設定">
+                <TabItem Header="{x:Static local:Translate.TabSettings}">
                     <ScrollViewer VerticalScrollBarVisibility="Auto"
                                   HorizontalScrollBarVisibility="Disabled">
                         <StackPanel Margin="24">
-                            <TextBlock Text="設定" FontSize="20" FontWeight="Bold" Margin="0,0,0,16"/>
+                            <TextBlock Text="{x:Static local:Translate.TabSettings}" FontSize="20" FontWeight="Bold" Margin="0,0,0,16"/>
 
                             <!-- 設定項目: フラット行配置（左端ラベル、右端コントロール） -->
                             <Grid Margin="0,4,0,16">
@@ -1238,21 +1238,21 @@
 
                                 <!-- 外観テーマ -->
                                 <TextBlock Grid.Row="0" Grid.Column="0"
-                                           Text="外観" VerticalAlignment="Center"
+                                           Text="{x:Static local:Translate.ThemeSettings}" VerticalAlignment="Center"
                                            HorizontalAlignment="Left"/>
                                 <ComboBox Grid.Row="0" Grid.Column="1"
                                           SelectedValue="{Binding SelectedTheme}"
                                           SelectedValuePath="Tag" Height="28"
                                           HorizontalAlignment="Right" Width="150">
-                                    <ComboBoxItem Content="Windows標準" Tag="{x:Static local:AppTheme.Windows}"/>
-                                    <ComboBoxItem Content="ライト" Tag="{x:Static local:AppTheme.Light}"/>
-                                    <ComboBoxItem Content="ダーク" Tag="{x:Static local:AppTheme.Dark}"/>
-                                    <ComboBoxItem Content="ブラック" Tag="{x:Static local:AppTheme.Black}"/>
+                                    <ComboBoxItem Content="{x:Static local:Translate.WindowsStandard}" Tag="{x:Static local:AppTheme.Windows}"/>
+                                    <ComboBoxItem Content="{x:Static local:Translate.Light}" Tag="{x:Static local:AppTheme.Light}"/>
+                                    <ComboBoxItem Content="{x:Static local:Translate.Dark}" Tag="{x:Static local:AppTheme.Dark}"/>
+                                    <ComboBoxItem Content="{x:Static local:Translate.Black}" Tag="{x:Static local:AppTheme.Black}"/>
                                 </ComboBox>
 
                                 <!-- 言語設定 -->
                                 <TextBlock Grid.Row="1" Grid.Column="0"
-                                           Text="言語設定" VerticalAlignment="Center"
+                                           Text="{x:Static local:Translate.LanguageSettings}" VerticalAlignment="Center"
                                            HorizontalAlignment="Left"/>
                                 <ComboBox Grid.Row="1" Grid.Column="1"
                                           ItemsSource="{Binding Languages}"
@@ -1288,14 +1288,14 @@
                                           VerticalAlignment="Center" HorizontalAlignment="Right"/>
 
                                 <TextBlock Grid.Row="5" Grid.Column="0"
-                                           Text="インスタンス一覧を常時表示" VerticalAlignment="Center" HorizontalAlignment="Left"/>
+                                           Text="{x:Static local:Translate.AlwaysShowInstanceList}" VerticalAlignment="Center" HorizontalAlignment="Left"/>
                                 <CheckBox Grid.Row="5" Grid.Column="1"
                                           Style="{StaticResource ToggleSwitchStyle}"
                                           IsChecked="{Binding KeepInstancePanelVisible}"
                                           VerticalAlignment="Center" HorizontalAlignment="Right"/>
 
                                 <TextBlock Grid.Row="6" Grid.Column="0"
-                                           Text="ポータルメニューを常時表示" VerticalAlignment="Center" HorizontalAlignment="Left"/>
+                                           Text="{x:Static local:Translate.AlwaysShowPortalMenu}" VerticalAlignment="Center" HorizontalAlignment="Left"/>
                                 <CheckBox Grid.Row="6" Grid.Column="1"
                                           Style="{StaticResource ToggleSwitchStyle}"
                                           IsChecked="{Binding KeepPortalMenuVisible}"
@@ -1304,23 +1304,23 @@
 
                             <!-- 編集データフォルダ (フラット) -->
                             <DockPanel Margin="0,16,0,6" LastChildFill="False">
-                                <TextBlock Text="編集データフォルダ" FontWeight="Bold"
+                                <TextBlock Text="{x:Static local:Translate.EditDataFolder}" FontWeight="Bold"
                                            VerticalAlignment="Center" DockPanel.Dock="Left"/>
                                 <StackPanel Orientation="Horizontal" DockPanel.Dock="Right">
                                     <Button Click="OpenProjectDirFolder_Click" Width="28" Height="26"
-                                            Margin="0,0,4,0" ToolTip="選択したフォルダを開く">
+                                            Margin="0,0,4,0" ToolTip="{x:Static local:Translate.OpenFolderTooltip}">
                                         <Path Data="M10,4H4C2.89,4 2,4.89 2,6V18A2,2 0 0,0 4,20H20A2,2 0 0,0 22,18V8C22,6.89 21.1,6 20,6H12L10,4Z"
                                               Stretch="Uniform" Width="12" Height="12"
                                               Fill="{DynamicResource TextBrush}"/>
                                     </Button>
                                     <Button Click="AddProjectDir_Click" Width="28" Height="26"
-                                            Margin="0,0,4,0" ToolTip="追加">
+                                            Margin="0,0,4,0" ToolTip="{x:Static local:Translate.Add}">
                                         <Path Data="M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z"
                                               Stretch="Uniform" Width="12" Height="12"
                                               Fill="{DynamicResource TextBrush}"/>
                                     </Button>
                                     <Button Click="RemoveProjectDir_Click" Width="28" Height="26"
-                                            ToolTip="削除">
+                                            ToolTip="{x:Static local:Translate.Delete}">
                                         <Path Data="M19,13H5V11H19V13Z"
                                               Stretch="Uniform" Width="12" Height="12"
                                               Fill="{DynamicResource TextBrush}"/>
@@ -1345,23 +1345,23 @@
 
                             <!-- 除外フォルダ (フラット) -->
                             <DockPanel Margin="0,4,0,6" LastChildFill="False">
-                                <TextBlock Text="除外フォルダ" FontWeight="Bold"
+                                <TextBlock Text="{x:Static local:Translate.ExcludeFolderLabel}" FontWeight="Bold"
                                            VerticalAlignment="Center" DockPanel.Dock="Left"/>
                                 <StackPanel Orientation="Horizontal" DockPanel.Dock="Right">
                                     <Button Click="OpenExcludeDirFolder_Click" Width="28" Height="26"
-                                            Margin="0,0,4,0" ToolTip="選択したフォルダを開く">
+                                            Margin="0,0,4,0" ToolTip="{x:Static local:Translate.OpenFolderTooltip}">
                                         <Path Data="M10,4H4C2.89,4 2,4.89 2,6V18A2,2 0 0,0 4,20H20A2,2 0 0,0 22,18V8C22,6.89 21.1,6 20,6H12L10,4Z"
                                               Stretch="Uniform" Width="12" Height="12"
                                               Fill="{DynamicResource TextBrush}"/>
                                     </Button>
                                     <Button Click="AddExcludeDir_Click" Width="28" Height="26"
-                                            Margin="0,0,4,0" ToolTip="追加">
+                                            Margin="0,0,4,0" ToolTip="{x:Static local:Translate.Add}">
                                         <Path Data="M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z"
                                               Stretch="Uniform" Width="12" Height="12"
                                               Fill="{DynamicResource TextBrush}"/>
                                     </Button>
                                     <Button Click="RemoveExcludeDir_Click" Width="28" Height="26"
-                                            ToolTip="削除">
+                                            ToolTip="{x:Static local:Translate.Delete}">
                                         <Path Data="M19,13H5V11H19V13Z"
                                               Stretch="Uniform" Width="12" Height="12"
                                               Fill="{DynamicResource TextBrush}"/>
@@ -1386,7 +1386,7 @@
 
                             <!-- アップデート -->
                             <DockPanel Margin="0,16,0,6" LastChildFill="False">
-                                <TextBlock Text="アップデート" FontWeight="Bold"
+                                <TextBlock Text="{x:Static local:Translate.Update}" FontWeight="Bold"
                                            VerticalAlignment="Center" DockPanel.Dock="Left"/>
                             </DockPanel>
                             <Border Style="{StaticResource SideGroupStyle}" Padding="12" Margin="0,0,0,16">
@@ -1397,13 +1397,13 @@
                                     </Grid.ColumnDefinitions>
                                     <StackPanel VerticalAlignment="Center">
                                         <TextBlock Text="{Binding HubVersionText}" FontWeight="Bold" FontSize="13"/>
-                                        <TextBlock Text="YukkuriMovieMaker4Hub の更新を確認・実行します"
+                                        <TextBlock Text="{x:Static local:Translate.HubUpdateDescription}"
                                                    Foreground="{DynamicResource SubTextBrush}" FontSize="11" Margin="0,3,0,0"/>
                                     </StackPanel>
                                     <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
-                                        <Button Click="CheckHubUpdate_Click" Content="アップデートを確認"
+                                        <Button Click="CheckHubUpdate_Click" Content="{x:Static local:Translate.UpdateCheckTitle}"
                                                 Height="28" Padding="12,0" Margin="0,0,8,0"/>
-                                        <Button Click="ExecuteHubUpdate_Click" Content="アップデートを実行"
+                                        <Button Click="ExecuteHubUpdate_Click" Content="{x:Static local:Translate.HubUpdateExecuteTitle}"
                                                 Height="28" Padding="14,0"
                                                 Background="{DynamicResource AccentBrush}" Foreground="White" FontWeight="Bold"/>
                                     </StackPanel>
@@ -1433,7 +1433,7 @@
                               Fill="{DynamicResource TextBrush}"/>
                         <TextBlock VerticalAlignment="Center" FontWeight="Bold">
                             <Run Text="{Binding PortalSelectedCount}"/>
-                            <Run Text="件選択中"/>
+                            <Run Text="{x:Static local:Translate.SelectedItemCount}"/>
                         </TextBlock>
                         <Path Width="14" Height="14" Stretch="Uniform" Margin="16,0,4,0"
                               Data="M12,2A10,10 0 0,0 2,12C2,16.42 4.87,20.17 8.84,21.5C9.34,21.58 9.5,21.27 9.5,21C9.5,20.77 9.5,20.14 9.5,19.31C6.73,19.91 6.14,17.97 6.14,17.97C5.68,16.81 5.03,16.5 5.03,16.5C4.12,15.88 5.1,15.9 5.1,15.9C6.1,15.97 6.63,16.93 6.63,16.93C7.5,18.45 8.97,18 9.54,17.76C9.63,17.11 9.89,16.67 10.17,16.42C7.95,16.17 5.62,15.31 5.62,11.5C5.62,10.39 6,9.5 6.65,8.79C6.55,8.54 6.2,7.5 6.75,6.15C6.75,6.15 7.59,5.88 9.5,7.17C10.29,6.95 11.15,6.84 12,6.84C12.85,6.84 13.71,6.95 14.5,7.17C16.41,5.88 17.25,6.15 17.25,6.15C17.8,7.5 17.45,8.54 17.35,8.79C18,9.5 18.38,10.39 18.38,11.5C18.38,15.32 16.04,16.16 13.81,16.41C14.17,16.72 14.5,17.33 14.5,18.26C14.5,19.6 14.5,20.68 14.5,21C14.5,21.27 14.66,21.59 15.17,21.5C19.14,20.16 22,16.42 22,12A10,10 0 0,0 12,2Z"
@@ -1443,21 +1443,21 @@
                             <Run Text="{Binding PortalGitHubCount}"/>
                         </TextBlock>
                         <TextBlock VerticalAlignment="Center" Margin="12,0,0,0">
-                            <Run Text="外部:"/>
+                            <Run Text="{x:Static local:Translate.ExternalLabel}"/>
                             <Run Text="{Binding PortalExternalCount}"/>
                         </TextBlock>
                     </StackPanel>
                     <!-- 操作ボタン -->
                     <StackPanel Grid.Column="1" Orientation="Horizontal">
                         <Button Click="PortalDeselectCurrentPage_Click" Height="26" Padding="8,0" Margin="0,0,6,0">
-                            <TextBlock Text="表示中を解除" FontSize="11"/>
+                            <TextBlock Text="{x:Static local:Translate.ClearVisible}" FontSize="11"/>
                         </Button>
                         <Button Click="PortalClearSelection_Click" Height="26" Padding="8,0" Margin="0,0,6,0">
                             <StackPanel Orientation="Horizontal">
                                 <Path Width="12" Height="12" Stretch="Uniform" Margin="0,0,4,0"
                                       Data="M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z"
                                       Fill="{DynamicResource TextBrush}"/>
-                                <TextBlock Text="クリア" FontSize="11" VerticalAlignment="Center"/>
+                                <TextBlock Text="{x:Static local:Translate.ClearFilter}" FontSize="11" VerticalAlignment="Center"/>
                             </StackPanel>
                         </Button>
                         <Button Click="BulkDownloadSelected_Click" Height="26" Padding="10,0">
@@ -1465,7 +1465,7 @@
                                 <Path Width="12" Height="12" Stretch="Uniform" Margin="0,0,4,0"
                                       Data="M5,20H19V18H5M19,9H15V3H9V9H5L12,16L19,9Z"
                                       Fill="{DynamicResource TextBrush}"/>
-                                <TextBlock Text="一括ダウンロード実行" FontSize="11" FontWeight="Bold"
+                                <TextBlock Text="{x:Static local:Translate.BulkDownload}" FontSize="11" FontWeight="Bold"
                                            VerticalAlignment="Center"/>
                             </StackPanel>
                         </Button>
@@ -1476,7 +1476,7 @@
             <!-- メイン領域左の操作レーン。コンテンツを覆わずにサイド領域を切り替える。 -->
             <Button Grid.Row="0" Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Top"
                     Width="30" Height="30" Margin="0,6,0,0" Padding="0" Panel.ZIndex="3"
-                    Click="ToggleInstancePanel_Click" ToolTip="インスタンス一覧を表示/非表示">
+                    Click="ToggleInstancePanel_Click" ToolTip="{x:Static local:Translate.ToggleInstanceList}">
                 <Button.Style>
                     <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
                         <Style.Triggers>
@@ -1507,7 +1507,7 @@
             <!-- 両方が非固定の場合のみ、ポータルメニューの操作をインスタンス一覧レーンへ並べる。 -->
             <Button Grid.Row="0" Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Top"
                     Width="30" Height="30" Margin="0,42,0,0" Padding="0" Panel.ZIndex="3"
-                    Click="TogglePortalMenu_Click" ToolTip="プラグインポータルのメニューを表示/非表示">
+                    Click="TogglePortalMenu_Click" ToolTip="{x:Static local:Translate.TogglePortalMenu}">
                 <Button.Style>
                         <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
                             <Setter Property="Visibility" Value="Collapsed"/>
