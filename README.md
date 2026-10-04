@@ -1,4 +1,4 @@
-<img width="1920" height="1080" alt="YukkuriMovieMaker4Hub" src="https://github.com/user-attachments/assets/0ebe8550-dcd5-446c-a677-c0898a07d449" />
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/e4b75201-63a0-4d60-8edc-eed89c5f1aba" />
 
 # YukkuriMovieMaker4Hub
 ゆっくりムービーメーカー4のハブソフトです
